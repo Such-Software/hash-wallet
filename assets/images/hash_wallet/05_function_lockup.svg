@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 80" width="500" height="80">
+<title>H(ash) = Wallet</title>
+<desc>Hash Wallet function-joke wordmark with green-boxed hash as the function name.</desc>
+<rect x="6" y="14" width="52" height="52" rx="11" fill="#1a5c38"/>
+<text x="32" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">#</text>
+<text x="68" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="400" fill="#888">(</text>
+<text x="88" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="500" fill="#1a1a1a">ash</text>
+<text x="158" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="400" fill="#888">)</text>
+<text x="186" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="400" fill="#888">=</text>
+<text x="218" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="500" fill="#1a5c38">Wallet</text>
+</svg>

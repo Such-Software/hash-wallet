@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 80" width="380" height="80">
+<title>#ash Wallet — inline lockup</title>
+<desc>Hash Wallet inline lockup where a green-boxed hash mark sits before the word "ash Wallet" to spell out "#ash Wallet".</desc>
+<rect x="6" y="14" width="52" height="52" rx="11" fill="#1a5c38"/>
+<text x="32" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">#</text>
+<text x="68" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="42" font-weight="500" fill="#1a1a1a">ash Wallet</text>
+</svg>
