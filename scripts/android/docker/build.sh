@@ -56,9 +56,8 @@ reown_ver=$(tinysha $SCRIPT_DIR/Dockerfile.reown $REPO_ROOT/scripts/prepare_reow
 bitbox_ver=$(tinysha $SCRIPT_DIR/Dockerfile.bitbox $REPO_ROOT/scripts/build_bitbox_flutter.sh)
 monero_ver=$(tinysha $SCRIPT_DIR/Dockerfile.monero $REPO_ROOT/scripts/prepare_moneroc.sh $REPO_ROOT/scripts/android/build_monero_all.sh)
 mwebd_ver=$(tinysha $SCRIPT_DIR/Dockerfile.mwebd $(find $REPO_ROOT/cw_mweb/go -type f))
-zcash_ver=$(tinysha $SCRIPT_DIR/Dockerfile.zcash $REPO_ROOT/scripts/prepare_zcash.sh $REPO_ROOT/scripts/android/build_zcash.sh)
 decred_ver=$(tinysha $SCRIPT_DIR/Dockerfile.torch $SCRIPT_DIR/Dockerfile.decred $REPO_ROOT/scripts/android/build_decred.sh)
-echo $base_ver $torch_ver $reown_ver $bitbox_ver $monero_ver $mwebd_ver $zcash_ver $decred_ver > /tmp/docker_build_versions
+echo $base_ver $torch_ver $reown_ver $bitbox_ver $monero_ver $mwebd_ver $decred_ver > /tmp/docker_build_versions
 final_ver=$(tinysha /tmp/docker_build_versions)
 
 docker create --name temp_extract $(img final $final_ver) \
@@ -83,8 +82,6 @@ build reown "$reown_ver" --build-arg BASE_IMAGE="$(img base "$base_ver")"
 
 build monero "$monero_ver" --build-arg BASE_IMAGE="$(img base "$base_ver")"
 
-build zcash "$zcash_ver" --build-arg BASE_IMAGE="$(img base "$base_ver")"
-
 build torch "$torch_ver" \
   --build-arg BASE_IMAGE="$(img base "$base_ver")"
 
@@ -99,8 +96,7 @@ build final $final_ver \
   --build-arg BITBOX_IMAGE="$(img bitbox $bitbox_ver)" \
   --build-arg MONERO_IMAGE="$(img monero $monero_ver)" \
   --build-arg DECRED_IMAGE="$(img decred $decred_ver)" \
-  --build-arg MWEBD_IMAGE="$(img mwebd $mwebd_ver)" \
-  --build-arg ZCASH_IMAGE="$(img zcash $zcash_ver)"
+  --build-arg MWEBD_IMAGE="$(img mwebd $mwebd_ver)"
 
 echo "done: $(img final $final_ver)"
 echo $(img final $final_ver) > /tmp/cakewallet_docker
