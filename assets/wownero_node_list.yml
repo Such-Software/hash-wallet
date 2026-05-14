@@ -12,3 +12,13 @@
   uri: node.monerodevs.org:34568
   is_default: false
   useSSL: false
+-
+  uri: wownerod.foolsump.com:34568
+  is_default: false
+  useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: spippolatori.it:34568
+  is_default: false
+  useSSL: false
+  isEnabledForAutoSwitching: true

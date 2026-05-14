@@ -10,3 +10,16 @@
 -
   uri: node.minisatoshi.cash:50002
   useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: bch.imaginary.cash:50002
+  useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: bch.loping.net:50002
+  useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: electroncash.dk:50002
+  useSSL: true
+  isEnabledForAutoSwitching: true

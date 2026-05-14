@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 1080" width="680" height="1080">
+<title>Hash Wallet logo set v2</title>
+<desc>Logo concepts for Hash Wallet: standalone mark, lockups, H-emphasized variants, and function-style wordmark.</desc>
+
+<style>
+  .label { font-family: ui-monospace, 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; fill: #999; }
+  .header { font-family: ui-monospace, 'JetBrains Mono', monospace; font-size: 13px; fill: #999; }
+  .micro { font-family: ui-monospace, monospace; font-size: 10px; fill: #aaa; }
+  .nano { font-family: ui-monospace, monospace; font-size: 9px; fill: #aaa; }
+  .mark { font-family: ui-monospace, 'JetBrains Mono', monospace; font-weight: 700; fill: #1a1a1a; }
+  .word-bold { font-family: ui-monospace, 'JetBrains Mono', monospace; font-weight: 500; fill: #1a1a1a; }
+  .word-light { font-family: ui-monospace, monospace; font-weight: 400; fill: #888; }
+  .word-accent { font-family: ui-monospace, monospace; font-weight: 500; fill: #1a5c38; }
+  .divider { stroke: #e5e5e5; stroke-width: 0.5; }
+</style>
+
+<text x="40" y="48" class="header">hash wallet / logo set v2</text>
+
+<!-- 01 — JUST A LOGO -->
+<line x1="40" y1="80" x2="640" y2="80" class="divider"/>
+<text x="40" y="108" class="label">01 — just a logo</text>
+
+<text x="80" y="230" class="mark" font-size="120">#</text>
+
+<g transform="translate(280, 150)">
+  <rect x="0" y="0" width="64" height="64" rx="12" fill="#1a1a1a"/>
+  <text x="32" y="52" font-family="ui-monospace, monospace" font-size="50" font-weight="700" fill="#fff" text-anchor="middle">#</text>
+</g>
+
+<g transform="translate(370, 150)">
+  <rect x="0" y="0" width="64" height="64" rx="12" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="32" y="52" font-family="ui-monospace, monospace" font-size="50" font-weight="700" fill="#1a1a1a" text-anchor="middle">#</text>
+</g>
+
+<g transform="translate(460, 150)">
+  <rect x="0" y="0" width="64" height="64" rx="12" fill="#1a5c38"/>
+  <text x="32" y="52" font-family="ui-monospace, monospace" font-size="50" font-weight="700" fill="#fff" text-anchor="middle">#</text>
+</g>
+
+<!-- 02 — CLEAN LOCKUP -->
+<line x1="40" y1="260" x2="640" y2="260" class="divider"/>
+<text x="40" y="288" class="label">02 — clean lockup, no tagline</text>
+
+<g transform="translate(80, 320)">
+  <rect x="0" y="0" width="64" height="64" rx="12" fill="#1a1a1a"/>
+  <text x="32" y="50" font-family="ui-monospace, monospace" font-size="48" font-weight="700" fill="#fff" text-anchor="middle">#</text>
+  <text x="84" y="44" class="word-bold" font-size="32">Hash Wallet</text>
+</g>
+
+<g transform="translate(80, 410)">
+  <rect x="0" y="0" width="64" height="64" rx="12" fill="#1a5c38"/>
+  <text x="32" y="50" font-family="ui-monospace, monospace" font-size="48" font-weight="700" fill="#fff" text-anchor="middle">#</text>
+  <text x="84" y="44" class="word-bold" font-size="32">Hash Wallet</text>
+</g>
+
+<g transform="translate(420, 320)">
+  <rect x="20" y="0" width="56" height="56" rx="10" fill="#1a1a1a"/>
+  <text x="48" y="44" font-family="ui-monospace, monospace" font-size="42" font-weight="700" fill="#fff" text-anchor="middle">#</text>
+  <text x="48" y="84" font-family="ui-monospace, monospace" font-size="18" font-weight="600" fill="#1a1a1a" text-anchor="middle">Hash Wallet</text>
+</g>
+
+<!-- 03 — H-EMPHASIZED MARK -->
+<line x1="40" y1="500" x2="640" y2="500" class="divider"/>
+<text x="40" y="528" class="label">03 — # that reads as H: three approaches</text>
+
+<!-- 3a -->
+<g transform="translate(70, 555)">
+  <text x="0" y="20" class="micro">3a · thick verticals</text>
+  <rect x="8" y="35" width="14" height="60" rx="1" fill="#1a1a1a"/>
+  <rect x="38" y="35" width="14" height="60" rx="1" fill="#1a1a1a"/>
+  <rect x="2" y="55" width="56" height="5" fill="#1a1a1a"/>
+  <rect x="2" y="72" width="56" height="5" fill="#1a1a1a"/>
+  <text x="72" y="80" class="word-bold" font-size="34">ash Wallet</text>
+</g>
+
+<!-- 3b -->
+<g transform="translate(70, 670)">
+  <text x="0" y="20" class="micro">3b · double crossbar collapsed — H first, # second</text>
+  <rect x="8" y="35" width="14" height="60" rx="1" fill="#1a1a1a"/>
+  <rect x="38" y="35" width="14" height="60" rx="1" fill="#1a1a1a"/>
+  <rect x="2" y="60" width="56" height="4" fill="#1a1a1a"/>
+  <rect x="2" y="68" width="56" height="4" fill="#1a1a1a"/>
+  <text x="72" y="80" class="word-bold" font-size="34">ash Wallet</text>
+</g>
+
+<!-- 3c -->
+<g transform="translate(70, 785)">
+  <text x="0" y="20" class="micro">3c · color split — H in primary, # bars in accent</text>
+  <rect x="8" y="35" width="14" height="60" rx="1" fill="#1a1a1a"/>
+  <rect x="38" y="35" width="14" height="60" rx="1" fill="#1a1a1a"/>
+  <rect x="2" y="55" width="56" height="5" fill="#1a5c38"/>
+  <rect x="2" y="72" width="56" height="5" fill="#1a5c38"/>
+  <text x="72" y="80" class="word-bold" font-size="34">ash Wallet</text>
+</g>
+
+<!-- favicon-size tests -->
+<g transform="translate(480, 560)">
+  <text x="0" y="0" class="micro">at favicon size</text>
+  <g transform="translate(0, 15)">
+    <rect x="3" y="6" width="6" height="28" rx="0.5" fill="#1a1a1a"/>
+    <rect x="17" y="6" width="6" height="28" rx="0.5" fill="#1a1a1a"/>
+    <rect x="0" y="15" width="26" height="2" fill="#1a1a1a"/>
+    <rect x="0" y="23" width="26" height="2" fill="#1a1a1a"/>
+  </g>
+  <g transform="translate(50, 15)">
+    <rect x="3" y="6" width="6" height="28" rx="0.5" fill="#1a1a1a"/>
+    <rect x="17" y="6" width="6" height="28" rx="0.5" fill="#1a1a1a"/>
+    <rect x="0" y="17" width="26" height="2" fill="#1a1a1a"/>
+    <rect x="0" y="21" width="26" height="2" fill="#1a1a1a"/>
+  </g>
+  <g transform="translate(100, 15)">
+    <rect x="3" y="6" width="6" height="28" rx="0.5" fill="#1a1a1a"/>
+    <rect x="17" y="6" width="6" height="28" rx="0.5" fill="#1a1a1a"/>
+    <rect x="0" y="15" width="26" height="2" fill="#1a5c38"/>
+    <rect x="0" y="23" width="26" height="2" fill="#1a5c38"/>
+  </g>
+  <text x="13" y="55" class="nano" text-anchor="middle">3a</text>
+  <text x="63" y="55" class="nano" text-anchor="middle">3b</text>
+  <text x="113" y="55" class="nano" text-anchor="middle">3c</text>
+</g>
+
+<!-- 04 — FUNCTION VERSION -->
+<line x1="40" y1="890" x2="640" y2="890" class="divider"/>
+<text x="40" y="918" class="label">04 — H(ash) = Wallet, using the custom H</text>
+
+<g transform="translate(80, 950)">
+  <g>
+    <rect x="4" y="10" width="10" height="44" rx="1" fill="#1a1a1a"/>
+    <rect x="26" y="10" width="10" height="44" rx="1" fill="#1a1a1a"/>
+    <rect x="0" y="24" width="40" height="4" fill="#1a1a1a"/>
+    <rect x="0" y="36" width="40" height="4" fill="#1a1a1a"/>
+  </g>
+  <text x="48" y="48" class="word-light" font-size="40">(</text>
+  <text x="68" y="48" class="word-bold" font-size="40">ash</text>
+  <text x="138" y="48" class="word-light" font-size="40">)</text>
+  <text x="166" y="48" class="word-light" font-size="40">=</text>
+  <text x="198" y="48" class="word-accent" font-size="40">Wallet</text>
+</g>
+
+<g transform="translate(80, 1030)">
+  <g>
+    <rect x="2" y="8" width="6" height="26" rx="0.5" fill="#1a1a1a"/>
+    <rect x="15" y="8" width="6" height="26" rx="0.5" fill="#1a1a1a"/>
+    <rect x="0" y="17" width="23" height="2.5" fill="#1a1a1a"/>
+    <rect x="0" y="24" width="23" height="2.5" fill="#1a1a1a"/>
+  </g>
+  <text x="28" y="32" class="word-light" font-size="24">(</text>
+  <text x="40" y="32" class="word-bold" font-size="24">ash</text>
+  <text x="82" y="32" class="word-light" font-size="24">)</text>
+  <text x="100" y="32" class="word-light" font-size="24">=</text>
+  <text x="120" y="32" class="word-bold" font-size="24">Wallet</text>
+</g>
+
+</svg>

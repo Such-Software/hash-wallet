@@ -19,3 +19,8 @@
 -
   uri: backup.electrum-ltc.org:443
   useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: ltc.rentonisk.com:50002
+  useSSL: true
+  isEnabledForAutoSwitching: true

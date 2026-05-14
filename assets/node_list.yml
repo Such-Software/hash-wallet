@@ -32,3 +32,33 @@
   uri: xmr.stormycloud.org:18089
   useSSL: true
   is_default: false
+-
+  uri: node.xmr.surf:443
+  useSSL: true
+  is_default: false
+  isEnabledForAutoSwitching: true
+-
+  uri: xmr1.doggett.tech:18089
+  useSSL: true
+  is_default: false
+  isEnabledForAutoSwitching: true
+-
+  uri: xmr5.doggett.tech:18089
+  useSSL: true
+  is_default: false
+  isEnabledForAutoSwitching: true
+-
+  uri: xmr.cryptostorm.is:18081
+  useSSL: true
+  is_default: false
+  isEnabledForAutoSwitching: true
+-
+  uri: nodes.hashvault.pro:18081
+  useSSL: true
+  is_default: false
+  isEnabledForAutoSwitching: true
+-
+  uri: xmr.hexide.com:443
+  useSSL: true
+  is_default: false
+  isEnabledForAutoSwitching: true

@@ -13,3 +13,19 @@
   uri: electrum.cakewallet.com:50002
   useSSL: true
   isEnabledForAutoSwitching: true
+-
+  uri: bitcoin.stackwallet.com:50002
+  useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: electrum.blockstream.info:50002
+  useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: electrum.emzy.de:50002
+  useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  uri: fortress.qtornado.com:443
+  useSSL: true
+  isEnabledForAutoSwitching: true
