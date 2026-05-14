@@ -2024,9 +2024,9 @@ Future<void> generateWalletTypes({
     outputContent += '\tWalletType.banano,\n';
   }
 
-  // if (hasWownero) {
-  //   outputContent += '\tWalletType.wownero,\n';
-  // }
+  if (hasWownero) {
+    outputContent += '\tWalletType.wownero,\n';
+  }
 
   outputContent += '];\n';
   await walletTypesFile.writeAsString(outputContent);

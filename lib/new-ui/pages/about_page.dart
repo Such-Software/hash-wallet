@@ -80,7 +80,7 @@ class _AboutPageState extends State<AboutPage> {
                       spacing: 8,
                       children: [
                         Text(
-                          "Cake Wallet",
+                          "Hash Wallet",
                           style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
                         ),
                         Text(widget.appVersion,
@@ -108,43 +108,13 @@ class _AboutPageState extends State<AboutPage> {
                 NewListSections(sections: {
                   "": [
                     ListItemRegularRow(
-                        keyValue: "official website",
-                        label: "Official Website",
-                        onTap: () => launchUrl(Uri.https("cakewallet.com")),
-                        trailingIconPath: "assets/new-ui/link_arrow.svg",
-                        foregroundColor: Theme.of(context).colorScheme.primary,
-                        trailingIconSize: 10),
-                    ListItemRegularRow(
-                        keyValue: "docs",
-                        label: "Cake Docs",
-                        onTap: () => launchUrl(Uri.https("docs.cakewallet.com")),
-                        trailingIconPath: "assets/new-ui/link_arrow.svg",
-                        foregroundColor: Theme.of(context).colorScheme.primary,
-                        trailingIconSize: 10)
-                  ],
-                  "2": [
-                    ListItemRegularRow(
                         keyValue: "gh",
                         label: "GitHub",
-                        onTap: () => launchUrl(Uri.https("github.com", "cake-tech")),
+                        onTap: () => launchUrl(Uri.https("github.com", "Such-Software/hash-wallet")),
                         trailingIconPath: "assets/new-ui/link_arrow.svg",
                         foregroundColor: Theme.of(context).colorScheme.primary,
                         trailingIconSize: 10),
-                    ListItemRegularRow(
-                        keyValue: "twitter",
-                        label: "X (Twitter)",
-                        onTap: () => launchUrl(Uri.https("twitter.com", "cakewallet")),
-                        trailingIconPath: "assets/new-ui/link_arrow.svg",
-                        foregroundColor: Theme.of(context).colorScheme.primary,
-                        trailingIconSize: 10),
-                    ListItemRegularRow(
-                        keyValue: "tg",
-                        label: "Telegram",
-                        onTap: () => launchUrl(Uri.https("t.me", "cakewallet")),
-                        trailingIconPath: "assets/new-ui/link_arrow.svg",
-                        foregroundColor: Theme.of(context).colorScheme.primary,
-                        trailingIconSize: 10)
-                  ]
+                  ],
                 })
               ],
             )

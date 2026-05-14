@@ -11,4 +11,4 @@ PRODUCT_NAME = ${PRODUCT_NAME}
 PRODUCT_BUNDLE_IDENTIFIER = ${PRODUCT_BUNDLE_IDENTIFIER}
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.fotolockr. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 Such Software LLC. All rights reserved.

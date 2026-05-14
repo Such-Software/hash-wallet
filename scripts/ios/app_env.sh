@@ -16,10 +16,10 @@ MONERO_COM_VERSION="6.1.2"
 MONERO_COM_BUILD_NUMBER=163
 MONERO_COM_BUNDLE_ID="com.cakewallet.monero"
 
-CAKEWALLET_NAME="Cake Wallet"
+CAKEWALLET_NAME="Hash Wallet"
 CAKEWALLET_VERSION="6.1.2"
 CAKEWALLET_BUILD_NUMBER=418
-CAKEWALLET_BUNDLE_ID="com.fotolockr.cakewallet"
+CAKEWALLET_BUNDLE_ID="com.suchsoftware.hashwallet"
 
 
 if ! [[ " ${TYPES[*]} " =~ " ${APP_IOS_TYPE} " ]]; then

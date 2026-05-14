@@ -56,7 +56,7 @@ android {
     }
 
 
-    namespace "com.cakewallet.cake_wallet"
+    namespace "com.suchsoftware.hashwallet"
 
     defaultConfig {
         applicationId appProperties['id']

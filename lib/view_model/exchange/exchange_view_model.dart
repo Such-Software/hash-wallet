@@ -309,18 +309,22 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
   final TradesStore tradesStore;
   final SharedPreferences sharedPreferences;
 
+  // Hash Wallet: trimmed to Trocador only. Trocador's aggregator already fronts
+  // ChangeNow, LetsExchange, Exolix, StealthEx, FixedFloat, Quantex, etc.,
+  // letting us collect markup as the affiliate. Re-enable individual providers
+  // here only after registering Such Software affiliate keys per provider.
   List<ExchangeProvider> get _allProviders => [
-        ChangeNowExchangeProvider(settingsStore: _settingsStore),
+        // ChangeNowExchangeProvider(settingsStore: _settingsStore),
         // SideShiftExchangeProvider(),
-        ChainflipExchangeProvider(),
-        if (FeatureFlag.isExolixEnabled) ExolixExchangeProvider(),
-        SwapTradeExchangeProvider(),
-        LetsExchangeExchangeProvider(),
-        StealthExExchangeProvider(),
-        XOSwapExchangeProvider(),
-        SwapsXyzExchangeProvider(),
-        JupiterExchangeProvider(),
-        NearIntentsExchangeProvider(),
+        // ChainflipExchangeProvider(),
+        // if (FeatureFlag.isExolixEnabled) ExolixExchangeProvider(),
+        // SwapTradeExchangeProvider(),
+        // LetsExchangeExchangeProvider(),
+        // StealthExExchangeProvider(),
+        // XOSwapExchangeProvider(),
+        // SwapsXyzExchangeProvider(),
+        // JupiterExchangeProvider(),
+        // NearIntentsExchangeProvider(),
         TrocadorExchangeProvider(
             useTorOnly: _useTorOnly, providerStates: _settingsStore.trocadorProviderStates),
       ];

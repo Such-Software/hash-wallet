@@ -20,10 +20,10 @@ MONERO_COM_VERSION="6.1.0"
 MONERO_COM_BUILD_NUMBER=79
 MONERO_COM_BUNDLE_ID="com.cakewallet.monero"
 
-CAKEWALLET_NAME="Cake Wallet"
+CAKEWALLET_NAME="Hash Wallet"
 CAKEWALLET_VERSION="6.1.0"
 CAKEWALLET_BUILD_NUMBER=147
-CAKEWALLET_BUNDLE_ID="com.fotolockr.cakewallet"
+CAKEWALLET_BUNDLE_ID="com.suchsoftware.hashwallet"
 
 if ! [[ " ${TYPES[*]} " =~ " ${APP_MACOS_TYPE} " ]]; then
     echo "Wrong app type."

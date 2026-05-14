@@ -20,12 +20,12 @@ MONERO_COM_BUNDLE_ID="com.monero.app"
 MONERO_COM_PACKAGE="com.monero.app"
 MONERO_COM_SCHEME="monero.com"
 
-CAKEWALLET_NAME="Cake Wallet"
+CAKEWALLET_NAME="Hash Wallet"
 CAKEWALLET_VERSION="6.1.2"
 CAKEWALLET_BUILD_NUMBER=4410
-CAKEWALLET_BUNDLE_ID="com.cakewallet.cake_wallet"
-CAKEWALLET_PACKAGE="com.cakewallet.cake_wallet"
-CAKEWALLET_SCHEME="cakewallet"
+CAKEWALLET_BUNDLE_ID="com.suchsoftware.hashwallet"
+CAKEWALLET_PACKAGE="com.suchsoftware.hashwallet"
+CAKEWALLET_SCHEME="hashwallet"
 
 
 if ! [[ " ${TYPES[*]} " =~ " ${APP_ANDROID_TYPE} " ]]; then

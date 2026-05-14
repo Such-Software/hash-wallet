@@ -20,5 +20,5 @@ String get approximatedAppName {
         return 'Monero.com';   
     }
      
-    return 'Cake Wallet';
+    return 'Hash Wallet';
 }

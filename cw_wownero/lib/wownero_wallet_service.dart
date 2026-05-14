@@ -1,6 +1,5 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:cw_core/exceptions.dart' show WalletDeprecationException;
 import 'package:cw_core/monero_wallet_utils.dart';
 import 'package:cw_core/pathForWallet.dart';
 import 'package:cw_core/unspent_coins_info.dart';
@@ -139,7 +138,6 @@ class WowneroWalletService extends WalletService<
       }
 
       wallet = WowneroWallet(walletInfo: walletInfo, derivationInfo: await walletInfo.getDerivationInfo(), unspentCoinsInfo: unspentCoinsInfoSource, password: password);
-      throw WalletDeprecationException(seed: wallet.seed, curr: wallet.currency);
 
       final isValid = wallet.walletAddresses.validate();
 

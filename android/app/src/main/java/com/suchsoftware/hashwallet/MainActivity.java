@@ -1,4 +1,4 @@
-package com.cakewallet.cake_wallet;
+package com.suchsoftware.hashwallet;
 
 import androidx.annotation.NonNull;
 
