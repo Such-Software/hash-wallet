@@ -25,11 +25,11 @@
   },
   {
     "question" : "What can I do if I lose my seed?",
-    "answer" : "If you forgot your seed, you likely wrote it down somewhere. Please check your  notes and look around on your computer. If you can’t find it anywhere, you may have backed up Cake Wallet (in which case you would be able to restore from that backup.) If none of these work, there is unfortunately nothing that we can do.\n"
+    "answer" : "If you forgot your seed, you likely wrote it down somewhere. Please check your  notes and look around on your computer. If you can’t find it anywhere, you may have backed up Hash Wallet (in which case you would be able to restore from that backup.) If none of these work, there is unfortunately nothing that we can do.\n"
   },
   {
     "question" : "Do you collect any information about my wallet?",
-    "answer" : "Cake Wallet DOES NOT collect or record any information about your wallet. We care about your privacy.\n"
+    "answer" : "Hash Wallet DOES NOT collect or record any information about your wallet. We care about your privacy.\n"
   },
   {
     "question" : "Is it possible to reverse a transaction?",
@@ -52,7 +52,7 @@
     "answer" : "If you're having issues with an exchange, the best option is to contact the exchange itself. We're partnered with ChangeNow, SimpleSwap, SideShift and Trocador. So your best bet is to go to https://changenow.io, https://simpleswap.io/, https://sideshift.ai/, https://trocador.app/ and contact their support.\n"
   },
   {
-    "question" : "How do I contact Cake Wallet support?",
+    "question" : "How do I contact Hash Wallet support?",
     "answer" : "Email support@cakewallet.com, join the Telegram at @cakewallet_bot, or tweet @CakeWalletXMR!\n"
   }
 ]

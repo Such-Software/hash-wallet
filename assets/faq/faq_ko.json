@@ -25,7 +25,7 @@
   },
   {
     "question" : "씨앗을 잃어 버리면 어떻게해야합니까?",
-    "answer" : "씨앗을 잊어 버렸다면 아마 어딘가에 썼을 것입니다. 메모를 확인하고 컴퓨터를 둘러보십시오. 어디에서나 찾을 수 없다면 Cake Wallet을 백업했을 수 있습니다 (이 경우 해당 백업에서 복원 할 수 있습니다). 이러한 작업이 없으면 불행히도 우리가 할 수있는 일이 없습니다.\n"
+    "answer" : "씨앗을 잊어 버렸다면 아마 어딘가에 썼을 것입니다. 메모를 확인하고 컴퓨터를 둘러보십시오. 어디에서나 찾을 수 없다면 Hash Wallet을 백업했을 수 있습니다 (이 경우 해당 백업에서 복원 할 수 있습니다). 이러한 작업이 없으면 불행히도 우리가 할 수있는 일이 없습니다.\n"
   },
   {
     "question" : "내 지갑에 대한 정보를 수집합니까?",
@@ -52,7 +52,7 @@
     "answer" : "교환에 문제가있는 경우 가장 좋은 선택은 Exchange 자체에 연락하는 것입니다. 우리는 Changenow, Simpleswap, Sideshift 및 Trocador와 파트너 관계를 맺고 있습니다. 따라서 가장 좋은 방법은 https://changenow.io, https://simpleswap.io/, https://sideshift.ai/, https://trocador.app/로 이동하여 지원에 연락하는 것입니다.\n"
   },
   {
-    "question" : "Cake Wallet 지원팀에 연락하려면 어떻게해야합니까?",
+    "question" : "Hash Wallet 지원팀에 연락하려면 어떻게해야합니까?",
     "answer" : "support@cakewallet.com로 이메일을 보내거나 @cakewallet_bot에서 전보에 가입하거나 @CakeWalletXMR을 트윗하십시오!\n"
   }
 ]

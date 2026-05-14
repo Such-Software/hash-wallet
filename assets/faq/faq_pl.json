@@ -25,7 +25,7 @@
   },
   {
     "question" : "Co mogę zrobić, jeśli zapomniałem frazę seed?",
-    "answer" : "Jeśli zapomniałeś swoją frazę seed, prawdopodobnie gdzieś je zapisałeś. Sprawdź swoje notatki i rozejrzyj się po komputerze. Jeśli nie możesz go nigdzie znaleźć, być może utworzono kopię zapasową Cake Wallet (w takim przypadku będziesz mógł przywrócić dane z tej kopii zapasowej). Jeśli żadna z tych czynności nie działa, niestety nic nie możemy zrobić.\n"
+    "answer" : "Jeśli zapomniałeś swoją frazę seed, prawdopodobnie gdzieś je zapisałeś. Sprawdź swoje notatki i rozejrzyj się po komputerze. Jeśli nie możesz go nigdzie znaleźć, być może utworzono kopię zapasową Hash Wallet (w takim przypadku będziesz mógł przywrócić dane z tej kopii zapasowej). Jeśli żadna z tych czynności nie działa, niestety nic nie możemy zrobić.\n"
   },
   {
     "question" : "Czy zbieracie jakieś informacje o moim portfelu?",
@@ -52,7 +52,7 @@
     "answer" : "Jeśli masz problemy z wymianą, najlepszą opcją jest skontaktowanie się z samą wymianą. Współpracujemy z Changenow, Simpleswap, Sideshift i Trocador. Więc najlepszym rozwiązaniem jest przejście na https://changenow.io, https://simpleswap.io/, https://sideshift.ai/, https://trocador.app/ i skontaktować się z ich obsługą.\n"
   },
   {
-    "question" : "Jak skontaktować się z obsługą Cake Wallet?",
+    "question" : "Jak skontaktować się z obsługą Hash Wallet?",
     "answer" : "Wyślij e-mail na adres support@cakewallet.com, dołącz do telegramu na @cakewallet_bot lub tweet @CakeWalletXMR!\n"
   }
 ]

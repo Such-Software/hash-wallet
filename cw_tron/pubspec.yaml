@@ -2,7 +2,7 @@ name: cw_tron
 description: A new Flutter package project.
 version: 0.0.1
 publish_to: none
-homepage: https://cakewallet.com
+homepage: https://github.com/Such-Software/hash-wallet
 
 environment:
   sdk: '>=3.0.6 <4.0.0'

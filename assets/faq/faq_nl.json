@@ -25,11 +25,11 @@
   },
   {
     "question" : "Wat kan ik doen als ik mijn zaad verlies?",
-    "answer" : "Als je je zaad bent vergeten, heb je het waarschijnlijk ergens opgeschreven. Controleer uw aantekeningen en kijk rond op uw computer. Als je het nergens kunt vinden, heb je misschien een back-up gemaakt van Cake Wallet (in welk geval je in staat zou zijn om vanuit die back-up te herstellen.) Als geen van deze werken, kunnen we helaas niets doen.\n"
+    "answer" : "Als je je zaad bent vergeten, heb je het waarschijnlijk ergens opgeschreven. Controleer uw aantekeningen en kijk rond op uw computer. Als je het nergens kunt vinden, heb je misschien een back-up gemaakt van Hash Wallet (in welk geval je in staat zou zijn om vanuit die back-up te herstellen.) Als geen van deze werken, kunnen we helaas niets doen.\n"
   },
   {
     "question" : "Verzamel je informatie over mijn portemonnee?",
-    "answer" : "Cake Wallet verzamelt of registreert GEEN informatie over uw portemonnee. Wij geven om uw privacy.\n"
+    "answer" : "Hash Wallet verzamelt of registreert GEEN informatie over uw portemonnee. Wij geven om uw privacy.\n"
   },
   {
     "question" : "Is het mogelijk om een transactie ongedaan te maken?",
@@ -52,7 +52,7 @@
     "answer" : "Als u problemen heeft met een uitwisseling, is de beste optie om contact op te nemen met de uitwisseling zelf. We werken samen met ChangeNow, SimpleSwap, SideShift en Trocador. Dus het beste is om naar https://changenow.io, https://simpleswap.io/, https://sideshift.ai/, https://trocador.app/ te gaan en contact op te nemen met hun ondersteuning.\n"
   },
   {
-    "question" : "Hoe neem ik contact op met Cake Wallet-ondersteuning?",
+    "question" : "Hoe neem ik contact op met Hash Wallet-ondersteuning?",
     "answer" : "E-mail support@cakewallet.com, word lid van het Telegram op @cakewallet_bot of tweet @CakeWalletXMR!\n"
   }
 ]

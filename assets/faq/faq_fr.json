@@ -25,11 +25,11 @@
   },
   {
     "question" : "Que puis-je faire si je perds ma phrase secrète (seed) ?",
-    "answer" : "Si vous oubliez votre phrase secrète (seed), il y a des chances que vous l'ayez inscrite quelque part. Vérifiez vos notes et regardez sur votre ordinateur. Si vous ne parvenez pas à la retrouver, il est possible que vous ayez effectué une sauvegarde de Cake Wallet (dans ce cas vous pourrez restaurer d'après cette sauvegarde). Si aucune des ces options ne convient, malheureusement il n'y a plus rien à faire, vos fonds sont définitivement perdus.\n"
+    "answer" : "Si vous oubliez votre phrase secrète (seed), il y a des chances que vous l'ayez inscrite quelque part. Vérifiez vos notes et regardez sur votre ordinateur. Si vous ne parvenez pas à la retrouver, il est possible que vous ayez effectué une sauvegarde de Hash Wallet (dans ce cas vous pourrez restaurer d'après cette sauvegarde). Si aucune des ces options ne convient, malheureusement il n'y a plus rien à faire, vos fonds sont définitivement perdus.\n"
   },
   {
     "question" : "Collectez vous des informations à propos de mon portefeuille (wallet) ?",
-    "answer" : "Cake Wallet NE COLLECTE PAS d'informations à propos de votre portefeuille (wallet). Nous sommes respectueux de votre intimité.\n"
+    "answer" : "Hash Wallet NE COLLECTE PAS d'informations à propos de votre portefeuille (wallet). Nous sommes respectueux de votre intimité.\n"
   },
   {
     "question" : "Est il possible d'annuler une transaction ?",
@@ -53,7 +53,7 @@
     "answer" : "Si vous rencontrez des problèmes avec un échange, la meilleure option est de contacter l'échange lui-même. Nous sommes en partenariat avec Changenow, Simpleswap, Sideshift et le Trocador. Donc, votre meilleur pari est d'aller sur https://changenow.io, https://simpleswap.io/, https://sideshift.ai/, https://trocador.app/ et contactez leur support.\n"
   },
   {
-    "question" : "Comment puis-je contacter le support de Cake Wallet ?",
+    "question" : "Comment puis-je contacter le support de Hash Wallet ?",
     "answer" : "Envoyez un email à support@cakewallet.com, rejoignez le groupe Telegram @cakewallet_bot, ou @CakeWalletXMR sur Twitter!\n"
   }
 ]

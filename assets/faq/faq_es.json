@@ -25,11 +25,11 @@
   },
   {
     "question" : "¿Qué puedo hacer si pierdo mi semilla?",
-    "answer" : "Si olvidó su semilla, probablemente la escribió en alguna parte. Verifique sus notas y mire a su alrededor en su computadora. Si no puede encontrarlo en ninguna parte, es posible que haya realizado una copia de seguridad de Cake Wallet (en cuyo caso podría restaurar desde esa copia de seguridad). Si ninguno de estos funciona, desafortunadamente no hay nada que podamos hacer.\n"
+    "answer" : "Si olvidó su semilla, probablemente la escribió en alguna parte. Verifique sus notas y mire a su alrededor en su computadora. Si no puede encontrarlo en ninguna parte, es posible que haya realizado una copia de seguridad de Hash Wallet (en cuyo caso podría restaurar desde esa copia de seguridad). Si ninguno de estos funciona, desafortunadamente no hay nada que podamos hacer.\n"
   },
   {
     "question" : "¿Recopila información sobre mi billetera?",
-    "answer" : "Cake Wallet NO recopila ni registra ninguna información sobre su billetera. Nos preocupamos por su privacidad.\n"
+    "answer" : "Hash Wallet NO recopila ni registra ninguna información sobre su billetera. Nos preocupamos por su privacidad.\n"
   },
   {
     "question" : "¿Es posible revertir una transacción?",
@@ -52,7 +52,7 @@
     "answer" : "Si tiene problemas con un intercambio, la mejor opción es comunicarse con el intercambio en sí. Estamos asociados con ChangeNow, SimpleSwap, SideShift y Trocador. Entonces, su mejor opción es ir a https://changenow.io, https://simplewap.io/, https://sideshift.ai/, https://trocador.app/ y contactar su soporte.\n"
   },
   {
-    "question" : "¿Cómo contacto al soporte de Cake Wallet?",
+    "question" : "¿Cómo contacto al soporte de Hash Wallet?",
     "answer" : "¡Envíe un correo electrónico a support@cakewallet.com, únase al Telegram en @cakewallet_bot o envíe un tweet a @CakeWalletXMR!\n"
   }
 ]

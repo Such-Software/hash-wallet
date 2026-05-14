@@ -2,7 +2,7 @@ name: cw_monero
 description: A new flutter plugin project.
 version: 0.0.1
 publish_to: none
-homepage: https://cakewallet.com
+homepage: https://github.com/Such-Software/hash-wallet
 
 environment:
   sdk: ^3.5.0
