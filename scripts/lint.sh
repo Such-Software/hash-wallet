@@ -3,7 +3,7 @@ set -x -e
 cd $(dirname $0)
 cd ..
 
-for i in cw_zcash;
+for i in cw_core cw_monero cw_wownero cw_bitcoin cw_bitcoin_cash cw_dogecoin cw_evm cw_nano;
 do
     dart fix --apply $i/
     dart format --line-length=100 $i/
