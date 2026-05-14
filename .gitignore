@@ -147,7 +147,10 @@ lib/arbitrum/arbitrum.dart
 lib/evm/evm.dart
 lib/zcash/zcash.dart
 
-ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
+# Hash Wallet: keep the AppIcon Contents.json committed so a fresh clone
+# can run `dart run flutter_launcher_icons` without needing the directory
+# scaffold first. PNGs remain build artifacts.
+# ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
 ios/Runner/Assets.xcassets/AppIcon.appiconset/*.png
 
 ios/Runner/Info.plist
