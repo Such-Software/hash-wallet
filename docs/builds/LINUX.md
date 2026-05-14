@@ -51,9 +51,9 @@ cp -r build/linux/x64 build/linux/current
 # use line below if you are building on arm64
 # cp -r build/linux/arm64 build/linux/current
 # If you want to build flatpak you need --privileged flag
-flatpak-builder --force-clean flatpak-build com.cakewallet.CakeWallet.yml
+flatpak-builder --force-clean flatpak-build com.suchsoftware.HashWallet.yml
 flatpak build-export export flatpak-build
-flatpak build-bundle export build/linux/current/cake_wallet.flatpak com.cakewallet.CakeWallet
+flatpak build-bundle export build/linux/current/hash_wallet.flatpak com.suchsoftware.HashWallet
 EOF
 ```
 

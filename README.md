@@ -60,7 +60,7 @@ Required Flutter version is pinned in `Dockerfile` (currently 3.32.0). Before th
 Then run the platform-specific configure script, e.g.:
 
 ```bash
-APP_LINUX_TYPE=cakewallet ./configure_cake_wallet.sh linux
+APP_LINUX_TYPE=cakewallet ./configure_hash_wallet.sh linux
 ```
 
 ## Contributing

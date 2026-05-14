@@ -1,7 +1,7 @@
 @echo off
 set cw_win_app_config=--monero --bitcoin --ethereum --polygon --nano --bitcoinCash --wownero --dogecoin --base --arbitrum --bsc
 set cw_root=%cd%
-set cw_archive_name=Cake Wallet.zip
+set cw_archive_name=Hash Wallet.zip
 set cw_archive_path=%cw_root%\%cw_archive_name%
 set secrets_file_path=lib\.secrets.g.dart
 set release_dir=build\windows\x64\runner\Release
@@ -43,9 +43,9 @@ copy /Y "%tools_root%\vcruntime140.dll" "%release_dir%\" > nul
 copy /Y "%tools_root%\vcruntime140_1.dll" "%release_dir%\" > nul
 
 echo === Generate the application archive ===
-xcopy /s /e /v /Y "%release_dir%\*.*" "build\Cake Wallet\" > nul
-tar acf "%cw_archive_name%" -C build\ "Cake Wallet"
+xcopy /s /e /v /Y "%release_dir%\*.*" "build\Hash Wallet\" > nul
+tar acf "%cw_archive_name%" -C build\ "Hash Wallet"
 
 echo === Open Explorer with the application archive ===
-echo Cake Wallet created archive at: %cw_archive_path%
+echo Hash Wallet created archive at: %cw_archive_path%
 %SystemRoot%\explorer.exe /select, %cw_archive_path%

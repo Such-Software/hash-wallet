@@ -4,4 +4,4 @@
 # Assume that we are in scripts/windows dir
 CW_ROOT=`pwd`/../..
 cd $CW_ROOT
-cmd.exe /c cakewallet.bat $1
+cmd.exe /c hashwallet.bat $1
