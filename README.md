@@ -46,7 +46,14 @@ The build system is unchanged from upstream Cake Wallet. See `docs/` for per-pla
 * Linux: `docs/build_linux.md`
 * Windows: `docs/build_windows.md`
 
-Required Flutter version is pinned in `Dockerfile` (currently 3.32.0). Before the first `flutter pub get`, you must run the prep scripts to clone external native dependencies:
+Required Flutter version is pinned in `Dockerfile` (currently 3.32.0) and `.tool-versions`. Newer Flutter SDKs (3.5+) drop the `_macros` pseudo-package that Cake's pinned `hive_generator` + `build_resolvers` transitively require — `flutter pub get` will fail until you switch to 3.32.0. If using `asdf` or `mise`, the version will be picked up automatically; otherwise:
+
+```bash
+git clone --depth 1 --branch 3.32.0 https://github.com/flutter/flutter.git ~/sdks/flutter/3.32.0
+export PATH="$HOME/sdks/flutter/3.32.0/bin:$PATH"
+flutter --version    # confirm 3.32.0 / Dart 3.8.0
+```
+ Before the first `flutter pub get`, you must run the prep scripts to clone external native dependencies:
 
 ```bash
 ./scripts/prepare_torch.sh
