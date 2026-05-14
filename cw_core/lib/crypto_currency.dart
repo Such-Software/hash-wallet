@@ -35,7 +35,7 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
   static const all = [
     CryptoCurrency.xmr,
     CryptoCurrency.btc,
-    CryptoCurrency.btcln,
+    // CryptoCurrency.btcln,  // Hash Wallet: Lightning disabled, see FeatureFlag.isLightningEnabled
     CryptoCurrency.eth,
     CryptoCurrency.ltc,
     CryptoCurrency.doge,

@@ -15,6 +15,7 @@ import 'package:cake_wallet/entities/service_status.dart';
 import 'package:cake_wallet/entities/sync_status_display_mode.dart';
 import 'package:cake_wallet/exchange/exchange_provider_description.dart';
 import 'package:cake_wallet/generated/i18n.dart';
+import 'package:cake_wallet/utils/feature_flag.dart';
 import 'package:cake_wallet/monero/monero.dart';
 import 'package:cake_wallet/nano/nano.dart';
 import 'package:cake_wallet/order/order_provider_description.dart';
@@ -709,7 +710,10 @@ abstract class DashboardViewModelBase with Store {
 
   @computed
   bool get hasLightning =>
-      wallet.type == WalletType.bitcoin && wallet.isSoftwareWallet && bitcoin!.useLightning(wallet);
+      FeatureFlag.isLightningEnabled &&
+      wallet.type == WalletType.bitcoin &&
+      wallet.isSoftwareWallet &&
+      bitcoin!.useLightning(wallet);
 
   @computed
   bool get hasWalletConnect =>
