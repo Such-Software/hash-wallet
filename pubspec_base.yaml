@@ -176,8 +176,7 @@ dev_dependencies:
   mobx_codegen: ^2.1.1
   build_resolvers: ^2.4.4
   hive_generator: ^2.0.1
-  # flutter_launcher_icons: ^0.11.0
-  # check flutter_launcher_icons for usage
+  flutter_launcher_icons: ^0.13.1
   pedantic: ^1.8.0
   # replace https://github.com/dart-lang/lints#migrating-from-packagepedantic
   translator:
@@ -228,13 +227,21 @@ dependency_overrides:
   flutter_rust_bridge: 2.11.1
   flutter_secure_storage_windows: 3.1.2
 
-flutter_icons:
+flutter_launcher_icons:
   image_path: "assets/images/app_logo.png"
   android: true
   ios: true
+  remove_alpha_ios: true
   macos:
     generate: true
     image_path: "assets/images/app_logo.png"
+  linux:
+    generate: true
+    image_path: "assets/images/app_logo.png"
+  windows:
+    generate: true
+    image_path: "assets/images/app_logo.png"
+    icon_size: 256
 
 flutter:
   uses-material-design: true
