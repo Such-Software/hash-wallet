@@ -2,16 +2,24 @@ import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cake_wallet/entities/fiat_currency.dart';
 import 'dart:convert';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
 
-const _fiatApiClearNetAuthority = 'fiat-api.cakewallet.com';
-const _fiatApiOnionAuthority = 'kfkyguqtz5vcnbvar5pjgddkaeawbo4j3r4fj3e22k3tzqageplosiid.onion';
+// Hash Wallet price endpoint. Backed by the Cloudflare Worker in
+// github.com/Such-Software/hash-wallet-prices — Kraken for majors, NonKYC for
+// WOW, KV-cached every 60s.
+//
+// USD-only. The wallet still lets the user pick other fiats from the UI, but
+// non-USD requests will return price=0 until forex conversion is added on the
+// server side.
+//
+// TODO: add a .onion mirror once we deploy a Tor hidden service and update
+// _fiatApiOnionAuthority — Tor users currently fall back to clearnet.
+const _fiatApiClearNetAuthority = 'prices.suchsoftware.com';
+const _fiatApiOnionAuthority = '';
 const _fiatApiPath = '/v2/rates';
 
 Future<double> _fetchPrice(String crypto, String fiat, bool torOnly) async {
 
   final Map<String, String> queryParams = {
-    'interval_count': '1',
     'base': crypto.split(".").first,
     'quote': fiat,
   };
@@ -19,17 +27,15 @@ Future<double> _fetchPrice(String crypto, String fiat, bool torOnly) async {
   num price = 0.0;
 
   try {
-    final onionUri = Uri.http(_fiatApiOnionAuthority, _fiatApiPath, queryParams);
     final clearnetUri = Uri.https(_fiatApiClearNetAuthority, _fiatApiPath, queryParams);
+    final onionUri = _fiatApiOnionAuthority.isEmpty
+        ? clearnetUri
+        : Uri.http(_fiatApiOnionAuthority, _fiatApiPath, queryParams);
 
     final response = await ProxyWrapper().get(
       onionUri: onionUri,
       clearnetUri: torOnly ? onionUri : clearnetUri,
-      headers: {
-        "x-api-key": secrets.fiatApiKey,
-      }
     );
-    
 
     if (response.statusCode != 200) {
       return 0.0;
