@@ -155,7 +155,10 @@ android/app/src/main/res/mipmap-*
 android/app/src/main/res/drawable/ic_launcher.png
 !android/app/src/main/res/drawable/launch_background.xml
 !android/app/src/main/res/values/styles.xml
-assets/images/app_logo.png
+# Hash Wallet: keeping app_logo.png committed as the canonical brand master.
+# Cake gitignored it because their build symlinks per-product variants into
+# place via scripts/*/app_icon.sh; we have a single product so no swap needed.
+# assets/images/app_logo.png
 assets/new-ui/**/*.svg.vec
 
 /pubspec.yaml
