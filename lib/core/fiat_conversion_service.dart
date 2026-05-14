@@ -13,7 +13,7 @@ import 'dart:convert';
 //
 // TODO: add a .onion mirror once we deploy a Tor hidden service and update
 // _fiatApiOnionAuthority — Tor users currently fall back to clearnet.
-const _fiatApiClearNetAuthority = 'prices.suchsoftware.com';
+const _fiatApiClearNetAuthority = 'prices.neroswap.com';
 const _fiatApiOnionAuthority = '';
 const _fiatApiPath = '/v2/rates';
 
