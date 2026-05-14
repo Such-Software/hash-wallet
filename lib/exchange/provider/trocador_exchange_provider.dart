@@ -237,6 +237,12 @@ class TrocadorExchangeProvider extends ExchangeProvider {
       'address': request.toAddress,
       'refund': request.refundAddress,
       'refund_memo': '0',
+      // Hash Wallet: route trade-status updates through our Cloudflare Worker
+      // (github.com/Such-Software/hash-wallet-prices). Trocador POSTs the trade
+      // body on every status change; the wallet polls our worker for the
+      // cached status instead of hammering Trocador. Per their commercial
+      // team's request to use webhooks over polling.
+      'webhook': 'https://prices.neroswap.com/v1/trocador-webhook',
     };
 
     if (isFixedRateMode) {
