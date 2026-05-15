@@ -1,0 +1,174 @@
+name: Hash Wallet Linux build
+
+# Triggers:
+# - on push to dev/main (validates the foundation each time we land work)
+# - on PRs targeting dev/main (gates merges)
+# - manual via workflow_dispatch ("Run workflow" button in the UI)
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    # Both your Gitea linux-beast runner and GitHub-hosted ubuntu runners
+    # carry the `ubuntu-latest` label, so this works on either platform.
+    runs-on: ubuntu-latest
+    container:
+      # Cake Labs' prebuilt build image with Flutter 3.32.0, Go 1.24.1, NDK r28,
+      # Rust nightly, and all the C++ build deps (boost, openssl, libsodium,
+      # libzmq, unbound, icu) preinstalled. Saves us from doing the simplybs
+      # source-bootstrap dance that ate 9GB on jw-laptop.
+      image: ghcr.io/cake-tech/cake_wallet:debian13-flutter3.32.0-ndkr28-go1.24.1-ruststablenightly
+      env:
+        BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        # cake_wallet build profile name, retained from upstream — internal
+        # identifier only, doesn't appear in the binary or UI.
+        APP_LINUX_TYPE: cakewallet
+
+    steps:
+      - name: Fix Actions HOME pointing at /github/home (breaks ~/.cache writes)
+        run: echo "HOME=/root" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Configure git inside the container
+        run: |
+          git config --global --add safe.directory '*'
+          git config --global user.email "ci@suchsoftware.com"
+          git config --global user.name "Hash Wallet CI"
+
+      # ---- Secrets ---------------------------------------------------------
+      # tool/.secrets-config.json is the source-of-truth for lib/.secrets.g.dart
+      # generation. Populate from CI secrets. EMPTY for non-Trocador entries
+      # because we don't have other affiliate keys yet.
+      - name: Inject Trocador + Bitcoin secrets
+        env:
+          TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
+          TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
+          TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
+        run: |
+          set -e
+          mkdir -p tool
+          cat > tool/.secrets-config.json <<JSON
+          {
+            "trocadorApiKey": "${TROCADOR_API_KEY}",
+            "trocadorMoneroApiKey": "${TROCADOR_MONERO_API_KEY}",
+            "trocadorExchangeMarkup": "${TROCADOR_EXCHANGE_MARKUP:-1}",
+            "fiatApiKey": "",
+            "moonPayApiKey": "",
+            "anypayToken": "",
+            "onramperApiKey": "",
+            "robinhoodApplicationId": "",
+            "exolixApiKey": "",
+            "walletConnectProjectId": "",
+            "swapTradeApiKey": "",
+            "letsExchangeBearerToken": "",
+            "stealthExBearerToken": "",
+            "xoSwapApiKey": "",
+            "swapsXyzApiKey": "",
+            "nearIntentsApiKey": ""
+          }
+          JSON
+          # cw_bitcoin only needs breezApiKey (Lightning, disabled — empty is fine)
+          echo '{ "breezApiKey": "" }' > tool/.bitcoin-secrets-config.json
+          # Other per-module configs default to empty {} unless we add keys.
+          echo '{}' > tool/.evm-secrets-config.json
+          echo '{}' > tool/.solana-secrets-config.json
+          echo '{}' > tool/.tron-secrets-config.json
+          echo '{}' > tool/.nano-secrets-config.json
+
+      # ---- External clones (use prebuilt tarballs, NOT prepare_*.sh) -------
+      # The prepare_torch.sh / prepare_reown.sh scripts do dev-time clones
+      # that take forever; CI uses the pre-tagged release tarballs instead.
+      - name: Fetch prebuilt torch_dart
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf torch_dart torch_dart.tar.gz
+            wget -q https://github.com/MrCyjaneK/torch_dart/releases/download/v1.0.17/torch_dart-v1.0.17.tar.gz -O torch_dart.tar.gz
+            mkdir torch_dart
+            tar -xzf torch_dart.tar.gz -C torch_dart
+            rm torch_dart.tar.gz
+          popd
+
+      - name: Fetch prebuilt reown_flutter
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf reown_flutter reown_flutter.tar.gz
+            wget -q https://github.com/cake-tech/reown_flutter/releases/download/v0.0.4/reown_flutter-v0.0.4.tar.gz -O reown_flutter.tar.gz
+            mkdir reown_flutter
+            tar -xzf reown_flutter.tar.gz -C reown_flutter
+            rm reown_flutter.tar.gz
+          popd
+
+      - name: Clone BitBox Flutter (small, builds fast)
+        run: |
+          set -x -e
+          pushd scripts
+            ./build_bitbox_flutter.sh
+          popd
+
+      # ---- Native crypto cores (monero_c prebuilt bundle) ------------------
+      # Skips the full simplybs toolchain bootstrap. The bundle has libmonero,
+      # libwownero, AND libzano .so files; CMake only installs the ones we
+      # ship (monero + wownero).
+      - name: Fetch prebuilt monero_c .so bundle
+        run: |
+          set -x -e
+          ./scripts/prepare_moneroc.sh
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          echo "monero_c TAG: $MONERO_C_TAG"
+          mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
+          pushd "scripts/monero_c/release/$MONERO_C_TAG"
+            wget -q https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
+            unzip -q release-bundle.zip
+            rm release-bundle.zip
+            ls x86_64-linux-gnu/
+          popd
+
+      # ---- Configure: pubspec.yaml, AndroidManifest.xml, env vars ----------
+      - name: Run configure (cakewallet build profile)
+        run: |
+          pushd scripts/linux
+            source ./app_env.sh cakewallet
+            ./app_config.sh
+          popd
+
+      # ---- Codegen: mobx, hive adapters, FFI bindings ----------------------
+      # model_generator.sh is already trimmed to our 8 enabled chains.
+      # Use `async` flag for parallel build_runner across modules.
+      - name: Generate per-module secrets.g.dart files
+        run: dart run tool/generate_new_secrets.dart
+
+      - name: Build generated code (mobx + hive adapters)
+        run: bash model_generator.sh async
+
+      - name: Generate localization
+        run: dart run tool/generate_localization.dart
+
+      # ---- Compile + package ----------------------------------------------
+      - name: Build Linux app
+        run: flutter build linux --dart-define-from-file=env.json --release
+
+      - name: Compress release bundle
+        run: |
+          pushd build/linux/x64/release
+          zip -r hash_wallet_linux_${{ github.sha }}.zip bundle
+          popd
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hash-wallet-linux-${{ github.sha }}
+          path: build/linux/x64/release/hash_wallet_linux_*.zip
+          retention-days: 14
