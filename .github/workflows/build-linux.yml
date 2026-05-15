@@ -47,44 +47,16 @@ jobs:
           git config --global user.name "Hash Wallet CI"
 
       # ---- Secrets ---------------------------------------------------------
-      # tool/.secrets-config.json is the source-of-truth for lib/.secrets.g.dart
-      # generation. Populate from CI secrets. EMPTY for non-Trocador entries
-      # because we don't have other affiliate keys yet.
-      - name: Inject Trocador + Bitcoin secrets
-        env:
-          TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
-          TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
-          TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
-        run: |
-          set -e
-          mkdir -p tool
-          cat > tool/.secrets-config.json <<JSON
-          {
-            "trocadorApiKey": "${TROCADOR_API_KEY}",
-            "trocadorMoneroApiKey": "${TROCADOR_MONERO_API_KEY}",
-            "trocadorExchangeMarkup": "${TROCADOR_EXCHANGE_MARKUP:-1}",
-            "fiatApiKey": "",
-            "moonPayApiKey": "",
-            "anypayToken": "",
-            "onramperApiKey": "",
-            "robinhoodApplicationId": "",
-            "exolixApiKey": "",
-            "walletConnectProjectId": "",
-            "swapTradeApiKey": "",
-            "letsExchangeBearerToken": "",
-            "stealthExBearerToken": "",
-            "xoSwapApiKey": "",
-            "swapsXyzApiKey": "",
-            "nearIntentsApiKey": ""
-          }
-          JSON
-          # cw_bitcoin only needs breezApiKey (Lightning, disabled — empty is fine)
-          echo '{ "breezApiKey": "" }' > tool/.bitcoin-secrets-config.json
-          # Other per-module configs default to empty {} unless we add keys.
-          echo '{}' > tool/.evm-secrets-config.json
-          echo '{}' > tool/.solana-secrets-config.json
-          echo '{}' > tool/.tron-secrets-config.json
-          echo '{}' > tool/.nano-secrets-config.json
+      # IMPORTANT: don't pre-write any of the tool/.*secrets-config.json
+      # files. The generator at tool/generate_secrets_config.dart has an
+      # early-return if tool/.secrets-config.json already exists (lines
+      # 57-63), which then ALSO skips creating the per-module configs (evm,
+      # solana, nano, tron, bitcoin) — every cw_* module then fails to
+      # compile with "Undefined name secrets.xxx" for dozens of keys.
+      #
+      # Instead: run the generator first so it creates all configs from the
+      # full SecretKey list (with empty defaults), then sed-inject Trocador
+      # values into the freshly-generated lib/.secrets.g.dart.
 
       # ---- External clones (use prebuilt tarballs, NOT prepare_*.sh) -------
       # The prepare_torch.sh / prepare_reown.sh scripts do dev-time clones
@@ -147,8 +119,26 @@ jobs:
       # ---- Codegen: mobx, hive adapters, FFI bindings ----------------------
       # model_generator.sh is already trimmed to our 8 enabled chains.
       # Use `async` flag for parallel build_runner across modules.
-      - name: Generate per-module secrets.g.dart files
+      - name: Generate per-module secrets.g.dart files (all empty defaults)
         run: dart run tool/generate_new_secrets.dart
+
+      - name: Inject Trocador affiliate secrets into lib/.secrets.g.dart
+        env:
+          TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
+          TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
+          TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
+        run: |
+          # Replace empty default '' with real values for the three Trocador keys.
+          # Other ~80 secrets stay as empty strings — code that uses them just
+          # fails-soft at runtime (no transaction history without Etherscan key,
+          # no Cake Pay without API key, etc.). Add more sed lines here as we
+          # acquire other affiliate keys.
+          sed -i \
+            -e "s|const trocadorApiKey = '';|const trocadorApiKey = '${TROCADOR_API_KEY}';|" \
+            -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
+            -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
+            lib/.secrets.g.dart
+          grep '^const trocador' lib/.secrets.g.dart   # verify the substitutions
 
       # Initialize Flutter SDK once before parallel-ish work happens. flutter
       # precache for Flutter 3.32.0 hits a 404 on flutter_gpu.zip (asset not
