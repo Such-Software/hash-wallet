@@ -150,8 +150,19 @@ jobs:
       - name: Generate per-module secrets.g.dart files
         run: dart run tool/generate_new_secrets.dart
 
+      # Initialize Flutter SDK once before parallel-ish work happens. flutter
+      # precache for Flutter 3.32.0 hits a 404 on flutter_gpu.zip (asset not
+      # actually published at the path Flutter constructs); the `|| true`
+      # absorbs that — desktop Linux build doesn't need flutter_gpu.
+      - name: Initialize Flutter SDK
+        run: |
+          flutter --version
+          flutter precache --linux --no-android --no-ios --no-macos --no-windows --no-fuchsia --no-web || true
+
+      # Sequential — async flag races on Flutter's startup lock and corrupts
+      # the SDK state, causing the "doesn't support null safety" cascade.
       - name: Build generated code (mobx + hive adapters)
-        run: bash model_generator.sh async
+        run: bash model_generator.sh
 
       - name: Generate localization
         run: dart run tool/generate_localization.dart
