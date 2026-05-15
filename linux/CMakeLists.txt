@@ -125,13 +125,6 @@ set(MONERO_C_RELEASE_DIR
 )
 
 install(
-  FILES "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/zcash_lib/target/release/libwarp_api_ffi.so"
-  DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
-  RENAME "libwarp_api_ffi.so"
-  COMPONENT Runtime
-)
-
-install(
   FILES "${MONERO_C_RELEASE_DIR}/libmonero_wallet2_api_c.so"
   DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
   RENAME "libmonero_wallet2_api_c.so"
