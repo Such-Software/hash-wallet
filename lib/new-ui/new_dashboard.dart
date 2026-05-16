@@ -53,7 +53,12 @@ class _NewDashboardState extends State<NewDashboard> {
       });
     });
 
-    Future.delayed(Duration(milliseconds: 300)).then((_) => _showChangelog(context));
+    // Hash Wallet: changelog modal disabled. The Cake-supplied changelog
+    // text (assets/new-ui/changelog/text) describes Cake's release history
+    // including v6.1.0 entries that aren't ours, and the 'View more info'
+    // button linked to blog.cakewallet.com. Re-enable once we have our
+    // own changelog content + versioning under our control.
+    // Future.delayed(Duration(milliseconds: 300)).then((_) => _showChangelog(context));
     _showVulnerableSeedsPopup(context);
   }
 
