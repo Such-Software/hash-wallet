@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:cake_wallet/entities/auto_generate_subaddress_status.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/entities/auto_generate_subaddress_status.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';

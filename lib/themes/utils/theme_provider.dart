@@ -1,6 +1,6 @@
-import 'package:cake_wallet/themes/core/theme_store.dart';
-import 'package:cake_wallet/themes/utils/theme_list.dart';
-import 'package:cake_wallet/themes/theme_classes/black_theme.dart';
+import 'package:hash_wallet/themes/core/theme_store.dart';
+import 'package:hash_wallet/themes/utils/theme_list.dart';
+import 'package:hash_wallet/themes/theme_classes/black_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

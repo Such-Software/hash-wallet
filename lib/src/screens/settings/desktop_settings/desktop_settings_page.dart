@@ -1,11 +1,11 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/widgets/setting_action_button.dart';
-import 'package:cake_wallet/src/widgets/setting_actions.dart';
-import 'package:cake_wallet/typography.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/widgets/setting_action_button.dart';
+import 'package:hash_wallet/src/widgets/setting_actions.dart';
+import 'package:hash_wallet/typography.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/router.dart' as Router;
+import 'package:hash_wallet/router.dart' as Router;
 
 final _settingsNavigatorKey = GlobalKey<NavigatorState>();
 

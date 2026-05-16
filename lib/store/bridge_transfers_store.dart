@@ -1,4 +1,4 @@
-import 'package:cake_wallet/entities/bridge_transfer.dart';
+import 'package:hash_wallet/entities/bridge_transfer.dart';
 import 'package:mobx/mobx.dart';
 
 part 'bridge_transfers_store.g.dart';

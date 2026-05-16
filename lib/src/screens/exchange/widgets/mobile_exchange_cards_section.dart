@@ -1,5 +1,5 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/new_wallet/widgets/select_button.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/new_wallet/widgets/select_button.dart';
 import 'package:flutter/material.dart';
 
 class MobileExchangeCardsSection extends StatelessWidget {

@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_picker_cell.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
-import 'package:cake_wallet/view_model/settings/sync_mode.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_picker_cell.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/view_model/settings/sync_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

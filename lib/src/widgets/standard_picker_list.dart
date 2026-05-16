@@ -1,5 +1,5 @@
-import 'package:cake_wallet/src/widgets/list_row.dart';
-import 'package:cake_wallet/src/widgets/picker.dart';
+import 'package:hash_wallet/src/widgets/list_row.dart';
+import 'package:hash_wallet/src/widgets/picker.dart';
 import 'package:flutter/material.dart';
 
 class StandardPickerList<T> extends StatefulWidget {

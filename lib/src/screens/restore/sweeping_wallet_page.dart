@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:flutter/scheduler.dart';
 
 class SweepingWalletPage extends BasePage {

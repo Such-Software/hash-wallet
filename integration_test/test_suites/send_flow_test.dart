@@ -8,7 +8,7 @@ import '../components/common_test_flows.dart';
 import '../components/common_test_cases.dart';
 import '../robots/dashboard_page_robot.dart';
 import '../robots/send_page_robot.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

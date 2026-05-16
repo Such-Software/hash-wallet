@@ -1,7 +1,7 @@
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/picker.dart';
-import 'package:cake_wallet/src/widgets/standard_list.dart';
+import 'package:hash_wallet/src/widgets/picker.dart';
+import 'package:hash_wallet/src/widgets/standard_list.dart';
 
 class SettingsPriorityPickerCell<ItemType> extends StandardListRow {
   SettingsPriorityPickerCell({

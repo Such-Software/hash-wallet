@@ -1,5 +1,5 @@
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 
 class TradeNotCreatedException implements Exception {
   TradeNotCreatedException(this.provider, {this.description = ''});

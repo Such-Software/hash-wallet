@@ -1,8 +1,8 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/themes/core/theme_extension.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 class AddPassphraseBottomSheet extends StatefulWidget {

@@ -1,23 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cake_wallet/core/key_service.dart';
-import 'package:cake_wallet/core/wallet_loading_service.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/utils/feature_flag.dart';
-import 'package:cake_wallet/utils/tor.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_item.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_view_model.dart';
+import 'package:hash_wallet/core/key_service.dart';
+import 'package:hash_wallet/core/wallet_loading_service.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/utils/feature_flag.dart';
+import 'package:hash_wallet/utils/tor.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_item.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_view_model.dart';
 import 'package:cw_core/sync_status.dart';
 import 'package:cw_core/transaction_direction.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cake_wallet/evm/evm.dart';
+import 'package:hash_wallet/evm/evm.dart';
 
 class BackgroundSync {
   final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();

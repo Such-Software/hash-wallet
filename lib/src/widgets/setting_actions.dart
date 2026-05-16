@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
 import 'package:flutter/material.dart';
 
 class SettingActions {

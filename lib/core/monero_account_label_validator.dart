@@ -1,5 +1,5 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/core/validator.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/core/validator.dart';
 
 class MoneroLabelValidator extends TextValidator {
   MoneroLabelValidator()

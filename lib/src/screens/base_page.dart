@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:cake_wallet/new-ui/widgets/modern_button.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/themes/core/material_base_theme.dart';
-import 'package:cake_wallet/themes/core/theme_store.dart';
-import 'package:cake_wallet/utils/route_aware.dart';
+import 'package:hash_wallet/new-ui/widgets/modern_button.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/themes/core/material_base_theme.dart';
+import 'package:hash_wallet/themes/core/theme_store.dart';
+import 'package:hash_wallet/utils/route_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/src/widgets/nav_bar.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/src/widgets/nav_bar.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 enum AppBarStyle { regular, withShadow, transparent, completelyTransparent }

@@ -1,15 +1,15 @@
-import 'package:cake_wallet/anonpay/anonpay_info_base.dart';
-import 'package:cake_wallet/anonpay/anonpay_invoice_info.dart';
-import 'package:cake_wallet/entities/qr_view_data.dart';
+import 'package:hash_wallet/anonpay/anonpay_info_base.dart';
+import 'package:hash_wallet/anonpay/anonpay_invoice_info.dart';
+import 'package:hash_wallet/entities/qr_view_data.dart';
 import 'package:cw_core/receive_page_option.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/gradient_background.dart';
-import 'package:cake_wallet/src/screens/receive/widgets/anonpay_status_section.dart';
-import 'package:cake_wallet/src/screens/receive/widgets/qr_image.dart';
-import 'package:cake_wallet/src/screens/receive/widgets/copy_link_item.dart';
-import 'package:cake_wallet/utils/brightness_util.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/gradient_background.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/anonpay_status_section.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/qr_image.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/copy_link_item.dart';
+import 'package:hash_wallet/utils/brightness_util.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart' as qr;
 

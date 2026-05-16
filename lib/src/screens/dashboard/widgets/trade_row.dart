@@ -1,8 +1,8 @@
-import "package:cake_wallet/exchange/trade_state.dart";
-import "package:cake_wallet/palette.dart";
-import "package:cake_wallet/utils/image_utill.dart";
+import "package:hash_wallet/exchange/trade_state.dart";
+import "package:hash_wallet/palette.dart";
+import "package:hash_wallet/utils/image_utill.dart";
 import "package:flutter/material.dart";
-import "package:cake_wallet/exchange/exchange_provider_description.dart";
+import "package:hash_wallet/exchange/exchange_provider_description.dart";
 
 class TradeRow extends StatelessWidget {
   TradeRow({

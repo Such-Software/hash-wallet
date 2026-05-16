@@ -1,4 +1,4 @@
-import 'package:cake_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
 import 'package:cw_core/cake_hive.dart';
 
 Future<List<int>> getEncryptionKey(

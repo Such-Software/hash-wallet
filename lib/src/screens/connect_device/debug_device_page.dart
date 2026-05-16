@@ -2,10 +2,10 @@
 //
 // import 'package:basic_utils/basic_utils.dart';
 // import 'package:bitcoin_base/bitcoin_base.dart';
-// import 'package:cake_wallet/src/screens/base_page.dart';
-// import 'package:cake_wallet/src/screens/connect_device/widgets/device_tile.dart';
-// import 'package:cake_wallet/src/widgets/primary_button.dart';
-// import 'package:cake_wallet/utils/responsive_layout_util.dart';
+// import 'package:hash_wallet/src/screens/base_page.dart';
+// import 'package:hash_wallet/src/screens/connect_device/widgets/device_tile.dart';
+// import 'package:hash_wallet/src/widgets/primary_button.dart';
+// import 'package:hash_wallet/utils/responsive_layout_util.dart';
 // import 'package:flutter/material.dart';
 // import 'package:ledger_flutter_plus/ledger_flutter_plus.dart';
 // import 'package:ledger_litecoin/ledger_litecoin.dart';

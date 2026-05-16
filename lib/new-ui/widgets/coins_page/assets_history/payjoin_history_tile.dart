@@ -1,5 +1,5 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
 import 'package:flutter/material.dart';
 
 class PayjoinHistoryTile extends StatelessWidget {

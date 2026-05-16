@@ -1,11 +1,11 @@
-import 'package:cake_wallet/buy/buy_provider.dart';
-import 'package:cake_wallet/buy/dfx/dfx_buy_provider.dart';
-import 'package:cake_wallet/buy/kryptonim/kryptonim.dart';
-import 'package:cake_wallet/buy/meld/meld_buy_provider.dart';
-import 'package:cake_wallet/buy/moonpay/moonpay_provider.dart';
-import 'package:cake_wallet/buy/onramper/onramper_buy_provider.dart';
-import 'package:cake_wallet/buy/robinhood/robinhood_buy_provider.dart';
-import 'package:cake_wallet/di.dart';
+import 'package:hash_wallet/buy/buy_provider.dart';
+import 'package:hash_wallet/buy/dfx/dfx_buy_provider.dart';
+import 'package:hash_wallet/buy/kryptonim/kryptonim.dart';
+import 'package:hash_wallet/buy/meld/meld_buy_provider.dart';
+import 'package:hash_wallet/buy/moonpay/moonpay_provider.dart';
+import 'package:hash_wallet/buy/onramper/onramper_buy_provider.dart';
+import 'package:hash_wallet/buy/robinhood/robinhood_buy_provider.dart';
+import 'package:hash_wallet/di.dart';
 
 enum ProviderType { robinhood, dfx, onramper, moonpay, meld, kriptonim }
 

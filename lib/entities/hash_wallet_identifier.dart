@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 import 'package:cw_core/wallet_base.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hashlib/hashlib.dart';

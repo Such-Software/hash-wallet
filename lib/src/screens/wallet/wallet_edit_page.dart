@@ -1,23 +1,23 @@
 import 'dart:async';
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:cake_wallet/core/wallet_name_validator.dart';
-import 'package:cake_wallet/entities/wallet_edit_page_arguments.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/auth/auth_page.dart';
-import 'package:cake_wallet/src/screens/wallet_unlock/wallet_unlock_arguments.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_edit_view_model.dart';
+import 'package:hash_wallet/core/wallet_name_validator.dart';
+import 'package:hash_wallet/entities/wallet_edit_page_arguments.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/auth/auth_page.dart';
+import 'package:hash_wallet/src/screens/wallet_unlock/wallet_unlock_arguments.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_edit_view_model.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class WalletEditPage extends BasePage {

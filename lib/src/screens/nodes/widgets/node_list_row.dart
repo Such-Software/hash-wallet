@@ -1,6 +1,6 @@
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/nodes/widgets/node_indicator.dart';
-import 'package:cake_wallet/src/widgets/standard_list.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/nodes/widgets/node_indicator.dart';
+import 'package:hash_wallet/src/widgets/standard_list.dart';
 import 'package:cw_core/node.dart';
 import 'package:flutter/material.dart';
 

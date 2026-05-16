@@ -1,5 +1,5 @@
-import 'package:cake_wallet/src/widgets/new_list_row/list_Item_style_wrapper.dart';
-import 'package:cake_wallet/src/widgets/standard_switch.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/list_Item_style_wrapper.dart';
+import 'package:hash_wallet/src/widgets/standard_switch.dart';
 import 'package:flutter/material.dart';
 
 class ListItemToggleWidget extends StatefulWidget {

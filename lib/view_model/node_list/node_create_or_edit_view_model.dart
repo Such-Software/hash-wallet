@@ -1,8 +1,8 @@
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item.dart';
-import 'package:cake_wallet/entities/qr_scanner.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/utils/permission_handler.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item.dart';
+import 'package:hash_wallet/entities/qr_scanner.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/utils/permission_handler.dart';
 import 'package:collection/collection.dart';
 import 'package:cw_core/node.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';

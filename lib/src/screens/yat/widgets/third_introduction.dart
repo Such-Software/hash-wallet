@@ -1,11 +1,11 @@
-import 'package:cake_wallet/src/screens/yat/widgets/yat_bar.dart';
-import 'package:cake_wallet/src/screens/yat/widgets/yat_page_indicator.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/scrollable_with_bottom_section.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/yat_bar.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/yat_page_indicator.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 
 class ThirdIntroduction extends StatelessWidget {
   ThirdIntroduction({required this.onGet, required this.onConnect, this.onClose});

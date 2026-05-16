@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:cake_wallet/utils/responsive_layout_util.dart';
+import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:flutter/material.dart';
 
 class AlertBackground extends StatelessWidget {

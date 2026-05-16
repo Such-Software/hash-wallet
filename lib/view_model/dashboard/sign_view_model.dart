@@ -1,5 +1,5 @@
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:mobx/mobx.dart';

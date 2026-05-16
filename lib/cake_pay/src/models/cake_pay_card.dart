@@ -1,4 +1,4 @@
-import 'package:cake_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
 
 class CakePayCard {
   final int id;

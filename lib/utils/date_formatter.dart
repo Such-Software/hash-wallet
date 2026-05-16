@@ -1,7 +1,7 @@
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:intl/intl.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 
 class DateFormatter {
   static String currentLocalFormat({bool hasTime = true, bool reverse = false}) {

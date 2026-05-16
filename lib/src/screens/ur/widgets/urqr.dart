@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:cake_wallet/src/screens/receive/widgets/qr_image.dart';
-import 'package:cake_wallet/src/screens/ur/widgets/qr_format_info_bottom_sheet.dart';
-import 'package:cake_wallet/src/screens/ur/widgets/qr_selection_dialog.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/utils/feature_flag.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/qr_image.dart';
+import 'package:hash_wallet/src/screens/ur/widgets/qr_format_info_bottom_sheet.dart';
+import 'package:hash_wallet/src/screens/ur/widgets/qr_selection_dialog.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/utils/feature_flag.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';

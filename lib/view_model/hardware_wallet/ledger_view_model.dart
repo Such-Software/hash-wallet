@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/main.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/connect_device/connect_device_page.dart';
-import 'package:cake_wallet/view_model/hardware_wallet/hardware_wallet_view_model.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/main.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/connect_device/connect_device_page.dart';
+import 'package:hash_wallet/view_model/hardware_wallet/hardware_wallet_view_model.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:cw_core/hardware/device_connection_type.dart';
 import 'package:cw_core/hardware/hardware_wallet_service.dart';
 import 'package:cw_core/utils/print_verbose.dart';

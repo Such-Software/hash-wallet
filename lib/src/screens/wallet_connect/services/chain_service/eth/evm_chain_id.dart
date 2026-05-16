@@ -1,4 +1,4 @@
-import 'package:cake_wallet/evm/evm.dart';
+import 'package:hash_wallet/evm/evm.dart';
 
 enum EVMChainId {
   ethereum,

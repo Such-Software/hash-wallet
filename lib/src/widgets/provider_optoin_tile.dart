@@ -1,4 +1,4 @@
-import 'package:cake_wallet/utils/image_utill.dart';
+import 'package:hash_wallet/utils/image_utill.dart';
 import 'package:flutter/material.dart';
 
 class ProviderOptionTile extends StatelessWidget {

@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:cake_wallet/core/wallet_loading_service.dart';
-import 'package:cake_wallet/entities/wallet_group.dart';
-import 'package:cake_wallet/entities/wallet_manager.dart';
-import 'package:cake_wallet/reactions/wallet_utils.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_item.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_view_model.dart';
-import 'package:cake_wallet/wallet_types.g.dart';
+import 'package:hash_wallet/core/wallet_loading_service.dart';
+import 'package:hash_wallet/entities/wallet_group.dart';
+import 'package:hash_wallet/entities/wallet_manager.dart';
+import 'package:hash_wallet/reactions/wallet_utils.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_item.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_view_model.dart';
+import 'package:hash_wallet/wallet_types.g.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:mobx/mobx.dart';

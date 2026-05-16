@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cake_wallet/utils/clipboard_util.dart';
+import 'package:hash_wallet/utils/clipboard_util.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

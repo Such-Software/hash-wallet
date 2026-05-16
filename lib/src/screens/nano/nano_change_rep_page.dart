@@ -1,20 +1,20 @@
-import 'package:cake_wallet/core/address_validator.dart';
-import 'package:cake_wallet/nano/nano.dart';
-import 'package:cake_wallet/src/widgets/address_text_field.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/utils/payment_request.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/core/address_validator.dart';
+import 'package:hash_wallet/nano/nano.dart';
+import 'package:hash_wallet/src/widgets/address_text_field.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/utils/payment_request.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/n2_node.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/scrollable_with_bottom_section.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
 
 class NanoChangeRepPage extends BasePage {
   NanoChangeRepPage({required SettingsStore settingsStore, required WalletBase wallet})

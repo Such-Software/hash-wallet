@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:cake_wallet/core/universal_address_detector.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/core/universal_address_detector.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/utils/print_verbose.dart';

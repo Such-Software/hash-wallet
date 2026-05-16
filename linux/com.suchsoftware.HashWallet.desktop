@@ -6,4 +6,4 @@ Comment=A noncustodial multi-currency wallet
 Categories=Office;Finance;
 Terminal=false
 Icon=com.suchsoftware.HashWallet
-Exec=cake_wallet
+Exec=hash_wallet

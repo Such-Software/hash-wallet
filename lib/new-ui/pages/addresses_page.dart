@@ -1,28 +1,28 @@
 import 'dart:ui';
 
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/new-ui/long_press_popup.dart';
-import 'package:cake_wallet/new-ui/widgets/addresses_page/address_info.dart';
-import 'package:cake_wallet/new-ui/widgets/addresses_page/address_label_input.dart';
-import 'package:cake_wallet/new-ui/widgets/coins_page/cards/balance_card.dart';
-import 'package:cake_wallet/new-ui/widgets/long_press_menu.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/utils/address_formatter.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_list_item.dart';
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
-import 'package:cake_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/new-ui/long_press_popup.dart';
+import 'package:hash_wallet/new-ui/widgets/addresses_page/address_info.dart';
+import 'package:hash_wallet/new-ui/widgets/addresses_page/address_label_input.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/cards/balance_card.dart';
+import 'package:hash_wallet/new-ui/widgets/long_press_menu.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/utils/address_formatter.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_item.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
 import 'package:cw_core/card_design.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import 'package:cake_wallet/utils/list_item.dart';
+import 'package:hash_wallet/utils/list_item.dart';
 import 'package:mobx/mobx.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

@@ -1,9 +1,9 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/themes/core/material_base_theme.dart';
-import 'package:cake_wallet/themes/theme_classes/black_theme.dart';
-import 'package:cake_wallet/view_model/settings/display_settings_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/themes/core/material_base_theme.dart';
+import 'package:hash_wallet/themes/theme_classes/black_theme.dart';
+import 'package:hash_wallet/view_model/settings/display_settings_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

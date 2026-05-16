@@ -1,15 +1,15 @@
 import 'dart:io';
-import 'package:cake_wallet/core/backup_service_v3.dart';
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/default_settings_migration.dart' show generateBackupPassword;
-import 'package:cake_wallet/entities/secret_store_key.dart';
-import 'package:cake_wallet/view_model/edit_backup_password_view_model.dart';
+import 'package:hash_wallet/core/backup_service_v3.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/default_settings_migration.dart' show generateBackupPassword;
+import 'package:hash_wallet/entities/secret_store_key.dart';
+import 'package:hash_wallet/view_model/edit_backup_password_view_model.dart';
 import 'package:cw_core/root_dir.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:mobx/mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 
 part 'backup_view_model.g.dart';
 

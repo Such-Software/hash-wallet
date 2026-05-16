@@ -1,6 +1,6 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
 import 'package:flutter/material.dart';
 
 class HeaderTile extends StatefulWidget {

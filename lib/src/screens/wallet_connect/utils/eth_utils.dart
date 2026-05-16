@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/walletkit_service.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/walletkit_service.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';

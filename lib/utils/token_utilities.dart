@@ -1,7 +1,7 @@
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/solana/solana.dart';
-import 'package:cake_wallet/tron/tron.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/solana/solana.dart';
+import 'package:hash_wallet/tron/tron.dart';
 import 'package:cw_core/cake_hive.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';

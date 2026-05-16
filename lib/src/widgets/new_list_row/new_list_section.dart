@@ -1,16 +1,16 @@
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_Item_checkbox.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item_dropdown.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item_regular_row.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item_selector.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item_text_field.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item_toggle.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/list_item_checkbox_widget.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/list_item_dropdown_widget.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/list_item_regular_row_widget.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/list_item_selector_widget.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/list_item_text_field_widget.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/list_item_toggle_widget.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_Item_checkbox.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_dropdown.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_regular_row.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_selector.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_text_field.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_toggle.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/list_item_checkbox_widget.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/list_item_dropdown_widget.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/list_item_regular_row_widget.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/list_item_selector_widget.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/list_item_text_field_widget.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/list_item_toggle_widget.dart';
 import 'package:flutter/material.dart';
 
 class NewListSections extends StatelessWidget {

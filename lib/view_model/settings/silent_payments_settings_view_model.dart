@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';

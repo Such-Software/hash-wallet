@@ -1,5 +1,5 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/zcash/zcash.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/receive_page_option.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';

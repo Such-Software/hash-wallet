@@ -1,14 +1,14 @@
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
-import 'package:cake_wallet/store/dashboard/trades_store.dart';
-import 'package:cake_wallet/utils/image_utill.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/store/dashboard/trades_store.dart';
+import 'package:hash_wallet/utils/image_utill.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/exchange/trade.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/exchange/trade.dart';
 
 class ExchangeConfirmPage extends BasePage {
   ExchangeConfirmPage({required this.tradesStore}) : trade = tradesStore.trade!;

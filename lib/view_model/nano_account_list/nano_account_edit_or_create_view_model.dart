@@ -1,10 +1,10 @@
-import 'package:cake_wallet/nano/nano.dart';
+import 'package:hash_wallet/nano/nano.dart';
 import 'package:cw_core/nano_account.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';
 
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/core/execution_state.dart';
+import 'package:hash_wallet/core/execution_state.dart';
 
 part 'nano_account_edit_or_create_view_model.g.dart';
 

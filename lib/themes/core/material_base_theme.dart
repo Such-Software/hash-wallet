@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/themes/core/custom_theme_colors.dart';
+import 'package:hash_wallet/themes/core/custom_theme_colors.dart';
 
 enum ThemeType { light, dark }
 

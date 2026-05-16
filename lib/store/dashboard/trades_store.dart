@@ -1,6 +1,6 @@
-import 'package:cake_wallet/exchange/trade.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/view_model/dashboard/trade_list_item.dart';
+import 'package:hash_wallet/exchange/trade.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/view_model/dashboard/trade_list_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
 

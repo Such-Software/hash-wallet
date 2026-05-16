@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cake_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 

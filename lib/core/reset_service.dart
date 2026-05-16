@@ -1,8 +1,8 @@
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/secret_store_key.dart';
-import 'package:cake_wallet/store/authentication_store.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/secret_store_key.dart';
+import 'package:hash_wallet/store/authentication_store.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 

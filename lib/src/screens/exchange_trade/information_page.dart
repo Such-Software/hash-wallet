@@ -1,7 +1,7 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/alert_background.dart';
+import 'package:hash_wallet/src/widgets/alert_background.dart';
 
 class InformationPage extends StatelessWidget {
   InformationPage({required this.information, super.key});

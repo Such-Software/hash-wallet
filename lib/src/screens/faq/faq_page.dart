@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/faq/faq_item.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/standard_list.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/faq/faq_item.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/standard_list.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 
 class FaqPage extends BasePage {
   FaqPage(this.settingsStore);

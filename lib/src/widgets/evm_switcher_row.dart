@@ -1,6 +1,6 @@
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/src/widgets/evm_switcher.dart';
-import 'package:cake_wallet/src/widgets/standard_switch.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/evm_switcher.dart';
+import 'package:hash_wallet/src/widgets/standard_switch.dart';
 import 'package:flutter/material.dart';
 
 class EvmSwitcherRow extends StatelessWidget {

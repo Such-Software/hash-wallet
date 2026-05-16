@@ -1,4 +1,4 @@
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

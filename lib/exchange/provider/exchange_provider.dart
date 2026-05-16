@@ -1,7 +1,7 @@
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
-import 'package:cake_wallet/exchange/limits.dart';
-import 'package:cake_wallet/exchange/trade.dart';
-import 'package:cake_wallet/exchange/trade_request.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/exchange/limits.dart';
+import 'package:hash_wallet/exchange/trade.dart';
+import 'package:hash_wallet/exchange/trade_request.dart';
 import 'package:cw_core/crypto_currency.dart';
 
 abstract class ExchangeProvider {

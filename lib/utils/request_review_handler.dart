@@ -1,4 +1,4 @@
-import 'package:cake_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_review/in_app_review.dart';
 

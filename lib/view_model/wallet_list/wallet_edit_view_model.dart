@@ -1,10 +1,10 @@
-import 'package:cake_wallet/core/wallet_loading_service.dart';
-import 'package:cake_wallet/entities/wallet_manager.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_view_model.dart';
+import 'package:hash_wallet/core/wallet_loading_service.dart';
+import 'package:hash_wallet/entities/wallet_manager.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_view_model.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/di.dart';
+import 'package:hash_wallet/di.dart';
 import 'package:cw_core/wallet_service.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_item.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_item.dart';
 
 part 'wallet_edit_view_model.g.dart';
 

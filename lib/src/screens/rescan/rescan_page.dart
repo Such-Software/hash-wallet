@@ -1,15 +1,15 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/main.dart';
-import 'package:cake_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/main.dart';
+import 'package:hash_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/view_model/rescan_view_model.dart';
-import 'package:cake_wallet/src/widgets/blockchain_height_widget.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/view_model/rescan_view_model.dart';
+import 'package:hash_wallet/src/widgets/blockchain_height_widget.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

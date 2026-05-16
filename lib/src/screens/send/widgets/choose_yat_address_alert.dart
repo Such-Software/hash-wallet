@@ -1,7 +1,7 @@
-import 'package:cake_wallet/src/widgets/cake_scrollbar.dart';
-import 'package:cake_wallet/src/widgets/section_divider.dart';
+import 'package:hash_wallet/src/widgets/cake_scrollbar.dart';
+import 'package:hash_wallet/src/widgets/section_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/base_alert_dialog.dart';
+import 'package:hash_wallet/src/widgets/base_alert_dialog.dart';
 
 class ChooseYatAddressAlert extends BaseAlertDialog {
   ChooseYatAddressAlert({

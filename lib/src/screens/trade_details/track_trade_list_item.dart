@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/transaction_details/standart_list_item.dart';
+import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
 
 class TrackTradeListItem extends StandartListItem {
   TrackTradeListItem({

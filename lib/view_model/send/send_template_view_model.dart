@@ -1,18 +1,18 @@
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/view_model/send/template_view_model.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/view_model/send/template_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/entities/template.dart';
-import 'package:cake_wallet/store/templates/send_template_store.dart';
-import 'package:cake_wallet/core/template_validator.dart';
-import 'package:cake_wallet/core/address_validator.dart';
-import 'package:cake_wallet/core/amount_validator.dart';
+import 'package:hash_wallet/entities/template.dart';
+import 'package:hash_wallet/store/templates/send_template_store.dart';
+import 'package:hash_wallet/core/template_validator.dart';
+import 'package:hash_wallet/core/address_validator.dart';
+import 'package:hash_wallet/core/amount_validator.dart';
 import 'package:cw_core/wallet_base.dart';
-import 'package:cake_wallet/store/dashboard/fiat_conversion_store.dart';
+import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
 
 part 'send_template_view_model.g.dart';
 

@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/send/send_page.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/view_model/send/send_view_model_state.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/send/send_page.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/view_model/send/send_view_model_state.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/transaction_priority.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../components/common_test_cases.dart';
 import '../components/common_test_constants.dart';
 import 'auth_page_robot.dart';
-import 'package:cake_wallet/src/widgets/standard_slide_button_widget.dart';
-import 'package:cake_wallet/src/screens/dashboard/dashboard_page.dart';
+import 'package:hash_wallet/src/widgets/standard_slide_button_widget.dart';
+import 'package:hash_wallet/src/screens/dashboard/dashboard_page.dart';
 
 class SendPageRobot {
   SendPageRobot({required this.tester})

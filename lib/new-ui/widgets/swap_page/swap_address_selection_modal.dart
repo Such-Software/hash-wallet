@@ -1,9 +1,9 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/new-ui/widgets/send_page/send_address_input.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/new_simple_checkbox.dart';
-import 'package:cake_wallet/view_model/exchange/exchange_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/new-ui/widgets/send_page/send_address_input.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/new_simple_checkbox.dart';
+import 'package:hash_wallet/view_model/exchange/exchange_view_model.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/wallet_type.dart' show WalletType;

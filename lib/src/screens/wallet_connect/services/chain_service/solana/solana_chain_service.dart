@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:blockchain_utils/base58/base58.dart';
 import 'package:blockchain_utils/blockchain_utils.dart' as blockchain_utils;
-import 'package:cake_wallet/src/screens/wallet_connect/services/chain_service/solana/solana_supported_methods.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/solana/solana_supported_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:on_chain/solana/solana.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 
-import 'package:cake_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/chain_service/solana/solana_chain_id.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/key_service/wallet_connect_key_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/utils/method_utils.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/solana/solana_chain_id.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/key_service/wallet_connect_key_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/utils/method_utils.dart';
+import 'package:hash_wallet/store/app_store.dart';
 
 class SolanaChainService {
   Map<String, dynamic Function(String, dynamic)> get solanaRequestHandlers => {

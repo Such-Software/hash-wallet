@@ -1,7 +1,7 @@
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
-import 'package:cake_wallet/exchange/trade_state.dart';
-import 'package:cake_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/exchange/trade_state.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';

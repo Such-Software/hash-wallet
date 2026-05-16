@@ -1,14 +1,14 @@
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/src/screens/dashboard/widgets/sign_form.dart';
-import 'package:cake_wallet/src/screens/dashboard/widgets/verify_form.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/src/screens/dashboard/widgets/sign_form.dart';
+import 'package:hash_wallet/src/screens/dashboard/widgets/verify_form.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
 
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/dashboard/sign_view_model.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/dashboard/sign_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';

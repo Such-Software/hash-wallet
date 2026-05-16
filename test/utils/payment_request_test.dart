@@ -1,4 +1,4 @@
-import 'package:cake_wallet/utils/payment_request.dart';
+import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

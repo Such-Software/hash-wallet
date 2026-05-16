@@ -1,12 +1,12 @@
-import 'package:cake_wallet/src/screens/receive/widgets/address_list.dart';
-import 'package:cake_wallet/src/widgets/gradient_background.dart';
-import 'package:cake_wallet/src/widgets/keyboard_done_button.dart';
-import 'package:cake_wallet/utils/share_util.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/address_list.dart';
+import 'package:hash_wallet/src/widgets/gradient_background.dart';
+import 'package:hash_wallet/src/widgets/keyboard_done_button.dart';
+import 'package:hash_wallet/utils/share_util.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/receive/widgets/qr_widget.dart';
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/qr_widget.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 class ReceivePage extends BasePage {

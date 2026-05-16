@@ -1,6 +1,6 @@
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/dev/moneroc_cache_debug.dart';
-import 'package:cake_wallet/view_model/dev/qr_tools_view_model.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/dev/moneroc_cache_debug.dart';
+import 'package:hash_wallet/view_model/dev/qr_tools_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

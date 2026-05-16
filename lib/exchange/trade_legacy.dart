@@ -1,9 +1,9 @@
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/get_encryption_key.dart';
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
-import 'package:cake_wallet/exchange/trade.dart';
-import 'package:cake_wallet/exchange/trade_currency_snapshot.dart';
-import 'package:cake_wallet/exchange/trade_state.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/get_encryption_key.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/exchange/trade.dart';
+import 'package:hash_wallet/exchange/trade_currency_snapshot.dart';
+import 'package:hash_wallet/exchange/trade_state.dart';
 import 'package:cw_core/cake_hive.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/hive_type_ids.dart';

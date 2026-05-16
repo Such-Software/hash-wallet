@@ -1,15 +1,15 @@
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/exchange_trade/information_page.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/themes/core/theme_extension.dart';
-import 'package:cake_wallet/utils/payment_request.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/exchange_trade/information_page.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/themes/core/theme_extension.dart';
+import 'package:hash_wallet/utils/payment_request.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/unspent_coin_type.dart';
 import 'package:cw_core/wallet_type.dart';

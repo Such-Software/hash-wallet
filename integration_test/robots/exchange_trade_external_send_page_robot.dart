@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:cake_wallet/src/screens/exchange_trade/exchange_trade_external_send_page.dart';
+import 'package:hash_wallet/src/screens/exchange_trade/exchange_trade_external_send_page.dart';
 
 import '../components/common_test_cases.dart';
 

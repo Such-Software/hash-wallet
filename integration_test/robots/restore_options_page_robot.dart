@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/restore/restore_options_page.dart';
+import 'package:hash_wallet/src/screens/restore/restore_options_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../components/common_test_cases.dart';

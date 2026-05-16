@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/integrations/deuro/widgets/numpad.dart';
-import 'package:cake_wallet/src/widgets/bottom_sheet/base_bottom_sheet_widget.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/integrations/deuro/widgets/numpad.dart';
+import 'package:hash_wallet/src/widgets/bottom_sheet/base_bottom_sheet_widget.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:cw_core/parse_fixed.dart';
 import 'package:flutter/material.dart';
 

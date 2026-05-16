@@ -1,6 +1,6 @@
-import 'package:cake_wallet/entities/contact.dart';
-import 'package:cake_wallet/entities/contact_base.dart';
-import 'package:cake_wallet/entities/record.dart';
+import 'package:hash_wallet/entities/contact.dart';
+import 'package:hash_wallet/entities/contact_base.dart';
+import 'package:hash_wallet/entities/record.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';

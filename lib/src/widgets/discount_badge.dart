@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 
 class DiscountBadge extends StatelessWidget {
   const DiscountBadge({

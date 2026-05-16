@@ -1,4 +1,4 @@
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:mobx/mobx.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cake_wallet/src/widgets/section_divider.dart';
+import 'package:hash_wallet/src/widgets/section_divider.dart';
 import 'package:flutter/material.dart';
 
 

@@ -1,8 +1,8 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/rounded_icon_button.dart';
-import 'package:cake_wallet/utils/image_utill.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/rounded_icon_button.dart';
+import 'package:hash_wallet/utils/image_utill.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

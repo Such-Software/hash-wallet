@@ -1,23 +1,23 @@
 import 'dart:convert';
 
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 
-import 'package:cake_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/chain_service/eth/evm_chain_id.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/chain_service/eth/evm_supported_methods.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/key_service/wallet_connect_key_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/utils/eth_utils.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/utils/method_utils.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/eth/evm_chain_id.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/eth/evm_supported_methods.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/key_service/wallet_connect_key_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/utils/eth_utils.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/utils/method_utils.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
 
 class EvmChainServiceImpl {
   Map<String, dynamic Function(String, dynamic)> get sessionRequestHandlers => {

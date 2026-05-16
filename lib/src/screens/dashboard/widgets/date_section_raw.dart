@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/utils/date_formatter.dart';
+import 'package:hash_wallet/utils/date_formatter.dart';
 
 class DateSectionRaw extends StatelessWidget {
   DateSectionRaw({required this.date, super.key});

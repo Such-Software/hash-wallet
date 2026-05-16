@@ -1,6 +1,6 @@
-import 'package:cake_wallet/src/screens/yat/widgets/yat_close_button.dart';
-import 'package:cake_wallet/src/widgets/alert_background.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/yat_close_button.dart';
+import 'package:hash_wallet/src/widgets/alert_background.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 

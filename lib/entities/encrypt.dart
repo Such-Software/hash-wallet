@@ -1,6 +1,6 @@
 import 'package:encrypt/encrypt.dart';
 // import 'package:password/password.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
 String encrypt({required String source, required String key}) {
   final _key = Key.fromUtf8(key);

@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/standard_checkbox.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/standard_checkbox.dart';
 import 'package:flutter/material.dart';
 
 class UnspentCoinsListItem extends StatelessWidget {

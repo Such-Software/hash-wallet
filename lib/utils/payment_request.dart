@@ -1,7 +1,7 @@
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/lnurl.dart';
 import 'package:cw_core/payment_uris.dart';
-import 'package:cake_wallet/nano/nano.dart';
+import 'package:hash_wallet/nano/nano.dart';
 
 class PaymentRequest {
   PaymentRequest(this.address, this.amount, this.note, this.scheme, this.pjUri,

@@ -1,4 +1,4 @@
-import 'package:cake_wallet/new-ui/widgets/dropdown_row.dart';
+import 'package:hash_wallet/new-ui/widgets/dropdown_row.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedDropdown extends StatefulWidget {

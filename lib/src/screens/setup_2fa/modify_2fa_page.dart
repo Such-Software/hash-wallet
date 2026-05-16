@@ -1,15 +1,15 @@
-import 'package:cake_wallet/entities/cake_2fa_preset_options.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_choices_cell.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
-import 'package:cake_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/settings/choices_list_item.dart';
+import 'package:hash_wallet/entities/cake_2fa_preset_options.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_choices_cell.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/settings/choices_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
-import 'package:cake_wallet/view_model/set_up_2fa_viewmodel.dart';
-import 'package:cake_wallet/src/widgets/standard_list.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
+import 'package:hash_wallet/view_model/set_up_2fa_viewmodel.dart';
+import 'package:hash_wallet/src/widgets/standard_list.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:cake_wallet/core/utilities.dart';
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/core/utilities.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
 
 class ExchangeProviderLogEntry {
   final DateTime timestamp;

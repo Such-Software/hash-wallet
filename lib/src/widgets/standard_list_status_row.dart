@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/dashboard/widgets/sync_indicator_icon.dart';
+import 'package:hash_wallet/src/screens/dashboard/widgets/sync_indicator_icon.dart';
 import 'package:flutter/material.dart';
 
 class StandardListStatusRow extends StatelessWidget {

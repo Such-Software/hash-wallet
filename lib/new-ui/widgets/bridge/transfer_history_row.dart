@@ -1,7 +1,7 @@
-import 'package:cake_wallet/entities/bridge_transfer.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/themes/core/custom_theme_colors.dart';
+import 'package:hash_wallet/entities/bridge_transfer.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/themes/core/custom_theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

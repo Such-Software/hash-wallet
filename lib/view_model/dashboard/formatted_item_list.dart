@@ -1,5 +1,5 @@
-import 'package:cake_wallet/view_model/dashboard/action_list_item.dart';
-import 'package:cake_wallet/view_model/dashboard/date_section_item.dart';
+import 'package:hash_wallet/view_model/dashboard/action_list_item.dart';
+import 'package:hash_wallet/view_model/dashboard/date_section_item.dart';
 import 'package:flutter/foundation.dart';
 
 List<ActionListItem> formattedItemsList(List<ActionListItem> items) {

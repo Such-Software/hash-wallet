@@ -1,9 +1,9 @@
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/view_model/settings/link_list_item.dart';
-import 'package:cake_wallet/view_model/settings/settings_list_item.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/view_model/settings/link_list_item.dart';
+import 'package:hash_wallet/view_model/settings/settings_list_item.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:mobx/mobx.dart';
 
 part 'support_view_model.g.dart';

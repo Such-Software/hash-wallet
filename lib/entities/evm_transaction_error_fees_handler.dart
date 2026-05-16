@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/wallet_connect/utils/string_parsing.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/utils/string_parsing.dart';
 
 class EVMTransactionErrorFeesHandler {
   EVMTransactionErrorFeesHandler({

@@ -1,10 +1,10 @@
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:cake_wallet/utils/permission_handler.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
+import 'package:hash_wallet/utils/permission_handler.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:permission_handler/permission_handler.dart';

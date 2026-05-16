@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/view_model/hardware_wallet/hardware_wallet_view_model.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/view_model/hardware_wallet/hardware_wallet_view_model.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:cw_core/hardware/hardware_wallet_service.dart';
 import 'package:cw_core/root_dir.dart';
 import 'package:cw_core/utils/print_verbose.dart';

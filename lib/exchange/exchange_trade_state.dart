@@ -1,4 +1,4 @@
-import 'package:cake_wallet/exchange/trade.dart';
+import 'package:hash_wallet/exchange/trade.dart';
 
 abstract class ExchangeTradeState {}
 

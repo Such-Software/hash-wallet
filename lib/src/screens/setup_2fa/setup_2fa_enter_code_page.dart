@@ -1,19 +1,19 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/core/totp_request_details.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
-import 'package:cake_wallet/view_model/auth_state.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/core/totp_request_details.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/view_model/auth_state.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/setup_2fa/widgets/popup_cancellable_alert.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/set_up_2fa_viewmodel.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/setup_2fa/widgets/popup_cancellable_alert.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/set_up_2fa_viewmodel.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 

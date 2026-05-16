@@ -1,7 +1,7 @@
-import 'package:cake_wallet/anypay/any_pay_chain.dart';
-import 'package:cake_wallet/anypay/any_pay_payment_instruction.dart';
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/monero/monero.dart';
+import 'package:hash_wallet/anypay/any_pay_chain.dart';
+import 'package:hash_wallet/anypay/any_pay_payment_instruction.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/monero/monero.dart';
 
 class AnyPayPayment {
 	AnyPayPayment({

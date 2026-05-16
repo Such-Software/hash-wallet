@@ -1,8 +1,8 @@
 import 'package:bitcoin_base/bitcoin_base.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/core/validator.dart';
-import 'package:cake_wallet/solana/solana.dart';
-import 'package:cake_wallet/zano/zano.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/core/validator.dart';
+import 'package:hash_wallet/solana/solana.dart';
+import 'package:hash_wallet/zano/zano.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/erc20_token.dart';
 

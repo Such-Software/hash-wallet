@@ -1,4 +1,4 @@
-import 'package:cake_wallet/order/order.dart';
+import 'package:hash_wallet/order/order.dart';
 
 abstract class OrderProvider {
   Future<(Order, Object?)> findOrderById(String id);

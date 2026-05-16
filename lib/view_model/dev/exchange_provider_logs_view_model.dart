@@ -1,5 +1,5 @@
-import 'package:cake_wallet/utils/exchange_provider_logger.dart';
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/utils/exchange_provider_logger.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
 import 'package:mobx/mobx.dart';
 
 part 'exchange_provider_logs_view_model.g.dart';

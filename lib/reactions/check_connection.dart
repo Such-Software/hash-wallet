@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/utils/tor.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/utils/tor.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/sync_status.dart';
 import 'package:cw_core/wallet_type.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/evm/evm.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/evm/evm.dart';
 
 Timer? _checkConnectionTimer;
 

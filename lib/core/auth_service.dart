@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cake_wallet/core/reset_service.dart';
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/core/totp_request_details.dart';
-import 'package:cake_wallet/main.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/auth/auth_page.dart';
-import 'package:cake_wallet/store/app_store.dart' show AppStore;
-import 'package:cake_wallet/store/authentication_store.dart';
+import 'package:hash_wallet/core/reset_service.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/core/totp_request_details.dart';
+import 'package:hash_wallet/main.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/auth/auth_page.dart';
+import 'package:hash_wallet/store/app_store.dart' show AppStore;
+import 'package:hash_wallet/store/authentication_store.dart';
 import 'package:cw_core/db/sqlite.dart';
 import 'package:cw_core/root_dir.dart';
 import 'package:cw_core/utils/print_verbose.dart';
@@ -16,10 +16,10 @@ import 'package:cw_core/wallet_info.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/entities/secret_store_key.dart';
-import 'package:cake_wallet/entities/encrypt.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/entities/secret_store_key.dart';
+import 'package:hash_wallet/entities/encrypt.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 
 import '../src/screens/setup_2fa/setup_2fa_enter_code_page.dart';
 

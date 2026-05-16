@@ -1,7 +1,7 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/widgets/wc_verify_context_widget.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/widgets/wc_verify_context_widget.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 

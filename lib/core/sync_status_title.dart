@@ -1,5 +1,5 @@
-import 'package:cake_wallet/entities/sync_status_display_mode.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/entities/sync_status_display_mode.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/sync_status.dart';
 
 String syncStatusTitle(SyncStatus syncStatus, SyncStatusDisplayMode syncStatusDisplayMode) {

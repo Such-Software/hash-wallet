@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 import 'dart:ui';
-import 'package:cake_wallet/entities/page_indicator_actions.dart';
+import 'package:hash_wallet/entities/page_indicator_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 
 class PageIndicator extends StatefulWidget {
   const PageIndicator({

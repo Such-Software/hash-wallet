@@ -1,16 +1,16 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/core/validator.dart';
-import 'package:cake_wallet/entities/mnemonic_item.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/nano/nano.dart';
-import 'package:cake_wallet/solana/solana.dart';
-import 'package:cake_wallet/tron/tron.dart';
-import 'package:cake_wallet/wownero/wownero.dart';
-import 'package:cake_wallet/zano/zano.dart';
-import 'package:cake_wallet/decred/decred.dart';
-import 'package:cake_wallet/utils/language_list.dart';
-import 'package:cake_wallet/zcash/zcash.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/core/validator.dart';
+import 'package:hash_wallet/entities/mnemonic_item.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/nano/nano.dart';
+import 'package:hash_wallet/solana/solana.dart';
+import 'package:hash_wallet/tron/tron.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/zano/zano.dart';
+import 'package:hash_wallet/decred/decred.dart';
+import 'package:hash_wallet/utils/language_list.dart';
+import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/wallet_type.dart';
 
 class SeedValidator extends Validator<MnemonicItem> {

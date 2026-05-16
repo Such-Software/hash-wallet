@@ -1,6 +1,6 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/utils/share_util.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/utils/share_util.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

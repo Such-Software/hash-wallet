@@ -1,6 +1,6 @@
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/app_store.dart';
 
 ReactionDisposer? _onCurrentNodeChangeReaction;
 

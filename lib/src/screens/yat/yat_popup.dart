@@ -1,16 +1,16 @@
-import 'package:cake_wallet/src/screens/yat/widgets/first_introduction.dart';
-import 'package:cake_wallet/src/screens/yat/widgets/second_introduction.dart';
-import 'package:cake_wallet/src/screens/yat/widgets/third_introduction.dart';
-import 'package:cake_wallet/src/screens/yat/widgets/yat_close_button.dart';
-import 'package:cake_wallet/src/widgets/alert_background.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/store/yat/yat_store.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/first_introduction.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/second_introduction.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/third_introduction.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/yat_close_button.dart';
+import 'package:hash_wallet/src/widgets/alert_background.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/store/yat/yat_store.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 
 class YatPopup extends StatelessWidget {
   YatPopup({required this.dashboardViewModel, required this.onClose})

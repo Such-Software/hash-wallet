@@ -1,5 +1,5 @@
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/encrypt.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/encrypt.dart';
 import 'package:mobx/mobx.dart';
 
 part 'secure_preferences.g.dart';

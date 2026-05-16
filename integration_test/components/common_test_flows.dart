@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:cake_wallet/entities/seed_type.dart';
-import 'package:cake_wallet/reactions/wallet_utils.dart';
-import 'package:cake_wallet/wallet_types.g.dart';
+import 'package:hash_wallet/entities/seed_type.dart';
+import 'package:hash_wallet/reactions/wallet_utils.dart';
+import 'package:hash_wallet/wallet_types.g.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:cake_wallet/main.dart' as app;
+import 'package:hash_wallet/main.dart' as app;
 
 import '../robots/create_pin_welcome_page_robot.dart';
 import '../robots/new_wallet_page_robot.dart';
@@ -23,7 +23,7 @@ import '../robots/wallet_list_page_robot.dart';
 import '../robots/wallet_seed_page_robot.dart';
 import '../robots/welcome_page_robot.dart';
 import 'common_test_cases.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
 import 'common_test_constants.dart';
 

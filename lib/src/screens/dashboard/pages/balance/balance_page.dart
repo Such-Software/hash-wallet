@@ -1,9 +1,9 @@
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/src/screens/dashboard/pages/balance/crypto_balance_widget.dart';
-import 'package:cake_wallet/src/screens/dashboard/pages/nft_listing_page.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
-import 'package:cake_wallet/view_model/dashboard/nft_view_model.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/src/screens/dashboard/pages/balance/crypto_balance_widget.dart';
+import 'package:hash_wallet/src/screens/dashboard/pages/nft_listing_page.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/view_model/dashboard/nft_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

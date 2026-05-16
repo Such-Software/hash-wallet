@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:cake_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
 import 'package:cw_core/balance_card_style_settings.dart';
 import 'package:cw_core/card_design.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/view_model/monero_account_list/account_list_item.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/view_model/monero_account_list/account_list_item.dart';
 
 part 'monero_account_edit_or_create_view_model.g.dart';
 

@@ -1,5 +1,5 @@
-import 'package:cake_wallet/buy/buy_provider_description.dart';
-import 'package:cake_wallet/exchange/trade_state.dart';
+import 'package:hash_wallet/buy/buy_provider_description.dart';
+import 'package:hash_wallet/exchange/trade_state.dart';
 import 'package:cw_core/format_amount.dart';
 import 'package:cw_core/hive_type_ids.dart';
 import 'package:hive/hive.dart';

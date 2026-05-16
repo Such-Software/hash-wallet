@@ -1,10 +1,10 @@
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/confirm_swiper.dart';
-import 'package:cake_wallet/new-ui/widgets/new_primary_button.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/view_model/send/send_view_model.dart';
-import 'package:cake_wallet/view_model/send/send_view_model_state.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/confirm_swiper.dart';
+import 'package:hash_wallet/new-ui/widgets/new_primary_button.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/view_model/send/send_view_model.dart';
+import 'package:hash_wallet/view_model/send/send_view_model_state.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
-import 'package:cake_wallet/buy/wyre/wyre_buy_provider.dart';
-import 'package:cake_wallet/order/order.dart';
-import 'package:cake_wallet/order/order_provider.dart';
+import 'package:hash_wallet/buy/wyre/wyre_buy_provider.dart';
+import 'package:hash_wallet/order/order.dart';
+import 'package:hash_wallet/order/order_provider.dart';
 import 'package:cw_core/wallet_base.dart';
 
 class WyreOrderProviderAdapter implements OrderProvider {

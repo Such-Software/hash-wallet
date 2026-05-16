@@ -1,9 +1,9 @@
-import 'package:cake_wallet/cake_pay/src/models/cake_pay_card.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/number_text_fild_widget.dart';
-import 'package:cake_wallet/typography.dart';
-import 'package:cake_wallet/view_model/cake_pay/cake_pay_buy_card_view_model.dart';
-import 'package:cake_wallet/view_model/dashboard/dropdown_filter_item_widget.dart';
+import 'package:hash_wallet/cake_pay/src/models/cake_pay_card.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/number_text_fild_widget.dart';
+import 'package:hash_wallet/typography.dart';
+import 'package:hash_wallet/view_model/cake_pay/cake_pay_buy_card_view_model.dart';
+import 'package:hash_wallet/view_model/dashboard/dropdown_filter_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

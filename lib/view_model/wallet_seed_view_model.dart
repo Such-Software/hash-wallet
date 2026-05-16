@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cake_wallet/utils/feature_flag.dart';
+import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cw_core/wallet_type.dart';

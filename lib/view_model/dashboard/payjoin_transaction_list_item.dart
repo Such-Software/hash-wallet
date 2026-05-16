@@ -1,5 +1,5 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/view_model/dashboard/action_list_item.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/view_model/dashboard/action_list_item.dart';
 import 'package:cw_core/payjoin_session.dart';
 import 'package:cw_core/transaction_info.dart';
 

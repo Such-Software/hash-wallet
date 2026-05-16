@@ -1,6 +1,6 @@
-import 'package:cake_wallet/entities/bridge_transfer.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/store/bridge_transfers_store.dart';
+import 'package:hash_wallet/entities/bridge_transfer.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/bridge_transfers_store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'bridge_history_view_model.g.dart';

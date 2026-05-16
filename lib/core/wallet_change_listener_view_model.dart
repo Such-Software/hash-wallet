@@ -3,7 +3,7 @@ import 'package:cw_core/transaction_history.dart';
 import 'package:cw_core/transaction_info.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cw_core/wallet_base.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/app_store.dart';
 
 part 'wallet_change_listener_view_model.g.dart';
 

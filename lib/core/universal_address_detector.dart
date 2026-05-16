@@ -1,5 +1,5 @@
-import 'package:cake_wallet/utils/payment_request.dart';
-import 'package:cake_wallet/core/address_validator.dart';
+import 'package:hash_wallet/utils/payment_request.dart';
+import 'package:hash_wallet/core/address_validator.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/lnurl.dart';
 import 'package:cw_core/payment_uris.dart';

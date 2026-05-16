@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/entities/auto_generate_subaddress_status.dart';
-import 'package:cake_wallet/entities/priority_for_wallet_type.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/utils/package_info.dart';
-import 'package:cake_wallet/view_model/send/send_view_model.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/entities/auto_generate_subaddress_status.dart';
+import 'package:hash_wallet/entities/priority_for_wallet_type.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/utils/package_info.dart';
+import 'package:hash_wallet/view_model/send/send_view_model.dart';
 import 'package:collection/collection.dart';
 import 'package:cw_core/balance.dart';
 import 'package:cw_core/pathForWallet.dart';

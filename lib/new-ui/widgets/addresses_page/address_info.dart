@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_edit_or_create_view_model.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_edit_or_create_view_model.dart';
 import 'package:flutter/material.dart';
 
 class AddressInfoPopup extends StatelessWidget {

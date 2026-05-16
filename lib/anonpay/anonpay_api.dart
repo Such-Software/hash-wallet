@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:cake_wallet/anonpay/anonpay_donation_link_info.dart';
-import 'package:cake_wallet/anonpay/anonpay_invoice_info.dart';
-import 'package:cake_wallet/anonpay/anonpay_request.dart';
-import 'package:cake_wallet/anonpay/anonpay_status_response.dart';
-import 'package:cake_wallet/core/fiat_conversion_service.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/exchange/limits.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/anonpay/anonpay_donation_link_info.dart';
+import 'package:hash_wallet/anonpay/anonpay_invoice_info.dart';
+import 'package:hash_wallet/anonpay/anonpay_request.dart';
+import 'package:hash_wallet/anonpay/anonpay_status_response.dart';
+import 'package:hash_wallet/core/fiat_conversion_service.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/exchange/limits.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
 class AnonPayApi {
   const AnonPayApi({

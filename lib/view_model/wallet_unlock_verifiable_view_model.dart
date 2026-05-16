@@ -1,9 +1,9 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cw_core/wallet_type.dart';
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/view_model/wallet_unlock_view_model.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/view_model/wallet_unlock_view_model.dart';
 
 part 'wallet_unlock_verifiable_view_model.g.dart';
 

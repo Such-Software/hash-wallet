@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/exchange_trade/exchange_trade_page.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/exchange_trade/exchange_trade_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 

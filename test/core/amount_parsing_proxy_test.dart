@@ -1,5 +1,5 @@
-import "package:cake_wallet/core/amount_parsing_proxy.dart";
-import "package:cake_wallet/entities/bitcoin_amount_display_mode.dart";
+import "package:hash_wallet/core/amount_parsing_proxy.dart";
+import "package:hash_wallet/entities/bitcoin_amount_display_mode.dart";
 import "package:cw_core/crypto_currency.dart";
 import "package:flutter_test/flutter_test.dart";
 

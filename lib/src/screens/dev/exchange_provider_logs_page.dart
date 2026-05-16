@@ -1,6 +1,6 @@
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/view_model/dev/exchange_provider_logs_view_model.dart';
-import 'package:cake_wallet/utils/exchange_provider_logger.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/view_model/dev/exchange_provider_logs_view_model.dart';
+import 'package:hash_wallet/utils/exchange_provider_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

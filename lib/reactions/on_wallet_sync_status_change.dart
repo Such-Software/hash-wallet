@@ -1,7 +1,7 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_view_model.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_view_model.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:mobx/mobx.dart';

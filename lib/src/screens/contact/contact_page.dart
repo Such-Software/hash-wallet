@@ -1,21 +1,21 @@
-import 'package:cake_wallet/core/address_validator.dart';
-import 'package:cake_wallet/new-ui/widgets/send_page/send_address_input.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/core/address_validator.dart';
+import 'package:hash_wallet/new-ui/widgets/send_page/send_address_input.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/core/contact_name_validator.dart';
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/view_model/contact_list/contact_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/core/contact_name_validator.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/view_model/contact_list/contact_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/scrollable_with_bottom_section.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/src/screens/exchange/widgets/currency_picker.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/src/screens/exchange/widgets/currency_picker.dart';
 
 class ContactPage extends BasePage {
   ContactPage(this.contactViewModel)

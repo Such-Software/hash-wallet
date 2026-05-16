@@ -1,11 +1,11 @@
-import 'package:cake_wallet/src/widgets/picker_inner_wrapper_widget.dart';
-import 'package:cake_wallet/src/widgets/section_divider.dart';
-import 'package:cake_wallet/view_model/nano_account_list/nano_account_list_view_model.dart';
+import 'package:hash_wallet/src/widgets/picker_inner_wrapper_widget.dart';
+import 'package:hash_wallet/src/widgets/section_divider.dart';
+import 'package:hash_wallet/view_model/nano_account_list/nano_account_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/monero_accounts/widgets/account_tile.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/monero_accounts/widgets/account_tile.dart';
 
 class NanoAccountListPage extends StatelessWidget {
   NanoAccountListPage({required this.accountListViewModel});

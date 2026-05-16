@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:cake_wallet/core/key_service.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/monero/monero.dart';
+import 'package:hash_wallet/core/key_service.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/monero/monero.dart';
 import 'package:cw_monero/monero_wallet.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cw_core/wallet_base.dart';

@@ -1,11 +1,11 @@
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/walletkit_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/widgets/wc_connection_widget.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/widgets/wc_request_widget.dart';
-import 'package:cake_wallet/themes/core/custom_theme_colors.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/walletkit_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/widgets/wc_connection_widget.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/widgets/wc_request_widget.dart';
+import 'package:hash_wallet/themes/core/custom_theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 

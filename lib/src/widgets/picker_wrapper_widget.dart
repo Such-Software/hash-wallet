@@ -1,7 +1,7 @@
-import 'package:cake_wallet/utils/responsive_layout_util.dart';
+import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/alert_background.dart';
-import 'package:cake_wallet/src/widgets/alert_close_button.dart';
+import 'package:hash_wallet/src/widgets/alert_background.dart';
+import 'package:hash_wallet/src/widgets/alert_close_button.dart';
 
 class PickerWrapperWidget extends StatelessWidget {
   PickerWrapperWidget({

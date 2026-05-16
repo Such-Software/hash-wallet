@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:cake_wallet/src/screens/pin_code/pin_code_widget.dart';
+import 'package:hash_wallet/src/screens/pin_code/pin_code_widget.dart';
 
 class PinCode extends PinCodeWidget {
   PinCode(

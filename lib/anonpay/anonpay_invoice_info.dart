@@ -1,4 +1,4 @@
-import 'package:cake_wallet/anonpay/anonpay_info_base.dart';
+import 'package:hash_wallet/anonpay/anonpay_info_base.dart';
 import 'package:cw_core/hive_type_ids.dart';
 import 'package:cw_core/keyable.dart';
 import 'package:hive/hive.dart';

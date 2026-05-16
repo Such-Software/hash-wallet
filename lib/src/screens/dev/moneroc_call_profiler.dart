@@ -2,15 +2,15 @@
 // https://raw.githubusercontent.com/MrCyjaneK/unnamed_monero_wallet/refs/heads/master-rewrite/lib/pages/debug/performance.dart
 import 'dart:math';
 
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
-import 'package:cake_wallet/wownero/wownero.dart';
-import 'package:cake_wallet/zano/zano.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/zano/zano.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
 
 class DevMoneroCallProfilerPage extends BasePage {
   DevMoneroCallProfilerPage();

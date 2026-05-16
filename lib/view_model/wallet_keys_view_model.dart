@@ -1,11 +1,11 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/src/screens/transaction_details/standart_list_item.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/wownero/wownero.dart';
-import 'package:cake_wallet/zano/zano.dart';
-import 'package:cake_wallet/zcash/zcash.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/zano/zano.dart';
+import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/transaction_direction.dart';
 import 'package:cw_core/transaction_info.dart';
 import 'package:cw_core/wallet_base.dart';
@@ -14,10 +14,10 @@ import 'package:cw_core/wallet_type.dart';
 import 'package:cw_monero/monero_wallet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/decred/decred.dart';
+import 'package:hash_wallet/decred/decred.dart';
 import 'package:polyseed/polyseed.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
 
 part 'wallet_keys_view_model.g.dart';
 

@@ -1,11 +1,11 @@
-import 'package:cake_wallet/src/widgets/alert_background.dart';
-import 'package:cake_wallet/src/widgets/alert_close_button.dart';
-import 'package:cake_wallet/src/screens/dashboard/widgets/filter_tile.dart';
-import 'package:cake_wallet/src/widgets/section_divider.dart';
-import 'package:cake_wallet/src/widgets/standard_checkbox.dart';
-import 'package:cake_wallet/view_model/dashboard/filter_item.dart';
+import 'package:hash_wallet/src/widgets/alert_background.dart';
+import 'package:hash_wallet/src/widgets/alert_close_button.dart';
+import 'package:hash_wallet/src/screens/dashboard/widgets/filter_tile.dart';
+import 'package:hash_wallet/src/widgets/section_divider.dart';
+import 'package:hash_wallet/src/widgets/standard_checkbox.dart';
+import 'package:hash_wallet/view_model/dashboard/filter_item.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class FilterWidget extends StatefulWidget {

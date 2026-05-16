@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:cake_wallet/core/generate_wallet_password.dart';
-import 'package:cake_wallet/core/key_service.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/main.dart';
-import 'package:cake_wallet/reactions/on_authentication_state_change.dart';
-import 'package:cake_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:cake_wallet/utils/exception_handler.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/core/generate_wallet_password.dart';
+import 'package:hash_wallet/core/key_service.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/main.dart';
+import 'package:hash_wallet/reactions/on_authentication_state_change.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
+import 'package:hash_wallet/utils/exception_handler.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_info.dart';

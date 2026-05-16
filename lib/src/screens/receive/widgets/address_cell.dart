@@ -1,6 +1,6 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/utils/address_formatter.dart';
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_list_item.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/utils/address_formatter.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_item.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

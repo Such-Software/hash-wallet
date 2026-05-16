@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/picker.dart';
+import 'package:hash_wallet/src/widgets/picker.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 
-import 'package:cake_wallet/entities/seed_type.dart';
+import 'package:hash_wallet/entities/seed_type.dart';
 
 class SeedLanguagePickerOption {
   SeedLanguagePickerOption(this.name, this.nameLocalized, this.image, this.supportedSeedTypes);

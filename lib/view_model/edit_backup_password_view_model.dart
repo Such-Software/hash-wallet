@@ -1,7 +1,7 @@
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/default_settings_migration.dart' show generateBackupPassword;
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/default_settings_migration.dart' show generateBackupPassword;
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/entities/secret_store_key.dart';
+import 'package:hash_wallet/entities/secret_store_key.dart';
 
 part 'edit_backup_password_view_model.g.dart';
 

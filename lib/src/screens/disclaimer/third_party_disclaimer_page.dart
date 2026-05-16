@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:cake_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

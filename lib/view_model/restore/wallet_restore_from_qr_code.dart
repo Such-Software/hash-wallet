@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-import 'package:cake_wallet/core/seed_validator.dart';
-import 'package:cake_wallet/entities/parse_address_from_domain.dart';
-import 'package:cake_wallet/entities/qr_scanner.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
-import 'package:cake_wallet/view_model/restore/restore_mode.dart';
-import 'package:cake_wallet/view_model/restore/restore_wallet.dart';
+import 'package:hash_wallet/core/seed_validator.dart';
+import 'package:hash_wallet/entities/parse_address_from_domain.dart';
+import 'package:hash_wallet/entities/qr_scanner.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/view_model/restore/restore_mode.dart';
+import 'package:hash_wallet/view_model/restore/restore_wallet.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:collection/collection.dart';
 import 'package:polyseed/polyseed.dart';
 

@@ -1,26 +1,26 @@
 import 'dart:math';
 
-import 'package:cake_wallet/core/address_validator.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item_regular_row.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item_toggle.dart';
-import 'package:cake_wallet/entities/sort_balance_types.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/pages/settings_page.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/dashboard/favorite_token_modal.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_picker_cell.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
-import 'package:cake_wallet/src/widgets/new_list_row/new_list_section.dart';
-import 'package:cake_wallet/src/widgets/picker.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/core/address_validator.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_regular_row.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_toggle.dart';
+import 'package:hash_wallet/entities/sort_balance_types.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/pages/settings_page.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/dashboard/favorite_token_modal.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_picker_cell.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
+import 'package:hash_wallet/src/widgets/new_list_row/new_list_section.dart';
+import 'package:hash_wallet/src/widgets/picker.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/view_model/dashboard/home_settings_view_model.dart';
+import 'package:hash_wallet/view_model/dashboard/home_settings_view_model.dart';
 
 class HomeSettingsPage extends BasePage {
   HomeSettingsPage(this._homeSettingsViewModel);

@@ -1,18 +1,18 @@
-import 'package:cake_wallet/exchange/provider/exchange_provider.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/keyboard_done_button.dart';
+import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/keyboard_done_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cake_wallet/src/screens/exchange/widgets/exchange_card.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/scrollable_with_bottom_section.dart';
-import 'package:cake_wallet/view_model/exchange/exchange_view_model.dart';
-import 'package:cake_wallet/core/amount_validator.dart';
-import 'package:cake_wallet/src/screens/exchange/widgets/present_provider_picker.dart';
+import 'package:hash_wallet/src/screens/exchange/widgets/exchange_card.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
+import 'package:hash_wallet/view_model/exchange/exchange_view_model.dart';
+import 'package:hash_wallet/core/amount_validator.dart';
+import 'package:hash_wallet/src/screens/exchange/widgets/present_provider_picker.dart';
 
 class ExchangeTemplatePage extends BasePage {
   ExchangeTemplatePage(this.exchangeViewModel);

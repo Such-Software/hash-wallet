@@ -1,12 +1,12 @@
-import 'package:cake_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_link_provider_cell.dart';
-import 'package:cake_wallet/src/widgets/standard_list.dart';
-import 'package:cake_wallet/view_model/settings/link_list_item.dart';
-import 'package:cake_wallet/view_model/settings/regular_list_item.dart';
-import 'package:cake_wallet/view_model/support_view_model.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_link_provider_cell.dart';
+import 'package:hash_wallet/src/widgets/standard_list.dart';
+import 'package:hash_wallet/view_model/settings/link_list_item.dart';
+import 'package:hash_wallet/view_model/settings/regular_list_item.dart';
+import 'package:hash_wallet/view_model/support_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SupportOtherLinksPage extends BasePage {

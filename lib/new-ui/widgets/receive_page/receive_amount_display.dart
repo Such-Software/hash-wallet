@@ -1,5 +1,5 @@
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 

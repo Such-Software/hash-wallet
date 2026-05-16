@@ -1,5 +1,5 @@
-import 'package:cake_wallet/entities/bitcoin_amount_display_mode.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/utils/string_parsing.dart';
+import 'package:hash_wallet/entities/bitcoin_amount_display_mode.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/utils/string_parsing.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/utils/print_verbose.dart';

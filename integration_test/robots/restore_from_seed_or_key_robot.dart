@@ -1,7 +1,7 @@
-import 'package:cake_wallet/entities/seed_type.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/restore/wallet_restore_page.dart';
-import 'package:cake_wallet/src/widgets/validable_annotated_editable_text.dart';
+import 'package:hash_wallet/entities/seed_type.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/restore/wallet_restore_page.dart';
+import 'package:hash_wallet/src/widgets/validable_annotated_editable_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../components/common_test_cases.dart';

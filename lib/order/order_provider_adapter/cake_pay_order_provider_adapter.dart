@@ -1,10 +1,10 @@
-import 'package:cake_wallet/cake_pay/src/models/cake_pay_order.dart';
-import 'package:cake_wallet/cake_pay/src/services/cake_pay_service.dart';
-import 'package:cake_wallet/exchange/trade_state.dart';
-import 'package:cake_wallet/order/order.dart';
-import 'package:cake_wallet/order/order_provider.dart';
-import 'package:cake_wallet/order/order_provider_description.dart';
-import 'package:cake_wallet/order/order_source_description.dart';
+import 'package:hash_wallet/cake_pay/src/models/cake_pay_order.dart';
+import 'package:hash_wallet/cake_pay/src/services/cake_pay_service.dart';
+import 'package:hash_wallet/exchange/trade_state.dart';
+import 'package:hash_wallet/order/order.dart';
+import 'package:hash_wallet/order/order_provider.dart';
+import 'package:hash_wallet/order/order_provider_description.dart';
+import 'package:hash_wallet/order/order_source_description.dart';
 import 'package:cw_core/wallet_base.dart';
 
 class CakePayOrderProviderAdapter implements OrderProvider {

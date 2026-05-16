@@ -1,10 +1,10 @@
-import 'package:cake_wallet/entities/template.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/entities/template.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cake_wallet/store/dashboard/fiat_conversion_store.dart';
+import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
 
 part 'template_view_model.g.dart';
 

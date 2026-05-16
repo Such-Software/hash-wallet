@@ -1,5 +1,5 @@
-import 'package:cake_wallet/exchange/trade_state.dart';
-import 'package:cake_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
+import 'package:hash_wallet/exchange/trade_state.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'package:cake_wallet/generated/locales.dart';
+import 'package:hash_wallet/generated/locales.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:intl/intl.dart';
 

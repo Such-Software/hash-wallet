@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/exchange/widgets/mobile_exchange_cards_section.dart';
+import 'package:hash_wallet/src/screens/exchange/widgets/mobile_exchange_cards_section.dart';
 import 'package:flutter/material.dart';
 
 class DesktopExchangeCardsSection extends StatelessWidget {

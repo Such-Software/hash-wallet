@@ -101,8 +101,8 @@ Future<void> generateBitcoin(bool hasImplementation) async {
 import 'dart:io' show Platform;
 import 'dart:typed_data';
 import 'package:bitcoin_base/bitcoin_base.dart';
-import 'package:cake_wallet/view_model/hardware_wallet/ledger_view_model.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/view_model/hardware_wallet/ledger_view_model.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/hardware/hardware_account_data.dart';
 import 'package:cw_core/hardware/hardware_wallet_service.dart';
 import 'package:cw_core/node.dart';
@@ -330,7 +330,7 @@ import 'package:cw_core/transaction_history.dart';
 import 'package:cw_core/transaction_info.dart';
 import 'package:cw_core/balance.dart';
 import 'package:cw_core/output_info.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/wallet_service.dart';
 import 'package:hive/hive.dart';
 import 'package:ledger_flutter_plus/ledger_flutter_plus.dart' as ledger;
@@ -538,11 +538,11 @@ import 'package:cw_core/transaction_history.dart';
 import 'package:cw_core/transaction_info.dart';
 import 'package:cw_core/balance.dart';
 import 'package:cw_core/output_info.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cake_wallet/core/key_service.dart';
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/haven_seed_store.dart';
+import 'package:hash_wallet/core/key_service.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/haven_seed_store.dart';
 import 'package:cw_core/cake_hive.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/wallet_type.dart';
@@ -795,7 +795,7 @@ import 'package:cw_core/n2_node.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:mobx/mobx.dart';
 import 'package:hive/hive.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 """;
   const nanoCWHeaders = """
 import 'package:cw_nano/nano_client.dart';
@@ -920,8 +920,8 @@ abstract class NanoUtil {
 Future<void> generateSolana(bool hasImplementation) async {
   final outputFile = File(solanaOutputPath);
   const solanaCommonHeaders = """
-import 'package:cake_wallet/view_model/send/output.dart';
-import 'package:cake_wallet/exchange/provider/jupiter_exchange_provider.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/exchange/provider/jupiter_exchange_provider.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/output_info.dart';
 import 'package:cw_core/pending_transaction.dart';
@@ -942,11 +942,11 @@ import 'package:cw_solana/pending_solana_transaction.dart';
 import 'package:cw_solana/solana_transaction_credentials.dart';
 import 'package:cw_solana/solana_wallet_creation_credentials.dart';
 import 'package:cw_solana/default_spl_tokens.dart';
-import 'package:cake_wallet/core/fiat_conversion_service.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/entities/fiat_api_mode.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/core/fiat_conversion_service.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/entities/fiat_api_mode.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 
 import 'dart:convert';
 import 'dart:typed_data';
@@ -1067,7 +1067,7 @@ class JupiterSwapFailedException implements Exception {
 Future<void> generateTron(bool hasImplementation) async {
   final outputFile = File(tronOutputPath);
   const tronCommonHeaders = """
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/output_info.dart';
 import 'package:cw_core/transaction_info.dart';
@@ -1147,8 +1147,8 @@ abstract class Tron {
 Future<void> generateZano(bool hasImplementation) async {
   final outputFile = File(zanoOutputPath);
   const zanoCommonHeaders = """
-import 'package:cake_wallet/utils/language_list.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/utils/language_list.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:collection/collection.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/monero_transaction_priority.dart';
@@ -1229,7 +1229,7 @@ import 'package:cw_core/output_info.dart';
 import 'package:cw_core/wallet_service.dart';
 import 'package:cw_core/unspent_transaction_output.dart';
 import 'package:cw_core/unspent_coins_info.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:hive/hive.dart';
 """;
   const decredCWHeaders = """
@@ -1352,8 +1352,8 @@ Future<void> generateEVM(bool hasImplementation) async {
   final outputFile = File(evmOutputPath);
   const evmCommonHeaders = """
 import 'dart:math' as math;
-import 'package:cake_wallet/core/utilities.dart';
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/core/utilities.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/erc20_token.dart';
 import 'package:cw_core/hardware/hardware_account_data.dart';
@@ -1375,11 +1375,11 @@ import 'package:web3dart/web3dart.dart';
 
 """;
   const evmCWHeaders = """
-import 'package:cake_wallet/core/fiat_conversion_service.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/entities/fiat_api_mode.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/core/fiat_conversion_service.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/entities/fiat_api_mode.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 import 'package:cw_evm/utils/evm_chain_formatter.dart';
 import 'package:cw_evm/evm_chain_mnemonics.dart';
 import 'package:cw_evm/evm_chain_registry.dart';
@@ -1670,7 +1670,7 @@ class BridgeQuote {
 Future<void> generateZcash(bool hasImplementation) async {
   final outputFile = File(zcashOutputPath);
   const zcashCommonHeaders = """
-import 'package:cake_wallet/view_model/send/output.dart';
+import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/balance.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';

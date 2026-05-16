@@ -1,4 +1,4 @@
-import 'package:cake_wallet/exchange/exchange_pair.dart';
+import 'package:hash_wallet/exchange/exchange_pair.dart';
 import 'package:cw_core/crypto_currency.dart';
 
 List<ExchangePair> supportedPairs(List<CryptoCurrency> notSupported) {

@@ -1,12 +1,12 @@
-import 'package:cake_wallet/core/new_wallet_arguments.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/src/widgets/gradient_background.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/core/new_wallet_arguments.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/gradient_background.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
 
 class WalletGroupDescriptionPage extends BasePage {
   WalletGroupDescriptionPage({required this.selectedWalletType});

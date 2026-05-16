@@ -1,6 +1,6 @@
-import 'package:cake_wallet/order/order_provider_description.dart';
-import 'package:cake_wallet/order/order_source_description.dart';
-import 'package:cake_wallet/view_model/dashboard/order_list_item.dart';
+import 'package:hash_wallet/order/order_provider_description.dart';
+import 'package:hash_wallet/order/order_source_description.dart';
+import 'package:hash_wallet/view_model/dashboard/order_list_item.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:mobx/mobx.dart';
 

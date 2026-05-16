@@ -1,4 +1,4 @@
-import 'package:cake_wallet/view_model/settings/settings_list_item.dart';
+import 'package:hash_wallet/view_model/settings/settings_list_item.dart';
 
 class ChoicesListItem<ItemType> extends SettingsListItem {
   ChoicesListItem(

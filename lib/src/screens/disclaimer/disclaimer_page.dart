@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:cake_wallet/routes.dart';
+import 'package:hash_wallet/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DisclaimerPage extends BasePage {

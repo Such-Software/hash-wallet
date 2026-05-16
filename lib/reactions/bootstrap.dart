@@ -1,21 +1,21 @@
 import 'dart:async';
-import 'package:cake_wallet/reactions/fiat_rate_update.dart';
-import 'package:cake_wallet/reactions/on_current_fiat_api_mode_change.dart';
-import 'package:cake_wallet/reactions/on_current_node_change.dart';
+import 'package:hash_wallet/reactions/fiat_rate_update.dart';
+import 'package:hash_wallet/reactions/on_current_fiat_api_mode_change.dart';
+import 'package:hash_wallet/reactions/on_current_node_change.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/reactions/on_authentication_state_change.dart';
-import 'package:cake_wallet/reactions/on_current_fiat_change.dart';
-import 'package:cake_wallet/reactions/on_current_wallet_change.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/store/authentication_store.dart';
-import 'package:cake_wallet/store/dashboard/fiat_conversion_store.dart';
-import 'package:cake_wallet/core/node_switching_service.dart';
-import 'package:cake_wallet/utils/feature_flag.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/reactions/on_authentication_state_change.dart';
+import 'package:hash_wallet/reactions/on_current_fiat_change.dart';
+import 'package:hash_wallet/reactions/on_current_wallet_change.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/store/authentication_store.dart';
+import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
+import 'package:hash_wallet/core/node_switching_service.dart';
+import 'package:hash_wallet/utils/feature_flag.dart';
 
 Future<void> bootstrapOffline() async {
   final authenticationStore = getIt.get<AuthenticationStore>();

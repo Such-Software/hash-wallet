@@ -1,4 +1,4 @@
-import 'package:cake_wallet/entities/country.dart';
+import 'package:hash_wallet/entities/country.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 
 import 'cake_pay_card.dart';

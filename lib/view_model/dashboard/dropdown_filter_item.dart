@@ -1,4 +1,4 @@
-import 'package:cake_wallet/view_model/dashboard/filter_item.dart';
+import 'package:hash_wallet/view_model/dashboard/filter_item.dart';
 
 class DropdownFilterItem extends FilterItem {
   DropdownFilterItem({

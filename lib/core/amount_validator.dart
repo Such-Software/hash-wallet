@@ -1,6 +1,6 @@
-import 'package:cake_wallet/core/amount_parsing_proxy.dart';
-import 'package:cake_wallet/core/validator.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/core/amount_parsing_proxy.dart';
+import 'package:hash_wallet/core/validator.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/currency.dart';
 

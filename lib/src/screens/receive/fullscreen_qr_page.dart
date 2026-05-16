@@ -1,8 +1,8 @@
-import 'package:cake_wallet/entities/qr_view_data.dart';
-import 'package:cake_wallet/src/widgets/gradient_background.dart';
-import 'package:cake_wallet/src/screens/receive/widgets/qr_image.dart';
+import 'package:hash_wallet/entities/qr_view_data.dart';
+import 'package:hash_wallet/src/widgets/gradient_background.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/qr_image.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
 
 class FullscreenQRPage extends BasePage {
   FullscreenQRPage({required this.qrViewData});

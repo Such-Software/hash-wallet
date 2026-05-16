@@ -1,6 +1,6 @@
-import 'package:cake_wallet/entities/seed_type.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/store/seed_settings_store.dart';
+import 'package:hash_wallet/entities/seed_type.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/seed_settings_store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'seed_settings_view_model.g.dart';

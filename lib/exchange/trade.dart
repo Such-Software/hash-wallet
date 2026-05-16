@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
-import 'package:cake_wallet/exchange/trade_state.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/exchange/trade_state.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/db/sqlite.dart';
 import 'package:cw_core/format_amount.dart';

@@ -1,10 +1,10 @@
-import 'package:cake_wallet/core/auth_service.dart';
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/store/authentication_store.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/store/wallet_list_store.dart';
-import 'package:cake_wallet/view_model/link_view_model.dart';
+import 'package:hash_wallet/core/auth_service.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/authentication_store.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/store/wallet_list_store.dart';
+import 'package:hash_wallet/view_model/link_view_model.dart';
 import 'package:hive/hive.dart';
 import 'package:mocktail/mocktail.dart';
 

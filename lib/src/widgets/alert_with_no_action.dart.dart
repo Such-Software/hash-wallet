@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/base_alert_dialog.dart';
+import 'package:hash_wallet/src/widgets/base_alert_dialog.dart';
 
 class AlertWithNoAction extends BaseAlertDialog {
   AlertWithNoAction({

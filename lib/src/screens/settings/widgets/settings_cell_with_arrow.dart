@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/standard_list.dart';
+import 'package:hash_wallet/src/widgets/standard_list.dart';
 
 class SettingsCellWithArrow extends StandardListRow {
   SettingsCellWithArrow({

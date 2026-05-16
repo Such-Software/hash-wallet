@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/themes/core/material_base_theme.dart';
+import 'package:hash_wallet/themes/core/material_base_theme.dart';
 
 class TradeDetailsStandardListCard extends StatelessWidget {
   TradeDetailsStandardListCard({

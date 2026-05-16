@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
 import "package:cw_core/balance_card_style_settings.dart";
 import 'package:cw_core/card_design.dart';
 import 'package:cw_core/crypto_currency.dart';

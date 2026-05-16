@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
 import 'package:cw_core/generate_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

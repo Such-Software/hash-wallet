@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/dashboard/desktop_widgets/desktop_sidebar/side_menu_item.dart';
+import 'package:hash_wallet/src/screens/dashboard/desktop_widgets/desktop_sidebar/side_menu_item.dart';
 import 'package:flutter/material.dart';
 
 class SideMenu extends StatelessWidget {

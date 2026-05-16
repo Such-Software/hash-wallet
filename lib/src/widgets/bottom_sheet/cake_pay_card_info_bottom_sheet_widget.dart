@@ -1,9 +1,9 @@
-import 'package:cake_wallet/cake_pay/src/widgets/cake_pay_alert_modal.dart';
-import 'package:cake_wallet/cake_pay/src/widgets/flip_card_widget.dart';
-import 'package:cake_wallet/cake_pay/src/widgets/link_extractor.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/utils/image_utill.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/cake_pay/src/widgets/cake_pay_alert_modal.dart';
+import 'package:hash_wallet/cake_pay/src/widgets/flip_card_widget.dart';
+import 'package:hash_wallet/cake_pay/src/widgets/link_extractor.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/utils/image_utill.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:flutter/material.dart';
 
 import 'base_bottom_sheet_widget.dart';

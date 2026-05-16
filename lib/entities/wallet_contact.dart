@@ -1,4 +1,4 @@
-import 'package:cake_wallet/entities/contact_base.dart';
+import 'package:hash_wallet/entities/contact_base.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/wallet_type.dart';
 

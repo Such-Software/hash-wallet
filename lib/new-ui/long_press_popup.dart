@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:flutter/material.dart';
 
 class LongPressPopupBuilder extends StatelessWidget {

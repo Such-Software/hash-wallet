@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/auth/auth_page.dart';
+import 'package:hash_wallet/src/screens/auth/auth_page.dart';
 import 'package:cw_core/wallet_type.dart';
 
 typedef AuthPasswordHandler = Future<void> Function(String);

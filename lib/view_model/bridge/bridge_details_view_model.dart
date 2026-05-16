@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:cake_wallet/entities/bridge_transfer.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/transaction_details/address_list_item.dart';
-import 'package:cake_wallet/src/screens/transaction_details/standart_list_item.dart';
-import 'package:cake_wallet/src/screens/trade_details/trade_details_status_item.dart';
-import 'package:cake_wallet/src/screens/trade_details/track_trade_list_item.dart';
-import 'package:cake_wallet/src/screens/transaction_details/transaction_details_list_item.dart';
-import 'package:cake_wallet/store/bridge_transfers_store.dart';
+import 'package:hash_wallet/entities/bridge_transfer.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/transaction_details/address_list_item.dart';
+import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
+import 'package:hash_wallet/src/screens/trade_details/trade_details_status_item.dart';
+import 'package:hash_wallet/src/screens/trade_details/track_trade_list_item.dart';
+import 'package:hash_wallet/src/screens/transaction_details/transaction_details_list_item.dart';
+import 'package:hash_wallet/store/bridge_transfers_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
 

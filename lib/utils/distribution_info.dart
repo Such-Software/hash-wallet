@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cake_wallet/utils/package_info.dart';
+import 'package:hash_wallet/utils/package_info.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 
 enum DistributionType { googleplay, github, appstore, fdroid }

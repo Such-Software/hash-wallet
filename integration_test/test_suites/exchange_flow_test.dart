@@ -9,7 +9,7 @@ import '../robots/exchange_confirm_page_robot.dart';
 import '../robots/exchange_page_robot.dart';
 import '../robots/exchange_trade_external_send_page_robot.dart';
 import '../robots/exchange_trade_page_robot.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

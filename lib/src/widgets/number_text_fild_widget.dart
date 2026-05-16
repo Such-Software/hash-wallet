@@ -1,4 +1,4 @@
-import 'package:cake_wallet/typography.dart';
+import 'package:hash_wallet/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

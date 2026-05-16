@@ -1,11 +1,11 @@
-import 'package:cake_wallet/entities/list_order_mode.dart';
-import 'package:cake_wallet/entities/wallet_list_order_types.dart';
-import 'package:cake_wallet/src/screens/settings/widgets/settings_choices_cell.dart';
-import 'package:cake_wallet/src/widgets/section_divider.dart';
-import 'package:cake_wallet/view_model/settings/choices_list_item.dart';
+import 'package:hash_wallet/entities/list_order_mode.dart';
+import 'package:hash_wallet/entities/wallet_list_order_types.dart';
+import 'package:hash_wallet/src/screens/settings/widgets/settings_choices_cell.dart';
+import 'package:hash_wallet/src/widgets/section_divider.dart';
+import 'package:hash_wallet/view_model/settings/choices_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/picker_wrapper_widget.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/picker_wrapper_widget.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 
 class FilterListWidget extends StatefulWidget {
   FilterListWidget({

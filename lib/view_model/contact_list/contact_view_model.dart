@@ -1,14 +1,14 @@
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/entities/contact_record.dart';
-import 'package:cake_wallet/entities/parse_address_from_domain.dart';
-import 'package:cake_wallet/src/screens/send/widgets/extract_address_from_parsed.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/entities/contact_record.dart';
+import 'package:hash_wallet/entities/parse_address_from_domain.dart';
+import 'package:hash_wallet/src/screens/send/widgets/extract_address_from_parsed.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/entities/contact.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/entities/contact.dart';
 import 'package:cw_core/crypto_currency.dart';
 
 part 'contact_view_model.g.dart';

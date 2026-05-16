@@ -1,10 +1,10 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/unspent_coins/widgets/unspent_coins_list_item.dart';
-import 'package:cake_wallet/src/widgets/alert_with_no_action.dart.dart';
-import 'package:cake_wallet/src/widgets/standard_checkbox.dart';
-import 'package:cake_wallet/view_model/unspent_coins/unspent_coins_list_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/unspent_coins/widgets/unspent_coins_list_item.dart';
+import 'package:hash_wallet/src/widgets/alert_with_no_action.dart.dart';
+import 'package:hash_wallet/src/widgets/standard_checkbox.dart';
+import 'package:hash_wallet/view_model/unspent_coins/unspent_coins_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';

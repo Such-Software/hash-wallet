@@ -1,4 +1,4 @@
-import 'package:cake_wallet/anypay/any_pay_trasnaction.dart';
+import 'package:hash_wallet/anypay/any_pay_trasnaction.dart';
 
 class AnyPayPaymentCommittedInfo {
 	const AnyPayPaymentCommittedInfo({

@@ -1,4 +1,4 @@
-import 'package:cake_wallet/exchange/limits.dart';
+import 'package:hash_wallet/exchange/limits.dart';
 
 abstract class LimitsState {}
 

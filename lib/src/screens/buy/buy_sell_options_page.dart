@@ -1,6 +1,6 @@
-import 'package:cake_wallet/core/selectable_option.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/select_options_page.dart';
+import 'package:hash_wallet/core/selectable_option.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/select_options_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class BuyOptionsPage extends SelectOptionsPage {

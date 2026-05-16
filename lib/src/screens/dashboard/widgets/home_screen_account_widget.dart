@@ -1,6 +1,6 @@
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/src/screens/monero_accounts/monero_account_list_page.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/src/screens/monero_accounts/monero_account_list_page.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenAccountWidget extends StatelessWidget {

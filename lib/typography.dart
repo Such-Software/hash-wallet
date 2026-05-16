@@ -1,4 +1,4 @@
-import 'package:cake_wallet/utils/feature_flag.dart';
+import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:flutter/material.dart';
 
 const latoFont = "Lato";

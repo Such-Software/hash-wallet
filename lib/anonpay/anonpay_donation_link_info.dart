@@ -1,4 +1,4 @@
-import 'package:cake_wallet/anonpay/anonpay_info_base.dart';
+import 'package:hash_wallet/anonpay/anonpay_info_base.dart';
 
 class AnonpayDonationLinkInfo implements AnonpayInfoBase{
   final String clearnetUrl;

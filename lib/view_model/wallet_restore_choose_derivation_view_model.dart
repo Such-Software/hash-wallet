@@ -1,6 +1,6 @@
 import 'package:cw_core/wallet_info.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/view_model/restore/restore_mode.dart';
+import 'package:hash_wallet/view_model/restore/restore_mode.dart';
 
 part 'wallet_restore_choose_derivation_view_model.g.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/picker_wrapper_widget.dart';
-import 'package:cake_wallet/utils/responsive_layout_util.dart';
+import 'package:hash_wallet/src/widgets/picker_wrapper_widget.dart';
+import 'package:hash_wallet/utils/responsive_layout_util.dart';
 
 class PickerInnerWrapperWidget extends StatelessWidget {
   PickerInnerWrapperWidget(

@@ -1,21 +1,21 @@
 import 'dart:io';
 
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/widgets/seedphrase_grid_widget.dart';
-import 'package:cake_wallet/src/widgets/warning_box_widget.dart';
-import 'package:cake_wallet/utils/clipboard_util.dart';
-import 'package:cake_wallet/utils/share_util.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/widgets/seedphrase_grid_widget.dart';
+import 'package:hash_wallet/src/widgets/warning_box_widget.dart';
+import 'package:hash_wallet/utils/clipboard_util.dart';
+import 'package:hash_wallet/utils/share_util.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:file_picker/file_picker.dart";
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/view_model/wallet_seed_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/view_model/wallet_seed_view_model.dart';
 
 class WalletSeedPage extends BasePage {
   WalletSeedPage(this.walletSeedViewModel, {required this.isNewWalletCreated});

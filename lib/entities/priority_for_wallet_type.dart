@@ -1,12 +1,12 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/bitcoin_cash/bitcoin_cash.dart';
-import 'package:cake_wallet/dogecoin/dogecoin.dart';
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/wownero/wownero.dart';
-import 'package:cake_wallet/zano/zano.dart';
-import 'package:cake_wallet/decred/decred.dart';
-import 'package:cake_wallet/zcash/zcash.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/bitcoin_cash/bitcoin_cash.dart';
+import 'package:hash_wallet/dogecoin/dogecoin.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/zano/zano.dart';
+import 'package:hash_wallet/decred/decred.dart';
+import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/transaction_priority.dart';
 import 'package:cw_core/wallet_type.dart';
 

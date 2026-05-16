@@ -1,9 +1,9 @@
-import 'package:cake_wallet/core/sync_status_title.dart';
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/new-ui/widgets/coins_page/top_bar_widget/pulsing_dot.dart';
-import 'package:cake_wallet/src/screens/settings/manage_nodes_page.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/core/sync_status_title.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/top_bar_widget/pulsing_dot.dart';
+import 'package:hash_wallet/src/screens/settings/manage_nodes_page.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/sync_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

@@ -1,4 +1,4 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:mobx/mobx.dart';

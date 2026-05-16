@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/themes/core/material_base_theme.dart';
-import 'package:cake_wallet/themes/core/custom_theme_colors.dart';
-import 'package:cake_wallet/themes/custom_theme_colors/black_theme_custom_colors.dart';
+import 'package:hash_wallet/themes/core/material_base_theme.dart';
+import 'package:hash_wallet/themes/core/custom_theme_colors.dart';
+import 'package:hash_wallet/themes/custom_theme_colors/black_theme_custom_colors.dart';
 
 enum BlackThemeAccentColor implements ThemeAccentColor {
   hashGreen(Color(0xFF7FCAA0), 'Hash Green'),

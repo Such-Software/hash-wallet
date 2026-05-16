@@ -1,7 +1,7 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/src/screens/wallet_keys/wallet_keys_page.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/src/screens/wallet_keys/wallet_keys_page.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:cw_core/monero_wallet_keys.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:cw_monero/monero_wallet.dart';

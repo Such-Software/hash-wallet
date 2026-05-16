@@ -1,4 +1,4 @@
-import 'package:cake_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
+import 'package:hash_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
 import 'package:cw_core/hardware/hardware_wallet_service.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_info.dart';

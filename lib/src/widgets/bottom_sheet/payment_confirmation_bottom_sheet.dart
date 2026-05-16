@@ -1,15 +1,15 @@
-import 'package:cake_wallet/evm/evm.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/utils/payment_request.dart';
+import 'package:hash_wallet/evm/evm.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/generate_name.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/widgets/bottom_sheet/base_bottom_sheet_widget.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/bottom_sheet/base_bottom_sheet_widget.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:cw_core/wallet_type.dart';
-import 'package:cake_wallet/view_model/payment/payment_view_model.dart';
-import 'package:cake_wallet/view_model/wallet_switcher_view_model.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/view_model/payment/payment_view_model.dart';
+import 'package:hash_wallet/view_model/wallet_switcher_view_model.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class PaymentConfirmationBottomSheet extends BaseBottomSheet {

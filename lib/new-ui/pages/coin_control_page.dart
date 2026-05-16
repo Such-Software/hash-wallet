@@ -1,13 +1,13 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/coin_control_page/coin_control_list_item.dart';
-import 'package:cake_wallet/new-ui/widgets/modal_header.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/view_model/unspent_coins/unspent_coins_list_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/coin_control_page/coin_control_list_item.dart';
+import 'package:hash_wallet/new-ui/widgets/modal_header.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/view_model/unspent_coins/unspent_coins_list_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import "package:cake_wallet/view_model/unspent_coins/unspent_coins_item.dart";
+import "package:hash_wallet/view_model/unspent_coins/unspent_coins_item.dart";
 
 class NewCoinControlPage extends StatefulWidget {
   const NewCoinControlPage({super.key, required this.unspentCoinsListViewModel});

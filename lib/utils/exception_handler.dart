@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/main.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/utils/package_info.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/main.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/utils/package_info.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/root_dir.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:device_info_plus/device_info_plus.dart';

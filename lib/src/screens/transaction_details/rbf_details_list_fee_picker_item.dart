@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/transaction_details/transaction_details_list_item.dart';
+import 'package:hash_wallet/src/screens/transaction_details/transaction_details_list_item.dart';
 import 'package:flutter/widgets.dart';
 
 class StandardPickerListItem<T> extends TransactionDetailsListItem {

@@ -1,5 +1,5 @@
-import 'package:cake_wallet/new-ui/widgets/coins_page/assets_history/asset_details_modal.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/asset_details_modal.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

@@ -1,9 +1,9 @@
-import 'package:cake_wallet/buy/buy_provider_description.dart';
-import 'package:cake_wallet/buy/moonpay/moonpay_provider.dart';
-import 'package:cake_wallet/order/order.dart';
-import 'package:cake_wallet/order/order_provider.dart';
-import 'package:cake_wallet/order/order_source_description.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/buy/buy_provider_description.dart';
+import 'package:hash_wallet/buy/moonpay/moonpay_provider.dart';
+import 'package:hash_wallet/order/order.dart';
+import 'package:hash_wallet/order/order_provider.dart';
+import 'package:hash_wallet/order/order_source_description.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:cw_core/wallet_base.dart';
 
 class MoonPayOrderProviderAdapter implements OrderProvider {

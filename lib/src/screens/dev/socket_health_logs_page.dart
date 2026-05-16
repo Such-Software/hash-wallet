@@ -1,13 +1,13 @@
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/view_model/dev/socket_health_logs_view_model.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/view_model/dev/socket_health_logs_view_model.dart';
 import 'package:cw_core/utils/socket_health_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/reactions/wallet_utils.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/reactions/wallet_utils.dart';
 
 class DevSocketHealthLogsPage extends BasePage {
   final SocketHealthLogsViewModel viewModel;

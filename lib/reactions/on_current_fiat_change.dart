@@ -1,10 +1,10 @@
-import 'package:cake_wallet/entities/fiat_api_mode.dart';
+import 'package:hash_wallet/entities/fiat_api_mode.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/core/fiat_conversion_service.dart';
-import 'package:cake_wallet/store/dashboard/fiat_conversion_store.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/core/fiat_conversion_service.dart';
+import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
 
 ReactionDisposer? _onCurrentFiatCurrencyChangeDisposer;
 

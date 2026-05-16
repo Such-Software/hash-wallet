@@ -1,4 +1,4 @@
-import 'package:cake_wallet/core/selectable_option.dart';
+import 'package:hash_wallet/core/selectable_option.dart';
 
 enum PaymentType {
   all,

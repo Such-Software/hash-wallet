@@ -10,7 +10,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:cake_wallet/main.dart';
+import 'package:hash_wallet/main.dart';
 
 final quickActionsStream = StreamController<Uri?>.broadcast();
 

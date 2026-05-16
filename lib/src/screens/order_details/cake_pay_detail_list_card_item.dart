@@ -1,5 +1,5 @@
-import 'package:cake_wallet/cake_pay/src/models/cake_pay_order.dart';
-import 'package:cake_wallet/src/screens/transaction_details/standart_list_item.dart';
+import 'package:hash_wallet/cake_pay/src/models/cake_pay_order.dart';
+import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
 import 'package:flutter/material.dart';
 
 class CakePayDetailsListCardItem extends StandartListItem {

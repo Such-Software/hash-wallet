@@ -1,6 +1,6 @@
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/secret_store_key.dart';
-import 'package:cake_wallet/entities/encrypt.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/secret_store_key.dart';
+import 'package:hash_wallet/entities/encrypt.dart';
 
 class KeyService {
   KeyService(this._secureStorage);

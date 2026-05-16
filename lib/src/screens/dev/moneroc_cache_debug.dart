@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/utils/share_util.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/utils/share_util.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/root_dir.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';

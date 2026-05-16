@@ -1,8 +1,8 @@
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/src/screens/support_chat/widgets/chatwoot_widget.dart';
-import 'package:cake_wallet/view_model/support_view_model.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/src/screens/support_chat/widgets/chatwoot_widget.dart';
+import 'package:hash_wallet/view_model/support_view_model.dart';
 import 'package:flutter/material.dart';
 
 class SupportChatPage extends StatelessWidget {

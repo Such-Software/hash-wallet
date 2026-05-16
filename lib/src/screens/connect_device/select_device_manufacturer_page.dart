@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/screens/connect_device/widgets/dotted_divider.dart';
-import 'package:cake_wallet/src/screens/connect_device/widgets/manufacturer_option_tile.dart';
-import 'package:cake_wallet/utils/permission_handler.dart';
-import 'package:cake_wallet/view_model/restore/wallet_restore_from_qr_code.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/connect_device/widgets/dotted_divider.dart';
+import 'package:hash_wallet/src/screens/connect_device/widgets/manufacturer_option_tile.dart';
+import 'package:hash_wallet/utils/permission_handler.dart';
+import 'package:hash_wallet/view_model/restore/wallet_restore_from_qr_code.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:flutter/material.dart';

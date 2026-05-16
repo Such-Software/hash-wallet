@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/widgets/base_alert_dialog.dart';
+import 'package:hash_wallet/src/widgets/base_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 
 class AlertWithTwoActions extends BaseAlertDialog {

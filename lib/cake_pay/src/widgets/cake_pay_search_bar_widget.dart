@@ -1,6 +1,6 @@
-import 'package:cake_wallet/entities/country.dart';
-import 'package:cake_wallet/src/widgets/search_bar_widget.dart';
-import 'package:cake_wallet/utils/debounce.dart';
+import 'package:hash_wallet/entities/country.dart';
+import 'package:hash_wallet/src/widgets/search_bar_widget.dart';
+import 'package:hash_wallet/utils/debounce.dart';
 import 'package:flutter/material.dart';
 
 class CakePaySearchBar extends StatefulWidget {

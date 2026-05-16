@@ -1,12 +1,12 @@
 import 'package:mobx/mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/view_model/wallet_address_list/wallet_address_edit_or_create_view_model.dart';
-import 'package:cake_wallet/core/address_label_validator.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_edit_or_create_view_model.dart';
+import 'package:hash_wallet/core/address_label_validator.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
 
 class AddressEditOrCreatePage extends BasePage {
   AddressEditOrCreatePage({required this.addressEditOrCreateViewModel})

@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:cake_wallet/core/address_validator.dart';
-import 'package:cake_wallet/core/utilities.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/animated_dropdown.dart';
-import 'package:cake_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:cake_wallet/new-ui/widgets/send_page/send_confirm_bottom_widget.dart';
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/utils/address_formatter.dart';
-import 'package:cake_wallet/view_model/send/send_view_model.dart';
-import 'package:cake_wallet/view_model/send/send_view_model_state.dart';
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/core/address_validator.dart';
+import 'package:hash_wallet/core/utilities.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/animated_dropdown.dart';
+import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
+import 'package:hash_wallet/new-ui/widgets/send_page/send_confirm_bottom_widget.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/utils/address_formatter.dart';
+import 'package:hash_wallet/view_model/send/send_view_model.dart';
+import 'package:hash_wallet/view_model/send/send_view_model_state.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';

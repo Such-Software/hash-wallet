@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
-import 'package:cake_wallet/buy/buy_provider.dart';
-import 'package:cake_wallet/buy/buy_quote.dart';
-import 'package:cake_wallet/buy/pairs_utils.dart';
-import 'package:cake_wallet/buy/payment_method.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/buy/buy_provider.dart';
+import 'package:hash_wallet/buy/buy_quote.dart';
+import 'package:hash_wallet/buy/pairs_utils.dart';
+import 'package:hash_wallet/buy/payment_method.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:cw_core/wallet_base.dart';

@@ -1,4 +1,4 @@
-import "package:cake_wallet/core/lightning_invoice_service.dart";
+import "package:hash_wallet/core/lightning_invoice_service.dart";
 import "package:cw_core/lnurl.dart";
 import "package:cw_core/utils/proxy_wrapper.dart";
 import "package:cw_core/utils/tor/abstract.dart";

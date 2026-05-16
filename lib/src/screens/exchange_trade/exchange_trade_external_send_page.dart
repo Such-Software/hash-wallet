@@ -1,17 +1,17 @@
-import 'package:cake_wallet/entities/qr_view_data.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/exchange_trade/widgets/exchange_trade_card_item_widget.dart';
-import 'package:cake_wallet/src/screens/receive/widgets/qr_image.dart';
-import 'package:cake_wallet/utils/brightness_util.dart';
+import 'package:hash_wallet/entities/qr_view_data.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/exchange_trade/widgets/exchange_trade_card_item_widget.dart';
+import 'package:hash_wallet/src/screens/receive/widgets/qr_image.dart';
+import 'package:hash_wallet/utils/brightness_util.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/core/execution_state.dart';
-import 'package:cake_wallet/view_model/exchange/exchange_trade_view_model.dart';
-import 'package:cake_wallet/view_model/send/send_view_model_state.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/scrollable_with_bottom_section.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/core/execution_state.dart';
+import 'package:hash_wallet/view_model/exchange/exchange_trade_view_model.dart';
+import 'package:hash_wallet/view_model/send/send_view_model_state.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
 
 class ExchangeTradeExternalSendPage extends BasePage {
   ExchangeTradeExternalSendPage({required this.exchangeTradeViewModel});

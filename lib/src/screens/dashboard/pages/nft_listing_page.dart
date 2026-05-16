@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/src/screens/dashboard/widgets/nft_tile_widget.dart';
-import 'package:cake_wallet/src/screens/dashboard/widgets/solana_nft_tile_widget.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/view_model/dashboard/nft_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/src/screens/dashboard/widgets/nft_tile_widget.dart';
+import 'package:hash_wallet/src/screens/dashboard/widgets/solana_nft_tile_widget.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/view_model/dashboard/nft_view_model.dart';
 import 'package:cw_core/wallet_type.dart';
 
 class NFTListingPage extends StatefulWidget {

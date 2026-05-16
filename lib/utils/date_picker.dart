@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cake_wallet/main.dart';
+import 'package:hash_wallet/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

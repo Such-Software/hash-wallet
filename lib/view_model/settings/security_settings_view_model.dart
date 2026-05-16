@@ -1,7 +1,7 @@
-import 'package:cake_wallet/core/auth_service.dart';
-import 'package:cake_wallet/entities/biometric_auth.dart';
-import 'package:cake_wallet/entities/pin_code_required_duration.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/core/auth_service.dart';
+import 'package:hash_wallet/entities/biometric_auth.dart';
+import 'package:hash_wallet/entities/pin_code_required_duration.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'security_settings_view_model.g.dart';

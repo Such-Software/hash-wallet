@@ -1,13 +1,13 @@
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/utils/device_info.dart';
-import 'package:cake_wallet/utils/responsive_layout_util.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/utils/device_info.dart';
+import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/themes/utils/theme_list.dart';
+import 'package:hash_wallet/themes/utils/theme_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'material_base_theme.dart';
-import 'package:cake_wallet/themes/theme_classes/black_theme.dart';
+import 'package:hash_wallet/themes/theme_classes/black_theme.dart';
 
 part 'theme_store.g.dart';
 

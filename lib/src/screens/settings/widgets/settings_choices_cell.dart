@@ -1,4 +1,4 @@
-import 'package:cake_wallet/view_model/settings/choices_list_item.dart';
+import 'package:hash_wallet/view_model/settings/choices_list_item.dart';
 import 'package:flutter/material.dart';
 
 class SettingsChoicesCell extends StatelessWidget {

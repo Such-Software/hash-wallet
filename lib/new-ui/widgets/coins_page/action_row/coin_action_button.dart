@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:cake_wallet/themes/core/theme_extension.dart';
+import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';

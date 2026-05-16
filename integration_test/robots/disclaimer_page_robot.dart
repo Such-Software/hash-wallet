@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/disclaimer/disclaimer_page.dart';
+import 'package:hash_wallet/src/screens/disclaimer/disclaimer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

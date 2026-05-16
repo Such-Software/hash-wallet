@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 
-import 'package:cake_wallet/utils/image_utill.dart';
+import 'package:hash_wallet/utils/image_utill.dart';
 
-import 'package:cake_wallet/routes.dart';
+import 'package:hash_wallet/routes.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';

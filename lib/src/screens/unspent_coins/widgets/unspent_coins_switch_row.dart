@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/widgets/standard_switch.dart';
+import 'package:hash_wallet/src/widgets/standard_switch.dart';
 import 'package:flutter/material.dart';
 
 class UnspentCoinsSwitchRow extends StatelessWidget {

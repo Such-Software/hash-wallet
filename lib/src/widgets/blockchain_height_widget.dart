@@ -1,15 +1,15 @@
-import 'package:cake_wallet/bitcoin/bitcoin.dart';
-import 'package:cake_wallet/src/widgets/standard_switch.dart';
-import 'package:cake_wallet/utils/date_picker.dart';
-import 'package:cake_wallet/wownero/wownero.dart';
-import 'package:cake_wallet/zcash/zcash.dart';
+import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import 'package:hash_wallet/src/widgets/standard_switch.dart';
+import 'package:hash_wallet/utils/date_picker.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
+import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/monero/monero.dart';
-import 'package:cake_wallet/src/widgets/base_text_form_field.dart';
-import 'package:cake_wallet/decred/decred.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
+import 'package:hash_wallet/decred/decred.dart';
 
 class BlockchainHeightWidget extends StatefulWidget {
   BlockchainHeightWidget({

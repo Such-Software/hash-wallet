@@ -1,4 +1,4 @@
-import 'package:cake_wallet/core/universal_address_detector.dart';
+import 'package:hash_wallet/core/universal_address_detector.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter_test/flutter_test.dart';

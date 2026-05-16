@@ -1,4 +1,4 @@
-import 'package:cake_wallet/utils/device_info.dart';
+import 'package:hash_wallet/utils/device_info.dart';
 import 'package:device_display_brightness/device_display_brightness.dart';
 
 class BrightnessUtil {

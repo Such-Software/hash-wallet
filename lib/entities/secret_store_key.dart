@@ -1,4 +1,4 @@
-import 'package:cake_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum SecretStoreKey { moneroWalletPassword, pinCodePassword, backupPassword, duressPinCodePassword }

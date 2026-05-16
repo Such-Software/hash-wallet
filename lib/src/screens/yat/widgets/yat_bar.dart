@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/yat/widgets/yat_close_button.dart';
+import 'package:hash_wallet/src/screens/yat/widgets/yat_close_button.dart';
 import 'package:flutter/material.dart';
 
 class YatBar extends StatelessWidget {

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
-import 'package:cake_wallet/core/backup_service.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/core/backup_service.dart';
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 import 'package:cake_backup/backup.dart' as cake_backup;
-import 'package:cake_wallet/utils/package_info.dart';
+import 'package:hash_wallet/utils/package_info.dart';
 import 'package:crypto/crypto.dart';
 import 'package:cw_core/db/sqlite.dart';
 import 'package:cw_core/root_dir.dart';

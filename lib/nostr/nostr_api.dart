@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/nostr/nostr_user.dart';
-import 'package:cake_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:cake_wallet/src/widgets/picker.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/nostr/nostr_user.dart';
+import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/src/widgets/picker.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';
 import 'package:nostr_tools/nostr_tools.dart';

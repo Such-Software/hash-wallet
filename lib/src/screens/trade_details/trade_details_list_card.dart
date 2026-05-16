@@ -1,7 +1,7 @@
-import 'package:cake_wallet/src/screens/transaction_details/standart_list_item.dart';
+import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 
 class TradeDetailsListCardItem extends StandartListItem {
   TradeDetailsListCardItem(

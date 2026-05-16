@@ -1,16 +1,16 @@
-import 'package:cake_wallet/entities/balance_display_mode.dart';
-import 'package:cake_wallet/entities/bitcoin_amount_display_mode.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/entities/sync_status_display_mode.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/themes/core/material_base_theme.dart';
-import 'package:cake_wallet/themes/theme_classes/black_theme.dart';
-import 'package:cake_wallet/themes/utils/theme_list.dart';
+import 'package:hash_wallet/entities/balance_display_mode.dart';
+import 'package:hash_wallet/entities/bitcoin_amount_display_mode.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/entities/sync_status_display_mode.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/themes/core/material_base_theme.dart';
+import 'package:hash_wallet/themes/theme_classes/black_theme.dart';
+import 'package:hash_wallet/themes/utils/theme_list.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/entities/fiat_api_mode.dart';
-import 'package:cake_wallet/themes/core/theme_store.dart';
+import 'package:hash_wallet/entities/fiat_api_mode.dart';
+import 'package:hash_wallet/themes/core/theme_store.dart';
 import 'package:flutter/material.dart';
 
 part 'display_settings_view_model.g.dart';

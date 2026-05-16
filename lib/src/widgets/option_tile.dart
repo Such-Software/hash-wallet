@@ -1,4 +1,4 @@
-import 'package:cake_wallet/themes/core/theme_extension.dart';
+import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:flutter/material.dart';
 
 class OptionTile extends StatelessWidget {

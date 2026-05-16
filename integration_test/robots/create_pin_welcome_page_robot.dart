@@ -1,6 +1,6 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/welcome/create_pin_welcome_page.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/welcome/create_pin_welcome_page.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../components/common_test_cases.dart';

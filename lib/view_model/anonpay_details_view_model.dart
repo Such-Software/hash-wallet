@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:cake_wallet/anonpay/anonpay_api.dart';
-import 'package:cake_wallet/anonpay/anonpay_invoice_info.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/trade_details/track_trade_list_item.dart';
-import 'package:cake_wallet/src/screens/trade_details/trade_details_list_card.dart';
-import 'package:cake_wallet/src/screens/trade_details/trade_details_status_item.dart';
-import 'package:cake_wallet/src/screens/transaction_details/standart_list_item.dart';
-import 'package:cake_wallet/themes/core/theme_store.dart';
-import 'package:cake_wallet/utils/date_formatter.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/anonpay/anonpay_api.dart';
+import 'package:hash_wallet/anonpay/anonpay_invoice_info.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/trade_details/track_trade_list_item.dart';
+import 'package:hash_wallet/src/screens/trade_details/trade_details_list_card.dart';
+import 'package:hash_wallet/src/screens/trade_details/trade_details_status_item.dart';
+import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
+import 'package:hash_wallet/themes/core/theme_store.dart';
+import 'package:hash_wallet/utils/date_formatter.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:cake_wallet/nano/nano.dart';
+import 'package:hash_wallet/nano/nano.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:cw_core/nano_account.dart';

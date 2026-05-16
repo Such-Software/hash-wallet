@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/entities/new_ui_entities/list_item/list_item.dart';
+import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item.dart';
 
 class ListItemToggle extends ListItem {
   const ListItemToggle({

@@ -1,4 +1,4 @@
-import 'package:cake_wallet/utils/list_item.dart';
+import 'package:hash_wallet/utils/list_item.dart';
 
 class WalletAddressListItem extends ListItem {
   WalletAddressListItem({

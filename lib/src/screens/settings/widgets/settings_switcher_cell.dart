@@ -1,5 +1,5 @@
-import 'package:cake_wallet/src/widgets/standard_list.dart';
-import 'package:cake_wallet/src/widgets/standard_switch.dart';
+import 'package:hash_wallet/src/widgets/standard_list.dart';
+import 'package:hash_wallet/src/widgets/standard_switch.dart';
 import 'package:flutter/material.dart';
 
 class SettingsSwitcherCell extends StandardListRow {

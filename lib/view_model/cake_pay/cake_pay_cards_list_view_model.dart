@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:cake_wallet/cake_pay/src/models/cake_pay_card.dart';
-import 'package:cake_wallet/cake_pay/src/services/cake_pay_service.dart';
-import 'package:cake_wallet/cake_pay/src/cake_pay_states.dart';
-import 'package:cake_wallet/cake_pay/src/models/cake_pay_vendor.dart';
-import 'package:cake_wallet/entities/country.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/view_model/dashboard/filter_item.dart';
+import 'package:hash_wallet/cake_pay/src/models/cake_pay_card.dart';
+import 'package:hash_wallet/cake_pay/src/services/cake_pay_service.dart';
+import 'package:hash_wallet/cake_pay/src/cake_pay_states.dart';
+import 'package:hash_wallet/cake_pay/src/models/cake_pay_vendor.dart';
+import 'package:hash_wallet/entities/country.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/view_model/dashboard/filter_item.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:mobx/mobx.dart';
 

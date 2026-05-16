@@ -1,4 +1,4 @@
-import 'package:cake_wallet/utils/responsive_layout_util.dart';
+import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

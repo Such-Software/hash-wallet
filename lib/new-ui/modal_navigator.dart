@@ -1,4 +1,4 @@
-import 'package:cake_wallet/router.dart';
+import 'package:hash_wallet/router.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';
 

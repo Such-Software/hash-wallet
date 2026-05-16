@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/utils/show_bar.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 

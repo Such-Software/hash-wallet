@@ -1,10 +1,10 @@
-import 'package:cake_wallet/buy/buy_provider.dart';
-import 'package:cake_wallet/buy/payment_method.dart';
-import 'package:cake_wallet/core/selectable_option.dart';
-import 'package:cake_wallet/entities/calculate_fiat_amount.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
-import 'package:cake_wallet/entities/provider_types.dart';
-import 'package:cake_wallet/exchange/limits.dart';
+import 'package:hash_wallet/buy/buy_provider.dart';
+import 'package:hash_wallet/buy/payment_method.dart';
+import 'package:hash_wallet/core/selectable_option.dart';
+import 'package:hash_wallet/entities/calculate_fiat_amount.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/entities/provider_types.dart';
+import 'package:hash_wallet/exchange/limits.dart';
 import 'package:cw_core/crypto_currency.dart';
 
 enum ProviderRecommendation { bestRate, lowKyc, successRate }

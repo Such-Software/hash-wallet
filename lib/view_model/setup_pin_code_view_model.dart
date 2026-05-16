@@ -1,7 +1,7 @@
-import 'package:cake_wallet/core/auth_service.dart';
-import 'package:cake_wallet/entities/encrypt.dart';
-import 'package:cake_wallet/entities/secret_store_key.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/core/auth_service.dart';
+import 'package:hash_wallet/entities/encrypt.dart';
+import 'package:hash_wallet/entities/secret_store_key.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 
 class SetupPinCodeViewModel {
   SetupPinCodeViewModel(this._authService, this._settingsStore,

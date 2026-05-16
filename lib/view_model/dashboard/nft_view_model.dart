@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cake_wallet/entities/solana_nft_asset_model.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/widgets/bottom_sheet/bottom_sheet_message_display_widget.dart';
-import 'package:cake_wallet/evm/evm.dart';
+import 'package:hash_wallet/entities/solana_nft_asset_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/widgets/bottom_sheet/bottom_sheet_message_display_widget.dart';
+import 'package:hash_wallet/evm/evm.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
-import 'package:cake_wallet/entities/wallet_nft_response.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/entities/wallet_nft_response.dart';
+import 'package:hash_wallet/store/app_store.dart';
 
 part 'nft_view_model.g.dart';
 

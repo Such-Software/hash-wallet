@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:basic_utils/basic_utils.dart';
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/alert_with_picker_option.dart';
-import 'package:cake_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/alert_with_picker_option.dart';
+import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:dnssec_proof/dnssec_proof.dart';

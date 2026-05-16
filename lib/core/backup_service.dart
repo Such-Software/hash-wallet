@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:cake_wallet/core/secure_storage.dart';
-import 'package:cake_wallet/entities/get_encryption_key.dart';
-import 'package:cake_wallet/entities/transaction_description.dart';
-import 'package:cake_wallet/themes/utils/theme_list.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/entities/get_encryption_key.dart';
+import 'package:hash_wallet/entities/transaction_description.dart';
+import 'package:hash_wallet/themes/utils/theme_list.dart';
 import 'package:cw_core/root_dir.dart';
-import 'package:cake_wallet/utils/device_info.dart';
+import 'package:hash_wallet/utils/device_info.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/foundation.dart';
@@ -14,14 +14,14 @@ import 'package:cryptography/cryptography.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:archive/archive_io.dart' hide Mac;
 import 'package:cw_core/cake_hive.dart';
-import 'package:cake_wallet/core/key_service.dart';
-import 'package:cake_wallet/entities/encrypt.dart';
-import 'package:cake_wallet/entities/preferences_key.dart';
-import 'package:cake_wallet/entities/secret_store_key.dart';
+import 'package:hash_wallet/core/key_service.dart';
+import 'package:hash_wallet/entities/encrypt.dart';
+import 'package:hash_wallet/entities/preferences_key.dart';
+import 'package:hash_wallet/entities/secret_store_key.dart';
 import 'package:cw_core/wallet_info.dart';
-import 'package:cake_wallet/exchange/trade_legacy.dart';
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
-import 'package:cake_wallet/wallet_types.g.dart';
+import 'package:hash_wallet/exchange/trade_legacy.dart';
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/wallet_types.g.dart';
 import 'package:cake_backup/backup.dart' as cake_backup;
 
 class $BackupService {

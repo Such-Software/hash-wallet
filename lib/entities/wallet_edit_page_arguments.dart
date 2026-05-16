@@ -1,8 +1,8 @@
-import 'package:cake_wallet/core/auth_service.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_edit_view_model.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_item.dart';
-import 'package:cake_wallet/view_model/wallet_list/wallet_list_view_model.dart';
-import 'package:cake_wallet/view_model/wallet_new_vm.dart';
+import 'package:hash_wallet/core/auth_service.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_edit_view_model.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_item.dart';
+import 'package:hash_wallet/view_model/wallet_list/wallet_list_view_model.dart';
+import 'package:hash_wallet/view_model/wallet_new_vm.dart';
 
 class WalletEditPageArguments {
   WalletEditPageArguments({

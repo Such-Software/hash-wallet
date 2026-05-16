@@ -9,7 +9,7 @@ PLATFORMS=($IOS $ANDROID $MACOS $LINUX)
 PLATFORM=$1
 
 if ! [[ " ${PLATFORMS[*]} " =~ " ${PLATFORM} " ]]; then
-    echo "specify platform: ./configure_cake_wallet.sh ios|android|macos|linux"
+    echo "specify platform: ./configure_hash_wallet.sh ios|android|macos|linux"
     exit 1
 fi
 

@@ -1,10 +1,10 @@
-import 'package:cake_wallet/core/secure_storage.dart';
+import 'package:hash_wallet/core/secure_storage.dart';
 import 'package:cw_core/transaction_history.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/balance.dart';
 import 'package:cw_core/transaction_info.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'dart:async';

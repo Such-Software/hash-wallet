@@ -1,9 +1,9 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/view_model/wallet_restore_choose_derivation_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/view_model/wallet_restore_choose_derivation_view_model.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
 
 class WalletRestoreChooseDerivationPage extends BasePage {
   WalletRestoreChooseDerivationPage(this.walletRestoreChooseDerivationViewModel) {}

@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cake_wallet/.secrets.g.dart' as secrets;
-import 'package:cake_wallet/exchange/provider/exchange_provider.dart';
-import 'package:cake_wallet/exchange/exchange_provider_description.dart';
-import 'package:cake_wallet/exchange/limits.dart';
-import 'package:cake_wallet/exchange/trade.dart';
-import 'package:cake_wallet/exchange/trade_not_created_exception.dart';
-import 'package:cake_wallet/exchange/trade_request.dart';
-import 'package:cake_wallet/exchange/trade_state.dart';
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
+import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
+import 'package:hash_wallet/exchange/exchange_provider_description.dart';
+import 'package:hash_wallet/exchange/limits.dart';
+import 'package:hash_wallet/exchange/trade.dart';
+import 'package:hash_wallet/exchange/trade_not_created_exception.dart';
+import 'package:hash_wallet/exchange/trade_request.dart';
+import 'package:hash_wallet/exchange/trade_state.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/utils/print_verbose.dart';
-import 'package:cake_wallet/utils/exchange_provider_logger.dart';
+import 'package:hash_wallet/utils/exchange_provider_logger.dart';
 
 class LetsExchangeExchangeProvider extends ExchangeProvider {
   LetsExchangeExchangeProvider();

@@ -1,5 +1,5 @@
-import 'package:cake_wallet/exchange/provider/trocador_exchange_provider.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/exchange/provider/trocador_exchange_provider.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'trocador_providers_view_model.g.dart';

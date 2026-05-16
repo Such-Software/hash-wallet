@@ -1,5 +1,5 @@
-import 'package:cake_wallet/core/address_validator.dart';
-import 'package:cake_wallet/generated/i18n.dart';
+import 'package:hash_wallet/core/address_validator.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter_test/flutter_test.dart';
 

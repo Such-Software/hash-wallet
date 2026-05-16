@@ -1,6 +1,6 @@
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cake_wallet/entities/fiat_currency.dart';
+import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'dart:convert';
 
 // Hash Wallet price endpoint. Backed by the Cloudflare Worker in

@@ -1,9 +1,9 @@
-import 'package:cake_wallet/core/selectable_option.dart';
-import 'package:cake_wallet/src/screens/base_page.dart';
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/provider_optoin_tile.dart';
-import 'package:cake_wallet/src/widgets/scrollable_with_bottom_section.dart';
-import 'package:cake_wallet/themes/core/material_base_theme.dart';
+import 'package:hash_wallet/core/selectable_option.dart';
+import 'package:hash_wallet/src/screens/base_page.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/provider_optoin_tile.dart';
+import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
+import 'package:hash_wallet/themes/core/material_base_theme.dart';
 import 'package:flutter/material.dart';
 
 abstract class SelectOptionsPage extends BasePage {

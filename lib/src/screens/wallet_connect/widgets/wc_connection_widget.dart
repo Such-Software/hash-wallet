@@ -1,4 +1,4 @@
-import 'package:cake_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
 import 'package:flutter/material.dart';
 
 import 'wc_connection_item_widget.dart';

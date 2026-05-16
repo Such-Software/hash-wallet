@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:cake_wallet/order/order.dart';
-import 'package:cake_wallet/view_model/dashboard/order_list_item.dart';
+import 'package:hash_wallet/order/order.dart';
+import 'package:hash_wallet/view_model/dashboard/order_list_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cake_wallet/store/settings_store.dart';
+import 'package:hash_wallet/store/settings_store.dart';
 
 part 'orders_store.g.dart';
 

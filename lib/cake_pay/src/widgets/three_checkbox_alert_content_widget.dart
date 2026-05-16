@@ -1,6 +1,6 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/widgets/base_alert_dialog.dart';
-import 'package:cake_wallet/src/widgets/standard_checkbox.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/base_alert_dialog.dart';
+import 'package:hash_wallet/src/widgets/standard_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

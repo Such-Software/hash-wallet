@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:cake_wallet/di.dart';
-import 'package:cake_wallet/main.dart';
-import 'package:cake_wallet/reactions/bootstrap.dart';
-import 'package:cake_wallet/routes.dart';
-import 'package:cake_wallet/store/app_store.dart';
-import 'package:cake_wallet/store/settings_store.dart';
-import 'package:cake_wallet/utils/tor.dart';
+import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/main.dart';
+import 'package:hash_wallet/reactions/bootstrap.dart';
+import 'package:hash_wallet/routes.dart';
+import 'package:hash_wallet/store/app_store.dart';
+import 'package:hash_wallet/store/settings_store.dart';
+import 'package:hash_wallet/utils/tor.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';

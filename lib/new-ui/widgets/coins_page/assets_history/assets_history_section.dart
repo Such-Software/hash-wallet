@@ -1,9 +1,9 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/new-ui/widgets/coins_page/assets_history/assets_top_bar.dart';
-import 'package:cake_wallet/reactions/wallet_connect.dart';
-import 'package:cake_wallet/src/screens/dashboard/pages/nft_listing_page.dart';
-import 'package:cake_wallet/view_model/dashboard/dashboard_view_model.dart';
-import 'package:cake_wallet/view_model/dashboard/nft_view_model.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/assets_top_bar.dart';
+import 'package:hash_wallet/reactions/wallet_connect.dart';
+import 'package:hash_wallet/src/screens/dashboard/pages/nft_listing_page.dart';
+import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
+import 'package:hash_wallet/view_model/dashboard/nft_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'assets_section.dart';

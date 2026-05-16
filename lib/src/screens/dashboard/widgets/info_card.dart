@@ -1,5 +1,5 @@
-import 'package:cake_wallet/src/widgets/cake_image_widget.dart';
-import 'package:cake_wallet/src/widgets/dashboard_card_widget.dart';
+import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/dashboard_card_widget.dart';
 import 'package:flutter/material.dart';
 
 class InfoCard extends StatelessWidget {

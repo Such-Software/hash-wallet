@@ -1,9 +1,9 @@
-import 'package:cake_wallet/generated/i18n.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/services/key_service/wallet_connect_key_service.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/utils/namespace_model_builder.dart';
-import 'package:cake_wallet/src/screens/wallet_connect/widgets/wc_connection_widget.dart';
-import 'package:cake_wallet/store/app_store.dart';
+import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/services/key_service/wallet_connect_key_service.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/models/wc_connection_model.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/utils/namespace_model_builder.dart';
+import 'package:hash_wallet/src/screens/wallet_connect/widgets/wc_connection_widget.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:flutter/material.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 

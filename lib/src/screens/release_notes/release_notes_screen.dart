@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:cake_wallet/src/widgets/alert_background.dart';
-import 'package:cake_wallet/src/widgets/alert_close_button.dart';
-import 'package:cake_wallet/wallet_type_utils.dart';
+import 'package:hash_wallet/src/widgets/alert_background.dart';
+import 'package:hash_wallet/src/widgets/alert_close_button.dart';
+import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

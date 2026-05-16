@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cake_wallet/src/screens/exchange/widgets/picker_item.dart';
+import 'package:hash_wallet/src/screens/exchange/widgets/picker_item.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cake_wallet/src/widgets/picker.dart';
+import 'package:hash_wallet/src/widgets/picker.dart';
 import 'package:cw_core/currency.dart';
 
 class CurrencyPicker extends StatefulWidget {

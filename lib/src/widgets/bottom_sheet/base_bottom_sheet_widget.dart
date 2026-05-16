@@ -1,5 +1,5 @@
-import 'package:cake_wallet/src/widgets/primary_button.dart';
-import 'package:cake_wallet/src/widgets/standard_slide_button_widget.dart';
+import 'package:hash_wallet/src/widgets/primary_button.dart';
+import 'package:hash_wallet/src/widgets/standard_slide_button_widget.dart';
 import 'package:flutter/material.dart';
 
 enum FooterType { none, slideActionButton, singleActionButton, doubleActionButton }

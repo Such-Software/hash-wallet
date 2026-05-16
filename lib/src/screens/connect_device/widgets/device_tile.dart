@@ -1,4 +1,4 @@
-import 'package:cake_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
+import 'package:hash_wallet/entities/hardware_wallet/hardware_wallet_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

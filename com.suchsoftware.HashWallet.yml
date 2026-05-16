@@ -2,7 +2,7 @@ app-id: com.suchsoftware.HashWallet
 runtime: org.freedesktop.Platform
 runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
-command: cake_wallet
+command: hash_wallet
 separate-locales: false
 finish-args:
   - --share=ipc
@@ -13,13 +13,13 @@ finish-args:
   - --share=network
   - --filesystem=home
 modules:
-  - name: cake_wallet
+  - name: hash_wallet
     buildsystem: simple
     build-commands:
-      - "cp -R bundle /app/cake_wallet"
-      - "chmod +x /app/cake_wallet/cake_wallet"
+      - "cp -R bundle /app/hash_wallet"
+      - "chmod +x /app/hash_wallet/hash_wallet"
       - "mkdir -p /app/bin"
-      - "ln -s /app/cake_wallet/cake_wallet /app/bin/cake_wallet"
+      - "ln -s /app/hash_wallet/hash_wallet /app/bin/hash_wallet"
       - "mkdir -p /app/share/icons/hicolor/scalable/apps"
       - "cp cakewallet_icon_180.png /app/share/icons/hicolor/scalable/apps/com.suchsoftware.HashWallet.png"
       - "mkdir -p /app/share/applications"
