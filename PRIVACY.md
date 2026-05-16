@@ -1,36 +1,49 @@
-Privacy Policy
+PRIVACY POLICY
 ==============
 
-A complete privacy policy for Hash Wallet, published by Such Software LLC,
-is in preparation and will appear here before the first public release.
+Last Updated: May 16, 2026
 
-What we can say in the meantime
+Such Software LLC ("we", "us", or "our") respects your privacy. Hash Wallet is engineered to be a strictly non-custodial software application. Our privacy philosophy is simple: we cannot leak or misuse data that we do not collect.
+
+1. INFORMATION WE DO NOT COLLECT
+--------------------------------
+
+Hash Wallet operates entirely on your device. We do not collect, transmit, store, or have access to:
+
+- Your private keys, public keys, or mnemonic seed phrases.
+- Your wallet passwords or PINs.
+- Your transaction history, balances, or recipient addresses.
+- Your personal identifying information (e.g., name, address, email, phone number).
+- Your IP address or device identifiers (unless explicitly provided by you via direct support communications).
+
+2. HOW THE SOFTWARE CONNECTS TO BLOCKCHAINS
+-------------------------------------------
+
+To fetch balances and broadcast transactions, Hash Wallet must connect to remote blockchain nodes.
+
+By default, the Software may connect to nodes hosted by third parties or by us.
+
+When your device connects to a node, your IP address and the transaction data you are broadcasting are visible to that node.
+
+We highly recommend running your own node and configuring the Software to connect to it via the custom node settings, to ensure maximum network-level privacy.
+
+3. THIRD-PARTY SERVICES (TROCADOR)
+----------------------------------
+
+Hash Wallet integrates with a third-party swap aggregator, Trocador, to allow you to exchange digital assets natively within the interface.
+
+When you initiate a swap, the necessary transaction details (such as the sending address, receiving address, and amount) are transmitted directly to Trocador's API.
+
+Trocador acts as an independent data controller. Trocador or the underlying exchanges it routes to may log your IP address and transaction details. We strongly advise reviewing Trocador's Privacy Policy before utilizing the swap feature.
+
+Such Software LLC does not intercept, log, or store the data you transmit to Trocador.
+
+4. APP STORES AND CRASH REPORTS
 -------------------------------
 
-Hash Wallet is a non-custodial cryptocurrency wallet. Such Software LLC
-does not operate any servers that store, observe, or transmit your wallet
-keys, seed phrases, addresses, or transaction history. Wallet data is
-generated and stored locally on your device.
+If you download Hash Wallet through the Apple App Store or Google Play Store, those platforms may independently collect analytics or crash reports based on your device's operating system settings. We only view anonymized, aggregated metrics provided by these storefronts.
 
-When the app needs to interact with a blockchain it does so by connecting
-to a node — by default a community-operated public node, or one that you
-configure yourself in Settings. Such Software LLC does not currently operate
-any of the default nodes the app ships with. Connections to those nodes are
-made directly from your device; the operators of those nodes (not us) can
-observe IP-level metadata of your requests.
+5. CONTACT US
+-------------
 
-When you use third-party features integrated into the app (for example, the
-Trocador swap aggregator), those services have their own privacy policies
-that govern the data you share with them. Such Software LLC does not
-intermediate or proxy those connections.
-
-Hash Wallet inherits its codebase from Cake Wallet (MIT-licensed), but
-Such Software LLC and Cake Labs LLC are separate companies. Cake Labs'
-privacy policy at https://cakewallet.com does not apply to this app.
-
-Contact
--------
-
-Questions about this placeholder policy or the upcoming complete policy
-should be filed as a GitHub issue at
-https://github.com/Such-Software/hash-wallet/issues.
+If you have any questions or concerns regarding this Privacy Policy or your data, please contact us through our official repositories or support channels associated with Such Software LLC.

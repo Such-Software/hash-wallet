@@ -1,32 +1,47 @@
-Hash Wallet — Terms of Use Placeholder
-======================================
+TERMS OF SERVICE
+Last Updated: May 16, 2026
 
-A complete Terms of Use for Hash Wallet, published by Such Software LLC,
-is in preparation and will appear here before the first public release.
+1. ACCEPTANCE OF TERMS
+These Terms of Service ("Terms") are entered into by and between You and Such Software LLC, a limited liability company organized under the laws of the Commonwealth of Pennsylvania ("Company", "we", "our", or "us"). These Terms govern your access to and use of the Hash Wallet mobile application, source code, and any associated software (collectively, the "Software").
 
-What we can say in the meantime
--------------------------------
+By downloading, accessing, or using the Software, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the Software.
 
-Hash Wallet is a non-custodial cryptocurrency wallet. You alone hold and
-control the private keys to your funds. Such Software LLC cannot recover
-funds, reverse transactions, or access wallet data on your device.
+2. NATURE OF THE SOFTWARE
+Hash Wallet is a non-custodial, peer-to-peer cryptocurrency wallet software.
 
-Hash Wallet inherits its codebase from Cake Wallet (MIT-licensed) but is
-operated by Such Software LLC, a separate company. Cake Labs LLC's terms
-of use at https://cakewallet.com do not apply to this app.
+Non-Custodial: We do not own, control, or take custody of any cryptocurrency assets held in your Hash Wallet. You hold the private keys and are solely responsible for their management.
 
-Using the app means you understand:
-- You are responsible for the security of your seed phrase and device.
-- Lost seed phrases cannot be recovered by anyone, including us.
-- Transactions on blockchain networks are final and cannot be reversed.
-- Third-party services integrated into the app (e.g. Trocador for swaps,
-  default node operators) have their own terms that you should review
-  separately.
-- The app is provided "as is" without warranty of any kind.
+No Fiat Operations: The Software does not natively support or facilitate the purchase or sale of cryptocurrency with fiat currency (e.g., USD, EUR).
 
-Contact
--------
+No Embedded Applications: The Software does not include built-in decentralized applications (dApps) or a proprietary web3 browser.
 
-Questions about this placeholder or the upcoming full Terms of Use
-should be filed as a GitHub issue at
-https://github.com/Such-Software/hash-wallet/issues.
+3. YOUR RESPONSIBILITIES
+
+Seed Phrases and Private Keys: You are solely responsible for securely storing your seed phrase, private keys, and PINs. If you lose your seed phrase, your funds will be permanently lost. Such Software LLC has no ability to recover your seed phrase, private keys, or funds.
+
+Compliance with Law: You represent and warrant that your use of the Software complies with all applicable local, state, national, and international laws and regulations.
+
+4. THIRD-PARTY SERVICES & SWAPS
+The Software includes integrated API access to third-party cryptocurrency swap aggregators, specifically Trocador.
+
+Independent Relationship: Your use of Trocador is governed entirely by Trocador's own Terms of Service and Privacy Policy. Such Software LLC is not a party to any transaction you execute via Trocador.
+
+No Liability for Third Parties: We are not responsible for any delayed, failed, or halted transactions, nor for any "Know Your Customer" (KYC) or "Anti-Money Laundering" (AML) holds placed on your funds by the exchange partners utilized by Trocador. Any disputes regarding swapped funds must be resolved directly with Trocador or its respective exchange partners.
+
+5. ASSUMPTION OF RISK
+By using the Software, you acknowledge and accept the inherent risks associated with cryptographic systems, blockchain technology, and digital assets. This includes, but is not limited to, the risk of extreme price volatility, smart contract vulnerabilities, regulatory changes, and hardware or software failure. You agree that Such Software LLC is not responsible for any losses arising from these risks.
+
+6. INTELLECTUAL PROPERTY & OPEN SOURCE
+Hash Wallet is built on open-source technologies. The Software's proprietary code is licensed under the terms specified in the Software's respective open-source license (e.g., MIT, GPL, etc., as found in the repository). To the extent any branding, logos, or trademarks (including "Hash Wallet" and "Such Software LLC") are not covered by the open-source license, they remain the exclusive property of Such Software LLC.
+
+7. DISCLAIMER OF WARRANTIES
+THE SOFTWARE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. SUCH SOFTWARE LLC EXPRESSLY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED, ERROR-FREE, OR ENTIRELY SECURE.
+
+8. LIMITATION OF LIABILITY
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL SUCH SOFTWARE LLC, ITS FOUNDERS, MEMBERS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM (A) YOUR ACCESS TO OR USE OF OR INABILITY TO ACCESS OR USE THE SOFTWARE; OR (B) ANY UNAUTHORIZED ACCESS, USE, OR ALTERATION OF YOUR TRANSMISSIONS OR DATA.
+
+9. GOVERNING LAW AND DISPUTE RESOLUTION
+These Terms shall be governed by and construed in accordance with the laws of the Commonwealth of Pennsylvania, without regard to its conflict of law principles. Any legal action or proceeding arising under these Terms will be brought exclusively in the federal or state courts located in or serving Chester County, Pennsylvania, and the parties hereby irrevocably consent to the personal jurisdiction and venue therein.
+
+10. CHANGES TO THESE TERMS
+We reserve the right to modify these Terms at any time. We will provide notice of any material changes by updating the "Last Updated" date. Your continued use of the Software following any changes constitutes your acceptance of the new Terms.
