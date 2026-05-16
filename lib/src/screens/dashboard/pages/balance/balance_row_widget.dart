@@ -670,9 +670,9 @@ class BalanceRowWidget extends StatelessWidget {
   }
 
   void onPressedHelp() {
-    var helpUri = Uri.parse("https://docs.cakewallet.com/cryptos/bitcoin#lightning");
+    var helpUri = Uri.parse("https://github.com/Such-Software/hash-wallet");
     if (dashboardViewModel.type == WalletType.litecoin) {
-      helpUri = Uri.parse("https://docs.cakewallet.com/cryptos/litecoin#mweb");
+      helpUri = Uri.parse("https://github.com/Such-Software/hash-wallet");
     }
 
     launchUrl(helpUri, mode: LaunchMode.externalApplication);

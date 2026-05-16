@@ -30,7 +30,7 @@ class WelcomePage extends BasePage {
   @override
   Widget trailing(BuildContext context) {
     final Uri _url =
-        Uri.parse('https://docs.cakewallet.com/get-started/setup/');
+        Uri.parse('https://github.com/Such-Software/hash-wallet');
     return IconButton(
       icon: Icon(Icons.info_outline, size: 26,),
       onPressed: () async {

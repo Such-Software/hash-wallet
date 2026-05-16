@@ -311,7 +311,7 @@ class QRWidget extends StatelessWidget {
         footerType: FooterType.doubleActionButton,
         doubleActionLeftButtonText: S.of(context).learn_more,
         onLeftActionButtonPressed: () => launchUrl(
-            Uri.parse("https://docs.cakewallet.com/cryptos/bitcoin/#payjoin"),
+            Uri.parse("https://github.com/Such-Software/hash-wallet"),
             mode: LaunchMode.externalApplication),
         doubleActionRightButtonText: S.of(context).ok,
         onRightActionButtonPressed: () => Navigator.of(context).pop(),

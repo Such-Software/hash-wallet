@@ -15,42 +15,24 @@ abstract class SupportViewModelBase with Store {
 
   SupportViewModelBase(this._appStore)
       : items = [
+          // Hash Wallet: Cake's own support channels (email, website, forum,
+          // Discord, Telegram, Telegram bot) gutted — those are Cake Labs
+          // properties, not ours. Replaced with the only channel we have right
+          // now: GitHub Issues. The third-party provider support links below
+          // are kept because they're genuinely useful when a user has trouble
+          // with a swap/buy via that provider.
           LinkListItem(
-              title: 'Email',
-              icon: 'assets/images/support_icon.png',
-              linkTitle: 'support@cakewallet.com',
-              link: 'mailto:support@cakewallet.com'),
+              title: 'GitHub Issues',
+              icon: 'assets/images/github.png',
+              hasIconColor: true,
+              linkTitle: 'github.com/Such-Software/hash-wallet/issues',
+              link: 'https://github.com/Such-Software/hash-wallet/issues'),
           LinkListItem(
-              title: 'Website',
-              icon: 'assets/images/global.png',
-              linkTitle: 'cakewallet.com',
-              link: 'https://cakewallet.com'),
-          LinkListItem(
-              title: 'Forum',
-              icon: 'assets/images/discourse.png',
-              linkTitle: 'forum.cakewallet.com',
-              link: 'https://forum.cakewallet.com'),
-          LinkListItem(
-              title: 'GitHub',
+              title: 'GitHub Releases',
               icon: 'assets/images/github.png',
               hasIconColor: true,
               linkTitle: S.current.apk_update,
-              link: 'https://github.com/cake-tech/cake_wallet/releases'),
-          LinkListItem(
-              title: 'Discord',
-              icon: 'assets/images/discord.png',
-              linkTitle: 'discord.gg/pwmWa6aFpX',
-              link: 'https://discord.gg/pwmWa6aFpX'),
-          LinkListItem(
-              title: 'Telegram',
-              icon: 'assets/images/Telegram.png',
-              linkTitle: 't.me/cakewallet',
-              link: 'https://t.me/cakewalletannouncements'),
-          LinkListItem(
-              title: 'Telegram Support Bot',
-              icon: 'assets/images/Telegram.png',
-              linkTitle: '@cakewallet_bot',
-              link: 'https://t.me/cakewallet_bot'),
+              link: 'https://github.com/Such-Software/hash-wallet/releases'),
           LinkListItem(
               title: 'ChangeNow',
               icon: 'assets/images/change_now.png',
@@ -86,7 +68,7 @@ abstract class SupportViewModelBase with Store {
               icon: 'assets/images/onramper_dark.png',
               lightIcon: 'assets/images/onramper_light.png',
               linkTitle: 'View exchanges',
-              link: 'https://docs.cakewallet.com/support/buy/#onramper'),
+              link: 'https://onramper.com/'),
           LinkListItem(
               title: 'DFX',
               icon: 'assets/images/dfx_dark.png',
@@ -114,7 +96,7 @@ abstract class SupportViewModelBase with Store {
               link: 'mailto:contact@support.kryptonim.com'),
         ];
 
-  final docsUrl = 'https://docs.cakewallet.com';
+  final docsUrl = 'https://github.com/Such-Software/hash-wallet';
 
   String fetchUrl({String locale = "en", String authToken = ""}) {
     var supportUrl =
@@ -126,7 +108,7 @@ abstract class SupportViewModelBase with Store {
   }
 
   String get appVersion =>
-      "${isMoneroOnly ? "Monero.com" : "Cake Wallet"} - ${_appStore.settingsStore.appVersion}";
+      "${isMoneroOnly ? "Monero.com" : "Hash Wallet"} - ${_appStore.settingsStore.appVersion}";
 
   String get fiatApiMode => _appStore.settingsStore.fiatApiMode.title;
 

@@ -263,7 +263,7 @@ class CryptoBalanceWidget extends StatelessWidget {
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () => launchUrl(
                                   Uri.parse(
-                                      "https://docs.cakewallet.com/cryptos/bitcoin#silent-payments"),
+                                      "https://github.com/Such-Software/hash-wallet"),
                                   mode: LaunchMode.externalApplication,
                                 ),
                                 child: Row(
@@ -319,7 +319,7 @@ class CryptoBalanceWidget extends StatelessWidget {
                       hintWidget: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () => launchUrl(
-                          Uri.parse("https://docs.cakewallet.com/cryptos/litecoin/#mweb"),
+                          Uri.parse("https://github.com/Such-Software/hash-wallet"),
                           mode: LaunchMode.externalApplication,
                         ),
                         child: Text(
@@ -349,7 +349,7 @@ class CryptoBalanceWidget extends StatelessWidget {
                       hintWidget: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () => launchUrl(
-                          Uri.parse("https://docs.cakewallet.com/tutorials/zashi/#creating-a-new-zcash-wallet-on-cake"),
+                          Uri.parse("https://github.com/Such-Software/hash-wallet"),
                           mode: LaunchMode.externalApplication,
                         ),
                         child: Text(
@@ -376,7 +376,7 @@ class CryptoBalanceWidget extends StatelessWidget {
                       rightButtonTitle: S.of(context).learn_more,
                       leftButtonAction: () => dashboardViewModel.dismissDecredInfoCard(),
                       rightButtonAction: () => launchUrl(
-                          Uri.parse("https://docs.cakewallet.com/cryptos/decred/#spv-sync")),
+                          Uri.parse("https://github.com/Such-Software/hash-wallet")),
                     ),
                   ),
                 ],
@@ -390,7 +390,7 @@ class CryptoBalanceWidget extends StatelessWidget {
                       hintWidget: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () => launchUrl(
-                          Uri.parse("https://docs.cakewallet.com/cryptos/bitcoin/#payjoin"),
+                          Uri.parse("https://github.com/Such-Software/hash-wallet"),
                           mode: LaunchMode.externalApplication,
                         ),
                         child: Row(

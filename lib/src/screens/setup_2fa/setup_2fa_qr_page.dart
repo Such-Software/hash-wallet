@@ -26,7 +26,7 @@ class Setup2FAQRPage extends BasePage {
     final copyImage = Image.asset('assets/images/copy_content.png',
         height: 16, width: 16, color: Theme.of(context).colorScheme.onSurface);
     final cake2FAHowToUseUrl = Uri.parse(
-        'https://docs.cakewallet.com/features/advanced/authentication/#enabling-cake-2fa');
+        'https://github.com/Such-Software/hash-wallet');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(

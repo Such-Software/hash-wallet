@@ -52,7 +52,7 @@ class TransactionsPage extends StatelessWidget {
                   key: ValueKey('transactions_page_syncing_alert_card_key'),
                   onTap: () {
                     try {
-                      final uri = Uri.parse("https://docs.cakewallet.com/faq/funds-not-appearing");
+                      final uri = Uri.parse("https://github.com/Such-Software/hash-wallet");
                       launchUrl(uri, mode: LaunchMode.externalApplication);
                     } catch (_) {}
                   },

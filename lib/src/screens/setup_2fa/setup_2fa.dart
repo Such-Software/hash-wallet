@@ -21,7 +21,7 @@ class Setup2FAPage extends BasePage {
   Widget body(BuildContext context) {
     final cake2FAGuideTitle = 'Cake 2FA Guide';
     final cake2FAGuideUri =
-        Uri.parse('https://docs.cakewallet.com/features/advanced/authentication/');
+        Uri.parse('https://github.com/Such-Software/hash-wallet');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

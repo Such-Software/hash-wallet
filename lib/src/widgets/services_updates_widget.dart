@@ -113,7 +113,7 @@ class _ServicesUpdatesWidgetState extends State<ServicesUpdatesWidget> {
                                       try {
                                         launchUrl(
                                             Uri.parse(
-                                              "https://status.cakewallet.com/",
+                                              "https://github.com/Such-Software/hash-wallet/issues",
                                             ),
                                             mode: LaunchMode.externalApplication);
                                       } catch (_) {}

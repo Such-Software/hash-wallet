@@ -59,7 +59,7 @@ class HavenWalletRemovalPopup extends StatelessWidget {
                                   maxHeight: MediaQuery.of(context).size.height * 0.7,
                                 ),
                                 child: Text(
-                                  "It looks like you have Haven wallets in your list. Haven is getting removed in next release of Cake Wallet, and you currently have Haven in the following wallets:\n\n[${affectedWalletNames.join(", ")}]\n\nPlease move your funds to other wallet, as you will lose access to your Haven funds in next update.\n\nFor assistance, please use the in-app support or email support@cakewallet.com",
+                                  "It looks like you have Haven wallets in your list. Haven is getting removed in the Hash Wallet fork, and you currently have Haven in the following wallets:\n\n[${affectedWalletNames.join(", ")}]\n\nPlease move your funds to other wallet, as you will lose access to your Haven funds in next update.\n\nFor assistance, please use the in-app support or open an issue at github.com/Such-Software/hash-wallet",
                                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     decoration: TextDecoration.none,
                                     fontSize: 16.0,
