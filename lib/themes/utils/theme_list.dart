@@ -7,20 +7,20 @@ class ThemeList {
   static final all = [
     darkTheme,
     lightTheme,
-    blackThemeCakePrimary,
+    blackThemeHashGreen,
     blackThemeBCHGreen,
     blackThemeBitcoinYellow,
     blackThemeMoneroOrange,
-    blackThemeTronRed,
-    blackThemeFrostingPurple,
+    blackThemeSuchPink,
+    blackThemeSuchBlue,
   ];
 
   static final lightTheme = LightTheme();
   static final darkTheme = DarkTheme();
 
-  static final blackThemeCakePrimary = BlackTheme(BlackThemeAccentColor.cakePrimary);
-  static final blackThemeCakePrimaryOled = BlackTheme(
-    BlackThemeAccentColor.cakePrimary,
+  static final blackThemeHashGreen = BlackTheme(BlackThemeAccentColor.hashGreen);
+  static final blackThemeHashGreenOled = BlackTheme(
+    BlackThemeAccentColor.hashGreen,
     isOled: true,
   );
 
@@ -42,15 +42,15 @@ class ThemeList {
     isOled: true,
   );
 
-  static final blackThemeTronRed = BlackTheme(BlackThemeAccentColor.tronRed);
-  static final blackThemeTronRedOled = BlackTheme(
-    BlackThemeAccentColor.tronRed,
+  static final blackThemeSuchPink = BlackTheme(BlackThemeAccentColor.suchPink);
+  static final blackThemeSuchPinkOled = BlackTheme(
+    BlackThemeAccentColor.suchPink,
     isOled: true,
   );
 
-  static final blackThemeFrostingPurple = BlackTheme(BlackThemeAccentColor.frostingPurple);
-  static final blackThemeFrostingPurpleOled = BlackTheme(
-    BlackThemeAccentColor.frostingPurple,
+  static final blackThemeSuchBlue = BlackTheme(BlackThemeAccentColor.suchBlue);
+  static final blackThemeSuchBlueOled = BlackTheme(
+    BlackThemeAccentColor.suchBlue,
     isOled: true,
   );
 
@@ -71,7 +71,7 @@ class ThemeList {
       case 9:
         return darkTheme;
       case 12:
-        return blackThemeCakePrimary;
+        return blackThemeHashGreen;
       case 13:
         return blackThemeBCHGreen;
       case 14:
@@ -79,11 +79,11 @@ class ThemeList {
       case 15:
         return blackThemeMoneroOrange;
       case 16:
-        return blackThemeTronRed;
+        return blackThemeSuchPink;
       case 17:
-        return blackThemeFrostingPurple;
+        return blackThemeSuchBlue;
       case 112:
-        return blackThemeCakePrimaryOled;
+        return blackThemeHashGreenOled;
       case 113:
         return blackThemeBCHGreenOled;
       case 114:
@@ -91,11 +91,11 @@ class ThemeList {
       case 115:
         return blackThemeMoneroOrangeOled;
       case 116:
-        return blackThemeTronRedOled;
+        return blackThemeSuchPinkOled;
       case 117:
-        return blackThemeFrostingPurpleOled;
+        return blackThemeSuchBlueOled;
       default:
-        return blackThemeCakePrimary;
+        return blackThemeHashGreen;
     }
   }
 }
