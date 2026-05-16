@@ -63,7 +63,6 @@ abstract class SupportViewModelBase with Store {
               icon: 'assets/images/trocador.png',
               linkTitle: 'mail@trocador.app',
               link: 'mailto:mail@trocador.app'),
-          if (!isMoneroOnly) ...[
         ];
 
   final docsUrl = 'https://github.com/Such-Software/hash-wallet';
