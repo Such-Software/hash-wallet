@@ -4,12 +4,12 @@ import 'package:cake_wallet/themes/core/custom_theme_colors.dart';
 import 'package:cake_wallet/themes/custom_theme_colors/black_theme_custom_colors.dart';
 
 enum BlackThemeAccentColor implements ThemeAccentColor {
-  cakePrimary(Color(0xFF52B6F0), 'Cake Primary'),
+  hashGreen(Color(0xFF7FCAA0), 'Hash Green'),
+  suchPink(Color(0xFFE16FA6), 'Such Pink'),
+  suchBlue(Color(0xFF6AB7E6), 'Such Blue'),
   bchGreen(Color(0xFF44BA52), 'BCH Green'),
   bitcoinYellow(Color(0xFFFFC107), 'Bitcoin Yellow'),
-  moneroOrange(Color(0xFFFF6600), 'Monero Orange'),
-  tronRed(Color(0xFFFF4242), 'Tron Red'),
-  frostingPurple(Color(0xFFBABAF3), 'Frosting Purple');
+  moneroOrange(Color(0xFFFF6600), 'Monero Orange');
 
   const BlackThemeAccentColor(this.color, this.name);
 
@@ -263,12 +263,12 @@ class BlackTheme extends MaterialThemeBase {
   @override
   int get raw {
     final baseValue = switch (accentColor) {
-      BlackThemeAccentColor.cakePrimary => 12,
+      BlackThemeAccentColor.hashGreen => 12,
       BlackThemeAccentColor.bchGreen => 13,
       BlackThemeAccentColor.bitcoinYellow => 14,
       BlackThemeAccentColor.moneroOrange => 15,
-      BlackThemeAccentColor.tronRed => 16,
-      BlackThemeAccentColor.frostingPurple => 17,
+      BlackThemeAccentColor.suchPink => 16,
+      BlackThemeAccentColor.suchBlue => 17,
     };
     if (!isOled) return baseValue;
     // OLED encodes as 100 + base to avoid collisions

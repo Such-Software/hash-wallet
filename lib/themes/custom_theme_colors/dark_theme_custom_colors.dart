@@ -12,17 +12,17 @@ class DarkThemeCustomColors extends CustomThemeColors {
   Color get backgroundMainColor => const Color(0xFF000000);
 
   @override
-  Color get backgroundGradientColor => const Color(0xFF0F1A36);
+  Color get backgroundGradientColor => const Color(0xFF06150C);
 
   @override
-  Color get cardGradientColorPrimary => const Color(0xFF2B3A67);
+  Color get cardGradientColorPrimary => const Color(0xFF1F4530);
 
   @override
-  Color get cardGradientColorSecondary => const Color(0xFF1C2A4F);
+  Color get cardGradientColorSecondary => const Color(0xFF112A1D);
 
   @override
   Color get toggleKnobStateColor => const Color(0xFFFFFFFF);
 
   @override
-  Color get toggleColorOffState => const Color(0xFF3A4F88);
+  Color get toggleColorOffState => const Color(0xFF2A5840);
 }

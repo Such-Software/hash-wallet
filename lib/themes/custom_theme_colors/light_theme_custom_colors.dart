@@ -9,20 +9,20 @@ class LightThemeCustomColors extends CustomThemeColors {
   Color get warningOutlineColor => const Color(0xFF312938);
 
   @override
-  Color get backgroundMainColor => const Color(0xFF000000);
-  
+  Color get backgroundMainColor => const Color(0xFF0B1F14);
+
   @override
-  Color get backgroundGradientColor => const Color(0xFFE7E7FD);
-  
+  Color get backgroundGradientColor => const Color(0xFFDDEBE3);
+
   @override
   Color get cardGradientColorPrimary => const Color(0xFFFFFFFF);
-  
+
   @override
-  Color get cardGradientColorSecondary => const Color(0xFFF3F3FF);
-  
+  Color get cardGradientColorSecondary => const Color(0xFFEAF2EC);
+
   @override
   Color get toggleKnobStateColor => const Color(0xFFFFFFFF);
-  
+
   @override
-  Color get toggleColorOffState => const Color(0xFFCACAE7);
+  Color get toggleColorOffState => const Color(0xFFC7E5D2);
 }

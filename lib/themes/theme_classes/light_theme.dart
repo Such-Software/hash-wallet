@@ -10,51 +10,56 @@ class LightTheme extends MaterialThemeBase {
   @override
   ThemeMode get themeMode => ThemeMode.light;
 
+  // Hash Wallet palette:
+  //  - Primary: brand green (#1A5C38)
+  //  - Secondary: Such Software pink (#B83278)
+  //  - Tertiary: Such Software blue (#1F7DBF)
+  //  - Surface: very light minty bg (#F2F8F4)
   @override
-  Color get primaryColor => const Color(0xFF4EBEFF);
+  Color get primaryColor => const Color(0xFF1A5C38);
 
   @override
-  Color get secondaryColor => const Color(0xFF625C64);
+  Color get secondaryColor => const Color(0xFFB83278);
 
   @override
-  Color get tertiaryColor => const Color(0xFFBFCBDE);
+  Color get tertiaryColor => const Color(0xFF1F7DBF);
 
   @override
   Color get errorColor => const Color(0xFFBA1A1A);
 
   @override
-  Color get surfaceColor => const Color(0xFFEFEFF8);
+  Color get surfaceColor => const Color(0xFFF2F8F4);
 
   @override
   ColorScheme get colorScheme => ColorScheme.light(
         primary: primaryColor,
         onPrimary: const Color(0xFFFFFFFF),
-        primaryContainer: const Color(0xFF403747),
-        onPrimaryContainer: const Color(0xFFD5C8DC),
+        primaryContainer: const Color(0xFFC7E5D2),
+        onPrimaryContainer: const Color(0xFF0B1F14),
         secondary: secondaryColor,
         onSecondary: const Color(0xFFFFFFFF),
-        secondaryContainer: const Color(0xFFE1E4EA),
-        onSecondaryContainer: const Color(0xFF4C474E),
+        secondaryContainer: const Color(0xFFF9D6E5),
+        onSecondaryContainer: const Color(0xFF4A0E2C),
         tertiary: tertiaryColor,
         onTertiary: const Color(0xFFFFFFFF),
-        tertiaryContainer: const Color(0xFF35404A),
-        onTertiaryContainer: const Color(0xFFC5D7E5),
+        tertiaryContainer: const Color(0xFFD6EAF6),
+        onTertiaryContainer: const Color(0xFF0B2C46),
         error: errorColor,
         onError: const Color(0xFFFFFFFF),
         errorContainer: const Color(0xFFFFBDBD),
         onErrorContainer: const Color(0xFFE43D3D),
         surface: surfaceColor,
-        surfaceDim: const Color(0xFFE7E7FD),
-        onSurface: const Color(0xFF312938),
-        onSurfaceVariant: const Color(0xFF6C6772),
-        surfaceContainerLowest: Color(0xFFE4E4E4),
-        surfaceContainerLow: Color(0xFFECECED),
-        surfaceContainer: Color(0xFFFBFBFD),
-        surfaceContainerHigh: Color(0xFFFDFDFE),
+        surfaceDim: const Color(0xFFDDEBE3),
+        onSurface: const Color(0xFF0B1F14),
+        onSurfaceVariant: const Color(0xFF5A6B61),
+        surfaceContainerLowest: Color(0xFFE2EEE7),
+        surfaceContainerLow: Color(0xFFEAF2EC),
+        surfaceContainer: Color(0xFFF5FAF6),
+        surfaceContainerHigh: Color(0xFFFAFDFB),
         surfaceContainerHighest: Color(0xFFFFFFFF),
         onInverseSurface: Color(0xFFFAFAFA),
-        outline: const Color(0xFF7B757C),
-        outlineVariant: const Color(0xFFEDEDF6),
+        outline: const Color(0xFF6F857A),
+        outlineVariant: const Color(0xFFD9E6DE),
       );
 
   @override

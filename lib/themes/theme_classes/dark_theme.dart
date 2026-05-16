@@ -10,50 +10,55 @@ class DarkTheme extends MaterialThemeBase {
   @override
   ThemeMode get themeMode => ThemeMode.dark;
 
+  // Hash Wallet dark palette:
+  //  - Primary: mint (#7FCAA0) — light enough to read on dark surface
+  //  - Secondary: soft pink (#E16FA6)
+  //  - Tertiary: soft blue (#6AB7E6)
+  //  - Surface: deep green (#0B1F14)
   @override
-  Color get primaryColor => const Color(0xFF91B0FF);
+  Color get primaryColor => const Color(0xFF7FCAA0);
 
   @override
-  Color get secondaryColor => const Color(0xFFA1B9FF);
+  Color get secondaryColor => const Color(0xFFE16FA6);
 
   @override
   Color get errorColor => const Color(0xFFFFB4AB);
 
   @override
-  Color get surfaceColor => const Color(0xFF1B284A);
+  Color get surfaceColor => const Color(0xFF0B1F14);
 
   @override
-  Color get tertiaryColor => const Color(0xFF162028);
+  Color get tertiaryColor => const Color(0xFF6AB7E6);
 
   @override
   ColorScheme get colorScheme => ColorScheme.dark(
         primary: primaryColor,
-        onPrimary: const Color(0xFF002860),
-        primaryContainer: const Color(0xFF004C9E),
-        onPrimaryContainer: const Color(0xFFFFF3F0),
+        onPrimary: const Color(0xFF0B1F14),
+        primaryContainer: const Color(0xFF1A5C38),
+        onPrimaryContainer: const Color(0xFFC7E5D2),
         secondary: secondaryColor,
-        onSecondary: const Color(0xFF0C1C58),
-        secondaryContainer: const Color(0xFF1A3C6C),
-        onSecondaryContainer: const Color(0xFFBACBFF),
+        onSecondary: const Color(0xFF3A0F22),
+        secondaryContainer: const Color(0xFF7A1F4E),
+        onSecondaryContainer: const Color(0xFFFAD5E5),
         tertiary: tertiaryColor,
-        onTertiary: const Color(0xFF2B373F),
-        tertiaryContainer: const Color(0xFF1F2832),
-        onTertiaryContainer: const Color(0xFFA8B3C6),
+        onTertiary: const Color(0xFF0B2C46),
+        tertiaryContainer: const Color(0xFF14507A),
+        onTertiaryContainer: const Color(0xFFD6EAF6),
         error: errorColor,
         onError: const Color(0xFFB71919),
         errorContainer: const Color(0xFFC53636),
         onErrorContainer: const Color(0xFFFFDAD6),
         surface: surfaceColor,
-        onSurface: const Color(0xFFD7E2F7),
-        surfaceDim: const Color(0xFF0F1A36),
-        onSurfaceVariant: const Color(0xFF8C9FBB),
-        surfaceContainerLowest: Color(0xFF171C30),
-        surfaceContainerLow: Color(0xFF2D385C),
-        surfaceContainer: Color(0xFF24335B),
-        surfaceContainerHigh: Color(0xFF2A3E73),
-        surfaceContainerHighest: Color(0xFF334C8C),
-        outline: const Color(0xFF9EACC1),
-        outlineVariant: const Color(0xFF2A3E73),
+        onSurface: const Color(0xFFE0F0E8),
+        surfaceDim: const Color(0xFF06150C),
+        onSurfaceVariant: const Color(0xFF9BB5A6),
+        surfaceContainerLowest: Color(0xFF06150C),
+        surfaceContainerLow: Color(0xFF112A1D),
+        surfaceContainer: Color(0xFF173524),
+        surfaceContainerHigh: Color(0xFF1F4530),
+        surfaceContainerHighest: Color(0xFF2A5840),
+        outline: const Color(0xFF8AAA98),
+        outlineVariant: const Color(0xFF1F4530),
       );
   static const String fontFamily = 'Wix Madefor Text';
   @override
