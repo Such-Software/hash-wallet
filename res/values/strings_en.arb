@@ -734,7 +734,7 @@
   "payjoin_unavailable_sheet_content": "Receiving a Payjoin transaction requires you to have Bitcoin ready to use.\n\nAs soon as your wallet has funds, Payjoin will be automatically enabled.",
   "payjoin_unavailable_sheet_title": "Why is Payjoin unavailable?",
   "payment_id": "Payment ID: ",
-  "payment_made_easy": "Payments made easy",
+  "payment_made_easy": "Payments · Privacy · Security · made fun",
   "payment_was_received": "Your payment was received.",
   "payments": "Payments",
   "pending": " (pending)",
