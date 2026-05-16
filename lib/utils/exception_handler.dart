@@ -90,7 +90,7 @@ class ExceptionHandler {
 
       final MailOptions mailOptions = MailOptions(
         subject: 'Mobile App Issue',
-        recipients: ['support@cakewallet.com'],
+        recipients: ['support@such.software'],
         attachments: [_file!.path],
       );
 
