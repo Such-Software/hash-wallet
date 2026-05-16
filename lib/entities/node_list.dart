@@ -115,7 +115,9 @@ Future<void> resetToDefault(Box<Node> nodeSource) async {
   final dogecoinElectrumServerList = await loadDefaultNodes(WalletType.dogecoin);
   final baseNodes = await loadDefaultNodes(WalletType.base);
   final arbitrumNodes = await loadDefaultNodes(WalletType.arbitrum);
-  final zcashNodes = await loadDefaultNodes(WalletType.zcash);
+  // Hash Wallet: zcash node list deleted with the chain. Skip the load,
+  // skip the concat — stops the first-launch popup "Unable to load asset:
+  // assets/zcash_node_list.yml".
   final bscNodes = await loadDefaultNodes(WalletType.bsc);
 
   final nodes = moneroNodes +
@@ -133,7 +135,6 @@ Future<void> resetToDefault(Box<Node> nodeSource) async {
       dogecoinElectrumServerList +
       baseNodes +
       arbitrumNodes +
-      zcashNodes +
       bscNodes;
 
   await nodeSource.clear();
