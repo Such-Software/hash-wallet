@@ -46,21 +46,13 @@ extension ProviderTypeName on ProviderType {
 }
 
 class ProvidersHelper {
-  static List<ProviderType> getAvailableBuyProviderTypes() => [
-    ProviderType.robinhood,
-    ProviderType.dfx,
-    ProviderType.onramper,
-    ProviderType.moonpay,
-    ProviderType.kriptonim
-  ];
-
-  static List<ProviderType> getAvailableSellProviderTypes() => [
-    // ProviderType.robinhood, // ToDo: (Konsti) Enable once fixed in Exchange Helper, but still waiting for new Docs
-    ProviderType.dfx,
-    ProviderType.onramper,
-    ProviderType.moonpay,
-    ProviderType.kriptonim
-  ];
+  // Hash Wallet: all buy/sell providers (Robinhood Connect, DFX, Onramper,
+  // MoonPay, Kryptonim, Meld) gutted. Each requires a formal partner
+  // agreement with a revenue-share contract — no free integrations exist.
+  // Re-add providers here once Such Software has registered the affiliate
+  // relationship for that provider.
+  static List<ProviderType> getAvailableBuyProviderTypes() => [];
+  static List<ProviderType> getAvailableSellProviderTypes() => [];
 
   static BuyProvider getProviderByType(ProviderType type) {
     switch (type) {

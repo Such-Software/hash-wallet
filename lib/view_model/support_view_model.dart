@@ -63,37 +63,7 @@ abstract class SupportViewModelBase with Store {
               icon: 'assets/images/trocador.png',
               linkTitle: 'mail@trocador.app',
               link: 'mailto:mail@trocador.app'),
-          LinkListItem(
-              title: 'Onramper',
-              icon: 'assets/images/onramper_dark.png',
-              lightIcon: 'assets/images/onramper_light.png',
-              linkTitle: 'View exchanges',
-              link: 'https://onramper.com/'),
-          LinkListItem(
-              title: 'DFX',
-              icon: 'assets/images/dfx_dark.png',
-              lightIcon: 'assets/images/dfx_light.png',
-              linkTitle: 'support@dfx.swiss',
-              link: 'mailto:support@dfx.swiss'),
           if (!isMoneroOnly) ...[
-            LinkListItem(
-                title: 'MoonPay',
-                icon: 'assets/images/moonpay.png',
-                linkTitle: S.current.submit_request,
-                link: 'https://support.moonpay.com/hc/en-gb/requests/new'),
-            LinkListItem(
-                title: 'Robinhood Connect',
-                icon: 'assets/images/robinhood_dark.png',
-                lightIcon: 'assets/images/robinhood_light.png',
-                linkTitle: S.current.submit_request,
-                link: 'https://robinhood.com/contact')
-          ],
-          LinkListItem(
-              title: 'Kryptonim',
-              icon: 'assets/images/kryptonim_dark.png',
-              lightIcon: 'assets/images/kryptonim_light.png',
-              linkTitle: 'contact@support.kryptonim.com',
-              link: 'mailto:contact@support.kryptonim.com'),
         ];
 
   final docsUrl = 'https://github.com/Such-Software/hash-wallet';
