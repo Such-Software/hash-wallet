@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+<title>Hash Wallet notification mark</title>
+<desc>Single-color silhouette of the hash mark, no background, sized for Android notification tray (24x24 dp). Renders as white-on-system-tint per Android notification icon rules.</desc>
+<text x="12" y="20" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="22" font-weight="700" fill="currentColor" text-anchor="middle">#</text>
+</svg>

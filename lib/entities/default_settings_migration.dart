@@ -563,13 +563,10 @@ Future<void> defaultSettingsMigration(
           await _backupWowneroSeeds(havenSeedStore);
           break;
         case 55:
-          await addWalletNodeList(nodes: nodes, type: WalletType.zcash);
-          await _changeDefaultNode(
-            nodes: nodes,
-            sharedPreferences: sharedPreferences,
-            type: WalletType.zcash,
-            currentNodePreferenceKey: PreferencesKey.currentZcashNodeIdKey,
-          );
+          // Hash Wallet: zcash removed. The original migration here added
+          // zcash node list + set default zcash node. We no longer load
+          // zcash_node_list.yml (it was deleted), so skip the whole step.
+          break;
         case 56:
           await sharedPreferences.setString(
               PreferencesKey.syncStatusDisplayMode, SyncStatusDisplayMode.blocksRemaining.name);

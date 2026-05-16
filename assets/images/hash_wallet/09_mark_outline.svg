@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<title>Hash Wallet mark — outline</title>
+<desc>The Hash Wallet mark as a green outline + green hash, no fill. For monochrome UI surfaces and tiny sizes where the solid green box overwhelms.</desc>
+<rect x="4" y="4" width="92" height="92" rx="20" fill="none" stroke="#1a5c38" stroke-width="6"/>
+<text x="50" y="76" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="74" font-weight="700" fill="#1a5c38" text-anchor="middle">#</text>
+</svg>
