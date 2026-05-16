@@ -229,3 +229,6 @@ scripts/zcash_lib
 scripts/android/yttrium
 scripts/bitbox_flutter
 scripts/reown_flutter
+
+# Hash Wallet: untracked notes
+docs/links.md

@@ -1466,42 +1466,15 @@ abstract class DashboardViewModelBase with Store {
   }
 
   Future<ServicesResponse> _getServicesStatus() async {
-    try {
-      if (isEnabledBulletinAction) {
-        final res = await ProxyWrapper().get(
-          clearnetUri: Uri.https(
-            "service-api.cakewallet.com",
-            "/v1/active-notices",
-            {'key': secrets.fiatApiKey},
-          ),
-          onionUri: Uri.http(
-            "jpirgl4lrwzjgdqj2nsv3g7twhp2efzty5d3cnypktyczzqfc5qcwwyd.onion",
-            "/v1/active-notices",
-            {'key': secrets.fiatApiKey},
-          ),
-        );
-        if (res.statusCode < 200 || res.statusCode >= 300) {
-          throw res.body;
-        }
-
-        final oldSha = sharedPreferences.getString(PreferencesKey.serviceStatusShaKey);
-
-        final hash = await Cryptography.instance.sha256().hash(utf8.encode(res.body));
-        final currentSha = bytesToHex(hash.bytes);
-
-        final hasUpdates = oldSha != currentSha;
-
-        return ServicesResponse.fromJson(
-          json.decode(res.body) as Map<String, dynamic>,
-          hasUpdates,
-          currentSha,
-        );
-      } else {
-        return ServicesResponse([], false, '');
-      }
-    } catch (e) {
-      return ServicesResponse([], false, '');
-    }
+    // Hash Wallet: bulletin endpoint stubbed. The original implementation
+    // polled Cake's service-api.cakewallet.com/v1/active-notices (gated by
+    // the Cake-issued fiatApiKey) to surface push notices to all wallets.
+    // We don't run our own bulletin service yet. To restore: stand up an
+    // equivalent endpoint (likely under hash.boats or such.software) that
+    // returns the same JSON shape as service_status.dart expects, and put
+    // the network call back in place. Keep the user-facing toggle alive
+    // for forward-compat with the settings UI.
+    return ServicesResponse([], false, '');
   }
 
   String getTransactionType(TransactionInfo tx) {

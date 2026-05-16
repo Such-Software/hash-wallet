@@ -28,7 +28,7 @@ class OnRamperBuyProvider extends BuyProvider {
 
   static const _baseUrl = 'buy.onramper.com';
   static const _baseApiUrl = 'api.onramper.com';
-  static const _cIdBaseUrl = 'exchange-helper.cakewallet.com';
+  static const _cIdBaseUrl = 'exchange-helper.such.software';
   static const quotes = '/quotes';
   static const paymentTypes = '/payment-types';
   static const supported = '/supported';

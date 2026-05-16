@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
-import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DisclaimerPage extends BasePage {
@@ -36,8 +35,7 @@ class DisclaimerBodyState extends State<DisclaimerPageBody> {
   String _fileText = '';
 
   void getFileLines() {
-    final fileName =
-        isMoneroOnly ? 'assets/text/Monerocom_Terms_of_Use.txt' : 'assets/text/Terms_of_Use.txt';
+    const fileName = 'assets/text/Terms_of_Use.txt';
     rootBundle.loadString(fileName).then((text) => setState(() => _fileText = text));
   }
 

@@ -48,7 +48,7 @@ class MoonPayProvider extends BuyProvider {
   static const _baseSellProductUrl = 'sell.moonpay.com';
   static const _baseBuyTestUrl = 'buy-staging.moonpay.com';
   static const _baseBuyProductUrl = 'buy.moonpay.com';
-  static const _cIdBaseUrl = 'exchange-helper.cakewallet.com';
+  static const _cIdBaseUrl = 'exchange-helper.such.software';
   static const _apiUrl = 'https://api.moonpay.com';
   static const _baseUrl = 'api.moonpay.com';
   static const _currenciesPath = '/v3/currencies';

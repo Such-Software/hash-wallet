@@ -37,7 +37,7 @@ class RobinhoodBuyProvider extends BuyProvider {
         );
 
   static const _baseUrl = 'applink.robinhood.com';
-  static const _cIdBaseUrl = 'exchange-helper.cakewallet.com';
+  static const _cIdBaseUrl = 'exchange-helper.such.software';
   static const _apiBaseUrl = 'api.robinhood.com';
   static const _assetsPath = '/catpay/v1/supported_currencies/';
 
