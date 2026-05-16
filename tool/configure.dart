@@ -1956,6 +1956,11 @@ Future<void> generateWalletTypes({
   const outputDefinition = 'final availableWalletTypes = <WalletType>[';
   var outputContent = outputHeader + '\n\n' + outputDefinition + '\n';
 
+  // Hash Wallet: Wownero up top — it's the reason this fork exists.
+  if (hasWownero) {
+    outputContent += '\tWalletType.wownero,\n';
+  }
+
   if (hasMonero) {
     outputContent += '\tWalletType.monero,\n';
   }
@@ -2024,9 +2029,7 @@ Future<void> generateWalletTypes({
     outputContent += '\tWalletType.banano,\n';
   }
 
-  if (hasWownero) {
-    outputContent += '\tWalletType.wownero,\n';
-  }
+  // (Wownero moved to the top of this list — see comment above.)
 
   outputContent += '];\n';
   await walletTypesFile.writeAsString(outputContent);

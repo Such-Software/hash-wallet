@@ -24,7 +24,10 @@ bool get isNonAmnesticTails {
 bool showNotice = true;
 
 void setRootDirFromEnv() =>
-    _rootDirPath = Platform.environment['CAKE_WALLET_DIR'];
+    // HASH_WALLET_DIR is the canonical override; CAKE_WALLET_DIR kept as a
+    // fallback so users migrating from a Cake install via env-var override
+    // don't lose their path.
+    _rootDirPath = Platform.environment['HASH_WALLET_DIR'] ?? Platform.environment['CAKE_WALLET_DIR'];
 
 void copyDirectory(Directory source, Directory destination) {
   source.listSync(recursive: false).forEach((var entity) {
@@ -42,8 +45,11 @@ void copyDirectory(Directory source, Directory destination) {
 Future<void> linuxSymlinkSharedPreferences() async {
   if (!Platform.isLinux) return; // nuh-uh
   final dataHome = Platform.environment["XDG_DATA_HOME"] ?? p.join(Platform.environment["HOME"] ?? "", ".local", "share");
-  var cakeNames = ['com.example.cake_wallet', 'cake_wallet'];
-  for (String name in cakeNames) {
+  // Names to migrate from on startup. Includes the legacy Cake paths so users
+  // forking from a previous Cake install get their data automatically
+  // symlinked into Hash Wallet's new home (~/.local/share/hash_wallet).
+  var legacyNames = ['com.example.cake_wallet', 'cake_wallet'];
+  for (String name in legacyNames) {
     final oldPath = p.join(dataHome, name);
     final newPath = p.join((await getAppDir()).path, "_local_share");
     final oldDir = Directory(oldPath);
@@ -70,7 +76,7 @@ Future<void> linuxSymlinkSharedPreferences() async {
 }
 
 Future<Directory> getAppDir() async {
-  const String appName = 'cake_wallet';
+  const String appName = 'hash_wallet';
   Directory dir;
 
   if (_rootDirPath != null && _rootDirPath!.isNotEmpty) {
