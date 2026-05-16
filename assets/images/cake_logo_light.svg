@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 100" width="360" height="100">
-<title>Hash Wallet horizontal lockup</title>
-<desc>Hash Wallet logo with green-boxed hash mark on the left and Hash Wallet wordmark to the right.</desc>
-<rect x="10" y="18" width="64" height="64" rx="14" fill="#1a5c38"/>
-<text x="42" y="68" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="48" font-weight="700" fill="#ffffff" text-anchor="middle">#</text>
-<text x="90" y="63" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="32" font-weight="500" fill="#1a1a1a">Hash Wallet</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<title>Hash Wallet mark</title>
+<desc>The Hash Wallet mark: a white hash glyph centered in a brand-green rounded square.</desc>
+<rect width="100" height="100" rx="22" fill="#1a5c38"/>
+<text x="50" y="76" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="74" font-weight="700" fill="#ffffff" text-anchor="middle">#</text>
 </svg>

@@ -6,9 +6,9 @@
 <!-- Gradient backdrop: very dark green at top fading to surface bg -->
 <defs>
   <linearGradient id="skyDark" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stop-color="#06150C" />
+    <stop offset="0%"  stop-color="#06150C" />
     <stop offset="60%" stop-color="#0B1F14" />
-    <stop offset="100%" stop-color="#112A1D" />
+    <stop offset="100%" stop-color="#0B1F14" stop-opacity="0" />
   </linearGradient>
   <radialGradient id="glowPink" cx="0.5" cy="0.5" r="0.5">
     <stop offset="0%" stop-color="#E16FA6" stop-opacity="0.35" />

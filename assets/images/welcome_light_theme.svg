@@ -7,7 +7,7 @@
   <linearGradient id="skyLight" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0%"  stop-color="#C7E5D2" />
     <stop offset="60%" stop-color="#EAF2EC" />
-    <stop offset="100%" stop-color="#F2F8F4" />
+    <stop offset="100%" stop-color="#F2F8F4" stop-opacity="0" />
   </linearGradient>
   <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
     <stop offset="0%"  stop-color="#FFD466" stop-opacity="0.95" />
