@@ -81,107 +81,27 @@ class CakeFeaturesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOldUi(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 2),
-        DashBoardRoundedCardWidget(
-          shadowBlur: dashboardViewModel.getShadowBlur(),
-          shadowSpread: dashboardViewModel.getShadowSpread(),
-          onTap: () => _onCakePayTap(context),
-          title: 'Cake Pay',
-          subTitle: S.of(context).cake_pay_subtitle,
-          image: Image.asset('assets/images/cakepay.png', height: 74, width: 70, fit: BoxFit.cover),
-        ),
-        Observer(builder: (_) {
-          if (dashboardViewModel.type == WalletType.ethereum) {
-            return DashBoardRoundedCardWidget(
-              shadowBlur: dashboardViewModel.getShadowBlur(),
-              shadowSpread: dashboardViewModel.getShadowSpread(),
-              onTap: () => Navigator.of(context).pushNamed(Routes.dEuroSavings),
-              title: S.of(context).deuro_savings,
-              subTitle: S.of(context).deuro_savings_subtitle,
-              image: Image.asset('assets/images/deuro_icon.png', height: 80, width: 80, fit: BoxFit.cover),
-            );
-          }
-          return const SizedBox();
-        }),
-        DashBoardRoundedCardWidget(
-          shadowBlur: dashboardViewModel.getShadowBlur(),
-          shadowSpread: dashboardViewModel.getShadowSpread(),
-          onTap: () => _launchUrl("cake.nano-gpt.com"),
-          title: "NanoGPT",
-          subTitle: S.of(context).nanogpt_subtitle,
-          image: Image.asset('assets/images/nanogpt.png', height: 80, width: 80, fit: BoxFit.cover),
-        ),
-        const Spacer(),
-        const SizedBox(height: 125),
-      ],
-    );
-  }
+  // Hash Wallet: gutted Cake Pay, Cupcake, NanoGPT, and dEuro Savings
+  // entries — all third-party Cake-affiliate income. dEuro kept out for
+  // consistency (also has affiliate revenue, not our relationship).
+  // Re-populate this page when we have Hash Wallet / Such Software apps
+  // to feature here.
+  Widget _buildOldUi(BuildContext context) => _emptyState(context);
 
-  Widget _buildNewUi(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 24, bottom: 8),
-            child: CakeImageWidget(imageUrl: "assets/new-ui/by-cakelabs.svg", height: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
-          ),
+  Widget _buildNewUi(BuildContext context) => _emptyState(context);
+
+  Widget _emptyState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 64),
+        child: Text(
+          'No apps available yet.',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
         ),
-        AppsWidget(
-          isWide: true,
-          isCake: true,
-          onTap: () => _onCakePayTap(context),
-          title: 'Cake Pay',
-          subTitle: S.of(context).cake_pay_subtitle,
-          image: 'assets/images/cakepay.png',
-        ),
-        AppsWidget(
-          isWide: true,
-          isLink: true,
-          isCake: true,
-          onTap: () => _launchUrl("cupcakewallet.com"),
-          title: "Cupcake",
-          subTitle: "Turn your old phone into your new hardware wallet with our new app",
-          image: 'assets/images/cupcake.png',
-        ),
-        const SizedBox(height: 12),
-        Padding(
-          padding: const EdgeInsets.only(left: 24, top: 16, bottom: 8),
-          child: Text(
-            "Featured Apps",
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-        ),
-        AppsWidget(
-          isWide: true,
-          isLink: true,
-          onTap: () => _launchUrl("cake.nano-gpt.com"),
-          title: "NanoGPT",
-          subTitle: S.of(context).nanogpt_subtitle,
-          image: 'assets/images/nanogpt.png',
-        ),
-        Observer(builder: (_) {
-          if (dashboardViewModel.type == WalletType.ethereum) {
-            return AppsWidget(
-              isWide: true,
-              onTap: () => Navigator.of(context).pushNamed(Routes.dEuroSavings),
-              title: S.of(context).deuro_savings,
-              subTitle: S.of(context).deuro_savings_subtitle,
-              image: 'assets/images/deuro_icon.png',
-            );
-          }
-          return const SizedBox();
-        }),
-        const Spacer(),
-        const SizedBox(height: 125),
-      ],
+      ),
     );
   }
 
