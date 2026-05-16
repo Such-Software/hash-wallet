@@ -167,8 +167,11 @@ jobs:
           zip -r hash_wallet_linux_${{ github.sha }}.zip bundle
           popd
 
+      # actions/upload-artifact@v4 uses an HTTP API that Gitea Actions does
+      # not implement (only the v1/v3 wire format). Pinned to @v3 for Gitea
+      # compatibility — also works on GitHub Actions.
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: hash-wallet-linux-${{ github.sha }}
           path: build/linux/x64/release/hash_wallet_linux_*.zip
