@@ -132,8 +132,8 @@ create_xcframework() {
     echo "Created XCFramework: ${xcframework_output}"
 }
 
-wallets=("monero" "wownero" "zano")
-framework_names=("MoneroWallet" "WowneroWallet" "ZanoWallet")
+wallets=("monero" "wownero")
+framework_names=("MoneroWallet" "WowneroWallet")
 
 for i in "${!wallets[@]}"; do
     wallet="${wallets[$i]}"

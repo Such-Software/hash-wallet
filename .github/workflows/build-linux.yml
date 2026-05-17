@@ -50,9 +50,9 @@ jobs:
       # IMPORTANT: don't pre-write any of the tool/.*secrets-config.json
       # files. The generator at tool/generate_secrets_config.dart has an
       # early-return if tool/.secrets-config.json already exists (lines
-      # 57-63), which then ALSO skips creating the per-module configs (evm,
-      # solana, nano, tron, bitcoin) — every cw_* module then fails to
-      # compile with "Undefined name secrets.xxx" for dozens of keys.
+      # 57-63), which then ALSO skips creating the per-module configs
+      # (evm, nano, bitcoin) — every cw_* module then fails to compile
+      # with "Undefined name secrets.xxx" for dozens of keys.
       #
       # Instead: run the generator first so it creates all configs from the
       # full SecretKey list (with empty defaults), then sed-inject Trocador
@@ -93,7 +93,8 @@ jobs:
       # ---- Native crypto cores (monero_c prebuilt bundle) ------------------
       # Skips the full simplybs toolchain bootstrap. The bundle has libmonero,
       # libwownero, AND libzano .so files; CMake only installs the ones we
-      # ship (monero + wownero).
+      # ship (monero + wownero) — libzano is dropped at install time even
+      # though monero_c builds it.
       - name: Fetch prebuilt monero_c .so bundle
         run: |
           set -x -e
