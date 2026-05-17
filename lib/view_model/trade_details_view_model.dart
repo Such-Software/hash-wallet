@@ -6,7 +6,6 @@ import 'package:hash_wallet/exchange/provider/changenow_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exolix_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/letsexchange_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/jupiter_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/swaptrade_exchange_provider.dart';
@@ -77,9 +76,6 @@ abstract class TradeDetailsViewModelBase with Store {
       case ExchangeProviderDescription.swapsXyz:
         _provider = SwapsXyzExchangeProvider();
         break;
-      case ExchangeProviderDescription.jupiter:
-        _provider = JupiterExchangeProvider();
-        break;
       case ExchangeProviderDescription.nearIntents:
         _provider = NearIntentsExchangeProvider();
         break;
@@ -119,8 +115,6 @@ abstract class TradeDetailsViewModelBase with Store {
         return  'https://orders.xoswap.com/${trade.id}';
       case ExchangeProviderDescription.swapsXyz:
         return  'https://scan.swaps.xyz/transactions/${trade.id}';
-      case ExchangeProviderDescription.jupiter:
-        return 'https://solscan.io/tx/${trade.txId}';
       case ExchangeProviderDescription.nearIntents:
         return  'https://explorer.near-intents.org/transactions/${trade.id}';
     }

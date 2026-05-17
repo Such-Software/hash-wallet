@@ -517,7 +517,6 @@ import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:hash_wallet/core/key_service.dart';
 import 'package:hash_wallet/core/secure_storage.dart';
-import 'package:hash_wallet/entities/haven_seed_store.dart';
 import 'package:cw_core/cake_hive.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/wallet_type.dart';
@@ -654,7 +653,6 @@ abstract class Wownero {
   Map<String, String> pendingTransactionInfo(Object transaction);
   String getLegacySeed(Object wallet, String langName);
   Map<String, List<int>> debugCallLength();
-  Future<void> backupSeeds(Box<HavenSeedStore> havenSeedStore);
 }
 
 abstract class WowneroSubaddressList {

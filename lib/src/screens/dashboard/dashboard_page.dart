@@ -9,7 +9,6 @@ import 'package:hash_wallet/src/screens/wallet_connect/widgets/bottom_sheet/bott
 import 'package:hash_wallet/src/screens/wallet_connect/services/bottom_sheet_service.dart';
 import 'package:hash_wallet/src/widgets/evm_switcher.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
-import 'package:hash_wallet/src/widgets/haven_wallet_removal_popup.dart';
 import 'package:hash_wallet/src/widgets/services_updates_widget.dart';
 import 'package:hash_wallet/src/widgets/vulnerable_seeds_popup.dart';
 import 'package:hash_wallet/utils/device_info.dart';
@@ -346,8 +345,6 @@ class _DashboardPageView extends BasePage {
 
     _showVulnerableSeedsPopup(context);
 
-    _showHavenPopup(context);
-
     var needToPresentYat = false;
 
     rootKey.currentState?.isInactive.listen(
@@ -423,21 +420,4 @@ class _DashboardPageView extends BasePage {
     }
   }
 
-  void _showHavenPopup(BuildContext context) async {
-    final List<String> havenWalletList = await dashboardViewModel.checkForHavenWallets();
-
-    if (havenWalletList.isNotEmpty) {
-      Future<void>.delayed(
-        Duration(seconds: 1),
-        () {
-          showPopUp<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return HavenWalletRemovalPopup(havenWalletList);
-            },
-          );
-        },
-      );
-    }
-  }
 }

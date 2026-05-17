@@ -89,11 +89,9 @@ class _PaymentConfirmationContent extends StatelessWidget {
     return false;
   }
 
-  /// Checks if flow type is token selection (EVM, Solana, or Tron)
+  /// Checks if flow type is token selection (EVM only — Solana/Tron removed).
   bool _isTokenSelectionFlow(PaymentFlowType type) {
-    return type == PaymentFlowType.evmNetworkSelection ||
-        type == PaymentFlowType.solanaTokenSelection ||
-        type == PaymentFlowType.tronTokenSelection;
+    return type == PaymentFlowType.evmNetworkSelection;
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:hash_wallet/exchange/provider/jupiter_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/simpleswap_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
@@ -64,8 +63,6 @@ class TradeMonitor {
         return XOSwapExchangeProvider();
       case ExchangeProviderDescription.swapsXyz:
         return SwapsXyzExchangeProvider();
-      case ExchangeProviderDescription.jupiter:
-        return JupiterExchangeProvider();
       case ExchangeProviderDescription.nearIntents:
         return NearIntentsExchangeProvider();
     }

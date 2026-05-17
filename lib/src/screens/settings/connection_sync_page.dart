@@ -110,14 +110,6 @@ class ConnectionSyncPage extends BasePage {
                                 onChanged: (val) {
                                   _connectionSyncViewModel.setUseBscScan(val);
                                 }),
-                          if (_connectionSyncViewModel.canUseTronGrid)
-                            ListItemToggle(
-                                keyValue: "can_use_trongrid",
-                                label: S.of(context).trongrid_history,
-                                value: _connectionSyncViewModel.useTronGrid,
-                                onChanged: (val) {
-                                  _connectionSyncViewModel.setUseTronGrid(val);
-                                }),
                           if (_connectionSyncViewModel.canUseMempoolFeeAPI)
                             ListItemToggle(
                                 keyValue: "enable_mempool_api",
