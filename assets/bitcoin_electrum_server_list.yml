@@ -1,7 +1,12 @@
 -
-  uri: btc-electrum.cakewallet.com:50002
+  uri: electrum.blockstream.info:50002
   useSSL: true
   isDefault: true
+  isEnabledForAutoSwitching: true
+-
+  uri: btc-electrum.cakewallet.com:50002
+  useSSL: true
+  isDefault: false
   isEnabledForAutoSwitching: true
 -
   uri: electrs.cakewallet.com:50001
@@ -15,10 +20,6 @@
   isEnabledForAutoSwitching: true
 -
   uri: bitcoin.stackwallet.com:50002
-  useSSL: true
-  isEnabledForAutoSwitching: true
--
-  uri: electrum.blockstream.info:50002
   useSSL: true
   isEnabledForAutoSwitching: true
 -
