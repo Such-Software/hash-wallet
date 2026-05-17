@@ -8,7 +8,6 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/order/order.dart';
 import 'package:hash_wallet/order/order_provider.dart';
 import 'package:hash_wallet/order/order_provider_adapter/cake_pay_order_provider_adapter.dart';
-import 'package:hash_wallet/order/order_provider_adapter/wyre_order_provider_adapter.dart';
 import 'package:hash_wallet/order/order_provider_description.dart';
 import 'package:hash_wallet/order/order_source_description.dart';
 import 'package:hash_wallet/src/screens/order_details/cake_pay_detail_list_card_item.dart';
@@ -39,9 +38,7 @@ abstract class OrderDetailsViewModelBase with Store {
         order = orderForDetails {
     switch (order.source) {
       case OrderSourceDescription.buy:
-        if (order.buyProvider == BuyProviderDescription.wyre) {
-          _provider = WyreOrderProviderAdapter(wallet: wallet);
-        } else if (order.buyProvider == BuyProviderDescription.moonPay) {
+        if (order.buyProvider == BuyProviderDescription.moonPay) {
           //_provider = MoonPayOrderProviderAdapter(appStore: null /* provide if needed */, wallet: wallet);
         }
         break;

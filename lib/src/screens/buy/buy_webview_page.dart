@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:hash_wallet/buy/moonpay/moonpay_provider.dart';
-import 'package:hash_wallet/buy/wyre/wyre_buy_provider.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/store/dashboard/orders_store.dart';
@@ -53,10 +52,6 @@ class BuyWebViewPageBodyState extends State<BuyWebViewPageBody> {
     _webViewkey = GlobalKey();
     _isSaving = false;
     widget.ordersStore.orderId = '';
-
-    if (widget.buyViewModel.selectedProvider is WyreBuyProvider) {
-      _saveOrder(keyword: 'completed', splitSymbol: '/');
-    }
 
     if (widget.buyViewModel.selectedProvider is MoonPayProvider) {
       _saveOrder(keyword: 'transactionId', splitSymbol: '=');

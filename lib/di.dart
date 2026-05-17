@@ -371,9 +371,7 @@ Future<void> setup({
     });
   }
 
-  final isBitcoinBuyEnabled = (secrets.wyreSecretKey.isNotEmpty) &&
-      (secrets.wyreApiKey.isNotEmpty) &&
-      (secrets.wyreAccountId.isNotEmpty);
+  const isBitcoinBuyEnabled = false;
 
   final settingsStore = await SettingsStoreBase.load(
     nodeSource: _nodeSource,

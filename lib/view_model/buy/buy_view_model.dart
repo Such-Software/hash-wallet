@@ -1,5 +1,4 @@
 import 'package:hash_wallet/buy/buy_provider.dart';
-import 'package:hash_wallet/buy/wyre/wyre_buy_provider.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:cw_core/utils/print_verbose.dart';
@@ -87,14 +86,6 @@ abstract class BuyViewModelBase with Store {
   }
 
   Future<void> _fetchBuyItems() async {
-    final List<BuyProvider> _providerList = [];
-
-    if (wallet.type == WalletType.bitcoin) {
-      _providerList.add(WyreBuyProvider(wallet: wallet));
-    }
-
-    items = _providerList
-        .map((provider) => BuyItem(provider: provider, buyAmountViewModel: buyAmountViewModel))
-        .toList();
+    items = const <BuyItem>[];
   }
 }
