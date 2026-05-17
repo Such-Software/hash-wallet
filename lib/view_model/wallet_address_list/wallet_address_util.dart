@@ -1,5 +1,4 @@
 import 'package:hash_wallet/bitcoin/bitcoin.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
 import 'package:cw_core/wallet_base.dart';
@@ -13,11 +12,6 @@ Future<void> createNewAddress(WalletBase wallet, String label) async {
 
   if (isElectrum) {
     await bitcoin!.generateNewAddress(wallet, label);
-    await wallet.save();
-  }
-
-  if (wallet.type == WalletType.decred) {
-    await decred!.generateNewAddress(wallet, label);
     await wallet.save();
   }
 

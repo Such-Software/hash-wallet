@@ -8,7 +8,6 @@ import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/store/settings_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/utils/tor.dart';
 import 'package:cw_core/balance.dart';
@@ -97,9 +96,6 @@ abstract class ConnectionSyncViewModelBase with Store {
   bool get useBscScan => _settingsStore.useBscScan;
 
   @computed
-  bool get useTronGrid => _settingsStore.useTronGrid;
-
-  @computed
   bool get canUseEtherscan => _wallet.chainId == 1;
 
   @computed
@@ -113,9 +109,6 @@ abstract class ConnectionSyncViewModelBase with Store {
 
   @computed
   bool get canUseBscScan => _wallet.chainId == 56;
-
-  @computed
-  bool get canUseTronGrid => _wallet.type == WalletType.tron;
 
   @action
   void setLookupsTwitter(bool value) => _settingsStore.lookupsTwitter = value;
@@ -173,12 +166,6 @@ abstract class ConnectionSyncViewModelBase with Store {
   void setUseBaseScan(bool value) {
     _settingsStore.useBaseScan = value;
     evm!.updateScanProviderUsageState(_wallet, value);
-  }
-
-  @action
-  void setUseTronGrid(bool value) {
-    _settingsStore.useTronGrid = value;
-    tron!.updateTronGridUsageState(_wallet, value);
   }
 
   @action

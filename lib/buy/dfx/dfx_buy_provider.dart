@@ -46,9 +46,6 @@ class DFXBuyProvider extends BuyProvider {
     CryptoCurrency.btc,
     CryptoCurrency.eth,
     CryptoCurrency.maticpoly,
-    CryptoCurrency.sol,
-    CryptoCurrency.zano,
-    CryptoCurrency.trx,
   ];
   static final List<CryptoCurrency> _notSupportedCrypto = CryptoCurrency.all
       .where((crypto) => !_supportedCrypto.contains(crypto) || ["ETH", "POL"].contains(crypto.tag))
@@ -77,8 +74,6 @@ class DFXBuyProvider extends BuyProvider {
     switch (wallet.type) {
       case WalletType.bitcoin:
         return 'Bitcoin';
-      case WalletType.zano:
-        return 'Zano';
       default:
         return walletTypeToString(wallet.type);
     }
@@ -138,14 +133,11 @@ class DFXBuyProvider extends BuyProvider {
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-      case WalletType.solana:
-      case WalletType.tron:
         return wallet.signMessage(message);
       case WalletType.monero:
       case WalletType.litecoin:
       case WalletType.bitcoin:
       case WalletType.bitcoinCash:
-      case WalletType.zano:
         return wallet.signMessage(message, address: walletAddress);
       default:
         throw Exception("WalletType is not available for DFX ${wallet.type}");

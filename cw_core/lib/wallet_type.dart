@@ -8,21 +8,16 @@ const walletTypes = [
   WalletType.monero,
   WalletType.bitcoin,
   WalletType.litecoin,
-  WalletType.haven,
   WalletType.ethereum,
   WalletType.bitcoinCash,
   WalletType.nano,
   WalletType.banano,
   WalletType.polygon,
-  WalletType.solana,
-  WalletType.tron,
-  WalletType.zano,
-  WalletType.decred,
   WalletType.dogecoin,
   WalletType.base,
   WalletType.arbitrum,
-  WalletType.zcash,
   WalletType.bsc,
+  WalletType.wownero,
 ];
 
 const electrumWalletTypes = [
@@ -40,6 +35,10 @@ const evmWalletTypes = [
   WalletType.bsc
 ];
 
+// HiveField IDs are pinned — never renumber. Existing user wallets persist
+// type via the int ID, so changing assignments here would re-interpret saved
+// wallet types on next launch. To remove a type, drop its enum entry; do not
+// re-use its old ID.
 @HiveType(typeId: WALLET_TYPE_TYPE_ID)
 enum WalletType {
   @HiveField(0)
@@ -53,9 +52,6 @@ enum WalletType {
 
   @HiveField(3)
   litecoin,
-
-  @HiveField(4)
-  haven,
 
   @HiveField(5)
   ethereum,
@@ -72,20 +68,8 @@ enum WalletType {
   @HiveField(9)
   polygon,
 
-  @HiveField(10)
-  solana,
-
-  @HiveField(11)
-  tron,
-
   @HiveField(12)
   wownero,
-
-  @HiveField(13)
-  zano,
-
-  @HiveField(14)
-  decred,
 
   @HiveField(15)
   dogecoin,
@@ -95,9 +79,6 @@ enum WalletType {
 
   @HiveField(17)
   arbitrum,
-
-  @HiveField(18)
-  zcash,
 
   @HiveField(19)
   bsc,
@@ -111,8 +92,6 @@ int serializeToInt(WalletType type) {
       return 1;
     case WalletType.litecoin:
       return 2;
-    case WalletType.haven:
-      return 3;
     case WalletType.ethereum:
       return 4;
     case WalletType.nano:
@@ -123,24 +102,14 @@ int serializeToInt(WalletType type) {
       return 7;
     case WalletType.polygon:
       return 8;
-    case WalletType.solana:
-      return 9;
-    case WalletType.tron:
-      return 10;
     case WalletType.wownero:
       return 11;
-    case WalletType.zano:
-      return 12;
-    case WalletType.decred:
-      return 13;
     case WalletType.dogecoin:
       return 14;
     case WalletType.base:
       return 15;
     case WalletType.arbitrum:
       return 16;
-    case WalletType.zcash:
-      return 17;
     case WalletType.bsc:
       return 18;
     case WalletType.none:
@@ -156,8 +125,6 @@ WalletType deserializeFromInt(int raw) {
       return WalletType.bitcoin;
     case 2:
       return WalletType.litecoin;
-    case 3:
-      return WalletType.haven;
     case 4:
       return WalletType.ethereum;
     case 5:
@@ -168,24 +135,14 @@ WalletType deserializeFromInt(int raw) {
       return WalletType.bitcoinCash;
     case 8:
       return WalletType.polygon;
-    case 9:
-      return WalletType.solana;
-    case 10:
-      return WalletType.tron;
     case 11:
       return WalletType.wownero;
-    case 12:
-      return WalletType.zano;
-    case 13:
-      return WalletType.decred;
     case 14:
       return WalletType.dogecoin;
     case 15:
       return WalletType.base;
     case 16:
       return WalletType.arbitrum;
-    case 17:
-      return WalletType.zcash;
     case 18:
       return WalletType.bsc;
     default:
@@ -201,8 +158,6 @@ String walletTypeToString(WalletType type) {
       return 'Bitcoin';
     case WalletType.litecoin:
       return 'Litecoin';
-    case WalletType.haven:
-      return 'Haven';
     case WalletType.ethereum:
       return 'Ethereum';
     case WalletType.bitcoinCash:
@@ -213,24 +168,14 @@ String walletTypeToString(WalletType type) {
       return 'Banano';
     case WalletType.polygon:
       return 'Polygon';
-    case WalletType.solana:
-      return 'Solana';
-    case WalletType.tron:
-      return 'Tron';
     case WalletType.wownero:
       return 'Wownero';
-    case WalletType.zano:
-      return 'Zano';
-    case WalletType.decred:
-      return 'Decred';
     case WalletType.dogecoin:
       return 'Dogecoin';
     case WalletType.base:
       return 'Base';
     case WalletType.arbitrum:
       return 'Arbitrum';
-    case WalletType.zcash:
-      return 'Zcash';
     case WalletType.bsc:
       return 'BNB Smart Chain';
     case WalletType.none:
@@ -246,8 +191,6 @@ String walletTypeToDisplayName(WalletType type) {
       return 'Bitcoin (BTC)';
     case WalletType.litecoin:
       return 'Litecoin (LTC)';
-    case WalletType.haven:
-      return 'Haven (XHV)';
     case WalletType.ethereum:
       return 'Ethereum (ETH)';
     case WalletType.bitcoinCash:
@@ -258,24 +201,14 @@ String walletTypeToDisplayName(WalletType type) {
       return 'Banano (BAN)';
     case WalletType.polygon:
       return 'Polygon (POL)';
-    case WalletType.solana:
-      return 'Solana (SOL)';
-    case WalletType.tron:
-      return 'Tron (TRX)';
     case WalletType.wownero:
       return 'Wownero (WOW)';
-    case WalletType.zano:
-      return 'Zano (ZANO)';
-    case WalletType.decred:
-      return 'Decred (DCR)';
     case WalletType.dogecoin:
       return 'Dogecoin (DOGE)';
     case WalletType.base:
       return 'Base';
     case WalletType.arbitrum:
       return 'Arbitrum (ARB)';
-    case WalletType.zcash:
-      return 'Zcash (ZEC)';
     case WalletType.bsc:
       return 'BNB Smart Chain (BNB)';
     case WalletType.none:
@@ -292,8 +225,6 @@ WalletType? _cryptoCurrencyToWalletType(CryptoCurrency type) {
       return WalletType.bitcoin;
     case CryptoCurrency.ltc:
       return WalletType.litecoin;
-    case CryptoCurrency.xhv:
-      return WalletType.haven;
     case CryptoCurrency.eth:
       return WalletType.ethereum;
     case CryptoCurrency.maticpoly:
@@ -311,20 +242,10 @@ WalletType? _cryptoCurrencyToWalletType(CryptoCurrency type) {
       return WalletType.nano;
     case CryptoCurrency.banano:
       return WalletType.banano;
-    case CryptoCurrency.sol:
-      return WalletType.solana;
-    case CryptoCurrency.trx:
-      return WalletType.tron;
     case CryptoCurrency.wow:
       return WalletType.wownero;
-    case CryptoCurrency.zano:
-      return WalletType.zano;
-    case CryptoCurrency.dcr:
-      return WalletType.decred;
     case CryptoCurrency.doge:
       return WalletType.dogecoin;
-    case CryptoCurrency.zec:
-      return WalletType.zcash;
     default:
       return null;
   }

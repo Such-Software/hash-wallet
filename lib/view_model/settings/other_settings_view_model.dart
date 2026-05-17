@@ -76,7 +76,6 @@ abstract class OtherSettingsViewModelBase with Store {
     WalletType.litecoin,
     WalletType.bitcoinCash,
     WalletType.dogecoin,
-    WalletType.decred
   ].contains(_wallet.type);
 
   @computed
@@ -99,8 +98,6 @@ abstract class OtherSettingsViewModelBase with Store {
   @computed
   bool get displayTransactionPriority => !(changeRepresentativeEnabled ||
       [
-        WalletType.solana,
-        WalletType.tron,
         WalletType.arbitrum,
       ].contains(_wallet.type));
 

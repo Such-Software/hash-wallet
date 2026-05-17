@@ -129,22 +129,10 @@ class _TokenSelectionContentState extends State<_TokenSelectionContent> {
   }
 
   String _getEcosystemTitle() {
-    if (selectedNetwork == WalletType.solana) {
-      return 'Solana\n${S.current.address_detected.toLowerCase()}';
-    }
-    if (selectedNetwork == WalletType.tron) {
-      return 'Tron\n${S.current.address_detected.toLowerCase()}';
-    }
     return '${S.current.ethereum_ecosystem}\n${S.current.address_detected.toLowerCase()}';
   }
 
   String _getEcosystemDescription() {
-    if (selectedNetwork == WalletType.solana) {
-      return 'Select a token to send on Solana network';
-    }
-    if (selectedNetwork == WalletType.tron) {
-      return 'Select a token to send on Tron network';
-    }
     return S.current.evm_ecosystem_description;
   }
 
@@ -339,60 +327,22 @@ class _TokenSelectionContentState extends State<_TokenSelectionContent> {
 
     final compatibleWallets = await widget.paymentViewModel.getWalletsByType(selectedNetwork!);
 
-    PaymentFlowResult newResult;
-
-    if (selectedNetwork == WalletType.solana) {
-      newResult = PaymentFlowResult.solanaTokenSelection(
-        AddressDetectionResult(
-          address: widget.paymentRequest.address,
-          detectedWalletType: WalletType.solana,
-          detectedCurrency: selectedToken!,
-          isValid: true,
-          amount: widget.paymentRequest.amount,
-          note: widget.paymentRequest.note,
-          scheme: widget.paymentRequest.scheme,
-          pjUri: widget.paymentRequest.pjUri,
-          callbackUrl: widget.paymentRequest.callbackUrl,
-          callbackMessage: widget.paymentRequest.callbackMessage,
-        ),
-        compatibleWallets: compatibleWallets,
-        wallet: compatibleWallets.isNotEmpty ? compatibleWallets.first : null,
-      );
-    } else if (selectedNetwork == WalletType.tron) {
-      newResult = PaymentFlowResult.tronTokenSelection(
-        AddressDetectionResult(
-          address: widget.paymentRequest.address,
-          detectedWalletType: WalletType.tron,
-          detectedCurrency: selectedToken!,
-          isValid: true,
-          amount: widget.paymentRequest.amount,
-          note: widget.paymentRequest.note,
-          scheme: widget.paymentRequest.scheme,
-          pjUri: widget.paymentRequest.pjUri,
-          callbackUrl: widget.paymentRequest.callbackUrl,
-          callbackMessage: widget.paymentRequest.callbackMessage,
-        ),
-        compatibleWallets: compatibleWallets,
-        wallet: compatibleWallets.isNotEmpty ? compatibleWallets.first : null,
-      );
-    } else {
-      newResult = PaymentFlowResult.evmNetworkSelection(
-        AddressDetectionResult(
-          address: widget.paymentRequest.address,
-          detectedWalletType: selectedNetwork!,
-          detectedCurrency: selectedToken!,
-          isValid: true,
-          amount: widget.paymentRequest.amount,
-          note: widget.paymentRequest.note,
-          scheme: widget.paymentRequest.scheme,
-          pjUri: widget.paymentRequest.pjUri,
-          callbackUrl: widget.paymentRequest.callbackUrl,
-          callbackMessage: widget.paymentRequest.callbackMessage,
-        ),
-        compatibleWallets: compatibleWallets,
-        wallet: compatibleWallets.isNotEmpty ? compatibleWallets.first : null,
-      );
-    }
+    PaymentFlowResult newResult = PaymentFlowResult.evmNetworkSelection(
+      AddressDetectionResult(
+        address: widget.paymentRequest.address,
+        detectedWalletType: selectedNetwork!,
+        detectedCurrency: selectedToken!,
+        isValid: true,
+        amount: widget.paymentRequest.amount,
+        note: widget.paymentRequest.note,
+        scheme: widget.paymentRequest.scheme,
+        pjUri: widget.paymentRequest.pjUri,
+        callbackUrl: widget.paymentRequest.callbackUrl,
+        callbackMessage: widget.paymentRequest.callbackMessage,
+      ),
+      compatibleWallets: compatibleWallets,
+      wallet: compatibleWallets.isNotEmpty ? compatibleWallets.first : null,
+    );
 
     widget.paymentViewModel.detectedWalletType = selectedNetwork!;
     widget.onNext(newResult);

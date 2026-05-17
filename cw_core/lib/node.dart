@@ -113,8 +113,6 @@ class Node extends HiveObject with Keyable {
   Uri get uri {
     switch (type) {
       case WalletType.monero:
-      case WalletType.zcash:
-      case WalletType.haven:
       case WalletType.wownero:
         return Uri.http(uriRaw, '');
       case WalletType.bitcoin:
@@ -129,10 +127,6 @@ class Node extends HiveObject with Keyable {
       case WalletType.base:
       case WalletType.bsc:
       case WalletType.arbitrum:
-      case WalletType.solana:
-      case WalletType.tron:
-      case WalletType.zano:
-      case WalletType.decred:
         return Uri.parse(
             "http${isSSL ? "s" : ""}://$uriRaw${path!.startsWith("/") || path!.isEmpty ? path : "/$path"}");
       case WalletType.none:
@@ -183,7 +177,6 @@ class Node extends HiveObject with Keyable {
     try {
       switch (type) {
         case WalletType.monero:
-        case WalletType.haven:
         case WalletType.wownero:
           return requestMoneroNode();
         case WalletType.nano:
@@ -197,43 +190,12 @@ class Node extends HiveObject with Keyable {
         case WalletType.base:
         case WalletType.arbitrum:
         case WalletType.bsc:
-        case WalletType.solana:
-        case WalletType.tron:
         case WalletType.dogecoin:
-        case WalletType.zcash:
           return requestElectrumServer();
-        case WalletType.zano:
-          return requestZanoNode();
-        case WalletType.decred:
-          return requestDecredNode();
         case WalletType.none:
           return false;
       }
     } catch (_) {
-      return false;
-    }
-  }
-
-  Future<bool> requestZanoNode() async {
-    final path = '/json_rpc';
-    final rpcUri = isSSL ? Uri.https(uri.authority, path) : Uri.http(uri.authority, path);
-    final body = {'jsonrpc': '2.0', 'id': '0', 'method': "getinfo"};
-
-    try {
-      final jsonBody = json.encode(body);
-
-      final response = await ProxyWrapper().post(
-        clearnetUri: rpcUri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonBody,
-      );
-
-      
-      final resBody = json.decode(response.body) as Map<String, dynamic>;
-
-      return resBody['result']['height'] != null;
-    } catch (e) {
-      printV("error: $e");
       return false;
     }
   }
@@ -384,20 +346,6 @@ class Node extends HiveObject with Keyable {
     }
   }
 
-  Future<bool> requestDecredNode() async {
-  if (uri.host == "default-spv-nodes") {
-    // Just show default port as ok. The wallet will connect to a list of known
-    // nodes automatically.
-    return true;
-  }
-  try {
-    final socket = await Socket.connect(uri.host, uri.port, timeout: Duration(seconds: 5));
-      socket.destroy();
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
 }
 
 /// https://github.com/ManyMath/digest_auth/

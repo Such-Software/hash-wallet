@@ -7,13 +7,11 @@ import 'package:hash_wallet/reactions/wallet_utils.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/new_wallet/widgets/select_button.dart';
-import 'package:hash_wallet/src/screens/setup_2fa/widgets/popup_cancellable_alert.dart';
 import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
 import 'package:hash_wallet/src/widgets/search_bar_widget.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
-import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/wallet_types.g.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/hardware/device_connection_type.dart';
@@ -175,17 +173,6 @@ class WalletTypeFormState extends State<WalletTypeForm> {
 
   Future<void> onTypeSelected() async {
     if (selected == null) throw Exception('Wallet Type is not selected yet.');
-
-    if (selected == WalletType.haven && widget.isCreate) {
-      return await showPopUp<void>(
-        context: context,
-        builder: (BuildContext context) => PopUpCancellableAlertDialog(
-          contentText: S.of(context).pause_wallet_creation,
-          actionButtonText: S.of(context).ok,
-          buttonAction: () => Navigator.of(context).pop(),
-        ),
-      );
-    }
 
     // If it's a restore flow, trigger the external callback
     // If it's not a BIP39 Wallet or if there are no other wallets, route to the newWallet page

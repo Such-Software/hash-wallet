@@ -4,13 +4,8 @@ import 'package:hash_wallet/entities/mnemonic_item.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/nano/nano.dart';
-import 'package:hash_wallet/solana/solana.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/utils/language_list.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/wallet_type.dart';
 
 class SeedValidator extends Validator<MnemonicItem> {
@@ -44,20 +39,9 @@ class SeedValidator extends Validator<MnemonicItem> {
       case WalletType.nano:
       case WalletType.banano:
         return nano!.getNanoWordList(language);
-      case WalletType.solana:
-        return solana!.getSolanaWordList(language);
-      case WalletType.tron:
-        return tron!.getTronWordList(language);
       case WalletType.wownero:
           return wownero!.getWowneroWordList(language);
-      case WalletType.zano:
-        return zano!.getWordList(language);
-      case WalletType.decred:
-        return decred!.getDecredWordList();
-      case WalletType.zcash:
-        return zcash!.getZcashWordList(language);
       case WalletType.none:
-      case WalletType.haven:
         return [];
     }
   }

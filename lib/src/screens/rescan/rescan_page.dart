@@ -10,7 +10,6 @@ import 'package:hash_wallet/view_model/rescan_view_model.dart';
 import 'package:hash_wallet/src/widgets/blockchain_height_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/generated/i18n.dart';
-import 'package:cw_core/wallet_type.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class RescanPage extends StatefulWidget {
@@ -28,79 +27,52 @@ class _RescanPageState extends State<RescanPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child;
-    if (widget._rescanViewModel.wallet.type != WalletType.decred) {
-      child = Padding(
-        padding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Observer(
-              builder: (_) => SingleChildScrollView(
-                controller: ModalScrollController.of(context),
-                child: BlockchainHeightWidget(
-                  // key: _blockchainHeightWidgetKey,
-                  onHeightOrDateEntered: (value) => widget._rescanViewModel.isButtonEnabled = value,
-                  isSilentPaymentsScan: widget._rescanViewModel.isSilentPaymentsScan,
-                  isMwebScan: widget._rescanViewModel.isMwebScan,
-                  doSingleScan: widget._rescanViewModel.doSingleScan,
-                  hasDatePicker: !widget._rescanViewModel.isMwebScan,
-                  // disable date picker for mweb for now
-                  toggleSingleScan: () =>
-                      widget._rescanViewModel.doSingleScan = !widget._rescanViewModel.doSingleScan,
-                  walletType: widget._rescanViewModel.wallet.type,
-                  heightController: _heightController,
-                  bitcoinMempoolAPIEnabled: widget._rescanViewModel.isBitcoinMempoolAPIEnabled,
-                ),
+    Widget child = Padding(
+      padding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Observer(
+            builder: (_) => SingleChildScrollView(
+              controller: ModalScrollController.of(context),
+              child: BlockchainHeightWidget(
+                // key: _blockchainHeightWidgetKey,
+                onHeightOrDateEntered: (value) => widget._rescanViewModel.isButtonEnabled = value,
+                isSilentPaymentsScan: widget._rescanViewModel.isSilentPaymentsScan,
+                isMwebScan: widget._rescanViewModel.isMwebScan,
+                doSingleScan: widget._rescanViewModel.doSingleScan,
+                hasDatePicker: !widget._rescanViewModel.isMwebScan,
+                // disable date picker for mweb for now
+                toggleSingleScan: () =>
+                    widget._rescanViewModel.doSingleScan = !widget._rescanViewModel.doSingleScan,
+                walletType: widget._rescanViewModel.wallet.type,
+                heightController: _heightController,
+                bitcoinMempoolAPIEnabled: widget._rescanViewModel.isBitcoinMempoolAPIEnabled,
               ),
             ),
-            Observer(
-              builder: (_) => LoadingPrimaryButton(
-                isLoading: widget._rescanViewModel.state == RescanWalletState.rescaning,
-                text: S.of(context).rescan,
-                onPressed: () async {
-                  if (widget._rescanViewModel.isSilentPaymentsScan) {
-                    return _toggleSilentPaymentsScanning(context);
-                  }
-
-                  widget._rescanViewModel.rescanCurrentWallet(
-                      restoreHeight: int.tryParse(_heightController.text) ?? 0);
-
-                  Navigator.of(context).pop();
-                },
-                color: Theme.of(context).colorScheme.primary,
-                textColor: Theme.of(context).colorScheme.onPrimary,
-                isDisabled: !widget._rescanViewModel.isButtonEnabled,
-              ),
-            )
-          ],
-        ),
-      );
-    } else {
-      child = Center(
-        child: Padding(
-          padding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Spacer(),
-              Observer(
-                builder: (_) => LoadingPrimaryButton(
-                  isLoading: widget._rescanViewModel.state == RescanWalletState.rescaning,
-                  text: S.of(context).rescan,
-                  onPressed: () async {
-                    await widget._rescanViewModel.rescanCurrentWallet(restoreHeight: 0);
-                    Navigator.of(context).pop();
-                  },
-                  color: Theme.of(context).colorScheme.primary,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
-                ),
-              )
-            ],
           ),
-        ),
-      );
-    }
+          Observer(
+            builder: (_) => LoadingPrimaryButton(
+              isLoading: widget._rescanViewModel.state == RescanWalletState.rescaning,
+              text: S.of(context).rescan,
+              onPressed: () async {
+                if (widget._rescanViewModel.isSilentPaymentsScan) {
+                  return _toggleSilentPaymentsScanning(context);
+                }
+
+                widget._rescanViewModel.rescanCurrentWallet(
+                    restoreHeight: int.tryParse(_heightController.text) ?? 0);
+
+                Navigator.of(context).pop();
+              },
+              color: Theme.of(context).colorScheme.primary,
+              textColor: Theme.of(context).colorScheme.onPrimary,
+              isDisabled: !widget._rescanViewModel.isButtonEnabled,
+            ),
+          )
+        ],
+      ),
+    );
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       // onTap: () => FocusScope.of(context).unfocus(),

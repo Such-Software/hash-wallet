@@ -1,16 +1,11 @@
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/entities/balance_display_mode.dart';
 import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/nano/nano.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/store/app_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/transaction_direction.dart';
@@ -44,10 +39,7 @@ class TransactionListItem extends ActionListItem with Keyable {
   @override
   dynamic get keyIndex => transaction.id;
 
-  bool get hasTokens =>
-      isEVMCompatibleChain(balanceViewModel.wallet.type) ||
-      balanceViewModel.wallet.type == WalletType.solana ||
-      balanceViewModel.wallet.type == WalletType.tron;
+  bool get hasTokens => isEVMCompatibleChain(balanceViewModel.wallet.type);
 
   String get formattedCryptoAmount {
     if (displayMode == BalanceDisplayMode.hiddenBalance) return '---';
@@ -87,8 +79,6 @@ class TransactionListItem extends ActionListItem with Keyable {
   int get neededConfirmations {
     switch (balanceViewModel.wallet.type) {
       case WalletType.monero:
-      case WalletType.haven:
-      case WalletType.zano:
         return 10;
       case WalletType.wownero:
         return 3;
@@ -106,8 +96,6 @@ class TransactionListItem extends ActionListItem with Keyable {
   String get formattedPendingStatus {
     switch (balanceViewModel.wallet.type) {
       case WalletType.monero:
-      case WalletType.haven:
-      case WalletType.zano:
         if (transaction.confirmations >= 0 && transaction.confirmations < 10) {
           return ' (${transaction.confirmations}/10)';
         }
@@ -147,10 +135,8 @@ class TransactionListItem extends ActionListItem with Keyable {
   String get formattedStatus {
     if ([
       WalletType.monero,
-      WalletType.haven,
       WalletType.wownero,
       WalletType.litecoin,
-      WalletType.zano,
     ].contains(balanceViewModel.wallet.type)) {
       return formattedPendingStatus;
     }
@@ -169,16 +155,6 @@ class TransactionListItem extends ActionListItem with Keyable {
     try {
       if (isEVMCompatibleChain(balanceViewModel.wallet.type)) {
         final asset = evm!.assetOfTransaction(balanceViewModel.wallet, transaction);
-        return asset;
-      }
-
-      if (balanceViewModel.wallet.type == WalletType.solana) {
-        final asset = solana!.assetOfTransaction(balanceViewModel.wallet, transaction);
-        return asset;
-      }
-
-      if (balanceViewModel.wallet.type == WalletType.tron) {
-        final asset = tron!.assetOfTransaction(balanceViewModel.wallet, transaction);
         return asset;
       }
     } catch (e) {
@@ -232,52 +208,8 @@ class TransactionListItem extends ActionListItem with Keyable {
           price: price,
         ).withLocalSeperator(_appStore.settingsStore.languageCode);
         break;
-      case WalletType.solana:
-        final asset = solana!.assetOfTransaction(balanceViewModel.wallet, transaction);
-        final price = balanceViewModel.fiatConversionStore.prices[asset];
-        amount = calculateFiatAmountRaw(
-          cryptoAmount: solana!.getTransactionAmountRaw(transaction),
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
-      case WalletType.tron:
-        final asset = tron!.assetOfTransaction(balanceViewModel.wallet, transaction);
-        final price = balanceViewModel.fiatConversionStore.prices[asset];
-        final cryptoAmount = tron!.getTransactionAmountRaw(transaction);
-        amount = calculateFiatAmountRaw(
-          cryptoAmount: cryptoAmount,
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
-      case WalletType.zano:
-        final asset = zano!.assetOfTransaction(balanceViewModel.wallet, transaction);
-        if (asset == null) {
-          amount = "0.00";
-          break;
-        }
-        final price = balanceViewModel.fiatConversionStore.prices[asset];
-        amount = calculateFiatAmountRaw(
-          cryptoAmount: zano!.formatterIntAmountToDouble(
-              amount: transaction.amount, currency: asset, forFee: false),
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
-      case WalletType.decred:
-        amount = calculateFiatAmountRaw(
-          cryptoAmount: decred!.formatterDecredAmountToDouble(amount: transaction.amount),
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
-      case WalletType.zcash:
-        amount = calculateFiatAmountRaw(
-          cryptoAmount:
-              zcash!.formatterZcashAmountToDouble(amount: BigInt.from(transaction.amount)),
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-
       case WalletType.none:
       case WalletType.banano:
-      case WalletType.haven:
         break;
     }
 

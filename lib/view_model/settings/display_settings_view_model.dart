@@ -123,7 +123,7 @@ abstract class DisplaySettingsViewModelBase with Store {
   bool get showDisplayAmountsInSatoshiSetting => _appStore.wallet?.type == WalletType.bitcoin;
 
   @computed
-  bool get showZcashCardSetting => _appStore.wallet?.type == WalletType.zcash;
+  bool get showZcashCardSetting => false;
 
   @action
   void setDisplayAmountsInSatoshi(BitcoinAmountDisplayMode value) => _settingsStore.displayAmountsInSatoshi = value;

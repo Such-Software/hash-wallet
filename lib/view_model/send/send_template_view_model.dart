@@ -55,11 +55,7 @@ abstract class SendTemplateViewModelBase with Store {
 
   TemplateValidator get templateValidator => TemplateValidator();
 
-  bool get hasMultiRecipient =>
-      _wallet.type != WalletType.haven &&
-      _wallet.type != WalletType.solana &&
-      _wallet.type != WalletType.tron &&
-      !isEVMCompatibleChain(_wallet.type);
+  bool get hasMultiRecipient => !isEVMCompatibleChain(_wallet.type);
 
   @computed
   CryptoCurrency get cryptoCurrency => _wallet.currency;
@@ -106,8 +102,5 @@ abstract class SendTemplateViewModelBase with Store {
   @computed
   List<CryptoCurrency> get walletCurrencies => _wallet.balance.keys.toList();
 
-  bool get hasMultipleTokens =>
-      isEVMCompatibleChain(_wallet.type) ||
-      _wallet.type == WalletType.solana ||
-      _wallet.type == WalletType.tron;
+  bool get hasMultipleTokens => isEVMCompatibleChain(_wallet.type);
 }

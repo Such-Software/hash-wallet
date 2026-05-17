@@ -65,25 +65,17 @@ abstract class NFTViewModelBase with Store {
     // and used within the wallet
     // the [excludeSpam] field is a boolean that determines if spam nfts be excluded from the response.
 
-    Uri uri;
-    if (wallet.type == WalletType.solana) {
-      uri = Uri.https(
-        'solana-gateway.moralis.io',
-        '/account/$chainName/$walletAddress/nft',
-      );
-    } else {
-      uri = Uri.https(
-        'deep-index.moralis.io',
-        '/api/v2.2/$walletAddress/nft',
-        {
-          "chain": chainName,
-          "format": "decimal",
-          "media_items": "false",
-          "exclude_spam": "true",
-          "normalizeMetadata": "true",
-        },
-      );
-    }
+    Uri uri = Uri.https(
+      'deep-index.moralis.io',
+      '/api/v2.2/$walletAddress/nft',
+      {
+        "chain": chainName,
+        "format": "decimal",
+        "media_items": "false",
+        "exclude_spam": "true",
+        "normalizeMetadata": "true",
+      },
+    );
 
     try {
       if (isLoading) return;
@@ -100,27 +92,11 @@ abstract class NFTViewModelBase with Store {
 
       final decodedResponse = jsonDecode(response.body);
 
-      if (wallet.type == WalletType.solana) {
-        final results = await Future.wait(
-          (decodedResponse as List<dynamic>).map(
-            (x) {
-              final data = x as Map<String, dynamic>;
-              final mint = data['mint'] as String? ?? '';
-              return getSolanaNFTDetails(mint, chainName);
-            },
-          ).toList(),
-        );
+      final result = WalletNFTsResponseModel.fromJson(decodedResponse as Map<String, dynamic>).result ?? [];
 
-        solanaNftAssetModels.clear();
+      nftAssetByWalletModels.clear();
 
-        solanaNftAssetModels.addAll(results);
-      } else {
-        final result = WalletNFTsResponseModel.fromJson(decodedResponse as Map<String, dynamic>).result ?? [];
-
-        nftAssetByWalletModels.clear();
-
-        nftAssetByWalletModels.addAll(result);
-      }
+      nftAssetByWalletModels.addAll(result);
     } catch (e) {
       log(e.toString());
       bottomSheetService.queueBottomSheet(
@@ -170,35 +146,29 @@ abstract class NFTViewModelBase with Store {
     try {
       isImportNFTLoading = true;
 
-      if (appStore.wallet!.type == WalletType.solana) {
-        final result = await getSolanaNFTDetails(tokenAddress, chainName);
+      final uri = Uri.https(
+        'deep-index.moralis.io',
+        '/api/v2.2/nft/$tokenAddress/$tokenId',
+        {
+          "chain": chainName,
+          "format": "decimal",
+          "media_items": "false",
+          "normalizeMetadata": "true",
+        },
+      );
+      final response = await ProxyWrapper().get(
+        clearnetUri: uri,
+        headers: {
+          "Accept": "application/json",
+          "X-API-Key": secrets.moralisApiKey,
+        },
+      );
 
-        solanaNftAssetModels.add(result);
-      } else {
-        final uri = Uri.https(
-          'deep-index.moralis.io',
-          '/api/v2.2/nft/$tokenAddress/$tokenId',
-          {
-            "chain": chainName,
-            "format": "decimal",
-            "media_items": "false",
-            "normalizeMetadata": "true",
-          },
-        );
-        final response = await ProxyWrapper().get(
-          clearnetUri: uri,
-          headers: {
-            "Accept": "application/json",
-            "X-API-Key": secrets.moralisApiKey,
-          },
-        );
+      final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
 
-        final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      final nftAsset = NFTAssetModel.fromJson(decodedResponse);
 
-        final nftAsset = NFTAssetModel.fromJson(decodedResponse);
-
-        nftAssetByWalletModels.add(nftAsset);
-      }
+      nftAssetByWalletModels.add(nftAsset);
     } catch (e) {
       bottomSheetService.queueBottomSheet(
         isModalDismissible: true,

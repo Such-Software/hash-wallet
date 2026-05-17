@@ -4,9 +4,6 @@ import 'package:hash_wallet/dogecoin/dogecoin.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/decred/decred.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/transaction_priority.dart';
 import 'package:cw_core/wallet_type.dart';
 
@@ -32,17 +29,8 @@ List<TransactionPriority> priorityForWalletType(WalletType type) {
     case WalletType.arbitrum:
     case WalletType.nano:
     case WalletType.banano:
-    case WalletType.solana:
-    case WalletType.tron:
       return [];
-    case WalletType.zano:
-      return zano!.getTransactionPriorities();
-    case WalletType.decred:
-      return decred!.getTransactionPriorities();
-    case WalletType.zcash:
-      return zcash!.getTransactionPriorities();
     case WalletType.none:
-    case WalletType.haven:
       return [];
   }
 }

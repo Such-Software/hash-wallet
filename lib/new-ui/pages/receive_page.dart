@@ -17,11 +17,9 @@ import 'package:hash_wallet/utils/share_util.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:hash_wallet/view_model/dashboard/receive_option_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_item.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/payment_uris.dart';
 import 'package:cw_core/receive_page_option.dart';
-import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -103,10 +101,6 @@ class _NewReceivePageState extends State<NewReceivePage> {
         widget.addressListViewModel.setAddressType(bitcoin!.getOptionToType(option));
         return;
       }
-      if (widget.dashboardViewModel.type == WalletType.zcash) {
-        widget.addressListViewModel.setAddressType(zcash!.getOptionToType(option));
-        return;
-      }
 
       switch (option) {
         case ReceivePageOption.anonPayInvoice:
@@ -150,10 +144,6 @@ class _NewReceivePageState extends State<NewReceivePage> {
           if ([WalletType.bitcoin, WalletType.litecoin]
               .contains(widget.addressListViewModel.type)) {
             widget.addressListViewModel.setAddressType(bitcoin!.getBitcoinAddressType(option));
-          }
-          if (widget.addressListViewModel.type == WalletType.zcash) {
-            printV("help me i'll kms if that wont work: ${zcash!.getZcashAddressType(option)}");
-            widget.addressListViewModel.setAddressType(zcash!.getZcashAddressType(option));
           }
       }
     });

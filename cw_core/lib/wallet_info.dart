@@ -548,10 +548,7 @@ class WalletInfo {
   String get yatEmojiId => yatEid ?? '';
 
   bool get isShowIntroCakePayCard {
-    if (showIntroCakePayCard == null) {
-      return type != WalletType.haven;
-    }
-    return showIntroCakePayCard!;
+    return showIntroCakePayCard ?? false;
   }
 
   bool get isHardwareWallet => [

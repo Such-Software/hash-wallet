@@ -1,6 +1,5 @@
 import 'dart:math' show min;
 import 'package:hash_wallet/bitcoin/bitcoin.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/entities/calculate_fiat_amount.dart';
 import 'package:hash_wallet/entities/calculate_fiat_amount_raw.dart';
@@ -11,15 +10,11 @@ import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/src/screens/send/widgets/extract_address_from_parsed.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
 import 'package:hash_wallet/store/settings_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/balance.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
@@ -133,9 +128,6 @@ abstract class OutputBase with Store {
           case WalletType.dogecoin:
             _amount = cryptoCurrencyHandler().parseAmount(_cryptoAmount).toInt();
             break;
-          case WalletType.decred:
-            _amount = decred!.formatterStringDoubleToDecredAmount(_cryptoAmount);
-            break;
           case WalletType.ethereum:
           case WalletType.polygon:
           case WalletType.base:
@@ -146,19 +138,9 @@ abstract class OutputBase with Store {
           case WalletType.wownero:
             _amount = wownero!.formatterWowneroParseAmount(amount: _cryptoAmount);
             break;
-          case WalletType.zano:
-            _amount = zano!
-                .formatterParseAmount(amount: _cryptoAmount, currency: cryptoCurrencyHandler());
-            break;
-          case WalletType.zcash:
-            _amount = zcash!.formatterZcashParseAmount(_cryptoAmount);
-            break;
           case WalletType.none:
-          case WalletType.haven:
           case WalletType.nano:
           case WalletType.banano:
-          case WalletType.solana:
-          case WalletType.tron:
             break;
         }
 
@@ -198,7 +180,6 @@ abstract class OutputBase with Store {
         case WalletType.litecoin:
         case WalletType.bitcoinCash:
         case WalletType.dogecoin:
-        case WalletType.decred:
           estimatedFee = walletTypeToCryptoCurrency(_wallet.type).formatAmount(BigInt.from(fee));
           break;
         case WalletType.bitcoin:
@@ -214,26 +195,6 @@ abstract class OutputBase with Store {
           }
 
           estimatedFee = _appStore.amountParsingProxy.getDisplayCryptoString(fee, cryptoCurrencyHandler());
-          break;
-        case WalletType.solana:
-          estimatedFee = solana!.getEstimateFees(_wallet).toString();
-          break;
-        case WalletType.zano:
-          estimatedFee = zano!
-              .formatterIntAmountToDouble(
-                  amount: fee, currency: cryptoCurrencyHandler(), forFee: true)
-              .toString();
-          break;
-        case WalletType.tron:
-          if (cryptoCurrencyHandler() == CryptoCurrency.trx) {
-            estimatedFee = tron!.getTronNativeEstimatedFee(_wallet).toString();
-          } else {
-            estimatedFee = tron!.getTronTRC20EstimatedFee(_wallet).toString();
-          }
-          break;
-
-        case WalletType.zcash:
-          estimatedFee = zcash!.formatterZcashAmountToDouble(amount: BigInt.from(fee)).toString();
           break;
 
         /// EVMs
@@ -256,7 +217,6 @@ abstract class OutputBase with Store {
 
         /// end EVMs
 
-        case WalletType.haven:
         case WalletType.nano:
         case WalletType.banano:
         case WalletType.none:
@@ -274,8 +234,7 @@ abstract class OutputBase with Store {
     final _ = _wallet.syncStatus;
 
     try {
-      final currency = (isEVMCompatibleChain(_wallet.type) ||
-              [WalletType.solana, WalletType.tron].contains(_wallet.type))
+      final currency = isEVMCompatibleChain(_wallet.type)
           ? _wallet.currency
           : cryptoCurrencyHandler();
 

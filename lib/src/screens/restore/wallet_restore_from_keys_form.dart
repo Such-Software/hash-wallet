@@ -246,7 +246,7 @@ class WalletRestoreFromKeysFormState extends State<WalletRestoreFromKeysForm> {
           if (widget.walletRestoreViewModel.hasBlockchainHeightSelector)
             BlockchainHeightWidget(
               key: blockchainHeightKey,
-              hasDatePicker: widget.walletRestoreViewModel.type != WalletType.haven,
+              hasDatePicker: true,
               onHeightChange: (_) => null,
               onHeightOrDateEntered: widget.onHeightOrDateEntered,
               walletType: widget.walletRestoreViewModel.type,
@@ -299,7 +299,7 @@ class WalletRestoreFromKeysFormState extends State<WalletRestoreFromKeysForm> {
         if (widget.walletRestoreViewModel.hasBlockchainHeightSelector)
           BlockchainHeightWidget(
             key: blockchainHeightKey,
-            hasDatePicker: widget.walletRestoreViewModel.type != WalletType.haven,
+            hasDatePicker: true,
             onHeightChange: (_) => null,
             onHeightOrDateEntered: widget.onHeightOrDateEntered,
             walletType: widget.walletRestoreViewModel.type,

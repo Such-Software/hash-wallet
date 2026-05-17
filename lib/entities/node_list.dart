@@ -16,9 +16,6 @@ Future<List<Node>> loadDefaultNodes(WalletType type) async {
     case WalletType.litecoin:
       path = 'assets/litecoin_electrum_server_list.yml';
       break;
-    case WalletType.haven:
-      path = 'assets/haven_node_list.yml';
-      break;
     // TODO: (refactoring) each wallet would have its path, so `wallet.nodePath` would be decided based on chain id in Evm wallet
     case WalletType.ethereum:
       path = 'assets/ethereum_server_list.yml';
@@ -32,20 +29,8 @@ Future<List<Node>> loadDefaultNodes(WalletType type) async {
     case WalletType.polygon:
       path = 'assets/polygon_node_list.yml';
       break;
-    case WalletType.solana:
-      path = 'assets/solana_node_list.yml';
-      break;
-    case WalletType.tron:
-      path = 'assets/tron_node_list.yml';
-      break;
     case WalletType.wownero:
       path = 'assets/wownero_node_list.yml';
-      break;
-    case WalletType.zano:
-      path = 'assets/zano_node_list.yml';
-      break;
-    case WalletType.decred:
-      path = 'assets/decred_node_list.yml';
       break;
     case WalletType.dogecoin:
       path = 'assets/dogecoin_electrum_server_list.yml';
@@ -55,9 +40,6 @@ Future<List<Node>> loadDefaultNodes(WalletType type) async {
       break;
     case WalletType.arbitrum:
       path = 'assets/arbitrum_node_list.yml';
-      break;
-    case WalletType.zcash:
-      path = 'assets/zcash_node_list.yml';
       break;
     case WalletType.bsc:
       path = 'assets/bsc_node_list.yml';
@@ -104,34 +86,21 @@ Future<void> resetToDefault(Box<Node> nodeSource) async {
   final bitcoinElectrumServerList = await loadDefaultNodes(WalletType.bitcoin);
   final litecoinElectrumServerList = await loadDefaultNodes(WalletType.litecoin);
   final bitcoinCashElectrumServerList = await loadDefaultNodes(WalletType.bitcoinCash);
-  final havenNodes = await loadDefaultNodes(WalletType.haven);
   final ethereumNodes = await loadDefaultNodes(WalletType.ethereum);
   final nanoNodes = await loadDefaultNodes(WalletType.nano);
   final polygonNodes = await loadDefaultNodes(WalletType.polygon);
-  final solanaNodes = await loadDefaultNodes(WalletType.solana);
-  final tronNodes = await loadDefaultNodes(WalletType.tron);
-  final decredNodes = await loadDefaultNodes(WalletType.decred);
-  final zanoNodes = await loadDefaultNodes(WalletType.zano);
   final dogecoinElectrumServerList = await loadDefaultNodes(WalletType.dogecoin);
   final baseNodes = await loadDefaultNodes(WalletType.base);
   final arbitrumNodes = await loadDefaultNodes(WalletType.arbitrum);
-  // Hash Wallet: zcash node list deleted with the chain. Skip the load,
-  // skip the concat — stops the first-launch popup "Unable to load asset:
-  // assets/zcash_node_list.yml".
   final bscNodes = await loadDefaultNodes(WalletType.bsc);
 
   final nodes = moneroNodes +
       bitcoinElectrumServerList +
       litecoinElectrumServerList +
-      havenNodes +
       ethereumNodes +
       bitcoinCashElectrumServerList +
       nanoNodes +
       polygonNodes +
-      solanaNodes +
-      tronNodes +
-      zanoNodes +
-      decredNodes +
       dogecoinElectrumServerList +
       baseNodes +
       arbitrumNodes +

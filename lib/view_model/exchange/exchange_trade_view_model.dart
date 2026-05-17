@@ -8,7 +8,6 @@ import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/changenow_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exolix_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/jupiter_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/swaptrade_exchange_provider.dart';
@@ -87,9 +86,6 @@ abstract class ExchangeTradeViewModelBase with Store {
       case ExchangeProviderDescription.swapsXyz:
         _provider = SwapsXyzExchangeProvider();
         break;
-      case ExchangeProviderDescription.jupiter:
-        _provider = JupiterExchangeProvider();
-        break;
       case ExchangeProviderDescription.nearIntents:
         _provider = NearIntentsExchangeProvider();
         break;
@@ -121,20 +117,13 @@ abstract class ExchangeTradeViewModelBase with Store {
 
   bool isSwapsXYZCanSendFromExternal;
 
-  /// Providers that should hide the "send from external" button
-  static const List<Type> _providersThatHideExternalSend = [
-    JupiterExchangeProvider,
-  ];
-
   /// Returns true if the current provider should hide the external send button
   bool get shouldHideExternalSendButton {
     if (_provider == null) return false;
 
     if (!isSwapsXYZCanSendFromExternal) return true;
 
-    return _providersThatHideExternalSend.any(
-      (providerType) => _provider.runtimeType == providerType,
-    );
+    return false;
   }
 
   String get extraInfo => trade.extraId != null && trade.extraId!.isNotEmpty
@@ -439,10 +428,6 @@ abstract class ExchangeTradeViewModelBase with Store {
         return ArbitrumURI(amount: amount, address: inputAddress);
       case WalletType.bsc:
         return BSCURI(amount: amount, address: inputAddress);
-      case WalletType.solana:
-        return SolanaURI(amount: amount, address: inputAddress);
-      case WalletType.tron:
-        return TronURI(amount: amount, address: inputAddress);
       case WalletType.monero:
         return MoneroURI(address: inputAddress, amount: amount);
       case WalletType.wownero:
@@ -453,15 +438,8 @@ abstract class ExchangeTradeViewModelBase with Store {
         return LitecoinURI(amount: amount, address: inputAddress);
       case WalletType.nano:
         return NanoURI(amount: amount, address: inputAddress);
-      case WalletType.zano:
-        return ZanoURI(amount: amount, address: inputAddress);
-      case WalletType.decred:
-        return DecredURI(amount: amount, address: inputAddress);
-      case WalletType.zcash:
-        return ZcashURI(amount: amount, address: inputAddress);
       case WalletType.banano:
       case WalletType.none:
-      case WalletType.haven:
         return null;
     }
   }

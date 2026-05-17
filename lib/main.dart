@@ -14,7 +14,6 @@ import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/entities/contact.dart';
 import 'package:hash_wallet/entities/default_settings_migration.dart';
 import 'package:hash_wallet/entities/get_encryption_key.dart';
-import 'package:hash_wallet/entities/haven_seed_store.dart';
 import 'package:hash_wallet/entities/language_service.dart';
 import 'package:hash_wallet/entities/template.dart';
 import 'package:hash_wallet/entities/transaction_description.dart';
@@ -37,7 +36,6 @@ import 'package:hash_wallet/utils/exception_handler.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:hash_wallet/view_model/link_view_model.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/address_info.dart';
 import 'package:cw_core/cake_hive.dart';
 import 'package:cw_core/db/sqlite.dart';
@@ -164,17 +162,6 @@ Future<void> runAppWithZone({Key? topLevelKey}) async {
       ProxyWrapper.logger = MemoryProxyLogger();
     }
 
-    if (!Platform.isWindows) {
-      var zcashPassword = await secureStorageShared.read(
-          key: "com.cakewallet.cw_zcash/zec.db");
-      if (zcashPassword == null || zcashPassword.isEmpty) {
-        zcashPassword = generateKey().substring(0, 32);
-        secureStorageShared.write(
-            key: "com.cakewallet.cw_zcash/zec.db", value: zcashPassword);
-      }
-      zcash?.unlockDatabase(zcashPassword);
-    }
-
     // Basically when we're running a test
     if (topLevelKey != null) {
       runApp(
@@ -256,10 +243,6 @@ Future<void> initializeAppConfigs({bool loadWallet = true}) async {
     CakeHive.registerAdapter(AnonpayInvoiceInfoAdapter());
   }
 
-  if (!CakeHive.isAdapterRegistered(HavenSeedStore.typeId)) {
-    CakeHive.registerAdapter(HavenSeedStoreAdapter());
-  }
-
   if (!CakeHive.isAdapterRegistered(MwebUtxo.typeId)) {
     CakeHive.registerAdapter(MwebUtxoAdapter());
   }
@@ -301,11 +284,6 @@ Future<void> initializeAppConfigs({bool loadWallet = true}) async {
   final unspentCoinsInfoSource = await CakeHive.openBox<UnspentCoinsInfo>(UnspentCoinsInfo.boxName);
   final payjoinSessionSource = await CakeHive.openBox<PayjoinSession>(PayjoinSession.boxName);
 
-  final havenSeedStoreBoxKey =
-      await getEncryptionKey(secureStorage: secureStorage, forKey: HavenSeedStore.boxKey);
-  final havenSeedStore = await CakeHive.openBox<HavenSeedStore>(HavenSeedStore.boxName,
-      encryptionKey: havenSeedStoreBoxKey);
-
   await initialSetup(
     loadWallet: loadWallet,
     sharedPreferences: await SharedPreferences.getInstance(),
@@ -321,7 +299,6 @@ Future<void> initializeAppConfigs({bool loadWallet = true}) async {
     secureStorage: secureStorage,
     payjoinSessionSource: payjoinSessionSource,
     anonpayInvoiceInfo: anonpayInvoiceInfo,
-    havenSeedStore: havenSeedStore,
     initialMigrationVersion: 65,
   );
 }
@@ -341,7 +318,6 @@ Future<void> initialSetup({
   required Box<AnonpayInvoiceInfo> anonpayInvoiceInfo,
   required Box<UnspentCoinsInfo> unspentCoinsInfoSource,
   required Box<PayjoinSession> payjoinSessionSource,
-  required Box<HavenSeedStore> havenSeedStore,
   required int initialMigrationVersion,
 }) async {
   LanguageService.loadLocaleList();
@@ -352,7 +328,6 @@ Future<void> initialSetup({
     contactSource: contactSource,
     nodes: nodes,
     powNodes: powNodes,
-    havenSeedStore: havenSeedStore,
   );
   await setup(
     nodeSource: nodes,

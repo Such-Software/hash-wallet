@@ -118,8 +118,6 @@ abstract class CakePayBuyCardViewModelBase with Store {
         ];
       case WalletType.monero:
         return [CakePayPaymentMethod.XMR];
-      case WalletType.zcash:
-        return [CakePayPaymentMethod.ZEC];
       default:
         return const [];
     }
@@ -148,10 +146,9 @@ abstract class CakePayBuyCardViewModelBase with Store {
       WalletType.bitcoin,
       WalletType.monero,
       WalletType.litecoin,
-      WalletType.zcash,
     ].contains(walletType)) {
       sendViewModel.state =
-          FailureState('Unsupported wallet type, please use Bitcoin, Monero, Litecoin or Zcash.');
+          FailureState('Unsupported wallet type, please use Bitcoin, Monero, or Litecoin.');
     }
     try {
       order = await _cakePayService.createOrder(

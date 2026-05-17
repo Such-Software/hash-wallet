@@ -30,7 +30,6 @@ import 'package:hash_wallet/core/trade_monitor.dart';
 import 'package:hash_wallet/core/wallet_creation_service.dart';
 import 'package:hash_wallet/core/wallet_loading_service.dart';
 import 'package:hash_wallet/core/yat_service.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/entities/biometric_auth.dart';
 import 'package:hash_wallet/entities/bridge_transfer.dart';
 import 'package:hash_wallet/entities/contact.dart';
@@ -47,7 +46,6 @@ import 'package:hash_wallet/entities/wallet_manager.dart';
 import 'package:hash_wallet/exchange/exchange_template.dart';
 import 'package:hash_wallet/exchange/provider/trocador_exchange_provider.dart';
 import 'package:hash_wallet/exchange/trade.dart';
-import 'package:hash_wallet/haven/cw_haven.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/nano/nano.dart';
 import 'package:hash_wallet/new-ui/new_dashboard.dart';
@@ -70,7 +68,6 @@ import 'package:hash_wallet/new-ui/pages/swap_page.dart';
 import 'package:hash_wallet/order/order.dart';
 import 'package:hash_wallet/reactions/on_authentication_state_change.dart';
 import 'package:hash_wallet/routes.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/src/screens/anonpay_details/anonpay_details_page.dart';
 import 'package:hash_wallet/src/screens/auth/auth_page.dart';
 import 'package:hash_wallet/src/screens/backup/backup_page.dart';
@@ -200,7 +197,6 @@ import 'package:hash_wallet/store/templates/send_template_store.dart';
 import 'package:hash_wallet/store/wallet_list_store.dart';
 import 'package:hash_wallet/store/yat/yat_store.dart';
 import 'package:hash_wallet/themes/core/theme_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/utils/device_info.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:hash_wallet/view_model/advanced_privacy_settings_view_model.dart';
@@ -295,8 +291,6 @@ import 'package:hash_wallet/view_model/wallet_switcher_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_unlock_loadable_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_unlock_verifiable_view_model.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/nano_account.dart';
 import 'package:cw_core/node.dart';
@@ -1006,8 +1000,7 @@ Future<void> setup({
   getIt.registerFactory<MoneroAccountListViewModel>(() {
     final wallet = getIt.get<AppStore>().wallet!;
     if (wallet.type == WalletType.monero ||
-        wallet.type == WalletType.wownero ||
-        wallet.type == WalletType.haven) {
+        wallet.type == WalletType.wownero) {
       return MoneroAccountListViewModel(wallet,getIt.get<SettingsStore>());
     }
     throw Exception(
@@ -1337,20 +1330,8 @@ Future<void> setup({
       case WalletType.nano:
       case WalletType.banano:
         return nano!.createNanoWalletService(SettingsStoreBase.walletPasswordDirectInput);
-      case WalletType.solana:
-        return solana!.createSolanaWalletService(SettingsStoreBase.walletPasswordDirectInput);
-      case WalletType.tron:
-        return tron!.createTronWalletService(SettingsStoreBase.walletPasswordDirectInput);
       case WalletType.wownero:
         return wownero!.createWowneroWalletService(_unspentCoinsInfoSource);
-      case WalletType.zano:
-        return zano!.createZanoWalletService();
-      case WalletType.decred:
-        return decred!.createDecredWalletService(_unspentCoinsInfoSource);
-      case WalletType.haven:
-        return HavenWalletService();
-      case WalletType.zcash:
-        return zcash!.createZcashWalletService(SettingsStoreBase.walletPasswordDirectInput);
       case WalletType.none:
         throw Exception('Unexpected token: ${param1.toString()} for generating of WalletService');
     }

@@ -601,7 +601,6 @@ class _WalletRestorePageBodyState extends State<_WalletRestorePageBody>
     final seedWords = seedPhrase.split(' ');
 
     if (seedWords.length == 14 && walletRestoreViewModel.type == WalletType.wownero) return true;
-    if (seedWords.length == 26 && walletRestoreViewModel.type == WalletType.zano) return true;
 
     if (seedWords.length == 12 && walletRestoreViewModel.type == WalletType.monero) {
       return walletRestoreFromSeedFormKey.currentState?.blockchainHeightKey.currentState
@@ -609,7 +608,7 @@ class _WalletRestorePageBodyState extends State<_WalletRestorePageBody>
           true;
     }
 
-    if ([WalletType.monero, WalletType.wownero, WalletType.haven]
+    if ([WalletType.monero, WalletType.wownero]
             .contains(walletRestoreViewModel.type) &&
         seedWords.length == WalletRestoreViewModelBase.moneroSeedMnemonicLength) {
       return true;
@@ -617,15 +616,10 @@ class _WalletRestorePageBodyState extends State<_WalletRestorePageBody>
 
     // bip39:
     final validBip39SeedLengths = [12, 18, 24];
-    final nonBip39WalletTypes = [WalletType.wownero, WalletType.haven, WalletType.decred];
+    final nonBip39WalletTypes = [WalletType.wownero];
     // if it's a bip39 wallet and the length is not valid return false
     if (!nonBip39WalletTypes.contains(walletRestoreViewModel.type) &&
         !(validBip39SeedLengths.contains(seedWords.length))) {
-      return false;
-    }
-
-    if ((walletRestoreViewModel.type == WalletType.decred) &&
-        seedWords.length != WalletRestoreViewModelBase.decredSeedMnemonicLength) {
       return false;
     }
 

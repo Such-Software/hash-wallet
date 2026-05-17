@@ -3,15 +3,12 @@ import 'dart:io';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/apps_widget.dart';
 import 'package:hash_wallet/routes.dart';
-import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
 import 'package:hash_wallet/src/widgets/dashboard_card_widget.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
-import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/view_model/dashboard/cake_features_view_model.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/utils/print_verbose.dart';
-import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -122,18 +119,6 @@ class CakeFeaturesPage extends StatelessWidget {
   }
 
   void _navigatorToGiftCardsPage(BuildContext context) {
-    if (dashboardViewModel.type == WalletType.haven) {
-      showPopUp<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertWithOneAction(
-                alertTitle: S.of(context).error,
-                alertContent: S.of(context).gift_cards_unavailable,
-                buttonText: S.of(context).ok,
-                buttonAction: () => Navigator.of(context).pop());
-          });
-    } else {
-      Navigator.pushNamed(context, Routes.cakePayCardsPage);
-    }
+    Navigator.pushNamed(context, Routes.cakePayCardsPage);
   }
 }

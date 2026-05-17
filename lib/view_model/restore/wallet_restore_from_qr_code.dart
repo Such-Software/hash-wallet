@@ -39,25 +39,12 @@ class WalletRestoreFromQRCode {
     'bitcoincash': WalletType.bitcoinCash,
     'bitcoincash-wallet': WalletType.bitcoinCash,
     'bitcoincash_wallet': WalletType.bitcoinCash,
-    'solana-wallet': WalletType.solana,
-    'tron': WalletType.tron,
-    'tron-wallet': WalletType.tron,
-    'tron_wallet': WalletType.tron,
     'wownero': WalletType.wownero,
     'wownero-wallet': WalletType.wownero,
     'wownero_wallet': WalletType.wownero,
-    'zano': WalletType.zano,
-    'zano-wallet': WalletType.zano,
-    'zano_wallet': WalletType.zano,
-    'decred': WalletType.decred,
-    'decred-wallet': WalletType.decred,
-    'decred_wallet': WalletType.decred,
     'dogecoin': WalletType.dogecoin,
     'dogecoin-wallet': WalletType.dogecoin,
     'dogecoin_wallet': WalletType.dogecoin,
-    'zcash': WalletType.zcash,
-    'zcash-wallet': WalletType.zcash,
-    'zcash_wallet': WalletType.zcash,
   };
 
   static WalletType? _extractWalletType(String code) {
@@ -232,22 +219,6 @@ class WalletRestoreFromQRCode {
         throw Exception('Unexpected restore mode: hexSeed');
       }
       return WalletRestoreMode.seed;
-    }
-
-    if (type == WalletType.solana && credentials.containsKey('private_key')) {
-      final privateKey = credentials['private_key'] as String;
-      if (privateKey.isEmpty) {
-        throw Exception('Unexpected restore mode: private_key');
-      }
-      return WalletRestoreMode.keys;
-    }
-
-    if (type == WalletType.tron && credentials.containsKey('private_key')) {
-      final privateKey = credentials['private_key'] as String;
-      if (privateKey.isEmpty) {
-        throw Exception('Unexpected restore mode: private_key');
-      }
-      return WalletRestoreMode.keys;
     }
 
     if (type == WalletType.monero) {

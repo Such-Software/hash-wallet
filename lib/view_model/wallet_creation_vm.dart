@@ -118,7 +118,7 @@ abstract class WalletCreationVMBase with Store {
         path: path,
         dirPath: dirPath,
         address: '',
-        showIntroCakePayCard: (!await walletCreationService.typeExists(type)) && type != WalletType.haven,
+        showIntroCakePayCard: !await walletCreationService.typeExists(type),
         derivationInfoId: diId,
         hardwareWalletType: credentials.hardwareWalletType,
       );

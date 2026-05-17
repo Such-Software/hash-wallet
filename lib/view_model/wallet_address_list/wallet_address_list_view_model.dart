@@ -4,7 +4,6 @@ import 'dart:developer' as dev;
 import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:hash_wallet/core/fiat_conversion_service.dart';
 import 'package:hash_wallet/core/wallet_change_listener_view_model.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/entities/auto_generate_subaddress_status.dart';
 import 'package:hash_wallet/entities/fiat_api_mode.dart';
 import 'package:hash_wallet/entities/fiat_currency.dart';
@@ -13,11 +12,9 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/reactions/wallet_utils.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
 import 'package:hash_wallet/store/yat/yat_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/utils/list_item.dart';
 import 'package:hash_wallet/utils/qr_util.dart';
 import 'package:hash_wallet/view_model/wallet_address_list/wallet_account_list_header.dart';
@@ -26,8 +23,6 @@ import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_h
 import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_item.dart';
 import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_util.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
-import 'package:hash_wallet/zano/zano.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/currency.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
@@ -62,7 +57,7 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
     _init();
 
     selectedCurrency = wallet.currency;
-    hasAccounts = [WalletType.monero, WalletType.wownero, WalletType.haven].contains(wallet.type);
+    hasAccounts = [WalletType.monero, WalletType.wownero].contains(wallet.type);
   }
 
   final FiatConversionStore fiatConversionStore;
@@ -318,40 +313,12 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
       addressList.add(WalletAddressListItem(isPrimary: true, name: null, address: primaryAddress));
     }
 
-    if (wallet.type == WalletType.solana) {
-      final primaryAddress = solana!.getAddress(wallet);
-
-      addressList.add(WalletAddressListItem(isPrimary: true, name: null, address: primaryAddress));
-    }
-
     if (wallet.type == WalletType.nano) {
       addressList.add(WalletAddressListItem(
         isPrimary: true,
         name: null,
         address: wallet.walletAddresses.address,
       ));
-    }
-
-    if (wallet.type == WalletType.tron) {
-      final primaryAddress = tron!.getAddress(wallet);
-
-      addressList.add(WalletAddressListItem(isPrimary: true, name: null, address: primaryAddress));
-    }
-
-    if (wallet.type == WalletType.decred) {
-      final addrInfos = decred!.getAddressInfos(wallet);
-      addrInfos.forEach((info) {
-        addressList.add(
-            new WalletAddressListItem(isPrimary: false, address: info.address, name: info.label));
-      });
-    }
-
-    if (wallet.type == WalletType.zcash) {
-      final addrInfos = zcash!.getAddressInfos(wallet);
-      addrInfos.forEach((info) {
-        addressList.add(
-            new WalletAddressListItem(isPrimary: false, address: info.address, name: info.label));
-      });
     }
 
     for (var i = 0; i < addressList.length; i++) {
@@ -365,12 +332,6 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
       if (!(addressList[i] is WalletAddressListItem)) continue;
       (addressList[i] as WalletAddressListItem).isManual = wallet.walletAddresses.manualAddresses
           .contains((addressList[i] as WalletAddressListItem).address);
-    }
-
-    if (wallet.type == WalletType.zano) {
-      final primaryAddress = zano!.getAddress(wallet);
-
-      addressList.add(WalletAddressListItem(isPrimary: true, name: null, address: primaryAddress));
     }
 
     if (searchText.isNotEmpty) {
@@ -445,17 +406,14 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
   bool get hasAddressList => [
         WalletType.monero,
         WalletType.wownero,
-        WalletType.haven,
         WalletType.bitcoinCash,
         WalletType.bitcoin,
         WalletType.litecoin,
-        WalletType.decred,
         WalletType.dogecoin,
-        WalletType.zcash
-      ].contains(wallet.type) && !isLightning && isZCashTransparent;
+      ].contains(wallet.type) && !isLightning;
 
   @computed
-  bool get hasAddressRotation => hasAddressList && wallet.type != WalletType.zcash;
+  bool get hasAddressRotation => hasAddressList;
 
   @computed
   bool get isElectrumWallet => [
@@ -513,25 +471,6 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
     }
 
     switch (wallet.type) {
-      case WalletType.solana:
-        return [
-          'assets/images/sol_icon.svg',
-          'assets/images/usdc_icon.svg',
-          'assets/images/usdt_wallet_icon.svg',
-          'assets/images/more_tokens.svg',
-        ];
-      case WalletType.tron:
-        return [
-          'assets/images/trx_icon.svg',
-          'assets/images/usdc_icon.svg',
-          'assets/images/usdt_wallet_icon.svg',
-          'assets/images/more_tokens.svg',
-        ];
-      case WalletType.zano:
-        return [
-          'assets/images/zano_icon.svg',
-          'assets/images/more_tokens.svg',
-        ];
       default:
         return [];
     }
@@ -558,15 +497,6 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
 
   @computed
   bool get isLightning => wallet.type == WalletType.bitcoin && (wallet.walletAddresses.getPaymentUri(_amount) is LightningPaymentRequest);
-
-  @computed
-  bool get isZCashTransparent {
-    if(wallet.type != WalletType.zcash) {
-      return true;
-    }
-    receivePageOption;
-    return wallet.type == WalletType.zcash && zcash!.hasSelectedTransparentAddress(wallet);
-  }
 
   @observable
   String receivePageOption;
@@ -609,9 +539,6 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
     if ([WalletType.bitcoin, WalletType.litecoin].contains(wallet.type)) {
       await bitcoin!.setAddressType(wallet, option);
     }
-    if (wallet.type == WalletType.zcash) {
-      await zcash!.setAddressType(wallet, option);
-    }
   }
 
   void _init() {
@@ -624,7 +551,6 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
     if ([
       WalletType.monero,
       WalletType.wownero,
-      WalletType.haven,
     ].contains(wallet.type)) {
       _baseItems.add(WalletAccountListHeader());
     }

@@ -2,14 +2,12 @@ import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:hash_wallet/src/widgets/standard_switch.dart';
 import 'package:hash_wallet/utils/date_picker.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
-import 'package:hash_wallet/decred/decred.dart';
 
 class BlockchainHeightWidget extends StatefulWidget {
   BlockchainHeightWidget({
@@ -191,14 +189,10 @@ class BlockchainHeightState extends State<BlockchainHeightWidget> {
           bitcoinMempoolAPIEnabled: await widget.bitcoinMempoolAPIEnabled,
         );
       } else {
-        if (widget.walletType == WalletType.decred) {
-          height = decred!.heightByDate(date);
-        } else if (widget.walletType == WalletType.monero) {
+        if (widget.walletType == WalletType.monero) {
           height = monero!.getHeightByDate(date: date);
         } else if (widget.walletType == WalletType.wownero){
           height = wownero!.getHeightByDate(date: date);
-        } else if (widget.walletType == WalletType.zcash) {
-          height = await zcash!.getHeightByDate(date);
         } else {
           throw Exception("unknown currency in BlockchainHeightWidget");
         }

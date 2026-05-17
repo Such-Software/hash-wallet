@@ -4,7 +4,6 @@ import 'package:mobx/mobx.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:hash_wallet/monero/monero.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:cw_core/wallet_type.dart';
 
 part 'wallet_address_edit_or_create_view_model.g.dart';
@@ -78,11 +77,6 @@ abstract class WalletAddressEditOrCreateViewModelBase with Store {
       await wallet.save();
     }
 
-    if (wallet.type == WalletType.decred) {
-      await decred!.generateNewAddress(wallet, label);
-      await wallet.save();
-    }
-
     if (wallet.type == WalletType.monero) {
       await monero!
           .getSubaddressList(wallet)
@@ -114,12 +108,6 @@ abstract class WalletAddressEditOrCreateViewModelBase with Store {
     final wallet = _wallet;
 
     if (isElectrum) await bitcoin!.updateAddress(wallet, _item!.address, label);
-
-    if (wallet.type == WalletType.decred) {
-      await decred!.updateAddress(wallet, _item!.address, label);
-      await wallet.save();
-      return;
-    }
 
     final index = _item?.id;
     if (index != null) {

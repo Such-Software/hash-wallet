@@ -1,12 +1,8 @@
 import 'package:hash_wallet/core/new_wallet_arguments.dart';
 import 'package:hash_wallet/dogecoin/dogecoin.dart';
 import 'package:hash_wallet/evm/evm.dart';
-import 'package:hash_wallet/zano/zano.dart';
 import 'package:hash_wallet/bitcoin_cash/bitcoin_cash.dart';
-import 'package:hash_wallet/solana/solana.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:mobx/mobx.dart';
 import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:hash_wallet/core/wallet_creation_service.dart';
@@ -16,7 +12,6 @@ import 'package:hash_wallet/nano/nano.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/view_model/seed_settings_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_creation_vm.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_credentials.dart';
 import 'package:cw_core/wallet_type.dart';
@@ -44,7 +39,7 @@ abstract class WalletNewVMBase extends WalletCreationVM with Store {
   String selectedMnemonicLanguage;
 
   bool get hasLanguageSelector =>
-      [WalletType.monero, WalletType.haven, WalletType.wownero].contains(type);
+      [WalletType.monero, WalletType.wownero].contains(type);
 
   bool get showLanguageSelector => newWalletArguments?.mnemonic == null && hasLanguageSelector;
 
@@ -112,20 +107,6 @@ abstract class WalletNewVMBase extends WalletCreationVM with Store {
           passphrase: passphrase,
         );
 
-      case WalletType.solana:
-        return solana!.createSolanaNewWalletCredentials(
-          name: name,
-          password: walletPassword,
-          mnemonic: newWalletArguments!.mnemonic,
-          passphrase: passphrase,
-        );
-      case WalletType.tron:
-        return tron!.createTronNewWalletCredentials(
-          name: name,
-          password: walletPassword,
-          mnemonic: newWalletArguments!.mnemonic,
-          passphrase: passphrase,
-        );
       case WalletType.wownero:
         return wownero!.createWowneroNewWalletCredentials(
           name: name,
@@ -134,23 +115,7 @@ abstract class WalletNewVMBase extends WalletCreationVM with Store {
           password: walletPassword,
           passphrase: passphrase,
         );
-      case WalletType.zano:
-        return zano!.createZanoNewWalletCredentials(
-          name: name,
-          password: walletPassword,
-          passphrase: passphrase,
-        );
-      case WalletType.zcash:
-        return zcash!.createZcashNewWalletCredentials(
-          name: name,
-          password: walletPassword,
-          mnemonic: newWalletArguments!.mnemonic,
-          passphrase: passphrase,
-        );
-      case WalletType.decred:
-        return decred!.createDecredNewWalletCredentials(name: name);
       case WalletType.none:
-      case WalletType.haven:
         throw Exception('Unexpected type: ${type.toString()}');
     }
   }

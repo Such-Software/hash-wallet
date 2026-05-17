@@ -15,7 +15,6 @@ import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/view_model/dashboard/home_settings_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/utils/homoglyph_normalizer.dart';
-import 'package:cw_core/wallet_type.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -349,13 +348,12 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
       if (!mounted) return;
 
       if (token != null) {
-        final isZano = widget.homeSettingsViewModel.walletType == WalletType.zano;
-        if (_tokenNameController.text.isEmpty || isZano) _tokenNameController.text = token.name;
-        if (_tokenSymbolController.text.isEmpty || isZano)
+        if (_tokenNameController.text.isEmpty) _tokenNameController.text = token.name;
+        if (_tokenSymbolController.text.isEmpty)
           _tokenSymbolController.text = token.title;
         if (_tokenIconPathController.text.isEmpty)
           _tokenIconPathController.text = token.iconPath ?? '';
-        if (_tokenDecimalController.text.isEmpty || isZano)
+        if (_tokenDecimalController.text.isEmpty)
           _tokenDecimalController.text = token.decimals.toString();
 
         _checkIfTokenIsVerified(_contractAddressController.text);
@@ -432,9 +430,7 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
             placeholder: S.of(context).contract_address,
             copyImagePath: 'assets/images/copy.png',
             options: [AddressTextFieldOption.paste],
-            validator: widget.homeSettingsViewModel.walletType == WalletType.zano
-                ? null
-                : AddressValidator(type: widget.homeSettingsViewModel.nativeToken).call,
+            validator: AddressValidator(type: widget.homeSettingsViewModel.nativeToken).call,
             onPushPasteButton: (_) {
               _pasteText();
             },

@@ -1,12 +1,10 @@
 import 'package:hash_wallet/bitcoin_cash/bitcoin_cash.dart';
 import 'package:hash_wallet/core/amount_parsing_proxy.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/dogecoin/dogecoin.dart';
 import 'package:hash_wallet/entities/priority_for_wallet_type.dart';
 import 'package:hash_wallet/core/wallet_change_listener_view_model.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/monero/monero.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/view_model/dashboard/balance_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
@@ -85,8 +83,6 @@ abstract class FeesViewModelBase extends WalletChangeListenerViewModel with Stor
     switch (wallet.type) {
       case WalletType.monero:
       case WalletType.wownero:
-      case WalletType.haven:
-      case WalletType.zano:
         return transactionPriority == monero!.getMoneroTransactionPrioritySlow();
       case WalletType.bitcoin:
         return transactionPriority == bitcoin!.getBitcoinTransactionPrioritySlow();
@@ -99,17 +95,12 @@ abstract class FeesViewModelBase extends WalletChangeListenerViewModel with Stor
         return transactionPriority == evm!.getEVMTransactionPrioritySlow();
       case WalletType.bitcoinCash:
         return transactionPriority == bitcoinCash!.getBitcoinCashTransactionPrioritySlow();
-      case WalletType.decred:
-        return transactionPriority == decred!.getDecredTransactionPrioritySlow();
       case WalletType.dogecoin:
         return transactionPriority == dogecoin!.getDogeCoinTransactionPrioritySlow();
       case WalletType.none:
       case WalletType.nano:
       case WalletType.banano:
-      case WalletType.solana:
-      case WalletType.tron:
       case WalletType.arbitrum:
-      case WalletType.zcash:
         return false;
     }
   }
@@ -126,8 +117,6 @@ abstract class FeesViewModelBase extends WalletChangeListenerViewModel with Stor
   bool get hasFeesPriority =>
       wallet.type != WalletType.nano &&
       wallet.type != WalletType.banano &&
-      wallet.type != WalletType.solana &&
-      wallet.type != WalletType.tron &&
       wallet.chainId !=
           42161; // Wallet type is generic for all EVM chains, so we need to check the chainId
 
@@ -186,13 +175,8 @@ abstract class FeesViewModelBase extends WalletChangeListenerViewModel with Stor
   void setDefaultTransactionPriority() {
     switch (wallet.type) {
       case WalletType.monero:
-      case WalletType.haven:
       case WalletType.wownero:
-      case WalletType.zano:
         _settingsStore.setPriority(wallet.type, monero!.getMoneroTransactionPriorityAutomatic());
-        break;
-      case WalletType.zcash:
-        _settingsStore.setPriority(wallet.type, zcash!.getZcashTransactionPriorityAutomatic());
         break;
       case WalletType.bitcoin:
         _settingsStore.setPriority(wallet.type, bitcoin!.getBitcoinTransactionPriorityMedium());

@@ -10,7 +10,6 @@ import 'package:hash_wallet/core/open_crypto_pay/models.dart';
 import 'package:hash_wallet/core/open_crypto_pay/open_cryptopay_service.dart';
 import 'package:hash_wallet/core/validator.dart';
 import 'package:hash_wallet/core/wallet_change_listener_view_model.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/entities/calculate_fiat_amount.dart';
 import 'package:hash_wallet/entities/contact.dart';
 import 'package:hash_wallet/entities/contact_record.dart';
@@ -24,13 +23,10 @@ import 'package:hash_wallet/entities/wallet_contact.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/exchange/exchange_provider_description.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/jupiter_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/thorchain_exchange.provider.dart';
 import 'package:hash_wallet/exchange/trade.dart';
-import 'package:hash_wallet/exchange/trade_state.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/nano/nano.dart';
@@ -39,7 +35,6 @@ import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
 import 'package:hash_wallet/store/settings_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:hash_wallet/view_model/contact_list/contact_list_view_model.dart';
 import 'package:hash_wallet/view_model/dashboard/balance_view_model.dart';
@@ -50,8 +45,6 @@ import 'package:hash_wallet/view_model/send/send_template_view_model.dart';
 import 'package:hash_wallet/view_model/send/send_view_model_state.dart';
 import 'package:hash_wallet/view_model/unspent_coins/unspent_coins_list_view_model.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/erc20_token.dart';
@@ -80,8 +73,7 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
     currencies = wallet.balance.keys.toList();
     selectedCryptoCurrency =
         coinTypeToSpendFrom == UnspentCoinType.lightning ? CryptoCurrency.btcln : wallet.currency;
-    hasMultipleTokens = isEVMWallet ||
-        [WalletType.solana, WalletType.tron, WalletType.zano].contains(wallet.type);
+    hasMultipleTokens = isEVMWallet;
 
     for (final output in outputs) {
       output.updateWallet(wallet);
@@ -112,8 +104,7 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
         selectedCryptoCurrency = coinTypeToSpendFrom == UnspentCoinType.lightning
             ? CryptoCurrency.btcln
             : _appStore.wallet!.currency,
-        hasMultipleTokens = isEVMCompatibleChain(_appStore.wallet!.type) ||
-            [WalletType.solana, WalletType.tron, WalletType.zano].contains(_appStore.wallet!.type),
+        hasMultipleTokens = isEVMCompatibleChain(_appStore.wallet!.type),
         selectedChainId = _appStore.wallet!.chainId,
         outputs = ObservableList<Output>(),
         fiatFromSettings = _appStore.settingsStore.fiatCurrency,
@@ -189,8 +180,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
   bool get isBatchSending => outputs.length > 1;
 
   bool get shouldDisplaySendALL {
-    if (walletType == WalletType.solana) return false;
-
     // if (walletType == WalletType.ethereum && selectedCryptoCurrency == CryptoCurrency.eth)
     // return false;
 
@@ -257,8 +246,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-      case WalletType.tron:
-      case WalletType.solana:
       case WalletType.bitcoin:
         return wallet.currency;
       default:
@@ -335,7 +322,7 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
 
   @computed
   Future<String> get sendingBalance async {
-    // only for electrum, monero, wownero, decred wallets atm:
+    // only for electrum, monero, wownero wallets atm:
     switch (wallet.type) {
       case WalletType.bitcoin:
         if (coinTypeToSpendFrom == UnspentCoinType.lightning) return balance;
@@ -347,7 +334,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
       case WalletType.dogecoin:
       case WalletType.monero:
       case WalletType.wownero:
-      case WalletType.decred:
         final sendingBalance =
             await unspentCoinsListViewModel.getSendingBalance(coinTypeToSpendFrom);
         return walletTypeToCryptoCurrency(walletType).formatAmount(BigInt.from(sendingBalance));
@@ -394,7 +380,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
         WalletType.litecoin,
         WalletType.monero,
         WalletType.wownero,
-        WalletType.decred,
         WalletType.bitcoinCash,
         WalletType.dogecoin
       ].contains(wallet.type) &&
@@ -808,38 +793,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
       }
       // END Swaps.xyz path
 
-      // Jupiter (Solana) swap path
-      if (walletType == WalletType.solana && trade != null && provider is JupiterExchangeProvider) {
-        final swapTransactionBase64 = trade.routerData;
-        final requestId = trade.routerValue;
-        if (swapTransactionBase64?.isNotEmpty == true &&
-            requestId?.isNotEmpty == true &&
-            solana != null) {
-          try {
-            final actualFee = trade.fee ?? 0.0005;
-            // Fallback to estimate if not available
-            final fee = actualFee > 0 ? actualFee : 0.0005;
-
-            final amount = double.tryParse(trade.amount) ?? 0.0;
-
-            pendingTransaction = await solana!.signAndPrepareJupiterSwapTransaction(
-              wallet,
-              swapTransactionBase64!,
-              requestId!,
-              trade.payoutAddress ?? '',
-              amount,
-              fee,
-            );
-
-            state = ExecutedSuccessfullyState();
-            return pendingTransaction;
-          } catch (e, s) {
-            printV('Jupiter swap error: $e\n$s');
-            throw Exception('Failed to process Jupiter swap: $e');
-          }
-        }
-      }
-
       // Regular flow
 
 
@@ -990,78 +943,8 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
         }
       }
 
-      await _updateSolanaTrade(signature: pendingTransaction!.id, isSuccess: true);
-
-      if (walletType == WalletType.solana) {
-        Future.delayed(Duration(seconds: 1), () async {
-          try {
-            await solana!.pollForTransaction(
-              wallet,
-              pendingTransaction!.id,
-              initialDelay: const Duration(seconds: 1),
-              maxRetries: 5,
-            );
-          } catch (e) {
-            printV('Failed to poll for transaction: $e');
-          }
-        });
-
-        // Update balances for currencies involved in swap
-        if (_currentTrade != null) {
-          Future.delayed(Duration(seconds: 2), () async {
-            try {
-              final tokenMints = <String>[];
-
-              // Extract from currency mint (skip native SOL)
-              if (_currentTrade!.from != null && _currentTrade!.from != CryptoCurrency.sol) {
-                try {
-                  final fromMint = solana!.getTokenAddress(_currentTrade!.from!);
-                  tokenMints.add(fromMint);
-                } catch (e) {
-                  printV('Error getting from currency mint: $e');
-                }
-              }
-
-              // Extract to currency mint (skip native SOL)
-              if (_currentTrade!.to != null && _currentTrade!.to != CryptoCurrency.sol) {
-                try {
-                  final toMint = solana!.getTokenAddress(_currentTrade!.to!);
-                  tokenMints.add(toMint);
-                } catch (e) {
-                  printV('Error getting to currency mint: $e');
-                }
-              }
-
-              if (tokenMints.isNotEmpty) {
-                solana!.updateTokenBalances(
-                  wallet,
-                  tokenMints: tokenMints,
-                );
-
-                // Retry after a bit more time to ensure balance is updated
-                Future.delayed(Duration(seconds: 2), () async {
-                  try {
-                    await solana!.updateTokenBalances(
-                      wallet,
-                      tokenMints: tokenMints,
-                    );
-                  } catch (e) {
-                    printV('Error retrying balance update: $e');
-                  }
-                });
-              }
-            } catch (e) {
-              printV('Failed to update balances after send: $e');
-            } finally {
-              _currentTrade = null;
-              _currentProvider = null;
-            }
-          });
-        }
-      }
-
-      // Immediate transaction update for EVM chains, Tron, and Nano
-      if (isEVMWallet || [WalletType.bitcoin, WalletType.solana, WalletType.tron, WalletType.nano].contains(walletType)) {
+      // Immediate transaction update for EVM chains and Nano
+      if (isEVMWallet || [WalletType.bitcoin, WalletType.nano].contains(walletType)) {
         Future.delayed(Duration(seconds: 4), () async {
           try {
             await Future.wait([
@@ -1081,25 +964,8 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
       await sharedPreferences.setString(PreferencesKey.backgroundSyncLastTrigger(wallet.name),
           DateTime.now().add(Duration(minutes: 1)).toIso8601String());
     } catch (e) {
-      if (e is JupiterSwapFailedException) {
-        await _updateSolanaTrade(signature: e.signature, isSuccess: false);
-      }
       state = FailureState(translateErrorMessage(e, wallet.type, wallet.currency));
-      await _updateSolanaTrade(signature: '', isSuccess: false);
     }
-  }
-
-  /// Update Jupiter trade with relevant details after transaction is committed
-  Future<void> _updateSolanaTrade({required String signature, required bool isSuccess}) async {
-    if (_currentTrade == null ||
-        _currentProvider?.title != 'Jupiter' ||
-        walletType != WalletType.solana) return;
-
-    _currentTrade!.txId = signature;
-
-    _currentTrade!.stateRaw = isSuccess ? TradeState.completed.raw : TradeState.failed.raw;
-
-    await _currentTrade!.save();
   }
 
   @action
@@ -1147,10 +1013,7 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
         ![
           WalletType.nano,
           WalletType.banano,
-          WalletType.solana,
-          WalletType.tron,
           WalletType.arbitrum,
-          WalletType.zcash,
         ].contains(wallet.type)) {
       throw Exception('Priority is null for wallet type: ${wallet.type}');
     }
@@ -1198,23 +1061,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
         );
       case WalletType.nano:
         return nano!.createNanoTransactionCredentials(outputs);
-      case WalletType.solana:
-        return solana!
-            .createSolanaTransactionCredentials(outputs, currency: selectedCryptoCurrency);
-      case WalletType.tron:
-        return tron!.createTronTransactionCredentials(outputs, currency: selectedCryptoCurrency);
-      case WalletType.zano:
-        return zano!.createZanoTransactionCredentials(
-            outputs: outputs, priority: priority!, currency: selectedCryptoCurrency);
-      case WalletType.decred:
-        this.coinTypeToSpendFrom = UnspentCoinType.any;
-        return decred!.createDecredTransactionCredentials(outputs, priority!);
-      case WalletType.zcash:
-        return zcash!.createZcashTransactionCredentials(
-          outputs,
-          currency: selectedCryptoCurrency,
-          // priority: priority,
-        );
       default:
         throw Exception('Unexpected wallet type: ${wallet.type} for send');
     }
@@ -1242,11 +1088,9 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
   }
 
   @computed
-  bool get hasMemos => [WalletType.zcash].contains(wallet.type);
+  bool get hasMemos => false;
 
-  final Map<WalletType, int> _maxMemoLengths = {
-    WalletType.zcash: 512,
-  };
+  final Map<WalletType, int> _maxMemoLengths = {};
 
   @computed
   int get maxMemoLength => _maxMemoLengths[wallet.type] ?? 9999999;
@@ -1366,77 +1210,7 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
   ) {
     String errorMessage = error.toString();
 
-    if (walletType == WalletType.solana) {
-      if (errorMessage.contains('insufficient lamports')) {
-        double solValueNeeded = 0.0;
-
-        // Regular expression to match the number after "need". This shows the exact lamports the user needs to perform the transaction.
-        RegExp regExp = RegExp(r'need (\d+)');
-
-        // Find the match
-        Match? match = regExp.firstMatch(errorMessage);
-
-        if (match != null) {
-          String neededAmount = match.group(1)!;
-          final lamportsNeeded = int.tryParse(neededAmount);
-
-          // 5000 lamport used here is the constant for sending a transaction on solana
-          int lamportsPerSol = 1000000000;
-
-          solValueNeeded =
-              lamportsNeeded != null ? ((lamportsNeeded + 5000) / lamportsPerSol) : 0.0;
-          return S.current.insufficient_lamports(solValueNeeded.toString());
-        } else {
-          return S.current.insufficient_lamport_for_tx;
-        }
-      }
-
-      if (error is SignNativeTokenTransactionRentException) {
-        return S.current.solana_sign_native_transaction_rent_exception;
-      }
-
-      if (error is CreateAssociatedTokenAccountException) {
-        return "${S.current.solana_create_associated_token_account_exception} ${S.current.added_message_for_ata_error}";
-      }
-
-      if (error is SignSPLTokenTransactionRentException) {
-        return S.current.solana_sign_spl_token_transaction_rent_exception;
-      }
-
-      if (error is NoAssociatedTokenAccountException) {
-        return S.current.solana_no_associated_token_account_exception;
-      }
-
-      if (errorMessage.contains('found no record of a prior credit')) {
-        return S.current.insufficient_funds_for_tx;
-      }
-
-      if (errorMessage.contains('insufficient funds for rent') &&
-          errorMessage.contains('Transaction simulation failed') &&
-          errorMessage.contains('account_index')) {
-        final accountIndexMatch = RegExp(r'account_index: (\d+)').firstMatch(errorMessage);
-        if (accountIndexMatch != null) {
-          return int.parse(accountIndexMatch.group(1)!) == 0
-              ? S.current.insufficientFundsForRentError
-              : S.current.insufficientFundsForRentErrorReceiver;
-        }
-      }
-
-      if (errorMessage.contains('invalid account data')) {
-        return S.current.solana_invalid_data_message;
-      }
-
-      if (errorMessage.contains('Blockhash not found') ||
-          errorMessage.contains('BlockhashNotFound') ||
-          errorMessage.contains('BlockhashMNotFound')) {
-        return 'Transaction failed because its recent blockhash expired. '
-            'Please retry your send; if this keeps happening, try again in '
-            'a few seconds or switch to a different Solana node.';
-      }
-
-      return errorMessage;
-    }
-    if (isEVMWallet || walletType == WalletType.haven) {
+    if (isEVMWallet) {
       if (errorMessage.contains('gas required exceeds allowance')) {
         return S.current.gas_exceeds_allowance;
       }
@@ -1476,16 +1250,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
       }
 
       return errorMessage;
-    }
-
-    if (walletType == WalletType.tron) {
-      if (errorMessage.contains('balance is not sufficient')) {
-        return S.current.do_not_have_enough_gas_asset(currency.toString());
-      }
-
-      if (errorMessage.contains('Transaction expired')) {
-        return S.current.tx_retry_message;
-      }
     }
 
     if (error is TransactionWrongBalanceException) {

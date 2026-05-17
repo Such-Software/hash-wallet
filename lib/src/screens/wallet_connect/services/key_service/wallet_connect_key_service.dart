@@ -1,6 +1,5 @@
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/src/screens/wallet_connect/services/key_service/chain_key_model.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';
@@ -24,8 +23,6 @@ class KeyServiceImpl implements WalletConnectKeyService {
       case WalletType.arbitrum:
       case WalletType.bsc:
         return evm!.getPrivateKey(wallet);
-      case WalletType.solana:
-        return solana!.getPrivateKey(wallet);
       default:
         return '';
     }
@@ -39,8 +36,6 @@ class KeyServiceImpl implements WalletConnectKeyService {
       case WalletType.arbitrum:
       case WalletType.bsc:
         return evm!.getPublicKey(wallet);
-      case WalletType.solana:
-        return solana!.getPublicKey(wallet);
       default:
         return '';
     }

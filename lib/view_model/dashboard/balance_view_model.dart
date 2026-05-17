@@ -7,9 +7,6 @@ import 'package:hash_wallet/entities/sort_balance_types.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/evm/evm.dart';
-import 'package:hash_wallet/solana/solana.dart';
-import 'package:hash_wallet/tron/tron.dart';
-import 'package:hash_wallet/zano/zano.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/transaction_history.dart';
 import 'package:cw_core/wallet_base.dart';
@@ -122,9 +119,7 @@ abstract class BalanceViewModelBase with Store {
   bool get isFiatDisabled => settingsStore.fiatApiMode == FiatApiMode.disabled;
 
   @computed
-  bool get isHomeScreenSettingsEnabled =>
-      isEVMCompatibleChain(wallet.type) ||
-      [WalletType.solana, WalletType.tron, WalletType.zano].contains(wallet.type);
+  bool get isHomeScreenSettingsEnabled => isEVMCompatibleChain(wallet.type);
 
   @computed
   bool get isEVMCompatible => isEVMCompatibleChain(wallet.type);
@@ -151,12 +146,7 @@ abstract class BalanceViewModelBase with Store {
 
     final typeFormatted = walletTypeToString(wallet.type);
 
-    switch (wallet.type) {
-      case WalletType.haven:
-        return '$typeFormatted Assets';
-      default:
-        return typeFormatted;
-    }
+    return typeFormatted;
   }
 
   @computed
@@ -184,14 +174,11 @@ abstract class BalanceViewModelBase with Store {
   @computed
   String get additionalBalanceLabel {
     switch (wallet.type) {
-      case WalletType.haven:
       case WalletType.ethereum:
       case WalletType.polygon:
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-      case WalletType.solana:
-      case WalletType.tron:
         return S.current.xmr_full_balance;
       case WalletType.nano:
       case WalletType.banano:
@@ -346,9 +333,6 @@ abstract class BalanceViewModelBase with Store {
   bool _hasAdditionalBalanceForWalletType(WalletType type) => [
         WalletType.monero,
         WalletType.wownero,
-        WalletType.zano,
-        WalletType.decred,
-        WalletType.zcash
       ].contains(type);
 
   String _getFormattedCryptoAmount(CryptoCurrency cryptoCurrency, BigInt? amount) {
@@ -383,7 +367,7 @@ abstract class BalanceViewModelBase with Store {
         if (a.asset == wallet.currency) return -1;
       }
 
-      final isTokenWallet = isEVMCompatibleChain(wallet.type) || wallet.type == WalletType.solana;
+      final isTokenWallet = isEVMCompatibleChain(wallet.type);
 
       if (isTokenWallet) {
         final aIsToken = a.asset is Erc20Token || a.asset is SPLToken;
@@ -434,20 +418,8 @@ abstract class BalanceViewModelBase with Store {
   }
 
   String? getTokenAddressBasedOnWallet(CryptoCurrency asset) {
-    if (wallet.type == WalletType.tron) {
-      return tron!.getTokenAddress(asset);
-    }
-
-    if (wallet.type == WalletType.solana) {
-      return solana!.getTokenAddress(asset);
-    }
-
     if (isEVMCompatibleChain(wallet.type) && asset is Erc20Token) {
       return evm!.getTokenAddress(asset);
-    }
-
-    if (wallet.type == WalletType.zano) {
-      return zano!.getZanoAssetAddress(asset);
     }
 
     return null;
@@ -532,13 +504,6 @@ abstract class BalanceViewModelBase with Store {
   }
 
   String _formatterAsset(CryptoCurrency asset) {
-    final assetString = asset.toString();
-    if (wallet.type == WalletType.haven &&
-        asset != CryptoCurrency.xhv &&
-        assetString[0].toUpperCase() == 'X') {
-      return assetString.replaceFirst('X', 'x');
-    }
-
     return appStore.amountParsingProxy.getCryptoSymbol(asset);
   }
 }

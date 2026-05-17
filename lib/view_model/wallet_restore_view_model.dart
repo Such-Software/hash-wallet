@@ -8,18 +8,13 @@ import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/nano/nano.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/store/app_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/view_model/restore/restore_mode.dart';
 import 'package:hash_wallet/view_model/restore/restore_wallet.dart';
 import 'package:hash_wallet/view_model/seed_settings_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_creation_vm.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_credentials.dart';
 import 'package:cw_core/wallet_info.dart';
@@ -45,23 +40,17 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
         break;
       case WalletType.nano:
       case WalletType.banano:
-      case WalletType.solana:
-      case WalletType.tron:
       case WalletType.wownero:
-      case WalletType.haven:
       case WalletType.ethereum:
       case WalletType.polygon:
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-      case WalletType.decred:
       case WalletType.bitcoin:
       case WalletType.litecoin:
-      case WalletType.zcash:
         availableModes = [WalletRestoreMode.seed, WalletRestoreMode.keys];
         break;
       case WalletType.bitcoinCash:
-      case WalletType.zano:
       case WalletType.dogecoin:
         availableModes = [WalletRestoreMode.seed];
         break;
@@ -77,14 +66,13 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
   }
 
   static const moneroSeedMnemonicLength = 25;
-  static const decredSeedMnemonicLength = 15;
 
   late List<WalletRestoreMode> availableModes;
   late final bool hasSeedLanguageSelector =
-      [WalletType.monero, WalletType.haven, WalletType.wownero].contains(type);
+      [WalletType.monero, WalletType.wownero].contains(type);
 
   late final bool hasBlockchainHeightSelector =
-      [WalletType.monero, WalletType.haven, WalletType.wownero, WalletType.zcash].contains(type);
+      [WalletType.monero, WalletType.wownero].contains(type);
 
   late final bool hasRestoreFromPrivateKey = [
     WalletType.ethereum,
@@ -94,13 +82,10 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
     WalletType.bsc,
     WalletType.nano,
     WalletType.banano,
-    WalletType.solana,
-    WalletType.tron,
-    WalletType.zcash,
   ].contains(type);
 
   late final bool onlyViewKeyRestore =
-      [if (FeatureFlag.hasBitcoinViewOnly) WalletType.bitcoin, WalletType.decred].contains(type);
+      [if (FeatureFlag.hasBitcoinViewOnly) WalletType.bitcoin].contains(type);
 
   final RestoredWallet? restoredWallet;
   final HardwareWalletType? hardwareWalletType;
@@ -177,20 +162,6 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
             password: password,
             passphrase: passphrase,
           );
-        case WalletType.solana:
-          return solana!.createSolanaRestoreWalletFromSeedCredentials(
-            name: name,
-            mnemonic: seed,
-            password: password,
-            passphrase: passphrase,
-          );
-        case WalletType.tron:
-          return tron!.createTronRestoreWalletFromSeedCredentials(
-            name: name,
-            mnemonic: seed,
-            password: password,
-            passphrase: passphrase,
-          );
         case WalletType.wownero:
           return wownero!.createWowneroRestoreWalletFromSeedCredentials(
             name: name,
@@ -199,30 +170,7 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
             passphrase: passphrase ?? '',
             height: height,
           );
-        case WalletType.zano:
-          return zano!.createZanoRestoreWalletFromSeedCredentials(
-            name: name,
-            password: password,
-            height: height,
-            passphrase: passphrase ?? '',
-            mnemonic: seed,
-          );
-        case WalletType.decred:
-          return decred!.createDecredRestoreWalletFromSeedCredentials(
-            name: name,
-            mnemonic: seed,
-            password: password,
-          );
-        case WalletType.zcash:
-          return zcash!.createZcashRestoreWalletFromSeedCredentials(
-            name: name,
-            mnemonic: seed,
-            password: password,
-            passphrase: passphrase,
-            height: height,
-          );
         case WalletType.none:
-        case WalletType.haven:
           break;
       }
     }
@@ -282,18 +230,6 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
             password: password,
             privateKey: options['private_key'] as String,
           );
-        case WalletType.solana:
-          return solana!.createSolanaRestoreWalletFromPrivateKey(
-            name: name,
-            password: password,
-            privateKey: options['private_key'] as String,
-          );
-        case WalletType.tron:
-          return tron!.createTronRestoreWalletFromPrivateKey(
-            name: name,
-            password: password,
-            privateKey: options['private_key'] as String,
-          );
         case WalletType.wownero:
           return wownero!.createWowneroRestoreWalletFromKeysCredentials(
             name: name,
@@ -303,19 +239,6 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
             address: address!,
             password: password,
             language: 'English',
-          );
-        case WalletType.decred:
-          return decred!.createDecredRestoreWalletFromPubkeyCredentials(
-            name: name,
-            password: password,
-            pubkey: viewKey!,
-          );
-        case WalletType.zcash:
-          return zcash!.createZcashRestoreWalletFromPrivateKey(
-            name: name,
-            privateKey: options['private_key'] as String,
-            password: password,
-            height: height
           );
         default:
           break;

@@ -111,14 +111,11 @@ abstract class NodeCreateOrEditViewModelBase with Store {
   String socksProxyAddress;
 
   @computed
-  bool get isReady =>
-      (address.isNotEmpty) ||
-      walletType == WalletType.decred; // Allow an empty address.
+  bool get isReady => address.isNotEmpty;
 
   bool get hasAuthCredentials =>
       walletType == WalletType.monero ||
-      walletType == WalletType.wownero ||
-      walletType == WalletType.haven;
+      walletType == WalletType.wownero;
 
   bool get hasPathSupport {
     switch (walletType) {
@@ -127,22 +124,16 @@ abstract class NodeCreateOrEditViewModelBase with Store {
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-      case WalletType.solana:
       case WalletType.banano:
       case WalletType.nano:
-      case WalletType.tron:
         return true;
       case WalletType.none:
       case WalletType.monero:
       case WalletType.wownero:
-      case WalletType.haven:
       case WalletType.litecoin:
       case WalletType.bitcoinCash:
       case WalletType.bitcoin:
       case WalletType.dogecoin:
-      case WalletType.zano:
-      case WalletType.decred:
-      case WalletType.zcash:
         return false;
     }
   }

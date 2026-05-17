@@ -45,7 +45,6 @@ abstract class PrivacySettingsViewModelBase with Store {
         WalletType.litecoin,
         WalletType.bitcoinCash,
         WalletType.dogecoin,
-        WalletType.decred
       ].contains(_wallet.type);
 
   @computed
@@ -55,7 +54,6 @@ abstract class PrivacySettingsViewModelBase with Store {
         WalletType.litecoin,
         WalletType.monero,
         WalletType.wownero,
-        WalletType.decred,
         WalletType.bitcoinCash,
         WalletType.dogecoin
       ].contains(_wallet.type);

@@ -24,7 +24,6 @@ import 'package:hash_wallet/exchange/exchange_trade_state.dart';
 import 'package:hash_wallet/exchange/limits.dart';
 import 'package:hash_wallet/exchange/limits_state.dart';
 import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/jupiter_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/letsexchange_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/changenow_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
@@ -302,7 +301,7 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
       ].contains(wallet.type);
 
   bool get hideAddressAfterExchange =>
-      [WalletType.monero, WalletType.wownero, WalletType.zcash].contains(wallet.type);
+      [WalletType.monero, WalletType.wownero].contains(wallet.type);
 
   bool _useTorOnly;
   final ExchangeTemplateStore _exchangeTemplateStore;
@@ -1451,10 +1450,6 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
         depositCurrency = CryptoCurrency.doge;
         receiveCurrency = CryptoCurrency.xmr;
         break;
-      case WalletType.haven:
-        depositCurrency = CryptoCurrency.xhv;
-        receiveCurrency = CryptoCurrency.btc;
-        break;
       case WalletType.ethereum:
         depositCurrency = CryptoCurrency.eth;
         receiveCurrency = CryptoCurrency.xmr;
@@ -1483,28 +1478,8 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
         depositCurrency = CryptoCurrency.bnb;
         receiveCurrency = CryptoCurrency.xmr;
         break;
-      case WalletType.solana:
-        depositCurrency = CryptoCurrency.sol;
-        receiveCurrency = CryptoCurrency.xmr;
-        break;
-      case WalletType.tron:
-        depositCurrency = CryptoCurrency.trx;
-        receiveCurrency = CryptoCurrency.xmr;
-        break;
       case WalletType.wownero:
         depositCurrency = CryptoCurrency.wow;
-        receiveCurrency = CryptoCurrency.xmr;
-        break;
-      case WalletType.zano:
-        depositCurrency = CryptoCurrency.zano;
-        receiveCurrency = CryptoCurrency.xmr;
-        break;
-      case WalletType.decred:
-        depositCurrency = CryptoCurrency.dcr;
-        receiveCurrency = CryptoCurrency.xmr;
-        break;
-      case WalletType.zcash:
-        depositCurrency = CryptoCurrency.zec;
         receiveCurrency = CryptoCurrency.xmr;
         break;
       case WalletType.none:

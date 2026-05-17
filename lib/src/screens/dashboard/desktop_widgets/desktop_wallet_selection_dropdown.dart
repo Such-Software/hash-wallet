@@ -35,7 +35,6 @@ class _DesktopWalletSelectionDropDownState extends State<DesktopWalletSelectionD
   final bitcoinIcon = Image.asset('assets/images/crypto/bitcoin.webp', height: 24, width: 24);
   final tBitcoinIcon = Image.asset('assets/images/tbtc.png', height: 24, width: 24);
   final litecoinIcon = Image.asset('assets/images/crypto/litecoin.webp', height: 24, width: 24);
-  final havenIcon = Image.asset('assets/images/haven_logo.webp', height: 24, width: 24);
   final ethereumIcon = Image.asset('assets/images/crypto/ethereum.webp', height: 24, width: 24);
   final polygonIcon = Image.asset('assets/images/crypto/polygon.webp', height: 24, width: 24);
   final bitcoinCashIcon = Image.asset('assets/images/crypto/bitcoin-cash.webp', height: 24, width: 24);
@@ -44,13 +43,8 @@ class _DesktopWalletSelectionDropDownState extends State<DesktopWalletSelectionD
   final bscIcon = Image.asset('assets/images/crypto/BNB.webp', height: 24, width: 24);
   final nanoIcon = Image.asset('assets/images/crypto/nano.webp', height: 24, width: 24);
   final bananoIcon = Image.asset('assets/images/crypto/nano.webp', height: 24, width: 24);
-  final solanaIcon = Image.asset('assets/images/crypto/solana.webp', height: 24, width: 24);
-  final tronIcon = Image.asset('assets/images/crypto/tron.webp', height: 24, width: 24);
   final wowneroIcon = Image.asset('assets/images/crypto/wownero.webp', height: 24, width: 24);
-  final zanoIcon = Image.asset('assets/images/crypto/zano.webp', height: 24, width: 24);
-  final decredIcon = Image.asset('assets/images/crypto/decred.webp', height: 24, width: 24);
   final dogeIcon = Image.asset('assets/images/crypto/dogecoin.webp', height: 24, width: 24);
-  final zcashIcon = Image.asset('assets/images/crypto/zcash.webp', height: 24, width: 24);
   final nonWalletTypeIcon = Image.asset('assets/images/close.png', height: 24, width: 24);
 
   Image _newWalletImage(BuildContext context) => Image.asset(
@@ -167,8 +161,6 @@ class _DesktopWalletSelectionDropDownState extends State<DesktopWalletSelectionD
         return wowneroIcon;
       case WalletType.litecoin:
         return litecoinIcon;
-      case WalletType.haven:
-        return havenIcon;
       case WalletType.ethereum:
         return ethereumIcon;
       case WalletType.bitcoinCash:
@@ -179,14 +171,6 @@ class _DesktopWalletSelectionDropDownState extends State<DesktopWalletSelectionD
         return bananoIcon;
       case WalletType.polygon:
         return polygonIcon;
-      case WalletType.solana:
-        return solanaIcon;
-      case WalletType.tron:
-        return tronIcon;
-      case WalletType.zano:
-        return zanoIcon;
-      case WalletType.decred:
-        return decredIcon;
       case WalletType.dogecoin:
         return dogeIcon;
       case WalletType.base:
@@ -195,8 +179,6 @@ class _DesktopWalletSelectionDropDownState extends State<DesktopWalletSelectionD
         return arbitrumIcon;
       case WalletType.bsc:
         return bscIcon;
-      case WalletType.zcash:
-        return zcashIcon;
       case WalletType.none:
         return nonWalletTypeIcon;
     }

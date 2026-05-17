@@ -1,5 +1,4 @@
 import 'package:hash_wallet/bitcoin/bitcoin.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/receive_page_option.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';
@@ -14,11 +13,7 @@ abstract class ReceiveOptionViewModelBase with Store {
       : selectedReceiveOption = initialPageOption ??
             ([WalletType.bitcoin, WalletType.litecoin].contains(_wallet.type)
                 ? bitcoin!.getSelectedAddressType(_wallet)
-                : (_wallet.type == WalletType.decred && _wallet.isTestnet)
-                    ? ReceivePageOption.testnet
-                    : _wallet.type == WalletType.zcash
-                        ? zcash!.getSelectedAddressType(_wallet)
-                        : ReceivePageOption.mainnet);
+                : ReceivePageOption.mainnet);
 
   final WalletBase _wallet;
 

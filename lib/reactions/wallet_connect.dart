@@ -1,7 +1,5 @@
 import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/eth/evm_chain_id.dart';
 import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/eth/evm_supported_methods.dart';
-import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/solana/solana_chain_id.dart';
-import 'package:hash_wallet/src/screens/wallet_connect/services/chain_service/solana/solana_supported_methods.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:hash_wallet/evm/evm.dart';
 
@@ -40,8 +38,6 @@ bool isNFTACtivatedChain(WalletType walletType, {int? chainId}) {
   }
 
   switch (walletType) {
-    case WalletType.solana:
-      return true;
     default:
       return false;
   }
@@ -49,7 +45,6 @@ bool isNFTACtivatedChain(WalletType walletType, {int? chainId}) {
 
 bool isWalletConnectCompatibleChain(WalletType walletType) {
   switch (walletType) {
-    case WalletType.solana:
     case WalletType.polygon:
     case WalletType.ethereum:
     case WalletType.base:
@@ -77,8 +72,6 @@ String getChainNameSpaceAndIdBasedOnWalletType(WalletType walletType, {int? chai
       return EVMChainId.arbitrum.chain();
     case WalletType.bsc:
       return EVMChainId.bsc.chain();
-    case WalletType.solana:
-      return SolanaChainId.mainnet.chain();
     default:
       return '';
   }
@@ -92,18 +85,12 @@ List<String> getChainSupportedMethodsOnWalletType(WalletType walletType) {
     case WalletType.arbitrum:
     case WalletType.bsc:
       return EVMSupportedMethods.values.map((e) => e.name).toList();
-    case WalletType.solana:
-      return SolanaSupportedMethods.values.map((e) => e.name).toList();
     default:
       return [];
   }
 }
 
 String getChainNameBasedOnWalletType(WalletType walletType, {int? chainId}) {
-  if (walletType == WalletType.solana) {
-    return 'mainnet';
-  }
-
   if (chainId != null) {
     return evm!.getChainNameByChainId(chainId);
   }
@@ -112,10 +99,6 @@ String getChainNameBasedOnWalletType(WalletType walletType, {int? chainId}) {
 }
 
 String getTokenNameBasedOnWalletType(WalletType walletType, {int? chainId}) {
-  if (walletType == WalletType.solana) {
-    return 'SOL';
-  }
-
   if (chainId != null) {
     return evm!.getTokenNameByChainId(chainId);
   }

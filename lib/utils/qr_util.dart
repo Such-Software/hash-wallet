@@ -12,12 +12,6 @@ String getQrImage(WalletType type) {
       return 'assets/images/arbitrum_chain_QR.svg';
     case WalletType.bsc:
       return 'assets/images/bnb_chain_QR.svg';
-    case WalletType.solana:
-      return 'assets/images/sol_chain_qr.svg';
-    case WalletType.tron:
-      return 'assets/images/trx_chain_qr.svg';
-    case WalletType.zano:
-      return 'assets/images/zano_chain_qr.svg';
     case WalletType.monero:
       return 'assets/images/xmr_chain_qr.svg';
     case WalletType.wownero:
@@ -30,14 +24,9 @@ String getQrImage(WalletType type) {
       return 'assets/images/bch_chain_qr.svg';
     case WalletType.nano:
       return 'assets/images/xno_chain_qr.svg';
-    case WalletType.decred:
-      return 'assets/images/dcr_chain_qr.svg';
     case WalletType.dogecoin:
       return 'assets/images/doge_chain_qr.svg';
-    case WalletType.zcash:
-      return 'assets/images/zec_icon_qr.svg';
     case WalletType.banano:
-    case WalletType.haven:
     case WalletType.none:
       return 'assets/images/qr-cake.png';
   }
@@ -55,12 +44,6 @@ String getChainMonoImage(WalletType type) {
       return 'assets/images/arbitrum_chain_mono.svg';
     case WalletType.bsc:
       return 'assets/images/bnb_chain_mono.svg';
-    case WalletType.solana:
-      return 'assets/images/sol_chain_mono.svg';
-    case WalletType.tron:
-      return 'assets/images/trx_chain_mono.svg';
-    case WalletType.zano:
-      return 'assets/images/zano_chain_mono.svg';
     default:
       return 'assets/images/eth_chain_mono.svg';
   }

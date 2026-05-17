@@ -82,24 +82,6 @@ abstract class PaymentViewModelBase with Store {
         return PaymentFlowResult.currentWalletCompatible();
       }
 
-      if (detectedWalletType == WalletType.solana) {
-        final compatibleWallets = await getWalletsByType(WalletType.solana);
-        return PaymentFlowResult.solanaTokenSelection(
-          detectionResult,
-          compatibleWallets: compatibleWallets,
-          wallet: compatibleWallets.isNotEmpty ? compatibleWallets.first : null,
-        );
-      }
-
-      if (detectedWalletType == WalletType.tron) {
-        final compatibleWallets = await getWalletsByType(WalletType.tron);
-        return PaymentFlowResult.tronTokenSelection(
-          detectionResult,
-          compatibleWallets: compatibleWallets,
-          wallet: compatibleWallets.isNotEmpty ? compatibleWallets.first : null,
-        );
-      }
-
       if (isEVMCompatibleChain(detectedWalletType!)) {
         return PaymentFlowResult.evmNetworkSelection(detectionResult);
       }
@@ -186,34 +168,6 @@ class PaymentFlowResult {
     );
   }
 
-  /// Solana address detected - needs token selection
-  factory PaymentFlowResult.solanaTokenSelection(
-    AddressDetectionResult addressDetectionResult, {
-    List<WalletInfo>? compatibleWallets,
-    WalletInfo? wallet,
-  }) =>
-      PaymentFlowResult._(
-        type: PaymentFlowType.solanaTokenSelection,
-        addressDetectionResult: addressDetectionResult,
-        walletType: WalletType.solana,
-        wallets: compatibleWallets ?? [],
-        wallet: wallet,
-      );
-
-  /// Tron address detected - needs token selection
-  factory PaymentFlowResult.tronTokenSelection(
-    AddressDetectionResult addressDetectionResult, {
-    List<WalletInfo>? compatibleWallets,
-    WalletInfo? wallet,
-  }) =>
-      PaymentFlowResult._(
-        type: PaymentFlowType.tronTokenSelection,
-        addressDetectionResult: addressDetectionResult,
-        walletType: WalletType.tron,
-        wallets: compatibleWallets ?? [],
-        wallet: wallet,
-      );
-
   /// Current wallet is compatible
   factory PaymentFlowResult.currentWalletCompatible() =>
       PaymentFlowResult._(type: PaymentFlowType.currentWalletCompatible);
@@ -292,9 +246,7 @@ class PaymentFlowResult {
       PaymentFlowResult._(type: PaymentFlowType.incompatible, message: message);
 
   CryptoCurrency? get detectedCurrency {
-    if (type == PaymentFlowType.evmNetworkSelection ||
-        type == PaymentFlowType.solanaTokenSelection ||
-        type == PaymentFlowType.tronTokenSelection) {
+    if (type == PaymentFlowType.evmNetworkSelection) {
       return addressDetectionResult?.detectedCurrency;
     }
     if (walletType != null) {
@@ -314,8 +266,6 @@ enum PaymentFlowType {
   multipleWallets,
   noWallets,
   evmNetworkSelection,
-  solanaTokenSelection,
-  tronTokenSelection,
   error,
   incompatible,
 }

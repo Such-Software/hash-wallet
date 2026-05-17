@@ -1,11 +1,8 @@
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/src/screens/transaction_details/address_list_item.dart';
 import 'package:hash_wallet/src/screens/transaction_details/confirmations_list_item.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/core/address_validator.dart';
-import 'package:hash_wallet/tron/tron.dart';
-import 'package:hash_wallet/zano/zano.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
@@ -71,8 +68,7 @@ class TxDetailRowDefinition {
         keyString: "standard_list_item_transaction_details_height_key",
         title: S.current.transaction_details_height,
         valueGetter: (vm) => vm.transactionInfo.height?.toString() ?? "",
-        applicable: (vm) => !([WalletType.solana, WalletType.tron].contains(vm.wallet.type) &&
-            !isLightning(vm.transactionInfo))),
+        applicable: (vm) => !isLightning(vm.transactionInfo)),
 
 
     TxDetailRowDefinition(
@@ -89,7 +85,7 @@ class TxDetailRowDefinition {
         title: S.current.confirmations,
         valueGetter: (vm) => "${vm.transactionInfo.confirmations}/${vm.neededConfirmations}",
         applicable: (vm) =>
-            [...electrumWalletTypes, ...evmWalletTypes, WalletType.zcash, WalletType.monero]
+            [...electrumWalletTypes, ...evmWalletTypes, WalletType.monero]
                 .contains(vm.wallet.type) &&
             !isLightning(vm.transactionInfo),
         listItemBuilder: ConfirmationsListItem.new),
@@ -113,8 +109,6 @@ class TxDetailRowDefinition {
               ret = (bitcoin!.getTransactionAddresses(vm.wallet, vm.transactionInfo) ?? [])
                       .firstOrNull ??
                   "";
-            case WalletType.tron:
-              ret = tron!.getTronBase58Address(vm.transactionInfo.to!, vm.wallet);
             default:
               break;
           }
@@ -127,7 +121,7 @@ class TxDetailRowDefinition {
         applicable: (vm) =>
             vm.showRecipientAddress &&
             (vm.transactionInfo.to != null ||
-                [WalletType.monero, WalletType.tron].contains(vm.wallet.type) ||
+                [WalletType.monero].contains(vm.wallet.type) ||
                 vm.wallet.type == WalletType.bitcoin &&
                     vm.transactionInfo.direction == TransactionDirection.incoming),
         listItemBuilder: AddressListItem.new),
@@ -136,14 +130,7 @@ class TxDetailRowDefinition {
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_details_source_address_key",
         title: S.current.transaction_details_source_address,
-        valueGetter: (vm) {
-          switch (vm.wallet.type) {
-            case WalletType.tron:
-              return tron!.getTronBase58Address(vm.transactionInfo.from!, vm.wallet);
-            default:
-              return vm.transactionInfo.from!;
-          }
-        },
+        valueGetter: (vm) => vm.transactionInfo.from!,
         applicable: (vm) => vm.transactionInfo.from != null,
         listItemBuilder: AddressListItem.new),
 
@@ -179,30 +166,6 @@ class TxDetailRowDefinition {
         title: S.current.confirmed_tx,
         valueGetter: (vm) => (vm.transactionInfo.confirmations > 0).toString(),
         applicable: (vm) => vm.wallet.type == WalletType.nano),
-
-
-    TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_memo_key",
-        title: S.current.memo,
-        valueGetter: (vm) => vm.transactionInfo.additionalInfo['memo'] as String,
-        applicable: (vm) =>
-            vm.wallet.type == WalletType.zcash &&
-            vm.transactionInfo.additionalInfo["memo"] != null),
-
-
-    TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_asset_id_key",
-        title: "Asset ID",
-        valueGetter: (vm) =>
-            vm.transactionInfo.additionalInfo["assetId"] as String? ?? "Unknown asset id",
-        applicable: (vm) => vm.wallet.type == WalletType.zano),
-
-
-    TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_comment_key",
-        title: S.current.transaction_details_title,
-        valueGetter: (vm) => vm.transactionInfo.additionalInfo['comment'] as String? ?? "",
-        applicable: (vm) => vm.wallet.type == WalletType.zano),
 
 
     TxDetailRowDefinition(
@@ -304,12 +267,7 @@ abstract class TransactionDetailsViewModelBase with Store {
       return evm!.assetOfTransaction(wallet, transactionInfo);
     }
 
-    return switch (wallet.type) {
-      WalletType.solana => solana!.assetOfTransaction(wallet, transactionInfo),
-      WalletType.tron => tron!.assetOfTransaction(wallet, transactionInfo),
-      WalletType.zano => zano!.assetOfTransaction(wallet, transactionInfo) ?? CryptoCurrency.zano,
-      _ => walletTypeToCryptoCurrency(wallet.type)
-    };
+    return walletTypeToCryptoCurrency(wallet.type);
   }
 
 
@@ -317,8 +275,6 @@ abstract class TransactionDetailsViewModelBase with Store {
   String get formattedPendingStatus {
     switch (wallet.type) {
       case WalletType.monero:
-      case WalletType.haven:
-      case WalletType.zano:
         if (transactionInfo.confirmations >= 0 && transactionInfo.confirmations < 10) {
           return ' (${transactionInfo.confirmations}/10)';
         }
@@ -358,10 +314,8 @@ abstract class TransactionDetailsViewModelBase with Store {
   String get formattedStatus {
     if ([
       WalletType.monero,
-      WalletType.haven,
       WalletType.wownero,
       WalletType.litecoin,
-      WalletType.zano,
     ].contains(wallet.type)) {
       return formattedPendingStatus;
     }
@@ -372,8 +326,6 @@ abstract class TransactionDetailsViewModelBase with Store {
   int get neededConfirmations {
     switch (wallet.type) {
       case WalletType.monero:
-      case WalletType.haven:
-      case WalletType.zano:
         return 10;
       case WalletType.wownero:
         return 3;
@@ -423,8 +375,6 @@ abstract class TransactionDetailsViewModelBase with Store {
             : 'https://blockchair.com/litecoin/transaction/${txId}';
       case WalletType.bitcoinCash:
         return 'https://blockchair.com/bitcoin-cash/transaction/${txId}';
-      case WalletType.haven:
-        return 'https://explorer.havenprotocol.org/search?value=${txId}';
       case WalletType.ethereum:
         return 'https://etherscan.io/tx/${txId}';
       case WalletType.base:
@@ -439,20 +389,10 @@ abstract class TransactionDetailsViewModelBase with Store {
         return 'https://nanexplorer.com/nano/block/${txId}';
       case WalletType.banano:
         return 'https://nanexplorer.com/banano/block/${txId}';
-      case WalletType.solana:
-        return 'https://solscan.io/tx/${txId}';
-      case WalletType.tron:
-        return 'https://tronscan.org/#/transaction/${txId}';
       case WalletType.wownero:
         return 'https://explore.wownero.com/tx/${txId}';
-      case WalletType.zano:
-        return 'https://explorer.zano.org/transaction/${txId}';
-      case WalletType.decred:
-        return 'https://${wallet.isTestnet ? "testnet" : "dcrdata"}.decred.org/tx/${txId.split(':')[0]}';
       case WalletType.dogecoin:
         return 'https://blockchair.com/dogecoin/transaction/${txId}';
-      case WalletType.zcash:
-        return 'https://blockchair.com/zcash/transaction/${txId}';
       case WalletType.none:
         return '';
     }

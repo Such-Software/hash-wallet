@@ -1,8 +1,6 @@
 import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/core/validator.dart';
-import 'package:hash_wallet/solana/solana.dart';
-import 'package:hash_wallet/zano/zano.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/erc20_token.dart';
 
@@ -29,9 +27,7 @@ class AddressValidator extends TextValidator {
                         : LitecoinNetwork.mainnet,
                   );
                 }
-              : type == CryptoCurrency.zano
-                  ? zano?.validateAddress
-                  : null,
+              : null,
           pattern: getPattern(type, isTestnet: isTestnet),
           length: getLength(type),
         );
@@ -185,11 +181,6 @@ class AddressValidator extends TextValidator {
   static List<int>? getLength(CryptoCurrency type) {
     if (type is Erc20Token) {
       return [42];
-    }
-
-    if (solana != null) {
-      final length = solana!.getValidationLength(type);
-      if (length != null) return length;
     }
 
     switch (type) {

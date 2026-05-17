@@ -3,7 +3,6 @@ import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/widgets/address_text_field.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/view_model/dashboard/nft_view_model.dart';
-import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -97,39 +96,37 @@ class _ImportNFTPage extends BasePage {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
           ),
-          if (nftViewModel.appStore.wallet!.type != WalletType.solana) ...[
-            SizedBox(height: 48),
-            Text(
-              S.current.tokenID,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    height: 1,
-                  ),
-            ),
-            SizedBox(height: 8),
-            AddressTextField(
-              controller: tokenIDController,
-              options: [AddressTextFieldOption.paste],
-              onPushPasteButton: (context) async {
-                final clipboard = await Clipboard.getData('text/plain');
-                final tokenID = clipboard?.text ?? '';
+          SizedBox(height: 48),
+          Text(
+            S.current.tokenID,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  height: 1,
+                ),
+          ),
+          SizedBox(height: 8),
+          AddressTextField(
+            controller: tokenIDController,
+            options: [AddressTextFieldOption.paste],
+            onPushPasteButton: (context) async {
+              final clipboard = await Clipboard.getData('text/plain');
+              final tokenID = clipboard?.text ?? '';
 
-                if (tokenID.isNotEmpty) {
-                  tokenIDController.text = tokenID;
-                }
-              },
-              iconColor: Theme.of(context).colorScheme.primary,
-              placeholder: S.current.enterTokenID,
-              textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-              hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-            ),
-          ],
+              if (tokenID.isNotEmpty) {
+                tokenIDController.text = tokenID;
+              }
+            },
+            iconColor: Theme.of(context).colorScheme.primary,
+            placeholder: S.current.enterTokenID,
+            textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+            hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
           Spacer(),
           Observer(builder: (context) {
             return LoadingPrimaryButton(

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:cw_core/wallet_type.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -26,8 +25,6 @@ import 'package:hash_wallet/src/screens/wallet_connect/widgets/wc_session_auth_r
 import 'package:hash_wallet/store/app_store.dart';
 
 import 'bottom_sheet_service.dart';
-import 'chain_service/solana/solana_chain_id.dart';
-import 'chain_service/solana/solana_chain_service.dart';
 
 part 'walletkit_service.g.dart';
 
@@ -167,17 +164,6 @@ abstract class WalletKitServiceBase with Store {
       }
     }
 
-    if (appStore.wallet!.type == WalletType.solana) {
-      for (final cId in SolanaChainId.values) {
-        SolanaChainService(
-          reference: cId,
-          appStore: appStore,
-          wcKeyService: walletKeyService,
-          bottomSheetService: _bottomSheetHandler,
-          walletKit: _walletKit,
-        );
-      }
-    }
   }
 
   @action

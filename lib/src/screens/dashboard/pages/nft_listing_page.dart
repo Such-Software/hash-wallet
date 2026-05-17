@@ -3,10 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/dashboard/widgets/nft_tile_widget.dart';
-import 'package:hash_wallet/src/screens/dashboard/widgets/solana_nft_tile_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/view_model/dashboard/nft_view_model.dart';
-import 'package:cw_core/wallet_type.dart';
 
 class NFTListingPage extends StatefulWidget {
   final NFTViewModel nftViewModel;
@@ -78,8 +76,6 @@ class NFTListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        final isSolana = nftViewModel.appStore.wallet!.type == WalletType.solana;
-
         final emptyMessage = Center(
           child: Text(
             S.current.noNFTYet,
@@ -90,43 +86,23 @@ class NFTListWidget extends StatelessWidget {
           ),
         );
 
-        if (isSolana) {
-          if (nftViewModel.solanaNftAssetModels.isEmpty) return emptyMessage;
+        if (nftViewModel.nftAssetByWalletModels.isEmpty) return emptyMessage;
 
-          return Padding(
-            padding: EdgeInsets.only(
-                bottom:  64),
-            child: ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemCount: nftViewModel.solanaNftAssetModels.length,
-              itemBuilder: (context, index) {
-                final nftAsset = nftViewModel.solanaNftAssetModels[index];
-                return SolanaNFTTileWidget(nftAsset: nftAsset);
-              },
-            ),
-          );
-        } else {
-          if (nftViewModel.nftAssetByWalletModels.isEmpty) return emptyMessage;
-
-          return Padding(
-            padding: EdgeInsets.only(
-               bottom:  64),
-            child: ListView.separated(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemCount: nftViewModel.nftAssetByWalletModels.length,
-              itemBuilder: (context, index) {
-                final nftAsset = nftViewModel.nftAssetByWalletModels[index];
-                return NFTTileWidget(nftAsset: nftAsset);
-              },
-            ),
-          );
-        }
+        return Padding(
+          padding: EdgeInsets.only(
+             bottom:  64),
+          child: ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            itemCount: nftViewModel.nftAssetByWalletModels.length,
+            itemBuilder: (context, index) {
+              final nftAsset = nftViewModel.nftAssetByWalletModels[index];
+              return NFTTileWidget(nftAsset: nftAsset);
+            },
+          ),
+        );
       },
     );
   }

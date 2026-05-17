@@ -17,11 +17,8 @@ class ReceiveInfoBox extends StatelessWidget {
         return null;
       case WalletType.ethereum:
       case WalletType.base:
-      case WalletType.solana:
       case WalletType.arbitrum:
-      case WalletType.tron:
       case WalletType.polygon:
-      case WalletType.zano:
       case WalletType.bsc:
         if(autoGenerateSubaddressStatus == AutoGenerateSubaddressStatus.disabled)
           return null;

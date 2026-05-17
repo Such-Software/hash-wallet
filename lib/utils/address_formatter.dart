@@ -157,7 +157,6 @@ class AddressFormatter {
     switch (walletType) {
       case WalletType.monero:
       case WalletType.wownero:
-      case WalletType.zano:
         return 6;
       default:
         return 4;

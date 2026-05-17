@@ -9,7 +9,6 @@ import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/view_model/node_list/node_create_or_edit_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:cw_core/wallet_type.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobx/mobx.dart';
 
@@ -75,9 +74,7 @@ class NodeFormState extends State<NodeForm> {
                 keyValue: vm.nodeAddressUIKey,
                 label: S.current.node_address,
                 initialValue: vm.address,
-                validator: vm.walletType == WalletType.decred
-                    ? NodeAddressValidatorDecredBlankException()
-                    : NodeAddressValidator(),
+                validator: NodeAddressValidator(),
               ),
               if (vm.hasPathSupport)
                 ListItemTextField(

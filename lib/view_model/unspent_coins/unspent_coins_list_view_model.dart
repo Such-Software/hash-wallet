@@ -5,7 +5,6 @@ import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
 import 'package:hash_wallet/utils/exception_handler.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:hash_wallet/view_model/unspent_coins/unspent_coins_item.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
 import 'package:cw_core/balance.dart';
@@ -152,9 +151,6 @@ abstract class UnspentCoinsListViewModelBase with Store {
     if ([WalletType.bitcoin, WalletType.litecoin, WalletType.bitcoinCash, WalletType.dogecoin].contains(wallet.type)) {
       await bitcoin!.updateUnspents(wallet);
     }
-    if (wallet.type == WalletType.decred) {
-      decred!.updateUnspents(wallet);
-    }
     _updateUnspentCoinsInfo();
   }
 
@@ -169,8 +165,6 @@ abstract class UnspentCoinsListViewModelBase with Store {
       case WalletType.bitcoinCash:
       case WalletType.dogecoin:
         return bitcoin!.getUnspents(wallet, coinTypeToSpendFrom: coinTypeToSpendFrom);
-      case WalletType.decred:
-        return decred!.getUnspents(wallet);
       default:
         return List.empty();
     }
@@ -187,8 +181,6 @@ abstract class UnspentCoinsListViewModelBase with Store {
       case WalletType.bitcoinCash:
       case WalletType.dogecoin:
         return bitcoin!.getUnspents(wallet, coinTypeToSpendFrom: overrideCoinTypeToSpendFrom);
-      case WalletType.decred:
-        return decred!.getUnspents(wallet);
       default:
         return List.empty();
     }

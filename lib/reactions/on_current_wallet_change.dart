@@ -5,8 +5,6 @@ import 'package:hash_wallet/entities/fiat_api_mode.dart';
 import 'package:hash_wallet/entities/wallet_manager.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/solana/solana.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/utils/tor.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/sync_status.dart';
@@ -82,8 +80,7 @@ void startCurrentWalletChangeReaction(
           wallet.type == WalletType.bitcoin ||
           wallet.type == WalletType.litecoin ||
           wallet.type == WalletType.bitcoinCash ||
-          wallet.type == WalletType.dogecoin ||
-          wallet.type == WalletType.decred) {
+          wallet.type == WalletType.dogecoin) {
         _setAutoGenerateSubaddressStatus(wallet, settingsStore);
       }
 
@@ -111,11 +108,6 @@ void startCurrentWalletChangeReaction(
       if (isEVMCompatibleChain(wallet.type)) {
         await evm!.discoverAndAddWalletTokens(wallet);
       }
-
-      if (wallet.type == WalletType.solana) {
-        await solana!
-            .discoverAndAddWalletTokens(wallet);
-      }
     } catch (e) {
       printV(e.toString());
     }
@@ -138,14 +130,6 @@ void startCurrentWalletChangeReaction(
       Iterable<CryptoCurrency>? currencies;
       if (isEVMCompatibleChain(wallet.type)) {
         currencies = evm!.getERC20Currencies(appStore.wallet!).where((element) => element.enabled);
-      }
-      if (wallet.type == WalletType.solana) {
-        currencies =
-            solana!.getSPLTokenCurrencies(appStore.wallet!).where((element) => element.enabled);
-      }
-      if (wallet.type == WalletType.tron) {
-        currencies =
-            tron!.getTronTokenCurrencies(appStore.wallet!).where((element) => element.enabled);
       }
 
       if (currencies != null) {

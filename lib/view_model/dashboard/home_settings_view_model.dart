@@ -6,13 +6,10 @@ import 'package:hash_wallet/entities/erc20_token_info_moralis.dart';
 import 'package:hash_wallet/entities/sort_balance_types.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/solana/solana.dart';
 import 'package:hash_wallet/store/settings_store.dart';
-import 'package:hash_wallet/tron/tron.dart';
 import 'package:hash_wallet/utils/token_utilities.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:hash_wallet/view_model/dashboard/balance_view_model.dart';
-import 'package:hash_wallet/zano/zano.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/erc20_token.dart';
 import 'package:cw_core/utils/homoglyph_normalizer.dart';
@@ -112,24 +109,6 @@ abstract class HomeSettingsViewModelBase with Store {
         await evm!.addErc20Token(_balanceViewModel.wallet, evmToken);
       }
 
-      if (_balanceViewModel.wallet.type == WalletType.solana) {
-        final splToken = token.copyWith(enabled: true);
-        await solana!.addSPLToken(
-          _balanceViewModel.wallet,
-          splToken,
-          contractAddress,
-        );
-      }
-
-      if (_balanceViewModel.wallet.type == WalletType.tron) {
-        final tronToken = token.copyWith(enabled: true);
-        await tron!.addTronToken(_balanceViewModel.wallet, tronToken, contractAddress);
-      }
-
-      if (_balanceViewModel.wallet.type == WalletType.zano) {
-        await zano!.addZanoAssetById(_balanceViewModel.wallet, contractAddress);
-      }
-
       _updateTokensList();
       _updateFiatPrices(token);
     } catch (e) {
@@ -145,18 +124,6 @@ abstract class HomeSettingsViewModelBase with Store {
       return evm!.isTokenAlreadyAdded(_balanceViewModel.wallet, contractAddress);
     }
 
-    if (_balanceViewModel.wallet.type == WalletType.solana) {
-      return solana!.isTokenAlreadyAdded(_balanceViewModel.wallet, contractAddress);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.tron) {
-      return tron!.isTokenAlreadyAdded(_balanceViewModel.wallet, contractAddress);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.zano) {
-      return zano!.isTokenAlreadyAdded(_balanceViewModel.wallet, contractAddress);
-    }
-
     return false;
   }
 
@@ -168,16 +135,6 @@ abstract class HomeSettingsViewModelBase with Store {
         await evm!.deleteErc20Token(_balanceViewModel.wallet, token as Erc20Token);
       }
 
-      if (_balanceViewModel.wallet.type == WalletType.solana) {
-        await solana!.deleteSPLToken(_balanceViewModel.wallet, token);
-      }
-
-      if (_balanceViewModel.wallet.type == WalletType.tron) {
-        await tron!.deleteTronToken(_balanceViewModel.wallet, token);
-      }
-      if (_balanceViewModel.wallet.type == WalletType.zano) {
-        await zano!.deleteZanoAsset(_balanceViewModel.wallet, token);
-      }
       _updateTokensList();
     } finally {
       isDeletingToken = false;
@@ -223,25 +180,15 @@ abstract class HomeSettingsViewModelBase with Store {
       case WalletType.bsc:
         defaultTokenAddresses = evm!.getDefaultTokenContractAddresses(_balanceViewModel.wallet);
         break;
-      case WalletType.solana:
-        defaultTokenAddresses = solana!.getDefaultTokenContractAddresses();
-        break;
-      case WalletType.tron:
-        defaultTokenAddresses = tron!.getDefaultTokenContractAddresses();
-        break;
-      case WalletType.zano:
       case WalletType.banano:
       case WalletType.monero:
       case WalletType.none:
       case WalletType.bitcoin:
       case WalletType.litecoin:
-      case WalletType.haven:
       case WalletType.nano:
       case WalletType.wownero:
       case WalletType.bitcoinCash:
-      case WalletType.decred:
       case WalletType.dogecoin:
-      case WalletType.zcash:
         return false;
     }
 
@@ -264,25 +211,15 @@ abstract class HomeSettingsViewModelBase with Store {
       case WalletType.bsc:
         defaultTokenSymbols = evm!.getDefaultTokenSymbols(_balanceViewModel.wallet);
         break;
-      case WalletType.solana:
-        defaultTokenSymbols = solana!.getDefaultTokenSymbols();
-        break;
-      case WalletType.tron:
-        defaultTokenSymbols = tron!.getDefaultTokenSymbols();
-        break;
-      case WalletType.zano:
       case WalletType.banano:
       case WalletType.monero:
       case WalletType.none:
       case WalletType.bitcoin:
       case WalletType.litecoin:
-      case WalletType.haven:
       case WalletType.nano:
       case WalletType.wownero:
       case WalletType.bitcoinCash:
-      case WalletType.decred:
       case WalletType.dogecoin:
-      case WalletType.zcash:
         return false;
     }
 
@@ -393,18 +330,6 @@ abstract class HomeSettingsViewModelBase with Store {
       return await evm!.getErc20Token(_balanceViewModel.wallet, contractAddress);
     }
 
-    if (_balanceViewModel.wallet.type == WalletType.solana) {
-      return await solana!.getSPLToken(_balanceViewModel.wallet, contractAddress);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.tron) {
-      return await tron!.getTronToken(_balanceViewModel.wallet, contractAddress);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.zano) {
-      return await zano!.getZanoAsset(_balanceViewModel.wallet, contractAddress);
-    }
-
     return null;
   }
 
@@ -427,20 +352,6 @@ abstract class HomeSettingsViewModelBase with Store {
     if (isEVMCompatibleChain(_balanceViewModel.wallet.type)) {
       evm!.addErc20Token(_balanceViewModel.wallet, token as Erc20Token);
       if (!value) evm!.removeTokenTransactionsInHistory(_balanceViewModel.wallet, token);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.solana) {
-      final address = solana!.getTokenAddress(token);
-      solana!.addSPLToken(_balanceViewModel.wallet, token, address);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.tron) {
-      final address = tron!.getTokenAddress(token);
-      tron!.addTronToken(_balanceViewModel.wallet, token, address);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.zano) {
-      await zano!.changeZanoAssetAvailability(_balanceViewModel.wallet, token);
     }
 
     _refreshTokensList();
@@ -469,30 +380,6 @@ abstract class HomeSettingsViewModelBase with Store {
     if (isEVMCompatibleChain(_balanceViewModel.wallet.type)) {
       tokens.addAll(evm!
           .getERC20Currencies(_balanceViewModel.wallet)
-          .where((element) => _matchesSearchText(element))
-          .toList()
-        ..sort(_sortFunc));
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.solana) {
-      tokens.addAll(solana!
-          .getSPLTokenCurrencies(_balanceViewModel.wallet)
-          .where((element) => _matchesSearchText(element))
-          .toList()
-        ..sort(_sortFunc));
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.tron) {
-      tokens.addAll(tron!
-          .getTronTokenCurrencies(_balanceViewModel.wallet)
-          .where((element) => _matchesSearchText(element))
-          .toList()
-        ..sort(_sortFunc));
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.zano) {
-      tokens.addAll(zano!
-          .getZanoAssets(_balanceViewModel.wallet)
           .where((element) => _matchesSearchText(element))
           .toList()
         ..sort(_sortFunc));
@@ -564,23 +451,10 @@ abstract class HomeSettingsViewModelBase with Store {
   }
 
   String? getTokenAddressBasedOnWallet(CryptoCurrency asset) {
-    if (_balanceViewModel.wallet.type == WalletType.tron) {
-      return tron!.getTokenAddress(asset);
-    }
-
-    if (_balanceViewModel.wallet.type == WalletType.solana) {
-      return solana!.getTokenAddress(asset);
-    }
-
     if (isEVMCompatibleChain(_balanceViewModel.wallet.type)) {
       return evm!.getTokenAddress(asset);
     }
 
-    if (_balanceViewModel.wallet.type == WalletType.zano) {
-      return zano!.getZanoAssetAddress(asset);
-    }
-
-    // We return null if it's neither Tron, EVM or Solana wallet (which is actually impossible because we only display home settings for either of these four wallets).
     return null;
   }
 }

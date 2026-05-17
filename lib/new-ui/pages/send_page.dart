@@ -876,23 +876,6 @@ class _NewSendPageState extends State<NewSendPage> {
             fixedNetwork: result.walletType,
           );
           break;
-        case PaymentFlowType.solanaTokenSelection:
-          await _showTokenSelectionFlow(
-            widget.paymentViewModel,
-            widget.walletSwitcherViewModel,
-            paymentRequest,
-            fixedNetwork: WalletType.solana,
-          );
-          break;
-        case PaymentFlowType.tronTokenSelection:
-          await _showTokenSelectionFlow(
-            widget.paymentViewModel,
-            widget.walletSwitcherViewModel,
-            paymentRequest,
-            fixedNetwork: WalletType.tron,
-          );
-
-          break;
         case PaymentFlowType.currentWalletCompatible:
         case PaymentFlowType.error:
         case PaymentFlowType.incompatible:

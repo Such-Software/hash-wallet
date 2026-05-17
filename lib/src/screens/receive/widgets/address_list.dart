@@ -83,8 +83,7 @@ class _AddressListState extends State<AddressList> {
             walletAddressListViewModel: widget.addressListViewModel,
             trailingButtonTap: () async {
               if (widget.addressListViewModel.type == WalletType.monero ||
-                  widget.addressListViewModel.type == WalletType.wownero ||
-                  widget.addressListViewModel.type == WalletType.haven) {
+                  widget.addressListViewModel.type == WalletType.wownero) {
                 await showPopUp<void>(
                   context: context,
                   builder: (_) => getIt.get<MoneroAccountListPage>(),

@@ -4,8 +4,6 @@ import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/wownero/wownero.dart';
-import 'package:hash_wallet/zano/zano.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/transaction_direction.dart';
 import 'package:cw_core/transaction_info.dart';
 import 'package:cw_core/wallet_base.dart';
@@ -14,7 +12,6 @@ import 'package:cw_core/wallet_type.dart';
 import 'package:cw_monero/monero_wallet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
-import 'package:hash_wallet/decred/decred.dart';
 import 'package:polyseed/polyseed.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
@@ -38,7 +35,6 @@ abstract class WalletKeysViewModelBase with Store {
     });
 
     if (_wallet.type == WalletType.monero ||
-        _wallet.type == WalletType.haven ||
         _wallet.type == WalletType.wownero) {
       final accountTransactions = _getWalletTransactions(_wallet);
       if (accountTransactions.isNotEmpty) {
@@ -85,7 +81,7 @@ abstract class WalletKeysViewModelBase with Store {
   bool get isBitcoin => _wallet.type == WalletType.bitcoin;
 
   // this is incomplete, needs legacy seed toggle for XMR
-  bool get shouldShowHeightBox => [WalletType.bitcoin, WalletType.zcash].contains(_wallet.type);
+  bool get shouldShowHeightBox => [WalletType.bitcoin].contains(_wallet.type);
   final ObservableList<StandartListItem> items;
 
   @observable
@@ -160,19 +156,11 @@ abstract class WalletKeysViewModelBase with Store {
       case WalletType.wownero:
         keys = wownero!.getKeys(_wallet);
         break;
-      case WalletType.zano:
-        keys = zano!.getKeys(_wallet);
-        break;
-      case WalletType.zcash:
-        keys = zcash!.getKeys(_wallet);
-        break;
       case WalletType.ethereum:
       case WalletType.polygon:
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-      case WalletType.solana:
-      case WalletType.tron:
         items.addAll([
           if (_wallet.privateKey != null)
             StandartListItem(
@@ -200,12 +188,6 @@ abstract class WalletKeysViewModelBase with Store {
             ),
         ]);
         break;
-      case WalletType.decred:
-        final pubkey = decred!.pubkey(_appStore.wallet!);
-        items.addAll([
-          StandartListItem(title: S.current.view_key_public, value: pubkey),
-        ]);
-        break;
       case WalletType.bitcoin:
       case WalletType.litecoin:
       case WalletType.bitcoinCash:
@@ -228,7 +210,6 @@ abstract class WalletKeysViewModelBase with Store {
         ]);
         break;
       case WalletType.none:
-      case WalletType.haven:
         break;
     }
 
@@ -297,8 +278,6 @@ abstract class WalletKeysViewModelBase with Store {
         return 'bitcoin-wallet';
       case WalletType.litecoin:
         return 'litecoin-wallet';
-      case WalletType.haven:
-        return 'haven-wallet';
       case WalletType.ethereum:
         return 'ethereum-wallet';
       case WalletType.bitcoinCash:
@@ -315,20 +294,10 @@ abstract class WalletKeysViewModelBase with Store {
         return 'arbitrum-wallet';
       case WalletType.bsc:
         return 'bsc-wallet';
-      case WalletType.solana:
-        return 'solana-wallet';
-      case WalletType.tron:
-        return 'tron-wallet';
       case WalletType.wownero:
         return 'wownero-wallet';
-      case WalletType.zano:
-        return 'zano-wallet';
-      case WalletType.decred:
-        return 'decred-wallet';
       case WalletType.dogecoin:
         return 'dogecoin-wallet';
-      case WalletType.zcash:
-        return 'zcash-wallet';
       case WalletType.none:
         throw Exception('Unexpected wallet type: ${_wallet.type.toString()} for wallet keys');
     }
@@ -340,9 +309,6 @@ abstract class WalletKeysViewModelBase with Store {
     }
     if (_wallet.type == WalletType.wownero) {
       return wownero!.getRestoreHeight(_wallet)?.toString();
-    }
-    if (_wallet.type == WalletType.zcash) {
-      return zcash!.getKeys(_wallet)["restoreHeight"]?.toString();
     }
     if (_restoreHeightByTransactions != 0)
       return getRoundedRestoreHeight(_restoreHeightByTransactions);

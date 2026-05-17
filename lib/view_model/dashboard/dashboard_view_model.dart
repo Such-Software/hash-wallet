@@ -23,7 +23,6 @@ import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/store/dashboard/order_filter_store.dart';
 import 'package:hash_wallet/utils/device_info.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
-import 'package:hash_wallet/zcash/zcash.dart';
 import 'package:cw_core/transaction_direction.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:hash_wallet/utils/tor.dart';
@@ -208,8 +207,7 @@ abstract class DashboardViewModelBase with Store {
         cardDesigns = ObservableList<CardDesign>(),
         cardOrder = ObservableMap<int, int>(),
         wallet = appStore.wallet! {
-    showDecredInfoCard = wallet.type == WalletType.decred &&
-        (sharedPreferences.getBool(PreferencesKey.showDecredInfoCard) ?? true);
+    showDecredInfoCard = false;
 
     name = wallet.name;
     type = wallet.type;
@@ -306,8 +304,7 @@ abstract class DashboardViewModelBase with Store {
       _onWalletChange(wallet);
       _checkMweb();
       loadCardDesigns();
-      showDecredInfoCard = wallet?.type == WalletType.decred &&
-          sharedPreferences.getBool(PreferencesKey.showDecredInfoCard) != false;
+      showDecredInfoCard = false;
 
       tradeMonitor.stopTradeMonitoring();
       tradeMonitor.monitorActiveTrades(wallet!.id);
@@ -320,14 +317,12 @@ abstract class DashboardViewModelBase with Store {
         return 0;
       }
       int confirmations = 1;
-      if (![WalletType.solana, WalletType.tron].contains(wallet.type)) {
-        try {
-          confirmations =
-              appStore.wallet!.transactionHistory.transactions.values.first.confirmations +
-                  appStore.wallet!.transactionHistory.transactions.values.last.confirmations +
-                  1;
-        } catch (_) {}
-      }
+      try {
+        confirmations =
+            appStore.wallet!.transactionHistory.transactions.values.first.confirmations +
+                appStore.wallet!.transactionHistory.transactions.values.last.confirmations +
+                1;
+      } catch (_) {}
       return length * confirmations;
     }, _transactionDisposerCallback, delay: 300);
 
@@ -376,9 +371,6 @@ abstract class DashboardViewModelBase with Store {
     if ([
       WalletType.monero,
       WalletType.wownero,
-      WalletType.decred,
-      WalletType.zcash,
-      WalletType.zano
     ].contains(wallet.type)) {
       return true;
     }
@@ -782,11 +774,7 @@ abstract class DashboardViewModelBase with Store {
   }
 
   @computed
-  bool get showZcashMissingFundsCard {
-    if (wallet.type != WalletType.zcash) return false;
-    if (!settingsStore.showZcashMissingFundsCard) return false;
-    return zcash!.showMissingFundsCard(wallet);
-  }
+  bool get showZcashMissingFundsCard => false;
 
   @computed
   bool get hasSilentPayments =>
@@ -1065,11 +1053,6 @@ abstract class DashboardViewModelBase with Store {
   }
 
   @action
-  Future<void> rescanInternalChangeZcash() async {
-    await zcash!.rescanInternalChange(wallet);
-  }
-
-  @action
   void dismissZcash() {
     settingsStore.showZcashMissingFundsCard = false;
   }
@@ -1171,17 +1154,11 @@ abstract class DashboardViewModelBase with Store {
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-      case WalletType.solana:
       case WalletType.nano:
       case WalletType.banano:
-      case WalletType.tron:
       case WalletType.wownero:
-      case WalletType.decred:
       case WalletType.dogecoin:
         return true;
-      case WalletType.zano:
-      case WalletType.haven:
-      case WalletType.zcash:
       case WalletType.none:
         return false;
     }
@@ -1288,14 +1265,12 @@ abstract class DashboardViewModelBase with Store {
         return 0;
       }
       int confirmations = 1;
-      if (![WalletType.solana, WalletType.tron].contains(wallet.type)) {
-        try {
-          confirmations =
-              appStore.wallet!.transactionHistory.transactions.values.first.confirmations +
-                  appStore.wallet!.transactionHistory.transactions.values.last.confirmations +
-                  1;
-        } catch (_) {}
-      }
+      try {
+        confirmations =
+            appStore.wallet!.transactionHistory.transactions.values.first.confirmations +
+                appStore.wallet!.transactionHistory.transactions.values.last.confirmations +
+                1;
+      } catch (_) {}
       return length * confirmations;
     }, _transactionDisposerCallback, delay: 300);
   }
@@ -1412,14 +1387,6 @@ abstract class DashboardViewModelBase with Store {
 
   @action
   void setSyncAll(bool value) => settingsStore.currentSyncAll = value;
-
-  Future<List<String>> checkForHavenWallets() async {
-    final walletInfos = await WalletInfo.getAll();
-    return walletInfos
-        .where((element) => element.type == WalletType.haven)
-        .map((e) => e.name)
-        .toList();
-  }
 
   Future<List<String>> checkAffectedWallets() async {
     try {
