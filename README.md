@@ -58,10 +58,9 @@ flutter --version    # confirm 3.32.0 / Dart 3.8.0
 ```bash
 ./scripts/prepare_torch.sh
 ./scripts/prepare_moneroc.sh
-./scripts/prepare_zcash.sh   # still required by build, even though Zcash is disabled
 ./scripts/build_bitbox_flutter.sh
 # Then fetch the prebuilt reown_flutter tarball (CI does this; reproduce locally
-# with the URL in .github/workflows/pr_test_build_linux.yml if you have it).
+# with the URL in .github/workflows/build-linux.yml).
 ```
 
 Then run the platform-specific configure script, e.g.:
@@ -72,7 +71,7 @@ APP_LINUX_TYPE=cakewallet ./configure_hash_wallet.sh linux
 
 ## Contributing
 
-Issues and PRs welcome at https://github.com/Such-Software/hash-wallet.
+Issues and PRs welcome at https://github.com/Such-Software/hash-wallet. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for ground rules.
 
 ## License
 

@@ -230,5 +230,6 @@ scripts/android/yttrium
 scripts/bitbox_flutter
 scripts/reown_flutter
 
-# Hash Wallet: untracked notes
+# Hash Wallet: untracked notes / internal playbooks
 docs/links.md
+docs/UPSTREAM_SYNC.md
