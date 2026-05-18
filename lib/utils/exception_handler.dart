@@ -16,8 +16,8 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ExceptionHandler {
   static bool _hasError = false;
@@ -70,39 +70,60 @@ class ExceptionHandler {
     );
   }
 
+  // Hash Wallet: the original Cake implementation used flutter_mailer to
+  // hand the error.txt to the OS mail client. That plugin has no Linux
+  // implementation (throws MissingPluginException) and on other platforms
+  // many users have no mail client configured, so very few reports ever
+  // reached anyone. Instead, we open a prefilled GitHub issue. Users
+  // without a GH account get nothing useful, but the trade-off beats
+  // pretending the mail flow works.
+  //
+  // GitHub's "new issue" URL caps the body at ~8KB before truncating, so
+  // we send the tail of error.txt (most recent exception is usually most
+  // relevant) and prepend a hint to attach the full file.
+  static const _issueUrl =
+      'https://github.com/Such-Software/hash-wallet/issues/new';
+  static const _maxBodyChars = 6500;
+
   static void _sendExceptionFile() async {
     try {
       if (_file == null) {
         final appDocDir = await getAppDir();
-
         _file = File('${appDocDir.path}/error.txt');
       }
 
       await _addDeviceInfo(_file!);
 
-      // Check if a mail client is available
-      final bool canSend = await FlutterMailer.canSendMail();
+      final fullBody = await _file!.readAsString();
+      final trimmed = fullBody.length > _maxBodyChars
+          ? '...(truncated, full log at ${_file!.path})\n\n${fullBody.substring(fullBody.length - _maxBodyChars)}'
+          : fullBody;
 
-      if (Platform.isIOS && !canSend) {
-        printV('Mail app is not available');
+      final body = '''
+<!-- Thanks for reporting. The trace below was captured automatically.
+Please add a short description of what you were doing when the error
+appeared (e.g. "creating wallet", "restoring from seed", "sending Tx"). -->
+
+
+
+---
+$trimmed
+''';
+
+      final uri = Uri.https('github.com', '/Such-Software/hash-wallet/issues/new', {
+        'title': 'App error report',
+        'labels': 'bug,from-app',
+        'body': body,
+      });
+
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        printV('Could not open GitHub issue URL: $uri');
         return;
       }
 
-      final MailOptions mailOptions = MailOptions(
-        subject: 'Mobile App Issue',
-        recipients: ['support@such.software'],
-        attachments: [_file!.path],
-      );
-
-      final result = await FlutterMailer.send(mailOptions);
-
-      // Clear file content if the error was sent or saved.
-      // On android we can't know if it was sent or saved
-      if (result.name == MailerResponse.sent.name ||
-          result.name == MailerResponse.saved.name ||
-          result.name == MailerResponse.android.name) {
-        _file!.writeAsString("", mode: FileMode.write);
-      }
+      // Clear the file now that the user has been handed the trace.
+      await _file!.writeAsString('', mode: FileMode.write);
     } catch (e, s) {
       _saveException(e.toString(), s);
     }
