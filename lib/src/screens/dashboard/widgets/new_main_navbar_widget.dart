@@ -122,7 +122,11 @@ class _NEWNewMainNavBarState extends State<NewMainNavBar> {
     final backgroundColor = theme.colorScheme.surfaceContainer.withAlpha(127);
     final pillColor = theme.colorScheme.onSurface.withAlpha(25);
     final activeColor = theme.colorScheme.onSurface;
-    final inactiveColor = theme.colorScheme.primary;
+    // Hash Wallet: was theme.colorScheme.primary — that's our brand forest
+    // green (#1A5C38), which renders dark-on-dark against the navbar's
+    // semi-transparent surface backdrop. Material's onSurfaceVariant is the
+    // standard token for de-emphasized icons and is visible across themes.
+    final inactiveColor = theme.colorScheme.onSurfaceVariant;
 
     return Observer(
       builder: (_) {

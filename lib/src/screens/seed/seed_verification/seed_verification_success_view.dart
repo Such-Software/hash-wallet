@@ -66,13 +66,15 @@ class SeedVerificationSuccessView extends StatelessWidget {
           PrimaryButton(
             key: ValueKey('wallet_seed_page_open_wallet_button_key'),
             onPressed: () {
-              if (walletType == WalletType.bitcoin) {
-                Navigator.of(context).pushNamed(Routes.lightningUsernamePage, arguments: true);
-              } else {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              }
+              // Hash Wallet: Lightning Username onboarding skipped. The original
+              // Cake flow pushed BTC wallets to the lightning_username_page,
+              // which suggests an @cake.cash address. We disabled Lightning
+              // entirely (no Greenlight infra) and the screen is meaningless
+              // without it. Re-enable here if we ever stand up our own LN
+              // backend + domain.
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
-            text: (walletType == WalletType.bitcoin) ? S.current.continue_text : S.current.open_wallet,
+            text: S.current.open_wallet,
             color: Theme.of(context).colorScheme.primary,
             textColor: Theme.of(context).colorScheme.onPrimary,
           ),
