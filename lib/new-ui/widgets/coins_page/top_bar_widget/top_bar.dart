@@ -45,7 +45,11 @@ class TopBar extends StatelessWidget {
               isSyncHeavy: dashboardViewModel.isSyncHeavy,
             ),
             ModernButton.svg(
-              iconColor: Theme.of(context).colorScheme.primary,
+              // Hash Wallet: was theme.colorScheme.primary (dark forest green)
+              // which rendered the gear icon nearly invisible on the dark
+              // dashboard backdrop. onSurfaceVariant is the de-emphasized-
+              // foreground Material token.
+              iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
               size: 36,
               onPressed: () {
                 HapticFeedback.mediumImpact();
