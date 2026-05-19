@@ -28,6 +28,10 @@ jobs:
     env:
       APP_IOS_TYPE: cakewallet
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      # CocoaPods refuses to operate when LANG is ASCII-8BIT (default for the
+      # Gitea runner shell). Force UTF-8 globally so `pod install` succeeds.
+      LANG: en_US.UTF-8
+      LC_ALL: en_US.UTF-8
 
     steps:
       - uses: actions/checkout@v4

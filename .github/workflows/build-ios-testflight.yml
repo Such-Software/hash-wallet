@@ -35,6 +35,9 @@ jobs:
     env:
       APP_IOS_TYPE: cakewallet
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      # CocoaPods needs UTF-8; Gitea runner shell defaults to ASCII-8BIT.
+      LANG: en_US.UTF-8
+      LC_ALL: en_US.UTF-8
 
     steps:
       - uses: actions/checkout@v4
