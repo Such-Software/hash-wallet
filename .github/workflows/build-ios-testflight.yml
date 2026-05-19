@@ -76,6 +76,25 @@ jobs:
           fi
           pod --version
 
+      - name: Install Go + gomobile (if missing)
+        run: |
+          if ! command -v go >/dev/null; then
+            if command -v brew >/dev/null; then
+              brew install go
+            else
+              echo "Go missing and brew not available"; exit 1
+            fi
+          fi
+          go version
+          GOPATH=$(go env GOPATH)
+          echo "$GOPATH/bin" >> "$GITHUB_PATH"
+          export PATH="$PATH:$GOPATH/bin"
+          if ! command -v gomobile >/dev/null; then
+            go install golang.org/x/mobile/cmd/gomobile@latest
+            go install golang.org/x/mobile/cmd/gobind@latest
+          fi
+          which gomobile && gomobile version || true
+
       - name: Show toolchain
         run: |
           set -x

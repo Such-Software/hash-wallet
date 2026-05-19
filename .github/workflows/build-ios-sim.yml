@@ -62,11 +62,9 @@ jobs:
             pod --version
             exit 0
           fi
-          # Prefer Homebrew on macOS — no sudo, installs into its own prefix.
           if command -v brew >/dev/null; then
             brew install cocoapods
           else
-            # Fallback: user-local gem install (no sudo).
             export GEM_HOME="$HOME/.gem"
             export PATH="$GEM_HOME/bin:$PATH"
             echo "GEM_HOME=$HOME/.gem" >> "$GITHUB_ENV"
@@ -74,6 +72,27 @@ jobs:
             gem install --user-install cocoapods --no-document
           fi
           pod --version
+
+      - name: Install Go + gomobile (if missing)
+        run: |
+          if ! command -v go >/dev/null; then
+            if command -v brew >/dev/null; then
+              brew install go
+            else
+              echo "Go missing and brew not available"; exit 1
+            fi
+          fi
+          go version
+          # Ensure $(go env GOPATH)/bin is on PATH for subsequent steps.
+          GOPATH=$(go env GOPATH)
+          echo "$GOPATH/bin" >> "$GITHUB_PATH"
+          export PATH="$PATH:$GOPATH/bin"
+          # gomobile + gobind are needed by scripts/build_bitbox_flutter.sh
+          if ! command -v gomobile >/dev/null; then
+            go install golang.org/x/mobile/cmd/gomobile@latest
+            go install golang.org/x/mobile/cmd/gobind@latest
+          fi
+          which gomobile && gomobile version || true
 
       - name: Show toolchain
         run: |
