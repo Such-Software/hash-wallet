@@ -1,0 +1,228 @@
+name: Hash Wallet Android build
+
+# Triggers:
+# - push to dev/main (validate every commit)
+# - PRs targeting dev/main (gate merges)
+# - manual via workflow_dispatch
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      # Same Cake-Labs prebuilt image used for Linux. Bundles Flutter 3.32.0,
+      # Android NDK r28, Go 1.24.1, Android SDK, JDK 17, gradle, and the
+      # native build deps (boost, openssl, libsodium, libzmq, unbound, icu).
+      image: ghcr.io/cake-tech/cake_wallet:debian13-flutter3.32.0-ndkr28-go1.24.1-ruststablenightly
+      env:
+        BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        APP_ANDROID_TYPE: cakewallet
+
+    steps:
+      - name: Fix Actions HOME (writeable for ~/.cache + gradle)
+        run: echo "HOME=/root" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Configure git inside the container
+        run: |
+          git config --global --add safe.directory '*'
+          git config --global user.email "ci@suchsoftware.com"
+          git config --global user.name "Hash Wallet CI"
+
+      # ---- External prebuilt deps (same approach as Linux workflow) --------
+      - name: Fetch prebuilt torch_dart
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf torch_dart torch_dart.tar.gz
+            wget -q https://github.com/MrCyjaneK/torch_dart/releases/download/v1.0.17/torch_dart-v1.0.17.tar.gz -O torch_dart.tar.gz
+            mkdir torch_dart
+            tar -xzf torch_dart.tar.gz -C torch_dart
+            rm torch_dart.tar.gz
+          popd
+
+      - name: Fetch prebuilt reown_flutter
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf reown_flutter reown_flutter.tar.gz
+            wget -q https://github.com/cake-tech/reown_flutter/releases/download/v0.0.4/reown_flutter-v0.0.4.tar.gz -O reown_flutter.tar.gz
+            mkdir reown_flutter
+            tar -xzf reown_flutter.tar.gz -C reown_flutter
+            rm reown_flutter.tar.gz
+          popd
+
+      - name: Clone BitBox Flutter
+        run: |
+          set -x -e
+          pushd scripts
+            ./build_bitbox_flutter.sh
+          popd
+
+      # ---- Native crypto cores (monero_c prebuilt bundle) ------------------
+      # Same release-bundle.zip as Linux. Contains pre-cross-compiled .so
+      # files for monero/wownero/zano across all 4 Android ABIs. We only ship
+      # monero + wownero — zano libs in the bundle are ignored.
+      - name: Fetch prebuilt monero_c .so bundle
+        run: |
+          set -x -e
+          ./scripts/prepare_moneroc.sh
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          echo "monero_c TAG: $MONERO_C_TAG"
+          mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
+          pushd "scripts/monero_c/release/$MONERO_C_TAG"
+            wget -q https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
+            unzip -q release-bundle.zip
+            rm release-bundle.zip
+            ls
+          popd
+
+      # ---- Stage native libs into android/app/src/main/jniLibs/<ABI>/ -----
+      # Flutter Android packaging auto-includes everything under jniLibs.
+      - name: Place Android .so files into jniLibs
+        run: |
+          set -x -e
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          BUNDLE_DIR="scripts/monero_c/release/$MONERO_C_TAG"
+
+          # monero_c target dir → Android ABI dir
+          declare -A ABI_MAP=(
+            [aarch64-linux-android]=arm64-v8a
+            [armv7a-linux-androideabi]=armeabi-v7a
+            [i686-linux-android]=x86
+            [x86_64-linux-android]=x86_64
+          )
+
+          for target in "${!ABI_MAP[@]}"; do
+            abi="${ABI_MAP[$target]}"
+            mkdir -p "android/app/src/main/jniLibs/$abi"
+            for coin in monero wownero; do
+              src="$BUNDLE_DIR/$target/lib${coin}_wallet2_api_c.so"
+              if [[ -f "$src" ]]; then
+                cp -v "$src" "android/app/src/main/jniLibs/$abi/"
+              else
+                echo "MISSING: $src — fail loud, the bundle layout may have changed"
+                exit 1
+              fi
+            done
+          done
+
+          echo "=== jniLibs contents ==="
+          find android/app/src/main/jniLibs/ -type f -name '*.so' | sort
+
+      # mwebd (Litecoin MWEB) is NOT built here. LTC works without MWEB —
+      # users just don't get the privacy MWEB feature. Add a build_mwebd
+      # step if/when we want MWEB on Android.
+
+      # ---- Configure: pubspec.yaml, AndroidManifest.xml, app_properties ----
+      - name: Run Android configure (cakewallet profile)
+        run: |
+          set -x -e
+          pushd scripts/android
+            source ./app_env.sh cakewallet
+            ./app_config.sh
+          popd
+
+      # ---- Secrets ---------------------------------------------------------
+      - name: Generate per-module secrets.g.dart files (all empty defaults)
+        run: dart run tool/generate_new_secrets.dart
+
+      - name: Inject Trocador affiliate secrets into lib/.secrets.g.dart
+        env:
+          TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
+          TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
+          TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
+        run: |
+          sed -i \
+            -e "s|const trocadorApiKey = '';|const trocadorApiKey = '${TROCADOR_API_KEY}';|" \
+            -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
+            -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
+            lib/.secrets.g.dart
+          grep '^const trocador' lib/.secrets.g.dart
+
+      # ---- Signing: decode upload keystore + write key.properties ---------
+      - name: Decode Android upload keystore + write key.properties
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -e
+          if [[ -z "$ANDROID_KEYSTORE_BASE64" ]]; then
+            echo "FATAL: ANDROID_KEYSTORE_BASE64 not set — configure Gitea Actions secrets first"
+            exit 1
+          fi
+          # Write decoded keystore next to build.gradle (storeFile path
+          # in key.properties is resolved relative to android/app/).
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+          ls -la android/app/upload-keystore.jks
+          # key.properties consumed by build.gradle's signingConfigs.release.
+          cat > android/key.properties <<EOF
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=upload-keystore.jks
+          EOF
+          chmod 600 android/key.properties
+
+      # ---- Flutter SDK init + codegen --------------------------------------
+      - name: Initialize Flutter SDK (Android precache)
+        run: |
+          flutter --version
+          flutter precache --android --no-linux --no-ios --no-macos --no-windows --no-fuchsia --no-web || true
+
+      - name: Build generated code (mobx + hive adapters)
+        run: bash model_generator.sh
+
+      - name: Generate localization
+        run: dart run tool/generate_localization.dart
+
+      # ---- Compile + sign --------------------------------------------------
+      # Universal APK (single binary covers all 4 ABIs, easy to sideload).
+      - name: Build release APK (universal, all ABIs)
+        run: flutter build apk --dart-define-from-file=env.json --release
+
+      # AAB for Play Console upload (Google generates per-ABI APKs server-side
+      # via Play App Signing).
+      - name: Build release AAB
+        run: flutter build appbundle --dart-define-from-file=env.json --release
+
+      - name: Sanity-check signature on APK
+        run: |
+          set -x
+          ls -la build/app/outputs/flutter-apk/
+          # apksigner is in build-tools; locate dynamically.
+          APKSIGNER=$(find $ANDROID_HOME/build-tools -name apksigner -type f 2>/dev/null | sort -V | tail -1 || which apksigner)
+          if [[ -n "$APKSIGNER" ]]; then
+            "$APKSIGNER" verify --print-certs build/app/outputs/flutter-apk/app-release.apk || true
+          else
+            echo "apksigner not on PATH; skipping sig print"
+          fi
+
+      # actions/upload-artifact@v4 doesn't work on Gitea; pin to v3.
+      - name: Upload APK artifact (sideload-able)
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-wallet-android-apk-${{ github.sha }}
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 14
+
+      - name: Upload AAB artifact (for Play Console)
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-wallet-android-aab-${{ github.sha }}
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
