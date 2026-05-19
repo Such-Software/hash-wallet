@@ -5,9 +5,12 @@ name: Hash Bags Android build
 # - PRs targeting dev/main (gate merges)
 # - manual via workflow_dispatch
 on:
+  # PR-from-fork triggers strip secrets in Gitea (and GitHub) for security.
+  # We mirror github-such-software/hash-wallet → Builds/hash-wallet via PRs,
+  # so a pull_request trigger here would always run without secrets.
+  # Listen only to push events on the destination branch (post-merge) so
+  # secrets are reliably available.
   push:
-    branches: [dev, main]
-  pull_request:
     branches: [dev, main]
   workflow_dispatch:
 
@@ -189,8 +192,19 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           set -e
+          # Debug visibility — prints lengths only, never values. If a secret
+          # length is 0, Gitea Actions is not passing it to this run (most
+          # commonly because the run was triggered by a from-fork PR).
+          echo "ANDROID_KEYSTORE_BASE64 length: ${#ANDROID_KEYSTORE_BASE64}"
+          echo "ANDROID_KEYSTORE_PASSWORD length: ${#ANDROID_KEYSTORE_PASSWORD}"
+          echo "ANDROID_KEY_ALIAS length: ${#ANDROID_KEY_ALIAS}"
+          echo "ANDROID_KEY_PASSWORD length: ${#ANDROID_KEY_PASSWORD}"
           if [[ -z "$ANDROID_KEYSTORE_BASE64" ]]; then
-            echo "FATAL: ANDROID_KEYSTORE_BASE64 not set — configure Gitea Actions secrets first"
+            echo "FATAL: ANDROID_KEYSTORE_BASE64 not reaching the runner."
+            echo "Check: (1) secret is in repo Settings → Actions → Secrets;"
+            echo "       (2) workflow was triggered by 'push' or 'workflow_dispatch'"
+            echo "           (PR triggers from a fork strip secrets);"
+            echo "       (3) Gitea's runner is configured to pass secrets."
             exit 1
           fi
           # Write decoded keystore next to build.gradle (storeFile path

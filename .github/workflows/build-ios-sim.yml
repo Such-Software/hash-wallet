@@ -8,9 +8,8 @@ name: Hash Bags iOS Simulator build
 # Phase 2 (separate workflow): full TestFlight pipeline with signing.
 
 on:
+  # See note in build-android.yml about Gitea PR-from-fork secret stripping.
   push:
-    branches: [dev, main]
-  pull_request:
     branches: [dev, main]
   workflow_dispatch:
 
