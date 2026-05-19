@@ -215,6 +215,9 @@ jobs:
       - name: Generate localization
         run: dart run tool/generate_localization.dart
 
+      - name: Compile SVG assets (res/pictures/*.svg → assets/new-ui/*.svg.vec)
+        run: ./compile_graphics.sh
+
       # CocoaPods: the iOS Podfile installs Flutter plugin pods. Required
       # before flutter build can link them.
       - name: pod install

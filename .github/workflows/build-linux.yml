@@ -161,6 +161,9 @@ jobs:
       - name: Generate localization
         run: dart run tool/generate_localization.dart
 
+      - name: Compile SVG assets (res/pictures/*.svg → assets/new-ui/*.svg.vec)
+        run: ./compile_graphics.sh
+
       # ---- Compile + package ----------------------------------------------
       - name: Build Linux app
         run: flutter build linux --dart-define-from-file=env.json --release

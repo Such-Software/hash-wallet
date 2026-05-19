@@ -228,6 +228,9 @@ jobs:
       - name: Generate localization
         run: dart run tool/generate_localization.dart
 
+      - name: Compile SVG assets (res/pictures/*.svg → assets/new-ui/*.svg.vec)
+        run: ./compile_graphics.sh
+
       # ---- Compile + sign --------------------------------------------------
       # Universal APK (single binary covers all 4 ABIs, easy to sideload).
       - name: Build release APK (universal, all ABIs)
