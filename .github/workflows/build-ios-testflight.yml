@@ -79,6 +79,19 @@ jobs:
           fi
           pod --version
 
+      - name: Install Rust + iOS targets (if missing)
+        run: |
+          if ! command -v rustup >/dev/null; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --no-modify-path
+            echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+            export PATH="$HOME/.cargo/bin:$PATH"
+          fi
+          rm -rf "$HOME/.rustup/downloads"/*.partial 2>/dev/null || true
+          rustup target add aarch64-apple-ios
+          rustup target add aarch64-apple-ios-sim
+          rustup target add x86_64-apple-ios
+          rustup show
+
       - name: Install Go + gomobile (if missing)
         run: |
           if ! command -v go >/dev/null; then
