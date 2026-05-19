@@ -32,13 +32,11 @@ jobs:
       # Gitea runner shell). Force UTF-8 globally so `pod install` succeeds.
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8
-      # The Mac runner hits git.such.software via the LAN (NAT hairpin),
-      # which bypasses the Let's Encrypt-fronted NPM and lands on Gitea's
-      # internal self-signed cert. Node won't trust it, so artifact upload
-      # bails with DEPTH_ZERO_SELF_SIGNED_CERT. Acceptable to skip
-      # validation since we're talking to our own infrastructure on our LAN.
-      # Long-term fix: point the runner at git.such.software via the public
-      # IP / NPM cert OR install Gitea's CA into the runner's trust store.
+      # If you added an /etc/hosts entry on the Mac mini that points
+      # git.such.software at NPM's LAN IP (so the runner hits NPM's
+      # Let's Encrypt cert instead of Gitea's internal self-signed),
+      # this env var can be removed. Left in as a belt-and-suspenders
+      # fallback — has no effect if certs already verify.
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
 
     steps:
