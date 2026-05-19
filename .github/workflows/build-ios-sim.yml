@@ -272,9 +272,27 @@ jobs:
           cd build/ios/iphonesimulator
           zip -r hash_wallet_ios_sim_${{ github.sha }}.zip Runner.app
 
-      - name: Upload .app artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: hash-wallet-ios-sim-${{ github.sha }}
-          path: build/ios/iphonesimulator/hash_wallet_ios_sim_*.zip
-          retention-days: 14
+      # actions/upload-artifact pushes to Gitea's API over HTTPS. From inside
+      # the Docker container on the Mac runner, that resolves to the public IP
+      # and fails on NAT hairpin. Since the runner and Gitea are the same
+      # machine, just copy the .app to a host-visible dir instead. github.workspace
+      # is a path mounted from the host, so anything written there survives the
+      # container teardown and is accessible from the Mac filesystem at:
+      #   ~/.cache/act/<runner-id>/hostexecutor/dist/
+      - name: Save .app to workspace/dist (host-accessible)
+        run: |
+          set -x
+          DIST_DIR="${{ github.workspace }}/dist"
+          mkdir -p "$DIST_DIR"
+          cp "build/ios/iphonesimulator/hash_wallet_ios_sim_${{ github.sha }}.zip" "$DIST_DIR/"
+          echo
+          echo "============================================================"
+          echo "Build artifact saved to workspace/dist/"
+          echo
+          echo "On the Mac filesystem, find it at:"
+          echo "  /Users/such-git/.cache/act/<recent>/hostexecutor/dist/hash_wallet_ios_sim_${{ github.sha }}.zip"
+          echo
+          echo "Or just:"
+          echo "  find /Users/such-git/.cache/act -name 'hash_wallet_ios_sim_${{ github.sha }}.zip' 2>/dev/null"
+          echo "============================================================"
+          ls -la "$DIST_DIR/"
