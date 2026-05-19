@@ -38,6 +38,10 @@ jobs:
       # CocoaPods needs UTF-8; Gitea runner shell defaults to ASCII-8BIT.
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8
+      # Mac runner hits internal Gitea over LAN (NAT hairpin), bypassing
+      # the public Let's Encrypt cert. Skip TLS verification for the
+      # artifact upload — talking to our own server on our own network.
+      NODE_TLS_REJECT_UNAUTHORIZED: '0'
 
     steps:
       - uses: actions/checkout@v4

@@ -237,9 +237,11 @@ jobs:
         run: flutter build apk --dart-define-from-file=env.json --release
 
       # AAB for Play Console upload (Google generates per-ABI APKs server-side
-      # via Play App Signing).
+      # via Play App Signing). --verbose surfaces the full gradle stacktrace
+      # when FinalizeBundleTask / signReleaseBundle fails — without it the
+      # error is opaque ('FinalizeBundleTask$BundleToolRunnable failed').
       - name: Build release AAB
-        run: flutter build appbundle --dart-define-from-file=env.json --release
+        run: flutter build appbundle --dart-define-from-file=env.json --release --verbose
 
       - name: Sanity-check signature on APK
         run: |
