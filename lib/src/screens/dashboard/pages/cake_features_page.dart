@@ -78,10 +78,10 @@ class CakeFeaturesPage extends StatelessWidget {
     );
   }
 
-  // Hash Wallet: gutted Cake Pay, Cupcake, NanoGPT, and dEuro Savings
+  // Hash Bags: gutted Cake Pay, Cupcake, NanoGPT, and dEuro Savings
   // entries — all third-party Cake-affiliate income. dEuro kept out for
   // consistency (also has affiliate revenue, not our relationship).
-  // Re-populate this page when we have Hash Wallet / Such Software apps
+  // Re-populate this page when we have Hash Bags / Such Software apps
   // to feature here.
   Widget _buildOldUi(BuildContext context) => _emptyState(context);
 

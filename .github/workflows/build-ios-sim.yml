@@ -1,4 +1,4 @@
-name: Hash Wallet iOS Simulator build
+name: Hash Bags iOS Simulator build
 
 # Phase 1 of iOS CI: validate the Mac runner end-to-end by producing an
 # unsigned simulator .app. Drop the resulting Runner.app into the iOS

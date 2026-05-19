@@ -428,7 +428,7 @@ Future<void> setup({
   getIt.registerLazySingleton(() => BitboxViewModel());
 
   getIt.registerLazySingleton(() => TrezorConnect("hashwallet://trezor_connect",
-      appName: "Hash Wallet"));
+      appName: "Hash Bags"));
   getIt.registerLazySingleton(() => TrezorViewModel(getIt<TrezorConnect>()));
 
 

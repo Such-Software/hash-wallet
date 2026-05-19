@@ -4,7 +4,7 @@ class Palette {
   static const Color green = Color.fromRGBO(39, 206, 80, 1.0);
   static const Color red = Color.fromRGBO(255, 51, 51, 1.0);
   static const Color darkRed = Color.fromRGBO(205, 0, 0, 1.0);
-  // Hash Wallet: Cake's blue-family accents repainted into the green-primary
+  // Hash Bags: Cake's blue-family accents repainted into the green-primary
   // brand palette. Names retained so call-sites compile unchanged.
   static const Color blueAlice = Color.fromRGBO(229, 247, 235, 1.0);    // pale green tint
   static const Color lightBlue = Color.fromRGBO(127, 202, 160, 1.0);    // mint
@@ -59,7 +59,7 @@ class Palette {
 }
 
 class PaletteDark {
-  // Hash Wallet: PaletteDark was almost entirely Cake's night-blue surfaces.
+  // Hash Bags: PaletteDark was almost entirely Cake's night-blue surfaces.
   // Repainted into the deep-green dark theme. moneroCard and moneroOrange
   // stay as chain identifiers. Original names retained — every call-site
   // compiles unchanged.

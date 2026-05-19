@@ -2,7 +2,7 @@ name: cw_evm
 description: A new Flutter package project.
 version: 0.0.1
 publish_to: none
-author: Hash Wallet
+author: Hash Bags
 homepage: https://github.com/Such-Software/hash-wallet
 
 environment:

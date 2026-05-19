@@ -66,7 +66,7 @@ class SeedVerificationSuccessView extends StatelessWidget {
           PrimaryButton(
             key: ValueKey('wallet_seed_page_open_wallet_button_key'),
             onPressed: () {
-              // Hash Wallet: Lightning Username onboarding skipped. The original
+              // Hash Bags: Lightning Username onboarding skipped. The original
               // Cake flow pushed BTC wallets to the lightning_username_page,
               // which suggests an @cake.cash address. We disabled Lightning
               // entirely (no Greenlight infra) and the screen is meaningless

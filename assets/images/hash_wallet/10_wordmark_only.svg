@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" width="280" height="60">
-<title>Hash Wallet wordmark</title>
-<desc>The Hash Wallet wordmark in mono, no mark — for headers, footers, or surfaces that already display the logo elsewhere. Uses currentColor so the consuming theme picks the tint.</desc>
-<text x="0" y="44" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="36" font-weight="500" fill="currentColor">Hash Wallet</text>
+<title>Hash Bags wordmark</title>
+<desc>The Hash Bags wordmark in mono, no mark — for headers, footers, or surfaces that already display the logo elsewhere. Uses currentColor so the consuming theme picks the tint.</desc>
+<text x="0" y="44" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="36" font-weight="500" fill="currentColor">Hash Bags</text>
 </svg>

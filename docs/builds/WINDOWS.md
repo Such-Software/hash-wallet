@@ -89,4 +89,4 @@ exit
 .\hashwallet.bat
 ```
 
-After running the script above, you should get `Hash Wallet.zip` in the project's root directory which will contain `cake_wallet.exe` (Flutter binary name retained from upstream) and other needed files for running the application. Now you can extract files from `Hash Wallet.zip` archive and run the application.
+After running the script above, you should get `Hash Bags.zip` in the project's root directory which will contain `cake_wallet.exe` (Flutter binary name retained from upstream) and other needed files for running the application. Now you can extract files from `Hash Bags.zip` archive and run the application.

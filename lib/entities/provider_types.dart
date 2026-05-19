@@ -46,7 +46,7 @@ extension ProviderTypeName on ProviderType {
 }
 
 class ProvidersHelper {
-  // Hash Wallet: all buy/sell providers (Robinhood Connect, DFX, Onramper,
+  // Hash Bags: all buy/sell providers (Robinhood Connect, DFX, Onramper,
   // MoonPay, Kryptonim, Meld) gutted. Each requires a formal partner
   // agreement with a revenue-share contract — no free integrations exist.
   // Re-add providers here once Such Software has registered the affiliate

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
-<title>Hash Wallet vertical lockup</title>
-<desc>Hash Wallet logo with green-boxed hash mark on top, wordmark centered below — for splash screens, about screens, vertical-aspect surfaces. Wordmark uses currentColor for theme adaptability.</desc>
+<title>Hash Bags vertical lockup</title>
+<desc>Hash Bags logo with green-boxed hash mark on top, wordmark centered below — for splash screens, about screens, vertical-aspect surfaces. Wordmark uses currentColor for theme adaptability.</desc>
 <rect x="50" y="20" width="100" height="100" rx="22" fill="#1a5c38"/>
 <text x="100" y="96" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="74" font-weight="700" fill="#ffffff" text-anchor="middle">#</text>
-<text x="100" y="180" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="28" font-weight="500" fill="currentColor" text-anchor="middle">Hash Wallet</text>
+<text x="100" y="180" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="28" font-weight="500" fill="currentColor" text-anchor="middle">Hash Bags</text>
 </svg>

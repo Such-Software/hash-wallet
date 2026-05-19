@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 80" width="500" height="80">
 <title>H(ash) = Wallet (dark theme)</title>
-<desc>Hash Wallet function-joke wordmark with green-boxed hash as the function name, light-on-dark variant. Punctuation/operators in mid-gray that reads on either background; argument and return in white.</desc>
+<desc>Hash Bags function-joke wordmark with green-boxed hash as the function name, light-on-dark variant. Punctuation/operators in mid-gray that reads on either background; argument and return in white.</desc>
 <rect x="6" y="14" width="52" height="52" rx="11" fill="#1a5c38"/>
 <text x="32" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">#</text>
 <text x="68" y="55" font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace" font-size="40" font-weight="400" fill="#aaa">(</text>

@@ -26,7 +26,7 @@ class SwapProviderInitialPreferenceModal extends StatelessWidget {
                 children: [
                   CakeImageWidget(imageUrl:"assets/new-ui/exchange_providers.svg"),
                   Text(
-                    "${S.of(context).swap_provider_initial_desc} Hash Wallet.",
+                    "${S.of(context).swap_provider_initial_desc} Hash Bags.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16),

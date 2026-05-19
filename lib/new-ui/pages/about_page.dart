@@ -80,7 +80,7 @@ class _AboutPageState extends State<AboutPage> {
                       spacing: 8,
                       children: [
                         Text(
-                          "Hash Wallet",
+                          "Hash Bags",
                           style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
                         ),
                         Text(widget.appVersion,

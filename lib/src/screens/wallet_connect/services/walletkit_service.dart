@@ -71,8 +71,8 @@ abstract class WalletKitServiceBase with Store {
         projectId: secrets.walletConnectProjectId,
       ),
       metadata: const PairingMetadata(
-        name: 'Hash Wallet',
-        description: 'Hash Wallet',
+        name: 'Hash Bags',
+        description: 'Hash Bags',
         url: 'https://github.com/Such-Software/hash-wallet',
         icons: ['https://github.com/Such-Software/hash-wallet/raw/dev/assets/images/app_logo.png'],
         redirect: Redirect(native: 'hashwallet://'),

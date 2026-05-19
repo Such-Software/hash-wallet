@@ -15,7 +15,7 @@ abstract class SupportViewModelBase with Store {
 
   SupportViewModelBase(this._appStore)
       : items = [
-          // Hash Wallet: Cake's own support channels (email, website, forum,
+          // Hash Bags: Cake's own support channels (email, website, forum,
           // Discord, Telegram, Telegram bot) gutted — those are Cake Labs
           // properties, not ours. Replaced with the only channel we have right
           // now: GitHub Issues. The third-party provider support links below
@@ -77,7 +77,7 @@ abstract class SupportViewModelBase with Store {
   }
 
   String get appVersion =>
-      "${isMoneroOnly ? "Monero.com" : "Hash Wallet"} - ${_appStore.settingsStore.appVersion}";
+      "${isMoneroOnly ? "Monero.com" : "Hash Bags"} - ${_appStore.settingsStore.appVersion}";
 
   String get fiatApiMode => _appStore.settingsStore.fiatApiMode.title;
 

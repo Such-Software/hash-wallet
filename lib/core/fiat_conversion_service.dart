@@ -3,7 +3,7 @@ import 'package:cw_core/crypto_currency.dart';
 import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'dart:convert';
 
-// Hash Wallet price endpoint. Backed by the Cloudflare Worker in
+// Hash Bags price endpoint. Backed by the Cloudflare Worker in
 // github.com/Such-Software/hash-wallet-prices — Kraken for majors, NonKYC for
 // WOW, KV-cached every 60s.
 //

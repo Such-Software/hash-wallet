@@ -10,7 +10,7 @@ class LightTheme extends MaterialThemeBase {
   @override
   ThemeMode get themeMode => ThemeMode.light;
 
-  // Hash Wallet palette:
+  // Hash Bags palette:
   //  - Primary: brand green (#1A5C38)
   //  - Secondary: Such Software pink (#B83278)
   //  - Tertiary: Such Software blue (#1F7DBF)

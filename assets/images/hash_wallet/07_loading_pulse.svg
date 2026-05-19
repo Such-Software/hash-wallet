@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-<title>Hash Wallet loading pulse</title>
+<title>Hash Bags loading pulse</title>
 <desc>Looping loading animation: green-boxed hash mark pulses opacity, suggesting a hash-computing rhythm.</desc>
 
 <rect x="20" y="20" width="160" height="160" rx="36" fill="#1a5c38">

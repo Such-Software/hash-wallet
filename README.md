@@ -1,10 +1,10 @@
-# Hash Wallet
+# Hash Bags
 
-**Hash Wallet** (`#`) is an open-source, non-custodial, multi-currency crypto wallet for Android, iOS, macOS, Linux, and Windows. It is a fork of [Cake Wallet](https://github.com/cake-tech/cake_wallet) maintained by [Such Software LLC](https://github.com/Such-Software).
+**Hash Bags** (`#`) is an open-source, non-custodial, multi-currency crypto wallet for Android, iOS, macOS, Linux, and Windows. It is a fork of [Cake Wallet](https://github.com/cake-tech/cake_wallet) maintained by [Such Software LLC](https://github.com/Such-Software).
 
 ## Why a fork?
 
-Cake Wallet ended Wownero support in early 2026. Hash Wallet exists to keep Wownero as a first-class mobile experience, run by the project's founder, while shipping a slimmer, more focused multi-coin wallet without the chains and integrations we don't want to maintain or recommend.
+Cake Wallet ended Wownero support in early 2026. Hash Bags exists to keep Wownero as a first-class mobile experience, run by the project's founder, while shipping a slimmer, more focused multi-coin wallet without the chains and integrations we don't want to maintain or recommend.
 
 ## Supported chains
 
@@ -75,11 +75,11 @@ Issues and PRs welcome at https://github.com/Such-Software/hash-wallet. See [`CO
 
 ## License
 
-Hash Wallet is distributed under the [MIT License](LICENSE), inheriting from Cake Wallet.
+Hash Bags is distributed under the [MIT License](LICENSE), inheriting from Cake Wallet.
 
 ```
 Copyright (C) 2018–2023 Cake Labs LLC
 Copyright (C) 2026      Such Software LLC
 ```
 
-Cake Wallet, the Cake Wallet logo, and related marks are trademarks of Cake Labs LLC and are not used by Hash Wallet.
+Cake Wallet, the Cake Wallet logo, and related marks are trademarks of Cake Labs LLC and are not used by Hash Bags.

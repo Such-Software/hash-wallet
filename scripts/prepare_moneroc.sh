@@ -19,7 +19,7 @@ git fetch -a
 git checkout bc8d1a0b75b97156d71579581b4cdfe58c777ed2
 git reset --hard
 
-# Hash Wallet: monero_c bundles monero, wownero, AND zano as sibling
+# Hash Bags: monero_c bundles monero, wownero, AND zano as sibling
 # submodules. Upstream did `git submodule update --init --recursive` which
 # pulled ALL three (and their deep transitive submodules — zano alone drags
 # down a ~100MB Qt UI tree we don't need). Init only the coins we ship,

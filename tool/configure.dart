@@ -1401,7 +1401,7 @@ Future<void> generateWalletTypes({
   const outputDefinition = 'final availableWalletTypes = <WalletType>[';
   var outputContent = outputHeader + '\n\n' + outputDefinition + '\n';
 
-  // Hash Wallet: Wownero up top — it's the reason this fork exists.
+  // Hash Bags: Wownero up top — it's the reason this fork exists.
   if (hasWownero) {
     outputContent += '\tWalletType.wownero,\n';
   }

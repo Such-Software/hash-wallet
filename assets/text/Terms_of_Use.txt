@@ -2,14 +2,14 @@ TERMS OF SERVICE
 Last Updated: May 16, 2026
 
 1. ACCEPTANCE OF TERMS
-These Terms of Service ("Terms") are entered into by and between You and Such Software LLC, a limited liability company organized under the laws of the Commonwealth of Pennsylvania ("Company", "we", "our", or "us"). These Terms govern your access to and use of the Hash Wallet mobile application, source code, and any associated software (collectively, the "Software").
+These Terms of Service ("Terms") are entered into by and between You and Such Software LLC, a limited liability company organized under the laws of the Commonwealth of Pennsylvania ("Company", "we", "our", or "us"). These Terms govern your access to and use of the Hash Bags mobile application, source code, and any associated software (collectively, the "Software").
 
 By downloading, accessing, or using the Software, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the Software.
 
 2. NATURE OF THE SOFTWARE
-Hash Wallet is a non-custodial, peer-to-peer cryptocurrency wallet software.
+Hash Bags is a non-custodial, peer-to-peer cryptocurrency wallet software.
 
-Non-Custodial: We do not own, control, or take custody of any cryptocurrency assets held in your Hash Wallet. You hold the private keys and are solely responsible for their management.
+Non-Custodial: We do not own, control, or take custody of any cryptocurrency assets held in your Hash Bags. You hold the private keys and are solely responsible for their management.
 
 No Fiat Operations: The Software does not natively support or facilitate the purchase or sale of cryptocurrency with fiat currency (e.g., USD, EUR).
 
@@ -32,7 +32,7 @@ No Liability for Third Parties: We are not responsible for any delayed, failed, 
 By using the Software, you acknowledge and accept the inherent risks associated with cryptographic systems, blockchain technology, and digital assets. This includes, but is not limited to, the risk of extreme price volatility, smart contract vulnerabilities, regulatory changes, and hardware or software failure. You agree that Such Software LLC is not responsible for any losses arising from these risks.
 
 6. INTELLECTUAL PROPERTY & OPEN SOURCE
-Hash Wallet is built on open-source technologies. The Software's proprietary code is licensed under the terms specified in the Software's respective open-source license (e.g., MIT, GPL, etc., as found in the repository). To the extent any branding, logos, or trademarks (including "Hash Wallet" and "Such Software LLC") are not covered by the open-source license, they remain the exclusive property of Such Software LLC.
+Hash Bags is built on open-source technologies. The Software's proprietary code is licensed under the terms specified in the Software's respective open-source license (e.g., MIT, GPL, etc., as found in the repository). To the extent any branding, logos, or trademarks (including "Hash Bags" and "Such Software LLC") are not covered by the open-source license, they remain the exclusive property of Such Software LLC.
 
 7. DISCLAIMER OF WARRANTIES
 THE SOFTWARE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. SUCH SOFTWARE LLC EXPRESSLY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED, ERROR-FREE, OR ENTIRELY SECURE.

@@ -1,7 +1,7 @@
 name: cw_shared_external
 description: Shared external libraries for monero and haven
 version: 0.0.1
-author: Hash Wallet
+author: Hash Bags
 homepage: https://github.com/Such-Software/hash-wallet
 
 environment:

@@ -70,7 +70,7 @@ class ExceptionHandler {
     );
   }
 
-  // Hash Wallet: the original Cake implementation used flutter_mailer to
+  // Hash Bags: the original Cake implementation used flutter_mailer to
   // hand the error.txt to the OS mail client. That plugin has no Linux
   // implementation (throws MissingPluginException) and on other platforms
   // many users have no mail client configured, so very few reports ever

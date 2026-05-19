@@ -32,7 +32,7 @@ Future<void> importSecretsConfig() async {
   final nanoOutput =
       nanoInput.keys.fold('', (String acc, String val) => acc + generateConst(val, nanoInput));
 
-  // Hash Wallet: upstream Cake declares bitcoinConfigPath/bitcoinOutputPath
+  // Hash Bags: upstream Cake declares bitcoinConfigPath/bitcoinOutputPath
   // but never processes them, leaving cw_bitcoin/lib/.secrets.g.dart missing
   // and the build broken on a fresh clone. Add it to the pipeline.
   final bitcoinOutputFile = File(bitcoinOutputPath);

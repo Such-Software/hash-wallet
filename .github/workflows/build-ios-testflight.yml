@@ -1,4 +1,4 @@
-name: Hash Wallet iOS TestFlight build
+name: Hash Bags iOS TestFlight build
 
 # Phase 2 of iOS CI: full signed build that uploads to TestFlight.
 # Phase 1 (build-ios-sim.yml) validates the Mac runner with no signing —

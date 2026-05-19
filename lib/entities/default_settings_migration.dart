@@ -28,14 +28,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cw_core/cake_hive.dart';
 import 'package:cw_core/erc20_token.dart';
 
-const newCakeWalletMoneroUri = 'node.sethforprivacy.com:443';  // Hash Wallet: default flipped to community node
-const cakeWalletBitcoinElectrumUri = 'electrum.blockstream.info:50002';  // Hash Wallet: default flipped to Blockstream
+const newCakeWalletMoneroUri = 'node.sethforprivacy.com:443';  // Hash Bags: default flipped to community node
+const cakeWalletBitcoinElectrumUri = 'electrum.blockstream.info:50002';  // Hash Bags: default flipped to Blockstream
 const cakeWalletSilentPaymentsElectrsUri = 'electrs.cakewallet.com:50001';
 const publicBitcoinTestnetElectrumAddress = 'electrs.cakewallet.com';
 const publicBitcoinTestnetElectrumPort = '50002';
 const publicBitcoinTestnetElectrumUri =
     '$publicBitcoinTestnetElectrumAddress:$publicBitcoinTestnetElectrumPort';
-const cakeWalletLitecoinElectrumUri = 'electrum-ltc.bysh.me:50002';  // Hash Wallet: default flipped to bysh.me community node
+const cakeWalletLitecoinElectrumUri = 'electrum-ltc.bysh.me:50002';  // Hash Bags: default flipped to bysh.me community node
 const havenDefaultNodeUri = 'nodes.havenprotocol.org:443';
 const ethereumDefaultNodeUri = 'ethereum-rpc.publicnode.com';
 const polygonDefaultNodeUri = 'polygon-bor-rpc.publicnode.com';
@@ -44,7 +44,7 @@ const nanoDefaultNodeUri = 'rpc.nano.to';
 const nanoDefaultPowNodeUri = 'rpc.nano.to';
 const solanaDefaultNodeUri = 'solana-mainnet.core.chainstack.com';
 const tronDefaultNodeUri = 'api.trongrid.io';
-const newCakeWalletBitcoinUri = 'electrum.blockstream.info:50002';  // Hash Wallet: default flipped to Blockstream
+const newCakeWalletBitcoinUri = 'electrum.blockstream.info:50002';  // Hash Bags: default flipped to Blockstream
 const wowneroDefaultNodeUri = 'node3.monerodevs.org:34568';
 const zanoDefaultNodeUri = '37.27.100.59:10500';
 const moneroWorldNodeUri = '.moneroworld.com';
@@ -457,7 +457,7 @@ Future<void> defaultSettingsMigration(
         case 54:
           break;
         case 55:
-          // Hash Wallet: zcash removed. The original migration here added
+          // Hash Bags: zcash removed. The original migration here added
           // zcash node list + set default zcash node. We no longer load
           // zcash_node_list.yml (it was deleted), so skip the whole step.
           break;

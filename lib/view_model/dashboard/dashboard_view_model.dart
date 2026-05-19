@@ -1433,7 +1433,7 @@ abstract class DashboardViewModelBase with Store {
   }
 
   Future<ServicesResponse> _getServicesStatus() async {
-    // Hash Wallet: bulletin endpoint stubbed. The original implementation
+    // Hash Bags: bulletin endpoint stubbed. The original implementation
     // polled Cake's service-api.cakewallet.com/v1/active-notices (gated by
     // the Cake-issued fiatApiKey) to surface push notices to all wallets.
     // We don't run our own bulletin service yet. To restore: stand up an

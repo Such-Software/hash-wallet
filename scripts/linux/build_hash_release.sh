@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# build_hash_release.sh - Script to build Hash Wallet for Linux
+# build_hash_release.sh - Script to build Hash Bags for Linux
 # Usage: ./build_hash_release.sh --amd64 [--arm64] [--app=cakewallet|monero.com]
 
 set -e

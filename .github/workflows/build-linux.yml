@@ -1,4 +1,4 @@
-name: Hash Wallet Linux build
+name: Hash Bags Linux build
 
 # Triggers:
 # - on push to dev/main (validates the foundation each time we land work)
@@ -48,7 +48,7 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
           git config --global user.email "ci@suchsoftware.com"
-          git config --global user.name "Hash Wallet CI"
+          git config --global user.name "Hash Bags CI"
 
       # ---- Secrets ---------------------------------------------------------
       # IMPORTANT: don't pre-write any of the tool/.*secrets-config.json

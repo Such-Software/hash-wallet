@@ -308,7 +308,7 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
   final TradesStore tradesStore;
   final SharedPreferences sharedPreferences;
 
-  // Hash Wallet: trimmed to Trocador only. Trocador's aggregator already fronts
+  // Hash Bags: trimmed to Trocador only. Trocador's aggregator already fronts
   // ChangeNow, LetsExchange, Exolix, StealthEx, FixedFloat, Quantex, etc.,
   // letting us collect markup as the affiliate. Re-enable individual providers
   // here only after registering Such Software affiliate keys per provider.

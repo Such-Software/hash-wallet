@@ -1,4 +1,4 @@
-name: Hash Wallet Android build
+name: Hash Bags Android build
 
 # Triggers:
 # - push to dev/main (validate every commit)
@@ -43,7 +43,7 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
           git config --global user.email "ci@suchsoftware.com"
-          git config --global user.name "Hash Wallet CI"
+          git config --global user.name "Hash Bags CI"
 
       # ---- External prebuilt deps (same approach as Linux workflow) --------
       - name: Fetch prebuilt torch_dart

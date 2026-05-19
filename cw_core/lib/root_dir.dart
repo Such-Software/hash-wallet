@@ -47,7 +47,7 @@ Future<void> linuxSymlinkSharedPreferences() async {
   final dataHome = Platform.environment["XDG_DATA_HOME"] ?? p.join(Platform.environment["HOME"] ?? "", ".local", "share");
   // Names to migrate from on startup. Includes the legacy Cake paths so users
   // forking from a previous Cake install get their data automatically
-  // symlinked into Hash Wallet's new home (~/.local/share/hash_wallet).
+  // symlinked into Hash Bags's new home (~/.local/share/hash_wallet).
   var legacyNames = ['com.example.cake_wallet', 'cake_wallet'];
   for (String name in legacyNames) {
     final oldPath = p.join(dataHome, name);

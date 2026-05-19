@@ -7,7 +7,7 @@ class FeatureFlag {
   static const bool isCakePayPurchaseSimulationEnabled = true;
   static const bool isCakePayRedemptionFlowEnabled = false;
   static const bool isExolixEnabled = true;
-  // Hash Wallet: Lightning disabled — running Greenlight/LSP infra is out of
+  // Hash Bags: Lightning disabled — running Greenlight/LSP infra is out of
   // scope for now. Re-enable once we have an LSP relationship lined up.
   static const bool isLightningEnabled = false;
   static const bool isBackgroundSyncEnabled = true;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-<title>Hash Wallet transaction confirm</title>
+<title>Hash Bags transaction confirm</title>
 <desc>Transaction confirm animation: empty green-outlined box fills with brand green from bottom up, hash glyph appears at completion. Loops for pending state.</desc>
 
 <defs>

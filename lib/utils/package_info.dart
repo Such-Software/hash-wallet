@@ -22,7 +22,7 @@ class PackageInfo {
             buildNumber: packageInfo.buildNumber);
     }
 
-    static const _defaultCWAppName = 'Hash Wallet';
+    static const _defaultCWAppName = 'Hash Bags';
     static const _defaultCWAppPackageName = 'com.suchsoftware.hashwallet';
     static const _defaultCWAppVersion = '1.0.0';
     static const _defaultCWAppBuildNumber = '1';

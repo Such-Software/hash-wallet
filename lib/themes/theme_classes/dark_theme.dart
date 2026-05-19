@@ -10,7 +10,7 @@ class DarkTheme extends MaterialThemeBase {
   @override
   ThemeMode get themeMode => ThemeMode.dark;
 
-  // Hash Wallet dark palette:
+  // Hash Bags dark palette:
   //  - Primary: mint (#7FCAA0) — light enough to read on dark surface
   //  - Secondary: soft pink (#E16FA6)
   //  - Tertiary: soft blue (#6AB7E6)

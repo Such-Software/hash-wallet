@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 1080" width="680" height="1080">
-<title>Hash Wallet logo set v2</title>
-<desc>Logo concepts for Hash Wallet: standalone mark, lockups, H-emphasized variants, and function-style wordmark.</desc>
+<title>Hash Bags logo set v2</title>
+<desc>Logo concepts for Hash Bags: standalone mark, lockups, H-emphasized variants, and function-style wordmark.</desc>
 
 <style>
   .label { font-family: ui-monospace, 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; fill: #999; }
@@ -45,19 +45,19 @@
 <g transform="translate(80, 320)">
   <rect x="0" y="0" width="64" height="64" rx="12" fill="#1a1a1a"/>
   <text x="32" y="50" font-family="ui-monospace, monospace" font-size="48" font-weight="700" fill="#fff" text-anchor="middle">#</text>
-  <text x="84" y="44" class="word-bold" font-size="32">Hash Wallet</text>
+  <text x="84" y="44" class="word-bold" font-size="32">Hash Bags</text>
 </g>
 
 <g transform="translate(80, 410)">
   <rect x="0" y="0" width="64" height="64" rx="12" fill="#1a5c38"/>
   <text x="32" y="50" font-family="ui-monospace, monospace" font-size="48" font-weight="700" fill="#fff" text-anchor="middle">#</text>
-  <text x="84" y="44" class="word-bold" font-size="32">Hash Wallet</text>
+  <text x="84" y="44" class="word-bold" font-size="32">Hash Bags</text>
 </g>
 
 <g transform="translate(420, 320)">
   <rect x="20" y="0" width="56" height="56" rx="10" fill="#1a1a1a"/>
   <text x="48" y="44" font-family="ui-monospace, monospace" font-size="42" font-weight="700" fill="#fff" text-anchor="middle">#</text>
-  <text x="48" y="84" font-family="ui-monospace, monospace" font-size="18" font-weight="600" fill="#1a1a1a" text-anchor="middle">Hash Wallet</text>
+  <text x="48" y="84" font-family="ui-monospace, monospace" font-size="18" font-weight="600" fill="#1a1a1a" text-anchor="middle">Hash Bags</text>
 </g>
 
 <!-- 03 — H-EMPHASIZED MARK -->
