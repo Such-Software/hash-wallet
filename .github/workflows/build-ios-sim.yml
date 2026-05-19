@@ -272,36 +272,57 @@ jobs:
           cd build/ios/iphonesimulator
           zip -r hash_wallet_ios_sim_${{ github.sha }}.zip Runner.app
 
-      # Make git.such.software resolve to something the runner can actually
-      # reach. Independent of whether the Mac's /etc/hosts has an entry,
-      # we override at job runtime — inside whatever environment this step
-      # actually runs in (native shell, Docker container, etc.). Try
-      # host.docker.internal first (Docker Desktop's host gateway). Fall
-      # back to 127.0.0.1 (works for host-mode runners).
-      - name: Force git.such.software to resolve locally
+      # Confirm git.such.software resolves to a local target (the Mac itself).
+      # The runner inherits the Mac's /etc/hosts directly (host-mode act_runner),
+      # so the user should have:
+      #   127.0.0.1 git.such.software
+      # already in /etc/hosts. We only assert that here, don't modify (sudo
+      # without NOPASSWD prompts for a password the runner can't enter).
+      #
+      # macOS's `getent` doesn't exist and `nslookup` bypasses /etc/hosts.
+      # We grep /etc/hosts directly — that's what Node's getaddrinfo will
+      # actually consult.
+      - name: Verify Gitea hostname resolves locally
         run: |
-          set -x
-          echo "=== before ==="
-          cat /etc/hosts | tail -10 || true
-          getent hosts git.such.software 2>/dev/null || nslookup git.such.software 2>/dev/null || true
+          if grep -qE '^[[:space:]]*(127\.0\.0\.1|host\.docker\.internal|192\.168\.)[[:space:]]+git\.such\.software' /etc/hosts; then
+            echo "✓ /etc/hosts points git.such.software at a local target:"
+            grep git.such.software /etc/hosts
+          else
+            echo "✗ /etc/hosts is MISSING a local override for git.such.software."
+            echo "  Node will resolve to the public IP and fail on NAT hairpin."
+            echo "  Add (once, on the Mac mini):"
+            echo "    sudo sh -c 'echo \"127.0.0.1 git.such.software\" >> /etc/hosts'"
+            exit 1
+          fi
 
-          if getent hosts host.docker.internal >/dev/null 2>&1; then
-            TARGET=host.docker.internal
-          else
-            TARGET=127.0.0.1
-          fi
-          echo "Pointing git.such.software → $TARGET"
-          # Remove any prior entry, append ours. sudo if available, plain
-          # write otherwise (root in containers, or NOPASSWD sudo).
-          if command -v sudo >/dev/null; then
-            sudo sh -c "sed -i.bak '/git\\.such\\.software/d' /etc/hosts; echo '$TARGET git.such.software' >> /etc/hosts"
-          else
-            sed -i.bak '/git\.such\.software/d' /etc/hosts
-            echo "$TARGET git.such.software" >> /etc/hosts
-          fi
-          echo "=== after ==="
-          cat /etc/hosts | tail -5
-          getent hosts git.such.software || nslookup git.such.software || true
+      # Diagnostic: print exactly where upload-artifact will try to send data.
+      # act_runner injects these env vars; their values tell us whether the
+      # upload targets git.such.software (uses our /etc/hosts override) or
+      # a LAN IP directly (override irrelevant). Also probe the URL with
+      # curl -k so we see the cert + reachability before the real upload.
+      - name: Diagnose Actions API endpoint
+        run: |
+          set +e
+          echo "=== Actions runtime env ==="
+          echo "ACTIONS_RUNTIME_URL=${ACTIONS_RUNTIME_URL:-<unset>}"
+          echo "ACTIONS_RESULTS_URL=${ACTIONS_RESULTS_URL:-<unset>}"
+          echo "ACTIONS_CACHE_URL=${ACTIONS_CACHE_URL:-<unset>}"
+          echo "GITHUB_SERVER_URL=${GITHUB_SERVER_URL:-<unset>}"
+          echo "GITHUB_API_URL=${GITHUB_API_URL:-<unset>}"
+          echo "NODE_TLS_REJECT_UNAUTHORIZED=${NODE_TLS_REJECT_UNAUTHORIZED:-<unset>}"
+          echo
+          # Probe each non-empty URL to see what Node will actually hit.
+          for var in ACTIONS_RUNTIME_URL ACTIONS_RESULTS_URL GITHUB_SERVER_URL; do
+            url="${!var}"
+            [ -z "$url" ] && continue
+            host=$(echo "$url" | sed -E 's|^https?://([^/:]+).*|\1|')
+            echo "--- $var → $url ---"
+            echo "DNS for $host:"
+            dscacheutil -q host -a name "$host" 2>/dev/null || nslookup "$host" 2>/dev/null || true
+            echo "HEAD probe (curl -kIv, 10s timeout):"
+            curl -kIv --max-time 10 "$url" 2>&1 | head -40 || true
+            echo
+          done
 
       - name: Upload .app artifact
         uses: actions/upload-artifact@v3
