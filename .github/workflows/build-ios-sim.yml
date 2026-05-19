@@ -163,17 +163,27 @@ jobs:
             ls
           popd
 
-      # iOS native lib staging: Cake's scripts/ios/setup.sh + gen_framework.sh
-      # expect pre-built .a archives in specific paths. The first run will
-      # likely surface what's missing; we iterate from there.
       - name: Inspect iOS targets available in monero_c bundle
         run: |
           set -x
           MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
           BUNDLE_DIR="scripts/monero_c/release/$MONERO_C_TAG"
-          # List anything iOS-y
-          find "$BUNDLE_DIR" -maxdepth 1 -name '*ios*' -o -name '*apple*' 2>/dev/null || true
+          echo "=== bundle top-level ==="
           ls "$BUNDLE_DIR" || true
+          echo "=== iOS-y subdirs ==="
+          find "$BUNDLE_DIR" -maxdepth 1 -type d \( -name '*ios*' -o -name '*apple*' \) 2>/dev/null
+          echo "=== sample contents of one apple-ios target ==="
+          for d in "$BUNDLE_DIR"/aarch64-apple-ios "$BUNDLE_DIR"/aarch64-apple-ios-simulator; do
+            [[ -d "$d" ]] && { echo "--- $d ---"; ls "$d"; }
+          done
+
+      - name: Build MoneroWallet + WowneroWallet XCFrameworks
+        run: |
+          set -x -e
+          pushd scripts/ios
+            bash ./gen_framework.sh
+          popd
+          ls -la ios/MoneroWallet.xcframework ios/WowneroWallet.xcframework
 
       # ---- Configure: pubspec.yaml, Info.plist, GeneratedPluginRegistrant ---
       - name: Run iOS configure (cakewallet profile)

@@ -158,6 +158,14 @@ jobs:
             rm release-bundle.zip
           popd
 
+      - name: Build MoneroWallet + WowneroWallet XCFrameworks
+        run: |
+          set -x -e
+          pushd scripts/ios
+            bash ./gen_framework.sh
+          popd
+          ls -la ios/MoneroWallet.xcframework ios/WowneroWallet.xcframework
+
       # ---- Configure: pubspec.yaml, Info.plist, etc. ----------------------
       - name: Run iOS configure (cakewallet profile)
         run: |
