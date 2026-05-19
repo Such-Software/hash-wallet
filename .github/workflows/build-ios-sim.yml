@@ -272,27 +272,40 @@ jobs:
           cd build/ios/iphonesimulator
           zip -r hash_wallet_ios_sim_${{ github.sha }}.zip Runner.app
 
-      # actions/upload-artifact pushes to Gitea's API over HTTPS. From inside
-      # the Docker container on the Mac runner, that resolves to the public IP
-      # and fails on NAT hairpin. Since the runner and Gitea are the same
-      # machine, just copy the .app to a host-visible dir instead. github.workspace
-      # is a path mounted from the host, so anything written there survives the
-      # container teardown and is accessible from the Mac filesystem at:
-      #   ~/.cache/act/<runner-id>/hostexecutor/dist/
-      - name: Save .app to workspace/dist (host-accessible)
+      # Make git.such.software resolve to something the runner can actually
+      # reach. Independent of whether the Mac's /etc/hosts has an entry,
+      # we override at job runtime — inside whatever environment this step
+      # actually runs in (native shell, Docker container, etc.). Try
+      # host.docker.internal first (Docker Desktop's host gateway). Fall
+      # back to 127.0.0.1 (works for host-mode runners).
+      - name: Force git.such.software to resolve locally
         run: |
           set -x
-          DIST_DIR="${{ github.workspace }}/dist"
-          mkdir -p "$DIST_DIR"
-          cp "build/ios/iphonesimulator/hash_wallet_ios_sim_${{ github.sha }}.zip" "$DIST_DIR/"
-          echo
-          echo "============================================================"
-          echo "Build artifact saved to workspace/dist/"
-          echo
-          echo "On the Mac filesystem, find it at:"
-          echo "  /Users/such-git/.cache/act/<recent>/hostexecutor/dist/hash_wallet_ios_sim_${{ github.sha }}.zip"
-          echo
-          echo "Or just:"
-          echo "  find /Users/such-git/.cache/act -name 'hash_wallet_ios_sim_${{ github.sha }}.zip' 2>/dev/null"
-          echo "============================================================"
-          ls -la "$DIST_DIR/"
+          echo "=== before ==="
+          cat /etc/hosts | tail -10 || true
+          getent hosts git.such.software 2>/dev/null || nslookup git.such.software 2>/dev/null || true
+
+          if getent hosts host.docker.internal >/dev/null 2>&1; then
+            TARGET=host.docker.internal
+          else
+            TARGET=127.0.0.1
+          fi
+          echo "Pointing git.such.software → $TARGET"
+          # Remove any prior entry, append ours. sudo if available, plain
+          # write otherwise (root in containers, or NOPASSWD sudo).
+          if command -v sudo >/dev/null; then
+            sudo sh -c "sed -i.bak '/git\\.such\\.software/d' /etc/hosts; echo '$TARGET git.such.software' >> /etc/hosts"
+          else
+            sed -i.bak '/git\.such\.software/d' /etc/hosts
+            echo "$TARGET git.such.software" >> /etc/hosts
+          fi
+          echo "=== after ==="
+          cat /etc/hosts | tail -5
+          getent hosts git.such.software || nslookup git.such.software || true
+
+      - name: Upload .app artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-wallet-ios-sim-${{ github.sha }}
+          path: build/ios/iphonesimulator/hash_wallet_ios_sim_*.zip
+          retention-days: 14
