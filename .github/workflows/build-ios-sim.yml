@@ -1,0 +1,164 @@
+name: Hash Wallet iOS Simulator build
+
+# Phase 1 of iOS CI: validate the Mac runner end-to-end by producing an
+# unsigned simulator .app. Drop the resulting Runner.app into the iOS
+# Simulator on any Apple Silicon Mac to verify the app actually compiles
+# and launches.
+#
+# Phase 2 (separate workflow): full TestFlight pipeline with signing.
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      APP_IOS_TYPE: cakewallet
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Show toolchain
+        run: |
+          set -x
+          flutter --version
+          xcodebuild -version
+          pod --version
+          which wget unzip
+          uname -m
+
+      # ---- External prebuilt deps (same as android/linux) ------------------
+      - name: Fetch prebuilt torch_dart
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf torch_dart torch_dart.tar.gz
+            wget -q https://github.com/MrCyjaneK/torch_dart/releases/download/v1.0.17/torch_dart-v1.0.17.tar.gz -O torch_dart.tar.gz
+            mkdir torch_dart
+            tar -xzf torch_dart.tar.gz -C torch_dart
+            rm torch_dart.tar.gz
+          popd
+
+      - name: Fetch prebuilt reown_flutter
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf reown_flutter reown_flutter.tar.gz
+            wget -q https://github.com/cake-tech/reown_flutter/releases/download/v0.0.4/reown_flutter-v0.0.4.tar.gz -O reown_flutter.tar.gz
+            mkdir reown_flutter
+            tar -xzf reown_flutter.tar.gz -C reown_flutter
+            rm reown_flutter.tar.gz
+          popd
+
+      - name: Clone BitBox Flutter
+        run: |
+          set -x -e
+          pushd scripts
+            ./build_bitbox_flutter.sh
+          popd
+
+      # ---- Native crypto cores (monero_c prebuilt bundle) ------------------
+      - name: Fetch prebuilt monero_c bundle
+        run: |
+          set -x -e
+          ./scripts/prepare_moneroc.sh
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
+          pushd "scripts/monero_c/release/$MONERO_C_TAG"
+            wget -q https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
+            unzip -q release-bundle.zip
+            rm release-bundle.zip
+            echo "=== bundle contents (one level) ==="
+            ls
+          popd
+
+      # iOS native lib staging: Cake's scripts/ios/setup.sh + gen_framework.sh
+      # expect pre-built .a archives in specific paths. The first run will
+      # likely surface what's missing; we iterate from there.
+      - name: Inspect iOS targets available in monero_c bundle
+        run: |
+          set -x
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          BUNDLE_DIR="scripts/monero_c/release/$MONERO_C_TAG"
+          # List anything iOS-y
+          find "$BUNDLE_DIR" -maxdepth 1 -name '*ios*' -o -name '*apple*' 2>/dev/null || true
+          ls "$BUNDLE_DIR" || true
+
+      # ---- Configure: pubspec.yaml, Info.plist, GeneratedPluginRegistrant ---
+      - name: Run iOS configure (cakewallet profile)
+        run: |
+          set -x -e
+          pushd scripts/ios
+            source ./app_env.sh cakewallet
+            ./app_config.sh
+          popd
+
+      # ---- Secrets ---------------------------------------------------------
+      - name: Generate per-module secrets.g.dart files (all empty defaults)
+        run: dart run tool/generate_new_secrets.dart
+
+      - name: Inject Trocador affiliate secrets
+        env:
+          TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
+          TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
+          TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
+        run: |
+          # macOS sed needs '' after -i; Linux sed doesn't accept that. This
+          # workflow runs on macos only.
+          sed -i '' \
+            -e "s|const trocadorApiKey = '';|const trocadorApiKey = '${TROCADOR_API_KEY}';|" \
+            -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
+            -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
+            lib/.secrets.g.dart
+          grep '^const trocador' lib/.secrets.g.dart
+
+      # ---- Flutter init + codegen -----------------------------------------
+      - name: Initialize Flutter SDK (iOS precache)
+        run: |
+          flutter --version
+          flutter precache --ios --no-linux --no-android --no-macos --no-windows --no-fuchsia --no-web || true
+
+      - name: Build generated code (mobx + hive adapters)
+        run: bash model_generator.sh
+
+      - name: Generate localization
+        run: dart run tool/generate_localization.dart
+
+      # CocoaPods: the iOS Podfile installs Flutter plugin pods. Required
+      # before flutter build can link them.
+      - name: pod install
+        run: |
+          cd ios
+          pod install --repo-update
+
+      # ---- Build iOS Simulator app (no codesign) ---------------------------
+      - name: Build iOS Simulator app
+        run: |
+          set -x -e
+          flutter build ios --simulator --no-codesign \
+            --dart-define-from-file=env.json
+          ls -la build/ios/iphonesimulator/
+
+      - name: Zip Runner.app
+        run: |
+          cd build/ios/iphonesimulator
+          zip -r hash_wallet_ios_sim_${{ github.sha }}.zip Runner.app
+
+      - name: Upload .app artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-wallet-ios-sim-${{ github.sha }}
+          path: build/ios/iphonesimulator/hash_wallet_ios_sim_*.zip
+          retention-days: 14
