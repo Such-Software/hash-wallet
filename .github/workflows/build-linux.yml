@@ -5,12 +5,9 @@ name: Hash Bags Linux build
 # - on PRs targeting dev/main (gates merges)
 # - manual via workflow_dispatch ("Run workflow" button in the UI)
 on:
-  # See note in build-android.yml about pull_request vs push triggers and
-  # Gitea Actions' from-fork secret stripping. Push-only here too for
-  # consistency (no secrets are required for Linux build today, but if we
-  # add any in future this avoids surprises).
-  push:
-    branches: [dev, main]
+  # Manual-only for now — auto-run on every push was too noisy. Trigger
+  # via Actions → "Hash Bags Linux build" → Run workflow when you want a
+  # build. Add `push:` back here if/when we want pre-merge validation.
   workflow_dispatch:
 
 concurrency:

@@ -8,9 +8,8 @@ name: Hash Bags iOS Simulator build
 # Phase 2 (separate workflow): full TestFlight pipeline with signing.
 
 on:
-  # See note in build-android.yml about Gitea PR-from-fork secret stripping.
-  push:
-    branches: [dev, main]
+  # Manual-only for now. Trigger via Actions → "Hash Bags iOS Simulator
+  # build" → Run workflow when you want a build.
   workflow_dispatch:
 
 # Cancel in-flight runs when a newer commit lands on the same branch — so a

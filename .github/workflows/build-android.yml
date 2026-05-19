@@ -5,13 +5,9 @@ name: Hash Bags Android build
 # - PRs targeting dev/main (gate merges)
 # - manual via workflow_dispatch
 on:
-  # PR-from-fork triggers strip secrets in Gitea (and GitHub) for security.
-  # We mirror github-such-software/hash-wallet → Builds/hash-wallet via PRs,
-  # so a pull_request trigger here would always run without secrets.
-  # Listen only to push events on the destination branch (post-merge) so
-  # secrets are reliably available.
-  push:
-    branches: [dev, main]
+  # Manual-only for now. Trigger via Actions → "Hash Bags Android build"
+  # → Run workflow when you want a build. workflow_dispatch runs as the
+  # triggering user, so secrets are always available (unlike PR triggers).
   workflow_dispatch:
 
 concurrency:
