@@ -101,26 +101,50 @@ jobs:
           MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
           BUNDLE_DIR="scripts/monero_c/release/$MONERO_C_TAG"
 
-          # monero_c target dir → Android ABI dir
+          # monero_c target dir → Android ABI dir. i686 (32-bit x86) is
+          # essentially dead on real Android devices; the monero_c bundle
+          # doesn't ship it. Missing target = log + skip, not fatal. The
+          # required modern ABIs (arm64-v8a, x86_64) MUST exist or we fail.
           declare -A ABI_MAP=(
             [aarch64-linux-android]=arm64-v8a
             [armv7a-linux-androideabi]=armeabi-v7a
             [i686-linux-android]=x86
             [x86_64-linux-android]=x86_64
           )
+          REQUIRED_ABIS=(arm64-v8a x86_64)
 
+          declare -A FOUND_ABI
           for target in "${!ABI_MAP[@]}"; do
             abi="${ABI_MAP[$target]}"
+            if [[ ! -d "$BUNDLE_DIR/$target" ]]; then
+              echo "SKIP: $target not in bundle (Android ABI $abi will not be shipped)"
+              continue
+            fi
             mkdir -p "android/app/src/main/jniLibs/$abi"
+            ok=true
             for coin in monero wownero; do
               src="$BUNDLE_DIR/$target/lib${coin}_wallet2_api_c.so"
               if [[ -f "$src" ]]; then
                 cp -v "$src" "android/app/src/main/jniLibs/$abi/"
               else
-                echo "MISSING: $src — fail loud, the bundle layout may have changed"
-                exit 1
+                echo "SKIP: $src missing (skipping $abi)"
+                ok=false
+                break
               fi
             done
+            if $ok; then
+              FOUND_ABI[$abi]=1
+            else
+              rm -rf "android/app/src/main/jniLibs/$abi"
+            fi
+          done
+
+          # Fail loudly only if a required ABI is missing.
+          for required in "${REQUIRED_ABIS[@]}"; do
+            if [[ -z "${FOUND_ABI[$required]:-}" ]]; then
+              echo "FATAL: required ABI $required is missing — monero_c bundle layout has changed"
+              exit 1
+            fi
           done
 
           echo "=== jniLibs contents ==="
