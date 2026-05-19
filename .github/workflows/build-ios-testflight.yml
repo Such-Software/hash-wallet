@@ -21,6 +21,10 @@ on:
   # input for build number or auto-bump.
   workflow_dispatch:
 
+concurrency:
+  group: ios-testflight-${{ github.ref }}
+  cancel-in-progress: true
+
 defaults:
   run:
     shell: bash
@@ -37,6 +41,31 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Check Flutter 3.32.0
+        id: flutter_check
+        run: |
+          if command -v flutter >/dev/null && flutter --version 2>/dev/null | grep -q "3\.32\.0"; then
+            echo "installed=true"  >> "$GITHUB_OUTPUT"
+            flutter --version
+          else
+            echo "installed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Flutter 3.32.0 (if missing)
+        if: steps.flutter_check.outputs.installed != 'true'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: stable
+          cache: true
+
+      - name: Install CocoaPods (if missing)
+        run: |
+          if ! command -v pod >/dev/null; then
+            sudo gem install cocoapods --no-document
+          fi
+          pod --version
+
       - name: Show toolchain
         run: |
           set -x
@@ -46,12 +75,13 @@ jobs:
           uname -m
 
       # ---- External prebuilt deps -----------------------------------------
+      # macOS doesn't ship wget; using curl everywhere.
       - name: Fetch prebuilt torch_dart
         run: |
           set -x -e
           pushd scripts
             rm -rf torch_dart torch_dart.tar.gz
-            wget -q https://github.com/MrCyjaneK/torch_dart/releases/download/v1.0.17/torch_dart-v1.0.17.tar.gz -O torch_dart.tar.gz
+            curl -fsSL -o torch_dart.tar.gz https://github.com/MrCyjaneK/torch_dart/releases/download/v1.0.17/torch_dart-v1.0.17.tar.gz
             mkdir torch_dart
             tar -xzf torch_dart.tar.gz -C torch_dart
             rm torch_dart.tar.gz
@@ -62,7 +92,7 @@ jobs:
           set -x -e
           pushd scripts
             rm -rf reown_flutter reown_flutter.tar.gz
-            wget -q https://github.com/cake-tech/reown_flutter/releases/download/v0.0.4/reown_flutter-v0.0.4.tar.gz -O reown_flutter.tar.gz
+            curl -fsSL -o reown_flutter.tar.gz https://github.com/cake-tech/reown_flutter/releases/download/v0.0.4/reown_flutter-v0.0.4.tar.gz
             mkdir reown_flutter
             tar -xzf reown_flutter.tar.gz -C reown_flutter
             rm reown_flutter.tar.gz
@@ -82,7 +112,7 @@ jobs:
           MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
           mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
           pushd "scripts/monero_c/release/$MONERO_C_TAG"
-            wget -q https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
+            curl -fsSL -O https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
             unzip -q release-bundle.zip
             rm release-bundle.zip
           popd
