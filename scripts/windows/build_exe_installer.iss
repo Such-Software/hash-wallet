@@ -1,11 +1,11 @@
-#define MyAppName "Cake Wallet"
-#define MyAppVersion "6.1.0"
-#define MyAppPublisher "Cake Labs LLC"
-#define MyAppURL "https://cakewallet.com/"
-#define MyAppExeName "CakeWallet.exe"
+#define MyAppName "Hash Bags"
+#define MyAppVersion "1.0.0"
+#define MyAppPublisher "Such Software LLC"
+#define MyAppURL "https://such.software/"
+#define MyAppExeName "HashWallet.exe"
 
 [Setup]
-AppId=com.cakewallet.cakewallet
+AppId=com.suchsoftware.hashwallet
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -13,13 +13,13 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\CakeWallet
+DefaultDirName={autopf}\HashBags
 DisableProgramGroupPage=yes
 LicenseFile=..\..\LICENSE.md
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ; PrivilegesRequired=lowest
 OutputDir=..\..\
-OutputBaseFilename=cakewallet_setup
+OutputBaseFilename=hashbags_setup
 SetupIconFile=..\..\windows\runner\resources\app_icon.ico
 Compression=lzma
 SolidCompression=yes

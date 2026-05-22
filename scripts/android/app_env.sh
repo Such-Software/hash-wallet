@@ -21,11 +21,11 @@ MONERO_COM_PACKAGE="com.monero.app"
 MONERO_COM_SCHEME="monero.com"
 
 CAKEWALLET_NAME="Hash Bags"
-CAKEWALLET_VERSION="6.1.2"
-CAKEWALLET_BUILD_NUMBER=4410
+CAKEWALLET_VERSION="1.0.0"
+CAKEWALLET_BUILD_NUMBER=1
 CAKEWALLET_BUNDLE_ID="com.suchsoftware.hashwallet"
 CAKEWALLET_PACKAGE="com.suchsoftware.hashwallet"
-CAKEWALLET_SCHEME="hashwallet"
+CAKEWALLET_SCHEME="hashbags"
 
 
 if ! [[ " ${TYPES[*]} " =~ " ${APP_ANDROID_TYPE} " ]]; then

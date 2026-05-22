@@ -53,7 +53,6 @@ const dogecoinDefaultNodeUri = 'dogecoin.stackwallet.com:50022';
 const baseDefaultNodeUri = 'base-rpc.publicnode.com';
 const arbitrumDefaultNodeUri = 'arbitrum.nownodes.io';
 const bscDefaultNodeUri = 'bsc-dataseed.bnbchain.org';
-const zcashDefaultNodeUri = 'zec-node.cakewallet.com:443';
 
 Future<void> defaultSettingsMigration(
     {required int version,
