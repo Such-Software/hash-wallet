@@ -15,11 +15,11 @@ class Setup2FAPage extends BasePage {
   final Setup2FAViewModel setup2FAViewModel;
 
   @override
-  String get title => 'Cake 2FA';
+  String get title => 'Hash Bags 2FA';
 
   @override
   Widget body(BuildContext context) {
-    final cake2FAGuideTitle = 'Cake 2FA Guide';
+    final cake2FAGuideTitle = 'Hash Bags 2FA Guide';
     final cake2FAGuideUri =
         Uri.parse('https://github.com/Such-Software/hash-wallet');
     return Column(
