@@ -5,14 +5,18 @@
        hash_wallet_logos.svg (#1a5c38). iOS/Android round the corners
        automatically; we ship a square fill. -->
   <rect width="1024" height="1024" fill="#1a5c38"/>
-  <!-- # mark, white, centered. ui-monospace falls back to the platform's
-       default monospace; the rasterizer bakes this into a PNG so font
-       availability on user devices doesn't matter. -->
-  <text x="512" y="512"
-        text-anchor="middle"
-        dominant-baseline="central"
-        font-family="ui-monospace, 'JetBrains Mono', 'Courier New', monospace"
-        font-size="720"
-        font-weight="700"
-        fill="#ffffff">#</text>
+  <!-- # mark, drawn as 4 vector lines centered at (512, 512). Previous
+       version used <text> with dominant-baseline="central", but the
+       rendered # was visually biased toward the top because monospaced
+       font glyph metrics don't put the # at the geometric center of the
+       em-box. Path-based rendering removes the font dependency
+       entirely. -->
+  <g stroke="#ffffff" stroke-width="80" stroke-linecap="square">
+    <!-- horizontal bars (top, bottom) — at y = 512 ± 100 -->
+    <line x1="212" y1="412" x2="812" y2="412"/>
+    <line x1="212" y1="612" x2="812" y2="612"/>
+    <!-- vertical bars (left, right) — at x = 512 ± 100 -->
+    <line x1="412" y1="212" x2="412" y2="812"/>
+    <line x1="612" y1="212" x2="612" y2="812"/>
+  </g>
 </svg>
