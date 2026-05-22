@@ -319,20 +319,62 @@ jobs:
         run: |
           ls -la build/windows/x64/runner/Release/
 
-      - name: Create release zip
+      # ---- Build single-file portable HashBags.exe (7-Zip SFX) -------------
+      # Goal: ship one .exe that users can double-click. The Flutter Windows
+      # build produces a directory tree (~500 files: hash_wallet.exe +
+      # plugin DLLs + data/ + locales/), but we want a single binary.
+      # 7-Zip's installer-mode SFX module (7zS.sfx) bundles the archive
+      # into a wrapper .exe that on launch extracts to %TEMP% and runs
+      # the configured RunProgram. Each launch re-extracts; subsequent
+      # launches are slower than a real install but the trade-off for
+      # "zero-touch portable" is acceptable for now.
+      - name: Create portable HashBags.exe (7-Zip SFX wrapper)
         run: |
           set -x -e
-          cd build/windows/x64/runner/Release
-          # PowerShell's Compress-Archive is in PATH; using it avoids depending
-          # on 7z which may or may not be installed.
-          powershell -NoProfile -Command "Compress-Archive -Path .\* -DestinationPath ..\..\..\..\..\hash_wallet_windows_${{ github.sha }}.zip -Force"
-          ls -la ../../../../../hash_wallet_windows_*.zip
+          SEVENZ_DIR="/c/Program Files/7-Zip"
+          # 7-Zip's installer-mode SFX module. Naming has varied between
+          # 7-Zip versions; check what's actually installed.
+          for candidate in "$SEVENZ_DIR/7zS.sfx" "$SEVENZ_DIR/7zSD.sfx" "$SEVENZ_DIR/7zSfx.sfx"; do
+            if [[ -f "$candidate" ]]; then
+              SFX_MODULE="$candidate"
+              break
+            fi
+          done
+          if [[ -z "${SFX_MODULE:-}" ]]; then
+            echo "FATAL: no 7zS*.sfx module under $SEVENZ_DIR"
+            ls "$SEVENZ_DIR"
+            exit 1
+          fi
+          echo "Using SFX module: $SFX_MODULE"
 
-      # actions/upload-artifact@v4 doesn't work on Gitea — pin to v3 like
-      # the iOS + Android workflows.
-      - name: Upload Windows release zip
+          # 1. Pack the Release dir into a single .7z
+          cd build/windows/x64/runner/Release
+          "$SEVENZ_DIR/7z.exe" a -mx=9 -mmt=on "$GITHUB_WORKSPACE/HashBags-payload.7z" . | tail -20
+          cd "$GITHUB_WORKSPACE"
+
+          # 2. SFX config — runtime behavior of the wrapper .exe.
+          # RunProgram is what fires after extraction. HashWallet is the
+          # BINARY_NAME baked into windows/CMakeLists.txt.
+          cat > sfx-config.txt <<'SFXCFG'
+;!@Install@!UTF-8!
+Title="Hash Bags"
+BeginPrompt=""
+Progress="yes"
+RunProgram="HashWallet.exe"
+;!@InstallEnd@!
+SFXCFG
+
+          # 3. Concatenate SFX module + config + payload → final .exe.
+          # Identical to the Windows "copy /b a + b + c" idiom; cat works
+          # fine for byte-exact concatenation in Git Bash.
+          OUT="HashBags-${{ github.sha }}.exe"
+          cat "$SFX_MODULE" sfx-config.txt HashBags-payload.7z > "$OUT"
+          ls -la "$OUT"
+          echo "Size: $(du -h "$OUT" | cut -f1)"
+
+      - name: Upload portable HashBags.exe
         uses: actions/upload-artifact@v3
         with:
-          name: hash-wallet-windows-${{ github.sha }}
-          path: hash_wallet_windows_*.zip
+          name: hash-bags-windows-${{ github.sha }}
+          path: HashBags-${{ github.sha }}.exe
           retention-days: 14
