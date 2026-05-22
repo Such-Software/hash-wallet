@@ -355,14 +355,9 @@ jobs:
           # 2. SFX config — runtime behavior of the wrapper .exe.
           # RunProgram is what fires after extraction. HashWallet is the
           # BINARY_NAME baked into windows/CMakeLists.txt.
-          cat > sfx-config.txt <<'SFXCFG'
-;!@Install@!UTF-8!
-Title="Hash Bags"
-BeginPrompt=""
-Progress="yes"
-RunProgram="HashWallet.exe"
-;!@InstallEnd@!
-SFXCFG
+          # Using printf instead of a heredoc because bash heredoc bodies
+          # have no indentation and break out of YAML's `run: |` block.
+          printf ';!@Install@!UTF-8!\nTitle="Hash Bags"\nBeginPrompt=""\nProgress="yes"\nRunProgram="HashWallet.exe"\n;!@InstallEnd@!\n' > sfx-config.txt
 
           # 3. Concatenate SFX module + config + payload → final .exe.
           # Identical to the Windows "copy /b a + b + c" idiom; cat works
