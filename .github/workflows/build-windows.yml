@@ -1,0 +1,338 @@
+name: Hash Bags Windows build
+
+# Phase 1 of Windows CI: produce an unsigned Windows release bundle (.zip of
+# the Flutter Release output + MSVC runtime DLLs). Drop the zip on any Win
+# 10/11 box, extract, run hash_wallet.exe.
+#
+# Phase 2 (separate iteration): wire up Inno Setup installer once the
+# scripts/windows/build_exe_installer.iss file is rebranded from Cake Wallet
+# → Hash Bags.
+
+on:
+  # Manual-only. Trigger via Actions → "Hash Bags Windows build" → Run workflow.
+  # workflow_dispatch runs as the triggering user, so secrets are always
+  # available (PR triggers from forks would strip them — not relevant here
+  # since the runner is self-hosted and listening on a self-hosted Gitea).
+  workflow_dispatch:
+
+# Cancel in-flight runs when a newer commit lands on the same branch.
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    # Explicit Git Bash path (not `shell: bash`) because Windows resolves
+    # bare `bash` to C:\Windows\System32\bash.exe (WSL), which refuses to
+    # run when the act_runner service is hosted under LocalSystem:
+    #   "Running WSL as local system is not supported."
+    # Git Bash works fine under LocalSystem and matches how GitHub's
+    # hosted windows-latest runner invokes bash.
+    shell: '"C:\Program Files\Git\bin\bash.exe" --noprofile --norc -eo pipefail {0}'
+
+jobs:
+  build:
+    # Matches the label our act_runner.exe advertised: "windows:host" → executor=host.
+    runs-on: windows
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      # Belt-and-suspenders: bypass Node TLS verification for actions/* that
+      # talk back to git.such.software. Same fallback as build-ios-sim.yml.
+      NODE_TLS_REJECT_UNAUTHORIZED: '0'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # ---- Git config for LocalSystem ---------------------------------------
+      # The runner service runs as LocalSystem, which has no global git
+      # identity. scripts/monero_c/apply_patches.sh (and a few other
+      # submodule operations) do `git commit`-equivalents that need
+      # user.email + user.name set. Also pre-empt git's "safe.directory"
+      # check, which fires when the checkout dir owner != runner identity.
+      - name: Configure git identity + safe.directory
+        run: |
+          git config --global --add safe.directory '*'
+          git config --global user.email "ci@suchsoftware.com"
+          git config --global user.name "Hash Bags CI"
+          git config --global --list
+
+      # ---- Toolchain sanity ------------------------------------------------
+      # Our self-hosted runner has Flutter / Rust / VS Build Tools / Inno
+      # Setup pre-installed (see scripts/windows/setup-windows-runner.ps1).
+      # This step just prints versions so failures are easy to diagnose.
+      - name: Show installed toolchain versions
+        run: |
+          set -x
+          # PATH may need refreshing after install — refresh from the registry.
+          # Git Bash inherits Windows PATH at shell start, so just printing
+          # `which` is enough.
+          which flutter dart cargo rustc git 2>/dev/null || true
+          flutter --version
+          dart --version
+          rustc --version
+          cargo --version
+
+      # ---- External path-dep plugins ----------------------------------------
+      # Several plugins are path-deps in pubspec.yaml. The path directories
+      # must exist BEFORE `flutter pub get` runs against the regenerated
+      # pubspec, or pub fails with "could not find package X at <path>".
+      #
+      # The Android + iOS + Linux workflows use upstream-published .tar.gz
+      # tarballs. We don't, because those tarballs contain example/*
+      # symlinks pointing to absolute /home/runner/.pub-cache/ paths
+      # (artifacts from the upstream build host) — Linux tar tolerates
+      # dangling symlinks, Windows tar bails the whole extraction. Clone
+      # the source repos at the matching tagged versions instead. Same
+      # pattern as bitbox_flutter further down.
+
+      - name: Clone torch_dart at v1.0.17
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf torch_dart
+            git clone --depth 1 --branch v1.0.17 https://github.com/MrCyjaneK/torch_dart
+          popd
+
+      - name: Clone reown_flutter at v0.0.4
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf reown_flutter
+            git clone --depth 1 --branch v0.0.4 https://github.com/cake-tech/reown_flutter
+          popd
+
+      - name: Clone BitBox Flutter
+        run: |
+          # Pubspec has bitbox_flutter as a path dep — the directory must
+          # exist for pub get even if BitBox Windows support isn't
+          # functional. Same approach as the iOS workflow: clone the repo
+          # at a pinned commit, don't run any Android-binding build step.
+          set -x -e
+          pushd scripts
+            if [[ ! -d bitbox_flutter ]]; then
+              git clone https://github.com/konstantinullrich/bitbox_flutter
+            fi
+            cd bitbox_flutter
+            git fetch -a
+            git reset --hard
+            git checkout 5a6e6dd388ef64003f86094af80d5453518b601d
+            git reset --hard
+          popd
+
+      # ---- Native crypto cores (monero_c prebuilt bundle) ------------------
+      # The same release-bundle.zip that Android + iOS use. Contains
+      # pre-cross-compiled native libs for many target triples. We'll need
+      # the x86_64-w64-mingw32 (Windows MinGW) or x86_64-pc-windows-msvc
+      # entries — inspection step below logs what's actually shipped.
+      - name: Fetch prebuilt monero_c bundle
+        run: |
+          set -x -e
+          ./scripts/prepare_moneroc.sh
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          echo "monero_c TAG: $MONERO_C_TAG"
+          mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
+          pushd "scripts/monero_c/release/$MONERO_C_TAG"
+            curl -fsSL -O https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
+            unzip -q release-bundle.zip
+            rm release-bundle.zip
+            echo "=== bundle contents (top level) ==="
+            ls
+          popd
+
+      - name: Inspect Windows targets in monero_c bundle
+        run: |
+          set -x
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          BUNDLE_DIR="scripts/monero_c/release/$MONERO_C_TAG"
+          echo "=== full mingw32 dir contents ==="
+          ls -la "$BUNDLE_DIR/x86_64-w64-mingw32" 2>/dev/null || true
+
+      # ---- Stage monero_c DLLs into the layout windows/CMakeLists.txt expects
+      # Upstream Cake's Windows build cross-compiles monero_c on Linux via
+      # scripts/windows/build_all.sh, which lays files out as:
+      #     scripts/monero_c/release/<coin>/<triple>_<basename>.dll
+      # The CMakeLists.txt at windows/CMakeLists.txt:84-94 hardcodes those
+      # paths in install(FILES ...) rules — it copies + RENAMEs them to the
+      # final names (monero_libwallet2_api_c.dll etc.) in the Release dir.
+      #
+      # We're using the prebuilt bundle from MrCyjaneK's release, which has
+      # a different layout:
+      #     scripts/monero_c/release/<TAG>/<triple>/lib<coin>_wallet2_api_c.dll
+      # So we restage the bundle's files into the upstream-build-all-style
+      # layout before flutter build windows runs.
+      - name: Stage monero_c bundle into upstream cross-compile layout
+        run: |
+          set -x -e
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          SRC="scripts/monero_c/release/$MONERO_C_TAG/x86_64-w64-mingw32"
+          MONERO_DST="scripts/monero_c/release/monero"
+          WOWNERO_DST="scripts/monero_c/release/wownero"
+          mkdir -p "$MONERO_DST" "$WOWNERO_DST"
+
+          # The wallet C-API DLLs, one per coin
+          cp -v "$SRC/libmonero_wallet2_api_c.dll"  "$MONERO_DST/x86_64-w64-mingw32_libwallet2_api_c.dll"
+          cp -v "$SRC/libwownero_wallet2_api_c.dll" "$WOWNERO_DST/x86_64-w64-mingw32_libwallet2_api_c.dll"
+
+          # MinGW runtime DLLs (libssp-0, libwinpthread-1) — the wallet libs
+          # are dynamically linked against these. MrCyjaneK's prebuilt
+          # release-bundle.zip does NOT ship them (only the wallet *.dll +
+          # *.dll.a import libs), so we source them from Git Bash's bundled
+          # MinGW-w64 distribution, which ships the same x86_64-w64-mingw32
+          # ABI used to build the wallet libs.
+          # ORDERING MATTERS: monero_c's prebuilt wallet DLLs are built against
+          # recent MinGW-w64 (post-2022 winpthreads ABI with pthread_cond_timedwait64).
+          # Flutter's bundled mingit ships a 2017-vintage libwinpthread that's
+          # missing newer symbols and crashes wallet creation at runtime. Prefer
+          # Git for Windows' mingw64/bin which is updated frequently.
+          RUNTIME_PATHS=(
+            "/c/Program Files/Git/mingw64/bin"                                        # Git for Windows — modern MinGW runtime (preferred)
+            "$SRC"                                                                    # monero_c bundle (in case it grows DLLs)
+            "/c/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin"           # choco install -y mingw
+            "/c/flutter/bin/mingit/mingw64/bin"                                       # Flutter's bundled mingit — old (2017), use only as last resort
+            "/mingw64/bin"                                                            # MSYS2 fallback
+          )
+          for runtime in libssp-0.dll libwinpthread-1.dll; do
+            src=""
+            for d in "${RUNTIME_PATHS[@]}"; do
+              if [[ -f "$d/$runtime" ]]; then
+                src="$d/$runtime"
+                break
+              fi
+            done
+            if [[ -z "$src" ]]; then
+              echo "FATAL: $runtime not found in any of:"
+              printf '  %s\n' "${RUNTIME_PATHS[@]}"
+              for d in "${RUNTIME_PATHS[@]}"; do
+                echo "--- contents of $d (if exists) ---"
+                ls "$d" 2>/dev/null | head -20 || echo "(missing)"
+              done
+              exit 1
+            fi
+            cp -v "$src" "$MONERO_DST/x86_64-w64-mingw32_${runtime}"
+          done
+
+          echo "=== final staged layout ==="
+          ls -la "$MONERO_DST/" "$WOWNERO_DST/"
+
+      # ---- Configure: pubspec.yaml + per-coin enablement -------------------
+      # Mirror of hashwallet.bat — drives tool/configure.dart with the same
+      # set of coin flags that upstream Cake's Windows build uses.
+      - name: Configure pubspec + Wallet types
+        run: |
+          set -x -e
+          cp -f pubspec_description.yaml pubspec.yaml
+          flutter pub get
+          dart run tool/generate_pubspec.dart
+          flutter pub get
+          dart run tool/configure.dart \
+            --monero --bitcoin --ethereum --polygon --nano --bitcoinCash \
+            --wownero --dogecoin --base --arbitrum --bsc
+
+      # ---- Secrets ---------------------------------------------------------
+      - name: Generate per-module secrets.g.dart files (empty defaults)
+        run: dart run tool/generate_new_secrets.dart
+
+      - name: Inject Trocador affiliate secrets into lib/.secrets.g.dart
+        env:
+          TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
+          TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
+          TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
+        run: |
+          # Length-only debug visibility — never prints actual secrets.
+          echo "TROCADOR_API_KEY length: ${#TROCADOR_API_KEY}"
+          echo "TROCADOR_MONERO_API_KEY length: ${#TROCADOR_MONERO_API_KEY}"
+          echo "TROCADOR_EXCHANGE_MARKUP length: ${#TROCADOR_EXCHANGE_MARKUP}"
+          if [[ -z "$TROCADOR_API_KEY" ]]; then
+            echo "WARN: TROCADOR_API_KEY not reaching runner — build will proceed"
+            echo "      but Trocador exchange features won't work in this binary."
+          fi
+          sed -i \
+            -e "s|const trocadorApiKey = '';|const trocadorApiKey = '${TROCADOR_API_KEY}';|" \
+            -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
+            -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
+            lib/.secrets.g.dart
+          grep '^const trocador' lib/.secrets.g.dart
+
+      # ---- Codegen ---------------------------------------------------------
+      - name: Build generated code (mobx + hive adapters)
+        run: bash model_generator.sh
+
+      - name: Generate localization
+        run: dart run tool/generate_localization.dart
+
+      - name: Compile SVG assets (res/pictures/*.svg → assets/new-ui/*.svg.vec)
+        run: ./compile_graphics.sh
+
+      # ---- Build the Windows .exe ------------------------------------------
+      - name: Build Windows release
+        run: |
+          set -x -e
+          flutter config --enable-windows-desktop
+          flutter build windows --dart-define-from-file=env.json --release --verbose
+
+      # ---- Reconcile monero/wownero DLL naming for Dart FFI ----------------
+      # windows/CMakeLists.txt's install(FILES ... RENAME ...) rules produce
+      # <coin>_libwallet2_api_c.dll, but package:monero's Dart FFI loader
+      # (mrcyjanek's package) opens lib<coin>_wallet2_api_c.dll — different
+      # filename layout, runtime error "Failed to load dynamic library".
+      # Create the lib-prefixed copies so both name conventions resolve.
+      - name: Mirror monero/wownero DLLs under lib-prefixed names
+        run: |
+          set -x -e
+          DST="build/windows/x64/runner/Release"
+          for coin in monero wownero; do
+            src="$DST/${coin}_libwallet2_api_c.dll"
+            dst="$DST/lib${coin}_wallet2_api_c.dll"
+            if [[ -f "$src" ]]; then
+              cp -v "$src" "$dst"
+            else
+              echo "WARN: $src not in Release dir — CMake install may have skipped it"
+              ls "$DST" | head -20
+            fi
+          done
+
+      # ---- Bundle MSVC runtime DLLs with the .exe --------------------------
+      # Standalone Windows builds need msvcp140.dll + vcruntime140.dll +
+      # vcruntime140_1.dll next to the .exe (or installed via vc_redist on
+      # the user's machine). Bundling avoids the "VCRUNTIME140.dll not found"
+      # error on machines without VC++ redistributable installed.
+      - name: Copy MSVC runtime DLLs next to the .exe
+        run: |
+          set -x -e
+          # Find the redist dir for the currently-installed MSVC version (the
+          # version number rolls forward with VS updates, so do NOT hardcode).
+          REDIST_BASE="/c/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Redist/MSVC"
+          REDIST_DIR=$(find "$REDIST_BASE" -type d -name 'Microsoft.VC*.CRT' -path '*/x64/*' 2>/dev/null | sort | tail -1)
+          if [[ -z "$REDIST_DIR" ]]; then
+            echo "FATAL: could not find VC redist dir under $REDIST_BASE"
+            ls "$REDIST_BASE" 2>/dev/null || echo "(redist base dir missing entirely)"
+            exit 1
+          fi
+          echo "Using redist dir: $REDIST_DIR"
+          cp -v "$REDIST_DIR/msvcp140.dll" "$REDIST_DIR/vcruntime140.dll" "$REDIST_DIR/vcruntime140_1.dll" \
+            build/windows/x64/runner/Release/
+
+      # ---- Package + upload ------------------------------------------------
+      - name: List built artifacts (for debug visibility)
+        run: |
+          ls -la build/windows/x64/runner/Release/
+
+      - name: Create release zip
+        run: |
+          set -x -e
+          cd build/windows/x64/runner/Release
+          # PowerShell's Compress-Archive is in PATH; using it avoids depending
+          # on 7z which may or may not be installed.
+          powershell -NoProfile -Command "Compress-Archive -Path .\* -DestinationPath ..\..\..\..\..\hash_wallet_windows_${{ github.sha }}.zip -Force"
+          ls -la ../../../../../hash_wallet_windows_*.zip
+
+      # actions/upload-artifact@v4 doesn't work on Gitea — pin to v3 like
+      # the iOS + Android workflows.
+      - name: Upload Windows release zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-wallet-windows-${{ github.sha }}
+          path: hash_wallet_windows_*.zip
+          retention-days: 14
