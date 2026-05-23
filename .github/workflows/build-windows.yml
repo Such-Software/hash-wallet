@@ -332,17 +332,28 @@ jobs:
         run: |
           set -x -e
           SEVENZ_DIR="/c/Program Files/7-Zip"
-          # 7-Zip's installer-mode SFX module. Naming has varied between
-          # 7-Zip versions; check what's actually installed.
-          for candidate in "$SEVENZ_DIR/7zS.sfx" "$SEVENZ_DIR/7zSD.sfx" "$SEVENZ_DIR/7zSfx.sfx"; do
+
+          # The standalone Windows 7-Zip install ships 7z.sfx (GUI prompt)
+          # and 7zCon.sfx (console-mode extractor) but NOT the installer-
+          # mode SFX module (7zS.sfx / 7zSD.sfx) that does "extract to
+          # temp + auto-run RunProgram". Those live in the "7-Zip Extra"
+          # supplementary archive. Download + extract it on-demand.
+          EXTRA_DIR="$RUNNER_TEMP/7z-extra"
+          if [[ ! -f "$EXTRA_DIR/7zSD.sfx" && ! -f "$EXTRA_DIR/7zS.sfx" ]]; then
+            mkdir -p "$EXTRA_DIR"
+            curl -fsSL -o "$EXTRA_DIR/7z-extra.7z" "https://www.7-zip.org/a/7z2409-extra.7z"
+            "$SEVENZ_DIR/7z.exe" x "$EXTRA_DIR/7z-extra.7z" -o"$EXTRA_DIR" -y | tail -3
+            rm "$EXTRA_DIR/7z-extra.7z"
+          fi
+          for candidate in "$EXTRA_DIR/7zSD.sfx" "$EXTRA_DIR/7zS.sfx"; do
             if [[ -f "$candidate" ]]; then
               SFX_MODULE="$candidate"
               break
             fi
           done
           if [[ -z "${SFX_MODULE:-}" ]]; then
-            echo "FATAL: no 7zS*.sfx module under $SEVENZ_DIR"
-            ls "$SEVENZ_DIR"
+            echo "FATAL: no installer-mode SFX module in 7-Zip Extra"
+            ls "$EXTRA_DIR"
             exit 1
           fi
           echo "Using SFX module: $SFX_MODULE"
