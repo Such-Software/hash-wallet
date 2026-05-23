@@ -341,7 +341,10 @@ jobs:
           EXTRA_DIR="$RUNNER_TEMP/7z-extra"
           if [[ ! -f "$EXTRA_DIR/7zSD.sfx" && ! -f "$EXTRA_DIR/7zS.sfx" ]]; then
             mkdir -p "$EXTRA_DIR"
-            curl -fsSL -o "$EXTRA_DIR/7z-extra.7z" "https://www.7-zip.org/a/7z2409-extra.7z"
+            # 7z2301 is the most recent "Extra" archive still hosted on the
+            # live 7-zip.org CDN — newer versions (24.x) have been pruned
+            # from the public URL. Pinned to a stable known-good version.
+            curl -fsSL -o "$EXTRA_DIR/7z-extra.7z" "https://www.7-zip.org/a/7z2301-extra.7z"
             "$SEVENZ_DIR/7z.exe" x "$EXTRA_DIR/7z-extra.7z" -o"$EXTRA_DIR" -y | tail -3
             rm "$EXTRA_DIR/7z-extra.7z"
           fi
