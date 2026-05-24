@@ -348,7 +348,12 @@ jobs:
             "$SEVENZ_DIR/7z.exe" x "$EXTRA_DIR/7z-extra.7z" -o"$EXTRA_DIR" -y | tail -3
             rm "$EXTRA_DIR/7z-extra.7z"
           fi
-          for candidate in "$EXTRA_DIR/7zSD.sfx" "$EXTRA_DIR/7zS.sfx"; do
+          # 7-Zip Extra 23.01 lays out architectures in subdirs.
+          # x64/ has the 64-bit SFX modules; the root has 32-bit + dlls.
+          # We want the 64-bit one to match our HashWallet.exe.
+          for candidate in \
+              "$EXTRA_DIR/x64/7zSD.sfx" "$EXTRA_DIR/x64/7zS.sfx" \
+              "$EXTRA_DIR/7zSD.sfx"     "$EXTRA_DIR/7zS.sfx"; do
             if [[ -f "$candidate" ]]; then
               SFX_MODULE="$candidate"
               break
@@ -356,7 +361,10 @@ jobs:
           done
           if [[ -z "${SFX_MODULE:-}" ]]; then
             echo "FATAL: no installer-mode SFX module in 7-Zip Extra"
+            echo "--- top-level: ---"
             ls "$EXTRA_DIR"
+            echo "--- x64: ---"
+            ls "$EXTRA_DIR/x64" 2>/dev/null
             exit 1
           fi
           echo "Using SFX module: $SFX_MODULE"
