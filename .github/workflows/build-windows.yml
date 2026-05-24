@@ -335,36 +335,33 @@ jobs:
 
           # The standalone Windows 7-Zip install ships 7z.sfx (GUI prompt)
           # and 7zCon.sfx (console-mode extractor) but NOT the installer-
-          # mode SFX module (7zS.sfx / 7zSD.sfx) that does "extract to
-          # temp + auto-run RunProgram". Those live in the "7-Zip Extra"
-          # supplementary archive. Download + extract it on-demand.
-          EXTRA_DIR="$RUNNER_TEMP/7z-extra"
-          if [[ ! -f "$EXTRA_DIR/7zSD.sfx" && ! -f "$EXTRA_DIR/7zS.sfx" ]]; then
+          # mode SFX modules (7zSD.sfx, 7zS2.sfx) that do "extract to temp
+          # + auto-run RunProgram". Those used to live in "7-Zip Extra"
+          # but were moved into the LZMA SDK archive in 23.01 — under
+          # bin/. Fetch the SDK on demand.
+          EXTRA_DIR="$RUNNER_TEMP/7z-sfx"
+          if [[ ! -f "$EXTRA_DIR/7zSD.sfx" ]]; then
             mkdir -p "$EXTRA_DIR"
-            # 7z2301 is the most recent "Extra" archive still hosted on the
-            # live 7-zip.org CDN — newer versions (24.x) have been pruned
-            # from the public URL. Pinned to a stable known-good version.
-            curl -fsSL -o "$EXTRA_DIR/7z-extra.7z" "https://www.7-zip.org/a/7z2301-extra.7z"
-            "$SEVENZ_DIR/7z.exe" x "$EXTRA_DIR/7z-extra.7z" -o"$EXTRA_DIR" -y | tail -3
-            rm "$EXTRA_DIR/7z-extra.7z"
+            curl -fsSL -o "$EXTRA_DIR/lzma-sdk.7z" "https://www.7-zip.org/a/lzma2301.7z"
+            # Extract only the SFX binaries we need — the SDK has ~700
+            # files of mostly source code we don't want.
+            "$SEVENZ_DIR/7z.exe" x "$EXTRA_DIR/lzma-sdk.7z" -o"$EXTRA_DIR" -y 'bin/*.sfx' | tail -3
+            rm "$EXTRA_DIR/lzma-sdk.7z"
+            # Flatten — copy out of bin/ for predictable paths
+            mv "$EXTRA_DIR/bin/"*.sfx "$EXTRA_DIR/"
           fi
-          # 7-Zip Extra 23.01 lays out architectures in subdirs.
-          # x64/ has the 64-bit SFX modules; the root has 32-bit + dlls.
-          # We want the 64-bit one to match our HashWallet.exe.
-          for candidate in \
-              "$EXTRA_DIR/x64/7zSD.sfx" "$EXTRA_DIR/x64/7zS.sfx" \
-              "$EXTRA_DIR/7zSD.sfx"     "$EXTRA_DIR/7zS.sfx"; do
+          # 7zSD.sfx is the classic installer-mode SFX (config.txt with
+          # RunProgram). 7zS2.sfx is the newer variant (similar config
+          # syntax). Prefer 7zSD which is more widely documented.
+          for candidate in "$EXTRA_DIR/7zSD.sfx" "$EXTRA_DIR/7zS2.sfx"; do
             if [[ -f "$candidate" ]]; then
               SFX_MODULE="$candidate"
               break
             fi
           done
           if [[ -z "${SFX_MODULE:-}" ]]; then
-            echo "FATAL: no installer-mode SFX module in 7-Zip Extra"
-            echo "--- top-level: ---"
+            echo "FATAL: no installer-mode SFX module after LZMA SDK extract"
             ls "$EXTRA_DIR"
-            echo "--- x64: ---"
-            ls "$EXTRA_DIR/x64" 2>/dev/null
             exit 1
           fi
           echo "Using SFX module: $SFX_MODULE"
