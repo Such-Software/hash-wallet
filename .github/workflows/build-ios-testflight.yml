@@ -284,6 +284,28 @@ jobs:
           cd ios
           pod install --repo-update
 
+      # ---- Override signing in Release.xcconfig for the archive step ------
+      # The committed project.pbxproj Release config uses Automatic signing
+      # + "Apple Development" identity (set up for local dev with Xcode
+      # signed into an Apple ID). CI can't do Automatic signing — it has
+      # only the cert + provisioning profile we installed in the temp
+      # keychain. Append manual-signing overrides to Release.xcconfig;
+      # xcconfig values take precedence over pbxproj defaults.
+      - name: Override signing settings for archive
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -x
+          cat >> ios/Flutter/Release.xcconfig <<XCFG
+
+          // CI-only signing overrides (appended at build time, not committed).
+          CODE_SIGN_IDENTITY = Apple Distribution
+          CODE_SIGN_STYLE = Manual
+          DEVELOPMENT_TEAM = ${APPLE_TEAM_ID}
+          PROVISIONING_PROFILE_SPECIFIER = ${PROFILE_NAME}
+          XCFG
+          tail -8 ios/Flutter/Release.xcconfig
+
       # ---- Generate ExportOptions.plist + build IPA -----------------------
       - name: Write ExportOptions.plist
         env:
