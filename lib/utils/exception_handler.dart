@@ -70,20 +70,21 @@ class ExceptionHandler {
     );
   }
 
-  // Hash Bags: the original Cake implementation used flutter_mailer to
-  // hand the error.txt to the OS mail client. That plugin has no Linux
-  // implementation (throws MissingPluginException) and on other platforms
-  // many users have no mail client configured, so very few reports ever
-  // reached anyone. Instead, we open a prefilled GitHub issue. Users
-  // without a GH account get nothing useful, but the trade-off beats
-  // pretending the mail flow works.
+  // Hash Bags: error reports are submitted to our own form at
+  // hash.boats/report. The receiving Node service at hash.boats relays
+  // them to a private Telegram channel and writes them to disk on the
+  // suchwow server — see hash.boats/deploy/install.sh + server.js.
   //
-  // GitHub's "new issue" URL caps the body at ~8KB before truncating, so
-  // we send the tail of error.txt (most recent exception is usually most
-  // relevant) and prepend a hint to attach the full file.
-  static const _issueUrl =
-      'https://github.com/Such-Software/hash-wallet/issues/new';
-  static const _maxBodyChars = 6500;
+  // The original Cake flow used flutter_mailer to hand error.txt to the
+  // OS mail client; that plugin has no Linux backend and most users
+  // don't have a mail client configured, so it rarely worked. We tried
+  // a GitHub-issue prefill next, but that needs a GitHub account most
+  // wallet users won't have.
+  //
+  // The flow now: copy error.txt to the clipboard, open the report
+  // page, user pastes + optionally adds context + submits. No accounts,
+  // no third-party (it's our own backend), works on every platform.
+  static const _reportUrl = 'https://hash.boats/report/';
 
   static void _sendExceptionFile() async {
     try {
@@ -95,34 +96,22 @@ class ExceptionHandler {
       await _addDeviceInfo(_file!);
 
       final fullBody = await _file!.readAsString();
-      final trimmed = fullBody.length > _maxBodyChars
-          ? '...(truncated, full log at ${_file!.path})\n\n${fullBody.substring(fullBody.length - _maxBodyChars)}'
-          : fullBody;
 
-      final body = '''
-<!-- Thanks for reporting. The trace below was captured automatically.
-Please add a short description of what you were doing when the error
-appeared (e.g. "creating wallet", "restoring from seed", "sending Tx"). -->
+      // Put the full trace on the clipboard so the user can paste it into
+      // the form on hash.boats/report. The receiving server caps each
+      // upload at 200KB — way more than a typical error.txt — so we
+      // don't bother trimming here.
+      await Clipboard.setData(ClipboardData(text: fullBody));
 
-
-
----
-$trimmed
-''';
-
-      final uri = Uri.https('github.com', '/Such-Software/hash-wallet/issues/new', {
-        'title': 'App error report',
-        'labels': 'bug,from-app',
-        'body': body,
-      });
-
+      final uri = Uri.parse(_reportUrl);
       final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (!launched) {
-        printV('Could not open GitHub issue URL: $uri');
+        printV('Could not open report URL: $uri');
         return;
       }
 
-      // Clear the file now that the user has been handed the trace.
+      // Clear the local error file now that the user has the trace on
+      // their clipboard and the report page is open in their browser.
       await _file!.writeAsString('', mode: FileMode.write);
     } catch (e, s) {
       _saveException(e.toString(), s);

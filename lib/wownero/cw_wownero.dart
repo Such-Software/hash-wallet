@@ -247,6 +247,7 @@ class CWWownero extends Wownero {
     final wowneroWallet = wallet as WowneroWallet;
     final keys = wowneroWallet.keys;
     return <String, String>{
+      'primaryAddress': keys.primaryAddress,
       'privateSpendKey': keys.privateSpendKey,
       'privateViewKey': keys.privateViewKey,
       'publicSpendKey': keys.publicSpendKey,
