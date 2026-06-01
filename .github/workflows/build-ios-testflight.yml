@@ -256,36 +256,28 @@ jobs:
           security unlock-keychain -p "$APPLE_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           # Add to user search list so codesign can find it
           security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | sed 's/"//g')
-          # Decode the user-uploaded .p12 to disk.
-          P12_MODERN="$RUNNER_TEMP/dist-modern.p12"
-          echo "$APPLE_DIST_CERT_P12_BASE64" | openssl base64 -d -A > "$P12_MODERN"
-          echo "=== uploaded .p12 file ==="
-          ls -la "$P12_MODERN"
-          xxd "$P12_MODERN" | head -1
-          file "$P12_MODERN" || true
-
-          # macOS Keychain Access in Sonoma+ exports .p12 with modern crypto
-          # (AES-256-GCM + PBKDF2 + SHA-256) that the `security import`
-          # binary on some macOS releases rejects with
-          # "SecKeychainItemImport: Unknown format in import." Re-export
-          # the PKCS12 through openssl using legacy PBE-SHA1-3DES so the
-          # macOS security command can definitely parse it.
-          P12="$RUNNER_TEMP/dist-legacy.p12"
-          echo "=== converting to legacy PKCS12 format ==="
-          openssl pkcs12 -in "$P12_MODERN" -nodes \
-              -password pass:"$APPLE_DIST_CERT_P12_PASSWORD" \
-            | openssl pkcs12 -export \
-              -macalg sha1 -keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES \
-              -password pass:"$APPLE_DIST_CERT_P12_PASSWORD" \
-              -out "$P12"
+          # Decode the user-uploaded .p12 directly. macOS Keychain Access
+          # exports .p12 with legacy PKCS12 crypto (RC2-40-CBC, PBE-SHA1)
+          # which is exactly what `security import` expects — no openssl
+          # conversion needed. Earlier attempts to "convert to legacy"
+          # via openssl 3.x failed because openssl 3.x has RC2-40-CBC
+          # disabled by default; that was a non-problem we made for
+          # ourselves. The original "Unknown format" failure was caused
+          # by a truncated base64 secret value, since fixed by re-pasting
+          # the secret via Gitea's API.
+          P12="$RUNNER_TEMP/dist.p12"
+          echo "$APPLE_DIST_CERT_P12_BASE64" | openssl base64 -d -A > "$P12"
+          echo "=== decoded .p12 ==="
           ls -la "$P12"
+          xxd "$P12" | head -1
+          file "$P12" || true
 
           security import "$P12" -k "$KEYCHAIN_PATH" -P "$APPLE_DIST_CERT_P12_PASSWORD" \
             -T /usr/bin/codesign -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$APPLE_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           # Sanity-check: list identities the keychain offers
           security find-identity -v -p codesigning "$KEYCHAIN_PATH"
-          rm -f "$P12_MODERN" "$P12"
+          rm -f "$P12"
 
       - name: Install provisioning profile + parse name/UUID for ExportOptions
         env:
