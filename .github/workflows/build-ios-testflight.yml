@@ -90,9 +90,19 @@ jobs:
             export PATH="$HOME/.cargo/bin:$PATH"
           fi
           rm -rf "$HOME/.rustup/downloads"/*.partial 2>/dev/null || true
+          # Stable + iOS targets (most plugins use these)
           rustup target add aarch64-apple-ios
           rustup target add aarch64-apple-ios-sim
           rustup target add x86_64-apple-ios
+          # Nightly + iOS targets — at least one plugin (sp_scanner / payjoin
+          # / something in the cargokit chain) builds its rust component
+          # with +nightly. The TestFlight archive bombs at "Missing manifest
+          # in toolchain 'nightly-aarch64-apple-darwin'" if nightly isn't
+          # installed alongside stable.
+          rustup toolchain install nightly --profile minimal
+          rustup target add aarch64-apple-ios --toolchain nightly
+          rustup target add aarch64-apple-ios-sim --toolchain nightly
+          rustup target add x86_64-apple-ios --toolchain nightly
           rustup show
 
       - name: Install Go + gomobile (if missing)
