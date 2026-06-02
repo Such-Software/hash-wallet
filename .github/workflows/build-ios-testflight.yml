@@ -144,15 +144,25 @@ jobs:
             tar -xzf torch_dart.tar.gz -C torch_dart
             rm torch_dart.tar.gz
           popd
-          # Diagnostic: print LibTorch.xcframework's required min iOS so we
-          # know whether the app's IPHONEOS_DEPLOYMENT_TARGET in pbxproj is
-          # high enough. Apple's TestFlight ITMS-90208 fires when the app
-          # claims to support an older iOS than this framework does.
-          LIBTORCH_PLIST=$(find scripts/torch_dart -path '*LibTorch.xcframework/*' -name Info.plist 2>/dev/null | head -1)
-          if [[ -n "$LIBTORCH_PLIST" ]]; then
-            echo "LibTorch xcframework Info.plist: $LIBTORCH_PLIST"
-            plutil -p "$LIBTORCH_PLIST" 2>/dev/null | grep -E "MinimumOSVersion|SupportedPlatform|SupportedArchitectures" || true
-          fi
+          # LibTorch.xcframework ships with a lie: each slice's Info.plist
+          # claims MinimumOSVersion=12.0, but the Mach-O LC_BUILD_VERSION
+          # in the binaries says 13.0 (device) and 14.0 (simulator).
+          # Apple's TestFlight validator catches this mismatch and rejects
+          # the upload with ITMS-90208. Patch the Info.plists to match
+          # the actual binary build versions.
+          DEVICE_PLIST=scripts/torch_dart/ios/LibTorch.xcframework/ios-arm64/LibTorch.framework/Info.plist
+          SIM_PLIST=scripts/torch_dart/ios/LibTorch.xcframework/ios-arm64-simulator/LibTorch.framework/Info.plist
+          for entry in "$DEVICE_PLIST:13.0" "$SIM_PLIST:14.0"; do
+            plist="${entry%:*}"
+            min="${entry#*:}"
+            if [[ -f "$plist" ]]; then
+              plutil -replace MinimumOSVersion -string "$min" "$plist"
+              echo "patched $plist -> MinimumOSVersion $min"
+              plutil -p "$plist" | grep -E "MinimumOSVersion|CFBundleName" || true
+            else
+              echo "WARNING: $plist not found"
+            fi
+          done
 
       - name: Fetch prebuilt reown_flutter
         run: |
