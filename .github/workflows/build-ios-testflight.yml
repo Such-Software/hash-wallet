@@ -144,6 +144,15 @@ jobs:
             tar -xzf torch_dart.tar.gz -C torch_dart
             rm torch_dart.tar.gz
           popd
+          # Diagnostic: print LibTorch.xcframework's required min iOS so we
+          # know whether the app's IPHONEOS_DEPLOYMENT_TARGET in pbxproj is
+          # high enough. Apple's TestFlight ITMS-90208 fires when the app
+          # claims to support an older iOS than this framework does.
+          LIBTORCH_PLIST=$(find scripts/torch_dart -path '*LibTorch.xcframework/*' -name Info.plist 2>/dev/null | head -1)
+          if [[ -n "$LIBTORCH_PLIST" ]]; then
+            echo "LibTorch xcframework Info.plist: $LIBTORCH_PLIST"
+            plutil -p "$LIBTORCH_PLIST" 2>/dev/null | grep -E "MinimumOSVersion|SupportedPlatform|SupportedArchitectures" || true
+          fi
 
       - name: Fetch prebuilt reown_flutter
         run: |
