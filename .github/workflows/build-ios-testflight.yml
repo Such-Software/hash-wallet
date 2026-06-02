@@ -331,27 +331,35 @@ jobs:
           cd ios
           pod install --repo-update
 
-      # ---- Override signing in Release.xcconfig for the archive step ------
-      # The committed project.pbxproj Release config uses Automatic signing
-      # + "Apple Development" identity (set up for local dev with Xcode
-      # signed into an Apple ID). CI can't do Automatic signing — it has
-      # only the cert + provisioning profile we installed in the temp
-      # keychain. Append manual-signing overrides to Release.xcconfig;
-      # xcconfig values take precedence over pbxproj defaults.
-      - name: Override signing settings for archive
+      # ---- Override signing in project.pbxproj for the archive step -------
+      # The committed Release config uses Automatic signing + "Apple
+      # Development" identity (set up for local dev where Xcode is signed
+      # into an Apple ID). On CI we have only the cert + provisioning
+      # profile we installed in the temp keychain; no Xcode account.
+      #
+      # First attempt was an xcconfig append, but Xcode build-setting
+      # precedence puts target-level pbxproj settings ABOVE xcconfig —
+      # so the pbxproj values won and the build did Automatic signing
+      # anyway. Patch the Release config in pbxproj directly, only
+      # within the Runner target block (id 97C147071CF9000F007C117D);
+      # leaves Debug/Profile configs untouched so local builds stay
+      # on Automatic signing.
+      - name: Override signing settings in pbxproj for archive
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           set -x
-          cat >> ios/Flutter/Release.xcconfig <<XCFG
-
-          // CI-only signing overrides (appended at build time, not committed).
-          CODE_SIGN_IDENTITY = Apple Distribution
-          CODE_SIGN_STYLE = Manual
-          DEVELOPMENT_TEAM = ${APPLE_TEAM_ID}
-          PROVISIONING_PROFILE_SPECIFIER = ${PROFILE_NAME}
-          XCFG
-          tail -8 ios/Flutter/Release.xcconfig
+          PBX=ios/Runner.xcodeproj/project.pbxproj
+          # BSD sed (macOS): -i '' for in-place, regex range scoped to
+          # the Runner target's Release config by its stable UUID.
+          sed -i '' "/97C147071CF9000F007C117D \/\* Release/,/name = Release;/ {
+            s/CODE_SIGN_IDENTITY = \"Apple Development\";/CODE_SIGN_IDENTITY = \"Apple Distribution\";/
+            s/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/
+            s/DEVELOPMENT_TEAM = [A-Z0-9]\{1,\};/DEVELOPMENT_TEAM = ${APPLE_TEAM_ID};/
+            s|PROVISIONING_PROFILE_SPECIFIER = \"\";|PROVISIONING_PROFILE_SPECIFIER = \"${PROFILE_NAME}\";|
+          }" "$PBX"
+          echo "=== patched Runner Release config ==="
+          sed -n '/97C147071CF9000F007C117D \/\* Release/,/name = Release;/p' "$PBX"
 
       # ---- Generate ExportOptions.plist + build IPA -----------------------
       - name: Write ExportOptions.plist
