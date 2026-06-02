@@ -318,8 +318,28 @@ jobs:
         run: |
           set -e
           mkdir -p "$HOME/.appstoreconnect/private_keys"
-          echo "$APPLE_API_KEY_P8_BASE64" | openssl base64 -d -A > "$HOME/.appstoreconnect/private_keys/AuthKey_${APPLE_KEY_ID}.p8"
+          P8="$HOME/.appstoreconnect/private_keys/AuthKey_${APPLE_KEY_ID}.p8"
+          echo "$APPLE_API_KEY_P8_BASE64" | openssl base64 -d -A > "$P8"
           ls -la "$HOME/.appstoreconnect/private_keys/"
+
+          # Diagnostics — verify the PEM file is well-formed without
+          # printing the private key body. A valid AuthKey .p8 must:
+          #   - Start with "-----BEGIN PRIVATE KEY-----"
+          #   - End with "-----END PRIVATE KEY-----"
+          #   - openssl pkey -in file -noout must succeed (real ASN.1 parse)
+          echo "=== .p8 first/last lines (no key body) ==="
+          head -1 "$P8"
+          tail -1 "$P8"
+          echo "=== openssl parse check (silent on success) ==="
+          if openssl pkey -in "$P8" -noout 2>&1; then
+            echo "OK — .p8 parses as a valid EC private key"
+          else
+            echo "FATAL: .p8 doesn't parse — secret likely truncated or wrong content"
+            echo "Re-paste APPLE_API_KEY_P8_BASE64 via the Gitea API (same flow"
+            echo "as the .p12 re-paste); the file decoded to:"
+            wc -c "$P8"
+            exit 1
+          fi
 
       # ---- Flutter init + codegen + pod install ---------------------------
       - name: Initialize Flutter SDK (iOS precache)
