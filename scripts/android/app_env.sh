@@ -20,9 +20,14 @@ MONERO_COM_BUNDLE_ID="com.monero.app"
 MONERO_COM_PACKAGE="com.monero.app"
 MONERO_COM_SCHEME="monero.com"
 
+# Source CAKEWALLET version + build number from pubspec_description.yaml
+# (single source of truth across iOS/Android). Without this, the hardcoded
+# build number here would silently override pubspec via inject_app_details.sh
+# and every Play Store upload would ship as versionCode 1.
+_PUBSPEC_VERSION=$(awk -F': ' '/^version:/ {print $2; exit}' ../../pubspec_description.yaml)
 CAKEWALLET_NAME="Hash Bags"
-CAKEWALLET_VERSION="1.0.0"
-CAKEWALLET_BUILD_NUMBER=1
+CAKEWALLET_VERSION="${_PUBSPEC_VERSION%+*}"
+CAKEWALLET_BUILD_NUMBER="${_PUBSPEC_VERSION#*+}"
 CAKEWALLET_BUNDLE_ID="com.suchsoftware.hashwallet"
 CAKEWALLET_PACKAGE="com.suchsoftware.hashwallet"
 CAKEWALLET_SCHEME="hashbags"
