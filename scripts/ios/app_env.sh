@@ -16,9 +16,15 @@ MONERO_COM_VERSION="6.1.2"
 MONERO_COM_BUILD_NUMBER=163
 MONERO_COM_BUNDLE_ID="com.cakewallet.monero"
 
+# Source CAKEWALLET version + build number from pubspec_description.yaml
+# (single source of truth). Without this, the hardcoded build number
+# here silently overrode pubspec via app_config.sh's PlistBuddy step,
+# so iOS uploads all shipped as the same CFBundleVersion and Apple
+# rejected duplicates.
+_PUBSPEC_VERSION=$(awk -F': ' '/^version:/ {print $2; exit}' ../../pubspec_description.yaml)
 CAKEWALLET_NAME="Hash Bags"
-CAKEWALLET_VERSION="1.0.0"
-CAKEWALLET_BUILD_NUMBER=1
+CAKEWALLET_VERSION="${_PUBSPEC_VERSION%+*}"
+CAKEWALLET_BUILD_NUMBER="${_PUBSPEC_VERSION#*+}"
 CAKEWALLET_BUNDLE_ID="com.suchsoftware.hashwallet"
 
 
