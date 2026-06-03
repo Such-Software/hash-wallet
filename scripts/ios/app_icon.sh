@@ -60,7 +60,7 @@ case $APP_IOS_TYPE in
 	"monero.com")
     ICON_DIRECTORY=monero_ios_icons;;
 	"cakewallet")
-    ICON_DIRECTORY=cakewallet_ios_icons;;
+    ICON_DIRECTORY=hashwallet_ios_icons;;
 esac
 
 CONTENTS_JSON_PATH=`pwd`/../../assets/images/ios_icons/$ICON_DIRECTORY/Contents.json
