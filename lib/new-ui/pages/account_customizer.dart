@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/monero/monero.dart';
+import 'package:hash_wallet/wownero/wownero.dart';
 import 'package:hash_wallet/new-ui/pages/card_customizer.dart';
 import 'package:hash_wallet/new-ui/viewmodels/card_customizer/card_customizer_bloc.dart';
 import 'package:hash_wallet/new-ui/widgets/coins_page/cards/balance_card.dart';
@@ -21,6 +22,7 @@ import 'package:cw_core/card_design.dart';
 import 'package:cw_core/generate_name.dart';
 import 'package:cw_core/sync_status.dart';
 import 'package:cw_core/utils/print_verbose.dart';
+import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,7 +64,13 @@ class _AccountCustomizerState extends State<AccountCustomizer> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadCards();
-      final activeId = monero!.getCurrentAccount(widget.dashboardViewModel.wallet).id;
+      final wallet = widget.dashboardViewModel.wallet;
+      final int? activeId = wallet.type == WalletType.monero
+          ? monero?.getCurrentAccount(wallet).id
+          : wallet.type == WalletType.wownero
+              ? wownero?.getCurrentAccount(wallet).id
+              : null;
+      if (activeId == null) return;
       for (int i = 0; i < _items.length-1; i++) {
         if(_items[i].accountListItem.id == activeId) {
           final lastIndex = _items.length - 1;
