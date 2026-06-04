@@ -168,18 +168,86 @@ jobs:
       - name: Build Linux app
         run: flutter build linux --dart-define-from-file=env.json --release
 
-      - name: Compress release bundle
+      # ---- Package as AppImage --------------------------------------------
+      # Self-contained .AppImage is the user-facing Linux deliverable: single
+      # file, double-click to run, no install, works on any glibc Linux from
+      # the last few years. appimagetool is run with --appimage-extract-and-run
+      # so it works inside the container without FUSE.
+      - name: Stage AppDir
         run: |
-          pushd build/linux/x64/release
-          zip -r hash_wallet_linux_${{ github.sha }}.zip bundle
-          popd
+          set -e -x
+          REL=build/linux/x64/release
+          APPDIR=$REL/Hash_Bags.AppDir
+          rm -rf "$APPDIR"
+          mkdir -p "$APPDIR/usr/bin" \
+                   "$APPDIR/usr/share/applications" \
+                   "$APPDIR/usr/share/icons/hicolor/256x256/apps"
+
+          # The whole Flutter Linux bundle (binary + data/ + lib/) lives
+          # under usr/bin/. The Flutter binary has RPATH=$ORIGIN/lib, so
+          # plugin/native libs in usr/bin/lib/ resolve naturally.
+          cp -r "$REL/bundle"/* "$APPDIR/usr/bin/"
+
+          # Icon: scale the iOS marketing icon to 256 if convert is around,
+          # else copy as-is (appimagetool only requires that AppDir root and
+          # the hicolor path contain a same-named PNG).
+          ICON_SRC=assets/images/ios_icons/hashwallet_ios_icons/Icon-App-1024x1024@1x.png
+          ICON_DEST="$APPDIR/usr/share/icons/hicolor/256x256/apps/hash_bags.png"
+          if command -v convert >/dev/null 2>&1; then
+            convert "$ICON_SRC" -resize 256x256 "$ICON_DEST"
+          else
+            cp "$ICON_SRC" "$ICON_DEST"
+          fi
+          cp "$ICON_DEST" "$APPDIR/hash_bags.png"
+
+          # .desktop file (at both canonical locations; appimagetool checks both)
+          cat > "$APPDIR/hash_bags.desktop" <<'DESKTOP'
+          [Desktop Entry]
+          Name=Hash Bags
+          Comment=Non-custodial multi-chain crypto wallet
+          Exec=hash_wallet
+          Icon=hash_bags
+          Type=Application
+          Categories=Office;Finance;
+          Terminal=false
+          DESKTOP
+          # Strip the leading whitespace from the heredoc
+          sed -i 's/^          //' "$APPDIR/hash_bags.desktop"
+          cp "$APPDIR/hash_bags.desktop" "$APPDIR/usr/share/applications/"
+
+          # AppRun: the entry point AppImage executes. Adds the bundled lib/
+          # dir to LD_LIBRARY_PATH and exec's the Flutter binary.
+          cat > "$APPDIR/AppRun" <<'APPRUN'
+          #!/bin/bash
+          HERE="$(dirname "$(readlink -f "${0}")")"
+          export LD_LIBRARY_PATH="${HERE}/usr/bin/lib:${LD_LIBRARY_PATH}"
+          exec "${HERE}/usr/bin/hash_wallet" "$@"
+          APPRUN
+          sed -i 's/^          //' "$APPDIR/AppRun"
+          chmod +x "$APPDIR/AppRun"
+
+          ls -la "$APPDIR"
+
+      - name: Build AppImage
+        run: |
+          set -e -x
+          REL=build/linux/x64/release
+          wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /tmp/appimagetool
+          chmod +x /tmp/appimagetool
+          # --appimage-extract-and-run avoids the FUSE requirement (no fusermount
+          # in the build container). ARCH= tells appimagetool which arch tag to
+          # embed in the filename.
+          ARCH=x86_64 /tmp/appimagetool --appimage-extract-and-run \
+            "$REL/Hash_Bags.AppDir" \
+            "$REL/Hash_Bags-x86_64.AppImage"
+          ls -la "$REL"/*.AppImage
 
       # actions/upload-artifact@v4 uses an HTTP API that Gitea Actions does
       # not implement (only the v1/v3 wire format). Pinned to @v3 for Gitea
       # compatibility — also works on GitHub Actions.
-      - name: Upload artifact
+      - name: Upload AppImage artifact
         uses: actions/upload-artifact@v3
         with:
-          name: hash-wallet-linux-${{ github.sha }}
-          path: build/linux/x64/release/hash_wallet_linux_*.zip
+          name: hash-wallet-linux-appimage-${{ github.sha }}
+          path: build/linux/x64/release/Hash_Bags-x86_64.AppImage
           retention-days: 14
