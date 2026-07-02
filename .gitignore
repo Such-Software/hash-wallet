@@ -234,6 +234,3 @@ scripts/reown_flutter
 docs/links.md
 docs/UPSTREAM_SYNC.md
 scripts/windows/setup-windows-runner.ps1
-
-# Hash Wallet: local mirror of hash.boats website (deploy target on suchwow server)
-hash.boats/
