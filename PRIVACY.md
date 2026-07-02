@@ -13,9 +13,11 @@ data that we do not collect.
 ## The short version
 
 Hash Bags is a non-custodial wallet. Your seed phrase and private keys live on
-your device and never touch us. We don't run servers that store user data, and
-we don't operate analytics, crash reporting, or telemetry SDKs. There are no
-accounts, emails, passwords, or logins.
+your device and never touch us. We don't run servers that store user data. We
+run no analytics, no automatic telemetry, and no crash-reporting SDK — the only
+diagnostic data we ever receive is an error report you choose to send us (see
+"Opt-in error reports" below). There are no accounts, emails, passwords, or
+logins.
 
 Where data *does* leave your device, it goes to (a) the blockchain nodes you
 query, and (b) third-party services you explicitly opt in to — Trocador for
@@ -34,6 +36,19 @@ Apple App Store or Google Play, those stores may give us aggregate, anonymized
 statistics (download counts, crash rates, OS versions) based on your device's
 settings. That data comes from Apple and Google, is not individually
 identifying, and is not something Hash Bags collects or transmits.
+
+## Opt-in error reports
+
+If Hash Bags hits an unexpected error, it may ask whether you'd like to send us
+a report. Nothing is sent unless you tap "Send" — which copies a technical error
+trace to your clipboard and opens hash.boats/report in your browser, where you
+paste it and submit. The report contains a technical stack trace, the wallet
+*type* (e.g. "monero" — not an address), and your device model, OS version, and
+app version. It does **not** contain your seed phrase, private keys, PIN,
+addresses, or balances. We store the submitted report on our own server and
+relay it to our team to fix bugs; the receiving endpoint also sees your IP
+address, as any web request does. To have a report you sent deleted, email
+support@such.software.
 
 ## What stays on your device
 
