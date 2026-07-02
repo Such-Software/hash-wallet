@@ -6,6 +6,7 @@ import 'package:hash_wallet/buy/moonpay/moonpay_provider.dart';
 import 'package:hash_wallet/buy/onramper/onramper_buy_provider.dart';
 import 'package:hash_wallet/buy/robinhood/robinhood_buy_provider.dart';
 import 'package:hash_wallet/di.dart';
+import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
 enum ProviderType { robinhood, dfx, onramper, moonpay, meld, kriptonim }
 
@@ -46,12 +47,16 @@ extension ProviderTypeName on ProviderType {
 }
 
 class ProvidersHelper {
-  // Hash Bags: all buy/sell providers (Robinhood Connect, DFX, Onramper,
-  // MoonPay, Kryptonim, Meld) gutted. Each requires a formal partner
-  // agreement with a revenue-share contract — no free integrations exist.
-  // Re-add providers here once Such Software has registered the affiliate
-  // relationship for that provider.
-  static List<ProviderType> getAvailableBuyProviderTypes() => [];
+  // Hash Bags: buy/sell providers stay gutted EXCEPT MoonPay, which is
+  // KEY-GATED — it becomes available only when a real moonPayApiKey is baked
+  // into the build (injected in CI from the MOONPAY_API_KEY secret; the
+  // exchange-helper signer must also be live). If the key is empty the Buy
+  // button stays hidden, so v1.0.0 ships cleanly with or without MoonPay.
+  // The other providers (Robinhood/DFX/Onramper/Kryptonim/Meld) still need
+  // their own partner agreements before re-adding here.
+  // Sell/off-ramp: enable by mirroring the buy line below once tested.
+  static List<ProviderType> getAvailableBuyProviderTypes() =>
+      secrets.moonPayApiKey.isNotEmpty ? [ProviderType.moonpay] : [];
   static List<ProviderType> getAvailableSellProviderTypes() => [];
 
   static BuyProvider getProviderByType(ProviderType type) {

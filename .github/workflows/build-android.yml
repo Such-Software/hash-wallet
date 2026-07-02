@@ -166,20 +166,25 @@ jobs:
       - name: Generate per-module secrets.g.dart files (all empty defaults)
         run: dart run tool/generate_new_secrets.dart
 
-      - name: Inject Trocador + WalletConnect secrets into lib/.secrets.g.dart
+      - name: Inject Trocador + WalletConnect + MoonPay secrets into lib/.secrets.g.dart
         env:
           TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
           TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
           TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
           WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
+          # MoonPay: publishable key only. NEVER inject moonPaySecretKey (server-side).
+          MOONPAY_API_KEY: ${{ secrets.MOONPAY_API_KEY }}
+          EXCHANGE_HELPER_API_KEY: ${{ secrets.EXCHANGE_HELPER_API_KEY }}
         run: |
           sed -i \
             -e "s|const trocadorApiKey = '';|const trocadorApiKey = '${TROCADOR_API_KEY}';|" \
             -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
             -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
             -e "s|const walletConnectProjectId = '';|const walletConnectProjectId = '${WALLETCONNECT_PROJECT_ID}';|" \
+            -e "s|const moonPayApiKey = '';|const moonPayApiKey = '${MOONPAY_API_KEY}';|" \
+            -e "s|const exchangeHelperApiKey = '';|const exchangeHelperApiKey = '${EXCHANGE_HELPER_API_KEY}';|" \
             lib/.secrets.g.dart
-          grep -E "^const (trocador|walletConnectProjectId)" lib/.secrets.g.dart
+          grep -E "^const (trocador|walletConnectProjectId|moonPayApiKey|exchangeHelperApiKey)" lib/.secrets.g.dart
 
       # ---- Signing: decode upload keystore + write key.properties ---------
       - name: Decode Android upload keystore + write key.properties
