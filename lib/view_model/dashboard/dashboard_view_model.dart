@@ -637,7 +637,10 @@ abstract class DashboardViewModelBase with Store {
       appStore.settingsStore.shouldShowMarketPlaceInDashboard;
 
   @computed
-  bool get showApps => appStore.settingsStore.shouldShowMarketPlaceInDashboard;
+  // Hash Bags: no Apps/marketplace content yet — hide the empty tab so the
+  // dashboard doesn't ship a nav destination that only says "No apps available
+  // yet." Re-enable (return the setting) once there is real content to show.
+  bool get showApps => false;
 
   @computed
   List<TradeListItem> get trades => tradesStore.trades.where((trade) {

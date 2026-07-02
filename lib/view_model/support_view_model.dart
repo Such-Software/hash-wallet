@@ -34,6 +34,18 @@ abstract class SupportViewModelBase with Store {
               linkTitle: S.current.apk_update,
               link: 'https://github.com/Such-Software/hash-wallet/releases'),
           LinkListItem(
+              title: 'Privacy Policy',
+              icon: 'assets/images/privacy_menu.png',
+              hasIconColor: true,
+              linkTitle: 'hash.boats/privacy',
+              link: 'https://hash.boats/privacy'),
+          LinkListItem(
+              title: 'Terms of Service',
+              icon: 'assets/images/privacy_menu.png',
+              hasIconColor: true,
+              linkTitle: 'hash.boats/terms',
+              link: 'https://hash.boats/terms'),
+          LinkListItem(
               title: 'ChangeNow',
               icon: 'assets/images/change_now.png',
               linkTitle: 'support@changenow.io',

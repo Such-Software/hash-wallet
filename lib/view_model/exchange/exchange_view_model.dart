@@ -122,12 +122,25 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
         super(appStore: _appStore) {
     _useTorOnly = _settingsStore.exchangeStatus == ExchangeApiMode.torOnly;
     _setProviders();
-    const excludeDepositCurrencies = [CryptoCurrency.btt];
+    // Hash Bags: chains removed from the wallet are not offered as swap targets.
+    const removedChainCurrencies = [
+      CryptoCurrency.sol,
+      CryptoCurrency.trx,
+      CryptoCurrency.zec,
+      CryptoCurrency.dcr,
+      CryptoCurrency.zano,
+      CryptoCurrency.usdcsol,
+      CryptoCurrency.usdtSol,
+      CryptoCurrency.usdcTrc20,
+      CryptoCurrency.usdttrc20,
+    ];
+    const excludeDepositCurrencies = [CryptoCurrency.btt, ...removedChainCurrencies];
     const excludeReceiveCurrencies = [
       CryptoCurrency.xlm,
       CryptoCurrency.xrp,
       CryptoCurrency.bnb,
-      CryptoCurrency.btt
+      CryptoCurrency.btt,
+      ...removedChainCurrencies,
     ];
     _initialPairBasedOnWallet();
 

@@ -40,11 +40,11 @@ Hardware wallet support: Ledger, Trezor, BitBox.
 
 The build system is unchanged from upstream Cake Wallet. See `docs/` for per-platform instructions:
 
-* Android: `docs/build_android.md`
-* iOS: `docs/build_ios.md`
-* macOS: `docs/build_macos.md`
-* Linux: `docs/build_linux.md`
-* Windows: `docs/build_windows.md`
+* Android: `docs/builds/ANDROID.md`
+* iOS: `docs/builds/IOS.md`
+* macOS: `docs/builds/MACOS.md`
+* Linux: `docs/builds/LINUX.md`
+* Windows: `docs/builds/WINDOWS.md`
 
 Required Flutter version is pinned in `Dockerfile` (currently 3.32.0) and `.tool-versions`. Newer Flutter SDKs (3.5+) drop the `_macros` pseudo-package that Cake's pinned `hive_generator` + `build_resolvers` transitively require — `flutter pub get` will fail until you switch to 3.32.0. If using `asdf` or `mise`, the version will be picked up automatically; otherwise:
 
@@ -75,10 +75,10 @@ Issues and PRs welcome at https://github.com/Such-Software/hash-wallet. See [`CO
 
 ## License
 
-Hash Bags is distributed under the [MIT License](LICENSE), inheriting from Cake Wallet.
+Hash Bags' own application code is distributed under the [MIT License](LICENSE.md), inherited from Cake Wallet. It also bundles third-party open-source components under their own licenses — including the Monero and Wownero wallet cores (BSD-3-Clause) and additional components under Apache-2.0 and LGPL-3.0 — so the app as a whole is not solely MIT-licensed. See the `LICENSE` files in the repository.
 
 ```
-Copyright (C) 2018–2023 Cake Labs LLC
+Copyright (C) 2018–2025 Cake Labs LLC
 Copyright (C) 2026      Such Software LLC
 ```
 

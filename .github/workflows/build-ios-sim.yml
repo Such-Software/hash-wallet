@@ -32,11 +32,10 @@ jobs:
       # Gitea runner shell). Force UTF-8 globally so `pod install` succeeds.
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8
-      # If you added an /etc/hosts entry on the Mac mini that points
-      # git.such.software at NPM's LAN IP (so the runner hits NPM's
-      # Let's Encrypt cert instead of Gitea's internal self-signed),
-      # this env var can be removed. Left in as a belt-and-suspenders
-      # fallback — has no effect if certs already verify.
+      # Belt-and-suspenders fallback for when the self-hosted runner's internal
+      # git host presents a self-signed cert. Preferred fix is to trust the
+      # internal CA on the runner, after which this can be removed. (Runner
+      # host and network specifics live in the internal CI docs, not this repo.)
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
 
     steps:

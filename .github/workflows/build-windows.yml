@@ -36,8 +36,9 @@ jobs:
     runs-on: windows
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      # Belt-and-suspenders: bypass Node TLS verification for actions/* that
-      # talk back to git.such.software. Same fallback as build-ios-sim.yml.
+      # Belt-and-suspenders fallback that bypasses Node TLS verification for
+      # actions/* against the self-hosted runner's internal git host. Same
+      # fallback as build-ios-sim.yml.
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
 
     steps:

@@ -4,6 +4,7 @@ import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/entities/balance_display_mode.dart';
 import 'package:hash_wallet/entities/bitcoin_amount_display_mode.dart';
+import 'package:hash_wallet/entities/provider_types.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/modal_navigator.dart';
 import 'package:hash_wallet/new-ui/pages/send_page.dart';
@@ -173,7 +174,8 @@ class _CardsViewState extends State<CardsView> {
                       onTap: withdrawFromL2,
                     )
                   ]
-                : widget.dashboardViewModel.isEnabledTradeAction
+                : (widget.dashboardViewModel.isEnabledTradeAction &&
+                        ProvidersHelper.getAvailableBuyProviderTypes().isNotEmpty)
                     ? [
                         BalanceCardAction(
                           label: S.current.buy,

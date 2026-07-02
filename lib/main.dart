@@ -95,7 +95,7 @@ Future<void> runAppWithZone({Key? topLevelKey}) async {
         }
 
         // Convert the shortcut type to a URI and add it to the stream
-        final uri = Uri.parse('hashwallet://quickaction/$shortcutType');
+        final uri = Uri.parse('hashbags://quickaction/$shortcutType');
         quickActionsStream.sink.add(uri);
       });
 

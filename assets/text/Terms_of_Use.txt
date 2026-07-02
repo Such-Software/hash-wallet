@@ -1,47 +1,92 @@
 TERMS OF SERVICE
-Last Updated: May 16, 2026
+Effective: July 2, 2026
 
-1. ACCEPTANCE OF TERMS
-These Terms of Service ("Terms") are entered into by and between You and Such Software LLC, a limited liability company organized under the laws of the Commonwealth of Pennsylvania ("Company", "we", "our", or "us"). These Terms govern your access to and use of the Hash Bags mobile application, source code, and any associated software (collectively, the "Software").
+The current version of these Terms is always available at https://hash.boats/terms
 
-By downloading, accessing, or using the Software, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the Software.
+1. WHO WE ARE AND ACCEPTANCE
+These Terms of Service ("Terms") are a binding agreement between you ("you") and Such Software LLC, a limited liability company organized under the laws of the Commonwealth of Pennsylvania, United States ("Such Software", "we", "us", or "our"). They govern your access to and use of the Hash Bags mobile and desktop applications, the source code, our website, and any related software and services (together, the "Software").
 
-2. NATURE OF THE SOFTWARE
-Hash Bags is a non-custodial, peer-to-peer cryptocurrency wallet software.
+By downloading, installing, accessing, or using the Software, you agree to these Terms and to our Privacy Policy (https://hash.boats/privacy). If you do not agree, do not use the Software.
 
-Non-Custodial: We do not own, control, or take custody of any cryptocurrency assets held in your Hash Bags. You hold the private keys and are solely responsible for their management.
+2. ELIGIBILITY
+You may use the Software only if you are at least 18 years old (or the age of majority in your jurisdiction, whichever is greater) and are able to form a binding contract with us. By using the Software you represent that you meet these requirements and that your use complies with all laws that apply to you.
 
-No Fiat Operations: The Software does not natively support or facilitate the purchase or sale of cryptocurrency with fiat currency (e.g., USD, EUR).
+3. THE SOFTWARE IS NON-CUSTODIAL
+Hash Bags is self-custodial wallet software. It does not store, transmit, hold, or take custody of your cryptocurrency, and it does not hold your seed phrase, private keys, or PIN. Your seed phrase and keys are generated and stored on your own device and remain under your sole control. Cryptocurrencies exist on their respective blockchains, not inside the Software; any transfer of value happens on a decentralized network, not with us.
 
-No Embedded Applications: The Software does not include built-in decentralized applications (dApps) or a proprietary web3 browser.
+WE CANNOT RECOVER YOUR FUNDS, SEED PHRASE, KEYS, OR PIN UNDER ANY CIRCUMSTANCES. If you lose your seed phrase, or if it is stolen or shared, your funds may be permanently and irretrievably lost, and we will be unable to help. You are solely responsible for securely backing up your seed phrase and for the security of your devices.
 
-3. YOUR RESPONSIBILITIES
+Such Software is not a bank, custodian, money services business, money transmitter, broker, dealer, exchange, or investment adviser, and it does not provide investment, financial, legal, accounting, or tax advice. The Software is a tool you operate yourself.
 
-Seed Phrases and Private Keys: You are solely responsible for securely storing your seed phrase, private keys, and PINs. If you lose your seed phrase, your funds will be permanently lost. Such Software LLC has no ability to recover your seed phrase, private keys, or funds.
+4. YOUR RESPONSIBILITIES
+- Keys and backups: Record your seed phrase and keep it private and secure. Never share your seed phrase or private keys with anyone, including us — we will never ask for them.
+- Accuracy: Blockchain transactions are generally irreversible. You are responsible for verifying recipient addresses, networks, and amounts before you send. Funds sent to the wrong address or network cannot be recovered.
+- Compliance and taxes: You are responsible for complying with the laws that apply to you and for determining and paying any taxes that arise from your activity.
 
-Compliance with Law: You represent and warrant that your use of the Software complies with all applicable local, state, national, and international laws and regulations.
+5. RESTRICTED PERSONS AND LOCATIONS (SANCTIONS)
+You represent and warrant that you are not, and are not acting on behalf of, a person who is: (a) located in, ordinarily resident in, or organized under the laws of any jurisdiction subject to comprehensive United States sanctions (currently including Cuba, Iran, North Korea, Syria, and the Crimea, Donetsk, and Luhansk regions of Ukraine); or (b) listed on any sanctions or restricted-party list maintained by the U.S. government (including the U.S. Treasury Department's Office of Foreign Assets Control (OFAC) Specially Designated Nationals and Blocked Persons List and the U.S. Commerce Department's Entity List), the United Nations, the European Union or its member states, or the United Kingdom. You agree not to use the Software if applicable law prohibits you from doing so.
 
-4. THIRD-PARTY SERVICES & SWAPS
-The Software includes integrated API access to third-party cryptocurrency swap aggregators, specifically Trocador.
+6. ACCEPTABLE USE
+You agree not to use the Software: (a) for money laundering, terrorist financing, fraud, or any other illegal activity, or to evade sanctions; (b) on behalf of any person barred under Section 5; or (c) to infringe others' rights, or to interfere with, attack, or circumvent the security of the Software or any network it connects to.
 
-Independent Relationship: Your use of Trocador is governed entirely by Trocador's own Terms of Service and Privacy Policy. Such Software LLC is not a party to any transaction you execute via Trocador.
+We may suspend, restrict, or terminate your access to the Software (or to particular features) if we reasonably believe you have violated these Terms or applicable law. Because the Software is non-custodial, ending your license does not affect your ability to access your funds with your seed phrase in other compatible wallet software.
 
-No Liability for Third Parties: We are not responsible for any delayed, failed, or halted transactions, nor for any "Know Your Customer" (KYC) or "Anti-Money Laundering" (AML) holds placed on your funds by the exchange partners utilized by Trocador. Any disputes regarding swapped funds must be resolved directly with Trocador or its respective exchange partners.
+7. THIRD-PARTY SERVICES
+The Software lets you connect to independent third parties. Those services are operated by others, not by us. When you use one, you may be subject to and required to accept that provider's own terms and privacy policy, and you may be entering into a separate contract directly with that provider. We are not a party to those transactions, do not control those providers, and are not responsible for their acts, omissions, pricing, availability, verification decisions, or performance. See our Privacy Policy for what data flows where.
 
-5. ASSUMPTION OF RISK
-By using the Software, you acknowledge and accept the inherent risks associated with cryptographic systems, blockchain technology, and digital assets. This includes, but is not limited to, the risk of extreme price volatility, smart contract vulnerabilities, regulatory changes, and hardware or software failure. You agree that Such Software LLC is not responsible for any losses arising from these risks.
+7.1 Swaps (Trocador). In-app swaps between coins are executed by Trocador, a third-party non-custodial exchange aggregator, and the underlying exchange providers it routes to — not by Such Software. When you start a swap, order details (input and output coin, amount, and your receiving address) are sent to Trocador's API. Such Software does not exchange your assets, does not take custody of funds during a swap, and is not the counterparty to your trade. Your use of Trocador is governed by Trocador's terms and privacy policy (https://trocador.app/en/privacypolicy/).
 
-6. INTELLECTUAL PROPERTY & OPEN SOURCE
-Hash Bags is built on open-source technologies. The Software's proprietary code is licensed under the terms specified in the Software's respective open-source license (e.g., MIT, GPL, etc., as found in the repository). To the extent any branding, logos, or trademarks (including "Hash Bags" and "Such Software LLC") are not covered by the open-source license, they remain the exclusive property of Such Software LLC.
+Swap fee: Such Software receives a commission (currently around 1% of the swap amount) from Trocador for swaps initiated in the Software. This commission is already reflected in the exchange rate shown to you before you confirm a swap; there is no separate charge. Because the fee is a referral commission paid by Trocador and we are never in custody of or in the settlement path for the swapped funds, we act as a referrer, not as a money transmitter or exchanger.
 
-7. DISCLAIMER OF WARRANTIES
-THE SOFTWARE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. SUCH SOFTWARE LLC EXPRESSLY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED, ERROR-FREE, OR ENTIRELY SECURE.
+7.2 Buying and selling with fiat (MoonPay). Where available, the Software may offer the option to buy or sell cryptocurrency for government-issued (fiat) currency through MoonPay, an independent third-party provider. This feature is optional and may not be available in all regions or in all versions of the Software. If you use it, MoonPay — not Such Software — is the provider and merchant of record, buys from or sells to you directly, and independently performs its own identity verification (KYC) and anti-money-laundering (AML) checks. MoonPay collects your personal and payment information directly; Such Software does not collect, receive, or control that information. The transaction takes place with MoonPay under MoonPay's Terms of Use (https://www.moonpay.com/legal/terms_of_use_usa) and Privacy Policy (https://www.moonpay.com/legal/privacy_policy), which you must accept with MoonPay. Such Software is not a party to the transaction and is not responsible for MoonPay's pricing, verification decisions, holds, refunds, chargebacks, or availability.
 
-8. LIMITATION OF LIABILITY
-TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL SUCH SOFTWARE LLC, ITS FOUNDERS, MEMBERS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM (A) YOUR ACCESS TO OR USE OF OR INABILITY TO ACCESS OR USE THE SOFTWARE; OR (B) ANY UNAUTHORIZED ACCESS, USE, OR ALTERATION OF YOUR TRANSMISSIONS OR DATA.
+7.3 Connecting to dApps (WalletConnect). For supported EVM networks (such as Ethereum, Polygon, Base, Arbitrum, and BNB Smart Chain), the Software can connect to independent third-party decentralized applications ("dApps") using WalletConnect, so you can review and approve transaction or signature requests those dApps send to your wallet. The Software does not include any built-in dApp and does not provide an in-app web browser. Third-party dApps are operated by others, are not part of the Software, and are not endorsed by us; you interact with them at your own risk and are responsible for what you approve.
 
-9. GOVERNING LAW AND DISPUTE RESOLUTION
-These Terms shall be governed by and construed in accordance with the laws of the Commonwealth of Pennsylvania, without regard to its conflict of law principles. Any legal action or proceeding arising under these Terms will be brought exclusively in the federal or state courts located in or serving Chester County, Pennsylvania, and the parties hereby irrevocably consent to the personal jurisdiction and venue therein.
+7.4 Nodes and other endpoints. To read balances and broadcast transactions, the Software connects to blockchain nodes. You may use the default nodes shipped with the Software or configure your own. Node operators and any other endpoints you connect to (including hardware wallets and services you paste links from) see the information your interaction with them entails. We neither operate nor monitor those third-party connections.
 
-10. CHANGES TO THESE TERMS
-We reserve the right to modify these Terms at any time. We will provide notice of any material changes by updating the "Last Updated" date. Your continued use of the Software following any changes constitutes your acceptance of the new Terms.
+8. FEES
+The Software is free to download and use. Network (miner/validator) fees are charged by the relevant blockchain, not by us. Fees, spreads, and limits for third-party services (such as Trocador and MoonPay) are set by those providers. The swap commission described in Section 7.1 is the only fee Such Software receives, and it is reflected in the quoted rate.
+
+9. ASSUMPTION OF RISK
+You understand and accept the risks of cryptocurrencies and blockchain technology, including: extreme price volatility; the irreversibility of on-chain transactions and losses from sending to a wrong address or network; bugs or vulnerabilities in protocols, smart contracts, or cryptographic libraries; forks and network changes; regulatory changes; and hardware, software, or third-party service failures. You agree that Such Software is not responsible for losses arising from these risks.
+
+10. INTELLECTUAL PROPERTY AND OPEN SOURCE
+Hash Bags' own application code is open source, licensed under the MIT License and inherited from its upstream project, Cake Wallet (Copyright Cake Labs LLC / Cake Technologies LLC; Copyright 2026 Such Software LLC). The Software also incorporates third-party open-source components under their own licenses, including the Monero and Wownero wallet cores (BSD-3-Clause), and additional components under Apache-2.0 and LGPL-3.0. The applicable license texts are available in the Software's source repository. To the extent any names, branding, or logos — including "Hash Bags" and "Such Software LLC" — are not covered by those open-source licenses, they remain the exclusive property of Such Software LLC, and nothing here grants you a license to use them.
+
+11. DISCLAIMER OF WARRANTIES
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE", WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, SUCH SOFTWARE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SOFTWARE WILL BE UNINTERRUPTED, TIMELY, SECURE, ERROR-FREE, OR THAT ANY DATA (INCLUDING RATES OR BALANCES) IS ACCURATE.
+
+12. LIMITATION OF LIABILITY
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, SUCH SOFTWARE AND ITS MEMBERS, MANAGERS, EMPLOYEES, AND AGENTS WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, REVENUE, DATA, OR CRYPTOCURRENCY, ARISING FROM OR RELATED TO YOUR USE OF (OR INABILITY TO USE) THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY. TO THE MAXIMUM EXTENT PERMITTED BY LAW, OUR TOTAL AGGREGATE LIABILITY FOR ALL CLAIMS RELATING TO THE SOFTWARE WILL NOT EXCEED ONE HUNDRED U.S. DOLLARS (US$100). SOME JURISDICTIONS DO NOT ALLOW CERTAIN EXCLUSIONS OR LIMITATIONS, SO SOME OF THE ABOVE MAY NOT APPLY TO YOU.
+
+13. INDEMNIFICATION
+You agree to indemnify and hold harmless Such Software and its members, managers, employees, and agents from any claims, losses, liabilities, and expenses (including reasonable legal fees) arising from your use of the Software, your violation of these Terms or applicable law (including sanctions, AML, or tax obligations), or your infringement of any third party's rights.
+
+14. APPLE APP STORE AND GOOGLE PLAY
+If you obtained the Software from the Apple App Store, the following additional terms apply. These Terms are between you and Such Software only, not with Apple, and Apple is not responsible for the Software or its content. Apple has no obligation to provide maintenance or support for the Software. In the event of any failure of the Software to conform to any applicable warranty, you may notify Apple, and Apple will refund the purchase price (if any); to the maximum extent permitted by law, Apple has no other warranty obligation with respect to the Software. Such Software, not Apple, is responsible for addressing any claims relating to the Software, including product-liability, legal-compliance, and intellectual-property claims. You represent that you are not located in a country subject to a U.S. Government embargo or designated as a "terrorist supporting" country and that you are not on any U.S. Government list of prohibited or restricted parties. Apple and its subsidiaries are third-party beneficiaries of these Terms and may enforce them against you. If you obtained the Software from Google Play, your use is also subject to the Google Play Terms of Service.
+
+15. GOVERNING LAW AND DISPUTES
+These Terms are governed by the laws of the Commonwealth of Pennsylvania, without regard to its conflict-of-laws rules.
+
+Courts. Except as provided below, any dispute arising out of or relating to these Terms or the Software will be brought exclusively in the state or federal courts located in or serving Chester County, Pennsylvania, and you consent to the personal jurisdiction and venue of those courts. Either party may bring an individual claim in small-claims court, and either party may seek injunctive or equitable relief in any court of competent jurisdiction to protect its intellectual property or security.
+
+Jury-trial and class-action waiver. To the maximum extent permitted by law, you and Such Software each waive any right to a jury trial and agree that disputes will be brought only on an individual basis, and not as a plaintiff or class member in any class, collective, or representative proceeding.
+
+Optional arbitration. At our option, we may elect to resolve a given dispute through final and binding individual arbitration administered by the American Arbitration Association under its rules, applying Pennsylvania law. This does not change the individual-basis and jury/class-waiver terms above.
+
+30-day opt-out. You may opt out of the class-action waiver and the optional-arbitration provision by emailing support@such.software with the subject line "Legal Opt-Out" within 30 days of first accepting these Terms. Opting out will not affect any other part of these Terms.
+
+Time limit. Any claim relating to the Software must be brought within one (1) year after it arises, or it is permanently barred, except where a longer period is required by law.
+
+Nothing in these Terms limits any mandatory consumer-protection rights you have under the law of your country of residence that cannot be waived by agreement.
+
+16. CHANGES TO THESE TERMS
+We may update these Terms from time to time. When we do, we will revise the effective date above and post the updated Terms at https://hash.boats/terms; material changes may also be noted in the app's release notes. Your continued use of the Software after an update means you accept the revised Terms.
+
+17. GENERAL
+If any provision of these Terms is held unenforceable, the rest remain in effect and the unenforceable provision will be limited or removed to the minimum extent necessary. These Terms (with the Privacy Policy) are the entire agreement between you and Such Software regarding the Software. You may not assign these Terms without our consent; we may assign them to an affiliate or successor. Our failure to enforce a provision is not a waiver. We are not liable for delays or failures caused by events beyond our reasonable control.
+
+18. CONTACT
+Questions about these Terms: support@such.software
+
+Hash Bags is developed and maintained by Such Software LLC.

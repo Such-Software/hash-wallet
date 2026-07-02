@@ -12,7 +12,7 @@ class DisclaimerPage extends BasePage {
   final bool isReadOnly;
 
   @override
-  String get title => 'Terms of Use';
+  String get title => 'Terms of Service';
 
   @override
   Widget? leading(BuildContext context) => isReadOnly ? super.leading(context) : null;
@@ -67,7 +67,7 @@ class DisclaimerBodyState extends State<DisclaimerPageBody> {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                'Terms and conditions',
+                                'Terms of Service',
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontSize: 20.0,
@@ -84,7 +84,7 @@ class DisclaimerBodyState extends State<DisclaimerPageBody> {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                'Legal Disclaimer\nAnd\nTerms of Use',
+                                'Legal Disclaimer\nand\nTerms of Service',
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -170,7 +170,7 @@ class DisclaimerBodyState extends State<DisclaimerPageBody> {
                                       : null,
                                 ),
                                 Text(
-                                  'I agree to Terms of Use',
+                                  'I agree to the Terms of Service',
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
