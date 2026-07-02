@@ -224,16 +224,18 @@ jobs:
       - name: Generate per-module secrets.g.dart files (empty defaults)
         run: dart run tool/generate_new_secrets.dart
 
-      - name: Inject Trocador affiliate secrets
+      - name: Inject Trocador + WalletConnect secrets
         env:
           TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
           TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
           TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
+          WALLETCONNECT_PROJECT_ID: ${{ secrets.WALLETCONNECT_PROJECT_ID }}
         run: |
           sed -i '' \
             -e "s|const trocadorApiKey = '';|const trocadorApiKey = '${TROCADOR_API_KEY}';|" \
             -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
             -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
+            -e "s|const walletConnectProjectId = '';|const walletConnectProjectId = '${WALLETCONNECT_PROJECT_ID}';|" \
             lib/.secrets.g.dart
 
       # ---- Apple signing setup --------------------------------------------
