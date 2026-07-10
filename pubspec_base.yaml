@@ -204,10 +204,11 @@ dependency_overrides:
     git:
       url: https://github.com/cake-tech/ledger-flutter-plus
       ref: 5237e5b3d5f07696eefd0aaee9c32478ed399d20
-  ledger_usb_plus:
-    git:
-      url: https://github.com/konstantinullrich/ledger-usb-plus
-      ref: dad482c847c0d0eedceabbb40d3478e64b65e630
+  # Hash Bags: the old git pin (konstantinullrich/ledger-usb-plus@dad482c) was
+  # force-pushed away — the commit no longer exists, breaking `flutter pub get`
+  # on any cold runner (Android/Linux containers). cake-tech's ledger-flutter-plus
+  # fork depends on the published `ledger_usb_plus: ^1.0.4`, so pin to that.
+  ledger_usb_plus: ^1.0.4
   socks5_proxy:
     git:
       url: https://github.com/LacticWhale/socks_dart.git
