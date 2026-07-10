@@ -124,7 +124,15 @@ jobs:
       # model_generator.sh is already trimmed to our 8 enabled chains.
       # Use `async` flag for parallel build_runner across modules.
       - name: Generate per-module secrets.g.dart files (all empty defaults)
-        run: dart run tool/generate_new_secrets.dart
+        run: |
+          # tool/generate_new_secrets.dart imports app deps (encrypt/convert/intl),
+          # so the app's packages must be resolved first. pubspec_gen.sh runs
+          # `flutter pub get` WITHOUT `set -e`, so any hiccup fails silently and
+          # surfaces here as "Couldn't resolve the package". Resolve explicitly
+          # (and loudly) before running the tool.
+          set -e
+          flutter pub get
+          dart run tool/generate_new_secrets.dart
 
       - name: Inject Trocador affiliate secrets into lib/.secrets.g.dart
         env:

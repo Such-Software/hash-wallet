@@ -164,7 +164,15 @@ jobs:
 
       # ---- Secrets ---------------------------------------------------------
       - name: Generate per-module secrets.g.dart files (all empty defaults)
-        run: dart run tool/generate_new_secrets.dart
+        run: |
+          # tool/generate_new_secrets.dart imports app deps (encrypt/convert/intl),
+          # so the app's packages must be resolved first. The configure step runs
+          # `flutter pub get` inside pubspec_gen.sh WITHOUT `set -e`, so any hiccup
+          # there fails silently and surfaces here as "Couldn't resolve the package".
+          # Resolve explicitly (and loudly) before running the tool.
+          set -e
+          flutter pub get
+          dart run tool/generate_new_secrets.dart
 
       - name: Inject Trocador + WalletConnect + MoonPay secrets into lib/.secrets.g.dart
         env:
