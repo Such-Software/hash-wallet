@@ -1,0 +1,11 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Generate App Store screenshots (iPhone 6.9\" + iPad 13\") via snapshot"
+  lane :screenshots do
+    capture_ios_screenshots        # reads ios/fastlane/Snapfile
+    # Optional: add device frames + captions (needs `brew install imagemagick`):
+    # frame_screenshots(white: true)
+    UI.success("Screenshots in ios/screenshots/en-US/ — upload to App Store Connect")
+  end
+end

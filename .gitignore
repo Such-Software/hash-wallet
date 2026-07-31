@@ -88,6 +88,11 @@ cw_monero/cw_monero/android/.cxx/
 
 android/key.properties
 android/app/key.jks
+# The Android CI workflow decodes ANDROID_KEYSTORE_BASE64 to this exact path.
+# That is the Play upload signing key — it must never be committable.
+android/app/upload-keystore.jks
+android/app/*.jks
+android/app/*.keystore
 
 **/tool/.secrets-prod.json
 **/tool/.secrets-test.json
@@ -234,3 +239,8 @@ scripts/reown_flutter
 docs/links.md
 docs/UPSTREAM_SYNC.md
 scripts/windows/setup-windows-runner.ps1
+
+# Capture harness: local config (Vaultwarden host, demo addresses). The
+# committed template is tools/demo/demo.env.example.
+tools/demo/demo.env
+__pycache__/

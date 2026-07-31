@@ -1,0 +1,37 @@
+{
+  "name": "hash",
+  "description": "Hash Bags — an open-source, non-custodial multi-currency wallet by Such Software LLC. Wownero-first, privacy-respecting, no KYC. Deep-forest green on near-black, clean geometric sans, the '#' mark. Calm and credible, not hype.",
+  "palette": {
+    "bg": "#0a1a12",
+    "bg_mid": "#0f2b1c",
+    "bg_hi": "#123f28",
+    "surface": "#123f28",
+    "ink": "#e8efe9",
+    "muted": "#7fae97",
+    "accent": "#2EA56A",
+    "accent_hi": "#8fd6b0",
+    "primary": "#1A5C38"
+  },
+  "type": {
+    "families": { "display": "Inter Display", "body": "Inter" },
+    "scale": { "title": 96, "subhead": 52, "body": 34, "caption": 48 },
+    "font_files": {
+      "display": "/usr/share/fonts/opentype/inter/InterDisplay-Bold.otf",
+      "body": "/usr/share/fonts/opentype/inter/Inter-SemiBold.otf"
+    },
+    "font_fallbacks": [
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+      "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
+    ]
+  },
+  "motion": {
+    "transition_default": "cross_dissolve",
+    "transition_social": "blur_punch"
+  },
+  "copy": {
+    "title": "Hash Bags",
+    "subtitle": "You hold the keys.",
+    "cta": "hash.boats",
+    "cta_sub": "open-source · non-custodial · no KYC"
+  }
+}

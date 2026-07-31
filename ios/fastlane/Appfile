@@ -1,0 +1,3 @@
+app_identifier("com.suchsoftware.hashwallet")
+team_id("32J6BB6VUS")            # Apple Developer Team (Such Software LLC)
+# apple_id("you@such.software")  # fill in only if you later use fastlane to upload
