@@ -1,0 +1,23 @@
+# fastlane snapshot config for Hash Bags App Store screenshots.
+# Run on macOS (Mac-mini runner or your Mac):  cd ios && fastlane screenshots
+#
+# These two devices cover Apple's required sizes:
+#   iPhone 16 Pro Max  -> 6.9"  (1290x2796 / 1320x2868)  [REQUIRED]
+#   iPad Pro 13" (M4)  -> 13"   (2064x2752)              [required if you ship iPad]
+devices([
+  "iPhone 16 Pro Max",
+  "iPad Pro 13-inch (M4)"
+])
+
+languages(["en-US"])
+
+# The Runner scheme's Test action must include the RunnerUITests target
+# (see store/SCREENSHOTS.md). only_testing keeps us to just the screenshot test.
+scheme("Runner")
+only_testing(["RunnerUITests/HashBagsScreenshotsUITests"])
+
+output_directory("./screenshots")
+clear_previous_screenshots(true)
+concurrent_simulators(false)   # wallet sync is flaky under parallel sims
+override_status_bar(true)      # clean status bar: 9:41, full battery/wifi
+stop_after_first_error(true)
