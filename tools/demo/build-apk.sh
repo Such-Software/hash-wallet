@@ -133,6 +133,18 @@ if [[ "$SKIP_DEPS" != "1" ]]; then
   elif [[ -x scripts/android/build_reown_deps.sh ]]; then
     echo "uniffi bindings missing -- generating via build_reown_deps.sh"
     echo "(this needs the Rust/uniffi toolchain and is slow on a cold run)"
+    # The prebuilt tarball unpacks a SHALLOW git repo. prepare_reown.sh then
+    # does `git fetch -a && git checkout <pinned sha>`, which cannot reach that
+    # commit through a shallow history and dies with
+    #   fatal: unable to read tree (8a6d79ef...)
+    # Unshallow in place rather than re-cloning: the tarball also carries
+    # prebuilt native artifacts that a bare clone would not have.
+    if [[ -d scripts/reown_flutter/.git ]] && \
+       [[ "$(git -C scripts/reown_flutter rev-parse --is-shallow-repository)" == "true" ]]; then
+      echo "unshallowing scripts/reown_flutter so the pinned commit is reachable"
+      git -C scripts/reown_flutter fetch --unshallow --tags || \
+        git -C scripts/reown_flutter fetch --depth=2147483647 --tags || true
+    fi
     ./scripts/android/build_reown_deps.sh || {
       echo
       echo "FATAL: could not generate the reown uniffi bindings."
