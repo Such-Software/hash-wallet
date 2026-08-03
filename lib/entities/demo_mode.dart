@@ -10,6 +10,7 @@ import 'package:hash_wallet/entities/preferences_key.dart';
 import 'package:hash_wallet/entities/seed_type.dart';
 import 'package:hash_wallet/store/authentication_store.dart';
 import 'package:hash_wallet/view_model/wallet_new_vm.dart';
+import 'package:hash_wallet/view_model/wallet_restore_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Whether this build was launched in capture/demo mode.
@@ -33,6 +34,17 @@ const String _demoPin = String.fromEnvironment('DEMO_PIN', defaultValue: '0801')
 
 /// Name of the throwaway wallet the demo build creates on first launch.
 const String _demoWalletName = 'Demo Wallet';
+
+/// Optional fixed seed. When set, the demo build RESTORES this exact wallet
+/// instead of creating a fresh one — so a funded throwaway wallet is
+/// reproducible and its balance (which lives on-chain against the seed)
+/// survives any emulator wipe. THROWAWAY only; never a real wallet. Supplied
+/// via --dart-define, kept out of git (tools/demo/demo.env).
+const String _demoSeed = String.fromEnvironment('DEMO_WALLET_SEED');
+
+/// Restore height for the seed above. Set it near the wallet's creation block
+/// so sync is fast; 0 scans from genesis (slow).
+const int _demoHeight = int.fromEnvironment('DEMO_WALLET_HEIGHT', defaultValue: 0);
 
 /// Bring the app up straight into a usable, unlocked wallet so the capture
 /// harness never has to drive onboarding or the PIN pad (whose synthetic taps
@@ -62,6 +74,30 @@ Future<void> maybeSetupDemoWallet() async {
       await loadCurrentWallet();
       authStore.allowed();
       printV('[demo] loaded existing wallet "$existing"');
+      return;
+    }
+
+    if (_demoSeed.trim().isNotEmpty) {
+      // Reproducible funded wallet: restore the fixed seed. WalletRestoreView
+      // Model shares WalletCreationVM.create, so it builds walletInfo/paths and
+      // finalizes (changeCurrentWallet + allowedCreate) just like the new-wallet
+      // flow.
+      final vm = getIt.get<WalletRestoreViewModel>(
+          param1: WalletType.wownero, param2: null);
+      vm.name = _demoWalletName;
+      // getCredentials() reads name/passphrase FROM the options map (not the vm
+      // field), and casts name as a non-null String — so it must be present.
+      await vm.create(options: <String, dynamic>{
+        'name': _demoWalletName,
+        'seed': _demoSeed.trim(),
+        'height': _demoHeight,
+        'passphrase': '',
+      });
+      if (vm.state is! ExecutedSuccessfullyState) {
+        throw Exception('wallet restore did not finish (${vm.state.runtimeType})');
+      }
+      printV('[demo] restored Wownero wallet from DEMO_WALLET_SEED '
+          '(height $_demoHeight)');
       return;
     }
 

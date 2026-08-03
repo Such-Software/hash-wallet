@@ -244,3 +244,6 @@ scripts/windows/setup-windows-runner.ps1
 # committed template is tools/demo/demo.env.example.
 tools/demo/demo.env
 __pycache__/
+
+# Internal engineering notes (not for the public repo)
+docs/internal-notes.md
