@@ -272,6 +272,8 @@ cmd_record() {
         --target=integration_test/demo/scenarios/'"$scenario"'.dart \
         -d "$SERIAL" \
         --dart-define-from-file=env.json \
+        --dart-define=DEMO_MODE=true \
+        --dart-define=DEMO_PIN='"${DEMO_PIN:-0801}"' \
         --dart-define=DEMO_WALLET_SEED="$DEMO_SEED" \
         --dart-define=DEMO_SEND_ADDRESS="$DEMO_SEND_ADDR"
     ' 2>&1 | tee "$RAW_DIR/$scenario.drive.log"

@@ -13,6 +13,7 @@ import 'package:hash_wallet/core/trade_monitor.dart';
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/entities/contact.dart';
 import 'package:hash_wallet/entities/default_settings_migration.dart';
+import 'package:hash_wallet/entities/demo_mode.dart';
 import 'package:hash_wallet/entities/get_encryption_key.dart';
 import 'package:hash_wallet/entities/language_service.dart';
 import 'package:hash_wallet/entities/template.dart';
@@ -161,6 +162,11 @@ Future<void> runAppWithZone({Key? topLevelKey}) async {
     if (FeatureFlag.hasDevOptions) {
       ProxyWrapper.logger = MemoryProxyLogger();
     }
+
+    // Capture/demo builds only (kDebugMode + --dart-define=DEMO_MODE): come up
+    // straight into an unlocked wallet so screenshots/video never depend on the
+    // onboarding/PIN flow. No-op in release.
+    await maybeSetupDemoWallet();
 
     // Basically when we're running a test
     if (topLevelKey != null) {
@@ -376,11 +382,13 @@ class AppState extends State<App> with SingleTickerProviderStateMixin {
         final settingsStore = appStore.settingsStore;
         final statusBarColor = Colors.transparent;
         final authenticationStore = getIt.get<AuthenticationStore>();
-        final initialRoute = authenticationStore.state == AuthenticationState.uninitialized
-            ? Routes.welcome
-            : settingsStore.currentBuiltinTor
-                ? Routes.startTor
-                : Routes.login;
+        final initialRoute = isDemoMode
+            ? Routes.dashboard
+            : authenticationStore.state == AuthenticationState.uninitialized
+                ? Routes.welcome
+                : settingsStore.currentBuiltinTor
+                    ? Routes.startTor
+                    : Routes.login;
         final currentTheme = appStore.themeStore.currentTheme;
         final statusBarBrightness =
             currentTheme.type == currentTheme.isDark ? Brightness.light : Brightness.dark;

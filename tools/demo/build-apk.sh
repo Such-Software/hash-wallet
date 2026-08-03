@@ -45,6 +45,8 @@ docker run --rm \
   -e SKIP_DEPS="$SKIP_DEPS" \
   -e BUILD_MODE="$BUILD_MODE" \
   -e TARGET_PLATFORM="$TARGET_PLATFORM" \
+  -e DEMO="${DEMO:-0}" \
+  -e DEMO_PIN="${DEMO_PIN:-0801}" \
   -e HOST_UID="$HOST_UID" \
   -e HOST_GID="$HOST_GID" \
   "$IMAGE" bash -c '
@@ -214,7 +216,15 @@ step "compile svg assets"
 step "build apk ($BUILD_MODE / ${TARGET_PLATFORM:-universal})"
 EXTRA=""
 [[ -n "$TARGET_PLATFORM" ]] && EXTRA="--target-platform=$TARGET_PLATFORM"
-flutter build apk --dart-define-from-file=env.json --$BUILD_MODE $EXTRA
+# DEMO=1 bakes in DEMO_MODE so the app boots straight to an unlocked demo
+# wallet (kDebugMode-gated, impossible in release). Lets capture skip the
+# onboarding/PIN flow entirely.
+DEMO_DEFINES=""
+if [[ "${DEMO:-0}" == "1" ]]; then
+  DEMO_DEFINES="--dart-define=DEMO_MODE=true --dart-define=DEMO_PIN=${DEMO_PIN:-0801}"
+  echo "DEMO_MODE baked in"
+fi
+flutter build apk --dart-define-from-file=env.json --$BUILD_MODE $EXTRA $DEMO_DEFINES
 
 echo
 echo "==> artifacts:"
