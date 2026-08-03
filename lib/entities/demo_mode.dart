@@ -20,8 +20,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///
 /// Enable for a local capture build with:
 ///   flutter run --dart-define=DEMO_MODE=true
+///
+/// SCREENSHOT_MODE is honored as an alias so the iOS fastlane snapshot UITest
+/// (ios/RunnerUITests/HashBagsScreenshotsUITests.swift, which already passes
+/// --dart-define=SCREENSHOT_MODE=true) drives this same path unchanged.
 const bool _demoModeDefine = bool.fromEnvironment('DEMO_MODE');
-bool get isDemoMode => kDebugMode && _demoModeDefine;
+const bool _screenshotModeDefine = bool.fromEnvironment('SCREENSHOT_MODE');
+bool get isDemoMode => kDebugMode && (_demoModeDefine || _screenshotModeDefine);
 
 /// PIN the demo build "unlocks" with.
 const String _demoPin = String.fromEnvironment('DEMO_PIN', defaultValue: '0801');
