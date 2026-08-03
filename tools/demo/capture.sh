@@ -61,6 +61,9 @@ SCENARIOS=(core_store_set onboarding_create restore_from_seed swap_and_buy)
 # On-device path for the in-flight recording.
 DEV_CAPTURE=/data/local/tmp/hb-capture.mp4
 
+# Package under capture — used to detect when the app is actually on screen.
+APP_PKG="${DEMO_APP_PKG:-com.suchsoftware.hashwallet}"
+
 log()  { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31m[fail]\033[0m %s\n' "$*" >&2; exit 1; }
@@ -85,18 +88,40 @@ set -- "${POSITIONAL[@]+"${POSITIONAL[@]}"}"
 # ---------------------------------------------------------------------------
 # device helpers
 # ---------------------------------------------------------------------------
-# Wait up to `timeout` seconds for a device to appear. A freshly launched
-# emulator takes appreciably longer than a fixed sleep to register with adb,
-# and the port varies (5554, 5556, ...) depending on what else is running.
+# Wait up to `timeout` seconds for OUR device to appear.
+#
+# Deliberately matches on AVD name rather than taking the first device adb
+# lists: this box routinely has other capture emulators running (VeganIQ etc),
+# and grabbing the wrong one silently records somebody else's app. Falls back
+# to the sole device only when exactly one is attached.
 detect_serial() {
   [[ -n "$SERIAL" ]] && return 0
-  local timeout="${1:-90}" waited=0
+  local timeout="${1:-90}" waited=0 cand name
   while (( waited < timeout )); do
-    SERIAL="$("$ADB" devices | awk '$2=="device" {print $1; exit}')"
-    [[ -n "$SERIAL" ]] && { log "device: $SERIAL"; return 0; }
+    while read -r cand; do
+      [[ -z "$cand" ]] && continue
+      name="$("$ADB" -s "$cand" emu avd name 2>/dev/null | head -1 | tr -d '\r')"
+      if [[ "$name" == "$AVD" ]]; then
+        SERIAL="$cand"; log "device: $SERIAL (avd $AVD)"; return 0
+      fi
+    done < <("$ADB" devices | awk '$2=="device" {print $1}')
+
+    # Exactly one device and it is not ours by name (physical phone, say) —
+    # take it, since there is no ambiguity to get wrong.
+    local all count
+    all="$("$ADB" devices | awk '$2=="device" {print $1}')"
+    count="$(printf '%s\n' "$all" | grep -c . || true)"
+    if [[ "$count" == "1" ]]; then
+      SERIAL="$(printf '%s\n' "$all" | head -1)"
+      log "device: $SERIAL (only device attached)"; return 0
+    fi
+
     sleep 2; waited=$((waited + 2))
   done
-  die "no device appeared within ${timeout}s. Run: tools/demo/capture.sh boot"
+  die "no device matching AVD '$AVD' appeared within ${timeout}s.
+Attached devices:
+$("$ADB" devices | tail -n +2)
+Run 'tools/demo/capture.sh boot', or pass --serial <name> explicitly."
 }
 
 adbs() { "$ADB" -s "$SERIAL" "$@"; }
@@ -117,14 +142,21 @@ cmd_boot() {
     log "a device is already booted"; detect_serial; return 0
   fi
   log "booting AVD $AVD (headless)"
-  # -feature -GLDMA: with swiftshader_indirect on a headless host, the guest
-  # graphics stack otherwise aborts on
-  #   "Assertion failed: !rcEnc->featureInfo()->hasReadColorBufferDma"
-  # which kills screencap and screenrecord — i.e. exactly the two things this
-  # harness needs. Disabling the DMA colour-buffer path costs a little capture
-  # throughput and makes both work.
+  # These exact flags matter — headless capture is fussy and most combinations
+  # silently produce nothing:
+  #
+  #   -gpu software      swiftshader_indirect aborts the guest graphics stack
+  #                      with "Assertion failed: !rcEnc->featureInfo()
+  #                      ->hasReadColorBufferDma", killing screencap.
+  #   -feature -Vulkan   without it the guest MediaCodec AVC encoder fails with
+  #                      "Encoder failed (err=-38)" at every resolution, so
+  #                      screenrecord writes a 0-byte file.
+  #
+  # The AVD must also be an **API 35** image. On API 36.1 the encoder is broken
+  # regardless of GPU flags — verified against both swiftshader_indirect and
+  # -gpu host on a real NVIDIA GPU. Same recipe as VeganIQ_API35_Capture.
   nohup "$EMULATOR_BIN" -avd "$AVD" -no-window -no-audio -no-boot-anim \
-    -gpu swiftshader_indirect -feature -GLDMA -no-snapshot-save \
+    -gpu software -feature -Vulkan -no-snapshot -no-snapshot-save \
     > "$OUT_ROOT/emulator.log" 2>&1 &
   sleep 5
   detect_serial
@@ -193,19 +225,37 @@ cmd_record() {
   fi
   local send_addr="${DEMO_SEND_ADDRESS:-}"
 
-  local dev_epoch_start
-  dev_epoch_start="$(adbs shell date +%s%3N | tr -d '\r')"
-
-  log "starting screenrecord"
-  # /data/local/tmp, not /sdcard: the emulator's emulated-storage FUSE layer
-  # is flaky headless ("Transport endpoint is not connected"), and screenrecord
-  # then fails to open its output. /data/local/tmp is a plain filesystem that
-  # adb can always read and write.
+  # Arm the recorder to fire the moment the app hits the foreground, NOT now.
+  #
+  # `flutter drive` compiles an instrumented APK before it installs anything,
+  # which can take many minutes. screenrecord caps at 180s, so starting it here
+  # would burn the entire budget filming the launcher and stop before the app
+  # ever appeared. Poll for the package becoming the resumed activity, then
+  # start recording and stamp the device clock at that instant.
+  #
+  # /data/local/tmp, not /sdcard: the emulator's emulated-storage FUSE layer is
+  # flaky headless ("Transport endpoint is not connected") and screenrecord
+  # then cannot open its output.
   adbs shell rm -f "$DEV_CAPTURE" || true
-  adbs shell screenrecord --size 1080x1920 --bit-rate 12000000 \
-    --time-limit 180 "$DEV_CAPTURE" &
+  local stamp_file="$RAW_DIR/$scenario.recstart"
+  rm -f "$stamp_file"
+
+  (
+    # Wait for the app to be foregrounded (cap the wait so a failed build does
+    # not leave this poller alive forever).
+    for _ in $(seq 1 900); do
+      if "$ADB" -s "$SERIAL" shell dumpsys activity activities 2>/dev/null \
+           | grep -q "topResumedActivity.*$APP_PKG"; then
+        "$ADB" -s "$SERIAL" shell date +%s%3N | tr -d '\r' > "$stamp_file"
+        "$ADB" -s "$SERIAL" shell screenrecord --size 1080x1920 \
+          --bit-rate 12000000 --time-limit 180 "$DEV_CAPTURE"
+        exit 0
+      fi
+      sleep 1
+    done
+  ) &
   local rec_pid=$!
-  sleep 2   # let the encoder actually start before the app launches
+  log "recorder armed — will start when $APP_PKG reaches the foreground"
 
   log "driving scenario: $scenario"
   set +e
@@ -222,6 +272,8 @@ cmd_record() {
         --target=integration_test/demo/scenarios/'"$scenario"'.dart \
         -d "$SERIAL" \
         --dart-define-from-file=env.json \
+        --dart-define=DEMO_MODE=true \
+        --dart-define=DEMO_PIN='"${DEMO_PIN:-0801}"' \
         --dart-define=DEMO_WALLET_SEED="$DEMO_SEED" \
         --dart-define=DEMO_SEND_ADDRESS="$DEMO_SEND_ADDR"
     ' 2>&1 | tee "$RAW_DIR/$scenario.drive.log"
@@ -230,8 +282,14 @@ cmd_record() {
 
   log "stopping screenrecord"
   adbs shell pkill -INT screenrecord || true
+  kill "$rec_pid" 2>/dev/null || true      # in case it never armed
   wait "$rec_pid" 2>/dev/null || true
   sleep 3   # screenrecord needs a moment to finalise the moov atom
+
+  if [[ ! -s "$stamp_file" ]]; then
+    warn "the recorder never armed — $APP_PKG never reached the foreground."
+    warn "That usually means the build or install failed; see $RAW_DIR/$scenario.drive.log"
+  fi
 
   adbs pull "$DEV_CAPTURE" "$RAW_DIR/$scenario.mp4" >/dev/null \
     || die "could not pull recording — did screenrecord start?"
@@ -244,7 +302,6 @@ cmd_record() {
   else
     warn "no driver output — captions and screenshots will be unavailable"
   fi
-  echo "$dev_epoch_start" > "$RAW_DIR/$scenario.recstart"
 
   exit_demo_mode
   if [[ $drive_rc -ne 0 ]]; then

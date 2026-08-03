@@ -352,30 +352,21 @@ class CommonTestFlows {
         return secrets.bitcoinCashTestWalletSeeds;
       case WalletType.polygon:
         return secrets.polygonTestWalletSeeds;
-      case WalletType.solana:
-        return secrets.solanaTestWalletSeeds;
       case WalletType.base:
         return secrets.baseTestWalletSeeds;
       case WalletType.arbitrum:
         return secrets.arbitrumTestWalletSeeds;
       case WalletType.bsc:
         return secrets.bscTestWalletSeeds;
-      case WalletType.tron:
-        return secrets.tronTestWalletSeeds;
       case WalletType.nano:
         return secrets.nanoTestWalletSeeds;
       case WalletType.wownero:
         return secrets.wowneroTestWalletSeeds;
-      case WalletType.zano:
-        return secrets.zanoTestWalletSeeds;
-      case WalletType.decred:
-        return secrets.decredTestWalletSeeds;
+      // Hash Bags does not ship SOL/TRX/ZEC/DCR/ZANO/Haven — those WalletType
+      // members no longer exist. dogecoin ships, but has no test seed in
+      // .secrets.g.dart.
       case WalletType.dogecoin:
-        return secrets.dogeTestWalletSeeds;
-      case WalletType.zcash:
-        return secrets.zcashTestWalletSeeds;
       case WalletType.none:
-      case WalletType.haven:
       case WalletType.banano:
         throw Exception("Unable to get seeds for ${walletType}");
     }
@@ -402,10 +393,6 @@ class CommonTestFlows {
         return secrets.arbitrumTestWalletReceiveAddress;
       case WalletType.bsc:
         return secrets.bscTestWalletReceiveAddress;
-      case WalletType.solana:
-        return secrets.solanaTestWalletReceiveAddress;
-      case WalletType.tron:
-        return secrets.tronTestWalletReceiveAddress;
       case WalletType.nano:
         return secrets.nanoTestWalletReceiveAddress;
       case WalletType.wownero:

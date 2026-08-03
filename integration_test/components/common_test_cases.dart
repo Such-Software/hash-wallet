@@ -14,12 +14,25 @@ class CommonTestCases {
     String key, {
     bool shouldPumpAndSettle = true,
     int pumpDuration = 100,
+    Duration timeout = const Duration(seconds: 20),
   }) async {
-    await tester.pump(Duration(milliseconds: 500));
-
     final widgetFinder = find.byKey(ValueKey(key));
 
-    expect(tester.any(widgetFinder), true, reason: 'Widget with key "$key" should be visible');
+    // Wait for the widget to actually appear rather than pumping a flat 500ms
+    // and hoping. Screens that arrive behind an async transition (PIN setup's
+    // success button is the usual offender) are otherwise a coin flip, and the
+    // failure reads as "key missing" rather than "key not there YET".
+    //
+    // Deliberately a pump loop, not pumpAndSettle: the dashboard runs a
+    // perpetual sync-indicator animation, so settling never completes there.
+    final deadline = DateTime.now().add(timeout);
+    while (!tester.any(widgetFinder) && DateTime.now().isBefore(deadline)) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    expect(tester.any(widgetFinder), true,
+        reason: 'Widget with key "$key" should be visible '
+            '(waited ${timeout.inSeconds}s)');
 
     final widget = widgetFinder.first;
     await tester.tap(widget, warnIfMissed: false);

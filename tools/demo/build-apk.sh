@@ -19,6 +19,10 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+# Pull in local capture config (DEMO_WALLET_SEED/HEIGHT/PIN). Gitignored.
+_DEMO_ENV="$(dirname "${BASH_SOURCE[0]}")/demo.env"
+if [[ -f "$_DEMO_ENV" ]]; then set -a; . "$_DEMO_ENV"; set +a; fi
 IMAGE="${CI_IMAGE:-ghcr.io/cake-tech/cake_wallet:debian13-flutter3.32.0-ndkr28-go1.24.1-ruststablenightly}"
 BUILD_MODE="${BUILD_MODE:-debug}"
 ABI="${ABI:-x86_64}"
@@ -45,6 +49,10 @@ docker run --rm \
   -e SKIP_DEPS="$SKIP_DEPS" \
   -e BUILD_MODE="$BUILD_MODE" \
   -e TARGET_PLATFORM="$TARGET_PLATFORM" \
+  -e DEMO="${DEMO:-0}" \
+  -e DEMO_PIN="${DEMO_PIN:-0801}" \
+  -e DEMO_WALLET_SEED="${DEMO_WALLET_SEED:-}" \
+  -e DEMO_WALLET_HEIGHT="${DEMO_WALLET_HEIGHT:-0}" \
   -e HOST_UID="$HOST_UID" \
   -e HOST_GID="$HOST_GID" \
   "$IMAGE" bash -c '
@@ -133,6 +141,18 @@ if [[ "$SKIP_DEPS" != "1" ]]; then
   elif [[ -x scripts/android/build_reown_deps.sh ]]; then
     echo "uniffi bindings missing -- generating via build_reown_deps.sh"
     echo "(this needs the Rust/uniffi toolchain and is slow on a cold run)"
+    # The prebuilt tarball unpacks a SHALLOW git repo. prepare_reown.sh then
+    # does `git fetch -a && git checkout <pinned sha>`, which cannot reach that
+    # commit through a shallow history and dies with
+    #   fatal: unable to read tree (8a6d79ef...)
+    # Unshallow in place rather than re-cloning: the tarball also carries
+    # prebuilt native artifacts that a bare clone would not have.
+    if [[ -d scripts/reown_flutter/.git ]] && \
+       [[ "$(git -C scripts/reown_flutter rev-parse --is-shallow-repository)" == "true" ]]; then
+      echo "unshallowing scripts/reown_flutter so the pinned commit is reachable"
+      git -C scripts/reown_flutter fetch --unshallow --tags || \
+        git -C scripts/reown_flutter fetch --depth=2147483647 --tags || true
+    fi
     ./scripts/android/build_reown_deps.sh || {
       echo
       echo "FATAL: could not generate the reown uniffi bindings."
@@ -200,9 +220,28 @@ step "compile svg assets"
 ./compile_graphics.sh
 
 step "build apk ($BUILD_MODE / ${TARGET_PLATFORM:-universal})"
-EXTRA=""
-[[ -n "$TARGET_PLATFORM" ]] && EXTRA="--target-platform=$TARGET_PLATFORM"
-flutter build apk --dart-define-from-file=env.json --$BUILD_MODE $EXTRA
+# DEMO=1 bakes in DEMO_MODE so the app boots straight to an unlocked demo
+# wallet (kDebugMode-gated, impossible in release). Lets capture skip the
+# onboarding/PIN flow entirely.
+# Use an ARRAY, not a string: the seed contains spaces (16 words), so a
+# word-split string turns "--dart-define=DEMO_WALLET_SEED=word1 word2 ..."
+# into separate argv tokens and flutter treats "unlock" as a target file
+# ("Target file 'unlock' not found."). Array elements preserve the spaces.
+DEMO_DEFINES=()
+if [[ "${DEMO:-0}" == "1" ]]; then
+  DEMO_DEFINES+=(--dart-define=DEMO_MODE=true "--dart-define=DEMO_PIN=${DEMO_PIN:-0801}")
+  if [[ -n "${DEMO_WALLET_SEED:-}" ]]; then
+    DEMO_DEFINES+=("--dart-define=DEMO_WALLET_SEED=${DEMO_WALLET_SEED}")
+    DEMO_DEFINES+=("--dart-define=DEMO_WALLET_HEIGHT=${DEMO_WALLET_HEIGHT:-0}")
+    echo "DEMO_MODE baked in (restore from seed, height ${DEMO_WALLET_HEIGHT:-0})"
+  else
+    echo "DEMO_MODE baked in (fresh wallet)"
+  fi
+fi
+EXTRA_ARGS=()
+[[ -n "$TARGET_PLATFORM" ]] && EXTRA_ARGS+=("--target-platform=$TARGET_PLATFORM")
+flutter build apk --dart-define-from-file=env.json --$BUILD_MODE \
+  "${EXTRA_ARGS[@]}" "${DEMO_DEFINES[@]+"${DEMO_DEFINES[@]}"}"
 
 echo
 echo "==> artifacts:"

@@ -94,12 +94,28 @@ no captions, no title/CTA cards, no music bed. `reel.py` also enforces
 Apple's 15–30s duration window and will fail rather than emit an out-of-spec
 preview.
 
-## Store sizing
+## The capture AVD (both details matter)
 
-The harness creates its own AVD at exactly **1080×1920 (16:9)**. Do not point
-it at the stock "Medium Phone" AVD: that is 1080×2400 = **2.22:1**, and Google
-Play rejects phone screenshots above **2:1**. `marks.py shots` warns if the
-frames it extracts violate that ratio.
+Create it as **API 35**, at exactly **1080×1920**:
+
+```bash
+avdmanager create avd -n HashBags_Capture \
+  -k "system-images;android-35;google_apis;x86_64" -d pixel_6
+# then in ~/.android/avd/HashBags_Capture.avd/config.ini:
+#   hw.lcd.width=1080  hw.lcd.height=1920  hw.lcd.density=420
+#   hw.ramSize=6144    showDeviceFrame=no
+```
+
+**Size:** the stock "Medium Phone" AVD is 1080×2400 = **2.22:1**, and Play
+rejects phone screenshots above **2:1**. `marks.py shots` warns if extracted
+frames violate that ratio.
+
+**API level:** use 35, not 36. On the API 36.1 image the guest MediaCodec AVC
+encoder is broken — `screenrecord` fails with `Encoder failed (err=-38)` at
+every resolution and writes a 0-byte file, and `screencap` aborts on a
+SwiftShader DMA assertion. Verified broken under `swiftshader_indirect` *and*
+under `-gpu host` on a real NVIDIA GPU. API 35 + `-gpu software`
++ `-feature -Vulkan` (what `capture.sh boot` uses) works.
 
 iOS App Store screenshots and the App Preview still have to come from a Mac —
 see `store/SCREENSHOTS.md` for the fastlane snapshot path.

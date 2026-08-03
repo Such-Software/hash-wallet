@@ -64,9 +64,9 @@ class WalletKeysAndSeedPageRobot {
       tester.printToConsole('$walletName wallet has seeds properly displayed');
     }
 
-    if (isEVMCompatibleChain(walletType) ||
-        walletType == WalletType.solana ||
-        walletType == WalletType.tron) {
+    // Hash Bags does not ship Solana or Tron; those WalletType members were
+    // removed with the chains, so only the EVM chains remain here.
+    if (isEVMCompatibleChain(walletType)) {
       if (hasSeed) {
         final seedWords = appStore.wallet!.seed!.split(" ");
         for (var seedWord in seedWords) {
