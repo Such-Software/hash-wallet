@@ -71,24 +71,34 @@ def rgb(h: str) -> tuple[int, int, int]:
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
+# Website (hash.boats) theme: near-black background, mint-green accents, a soft
+# green glow. Overrides the app pack's dark-green so all marketing (icon,
+# feature graphic, screenshots) reads as one system with the site.
+WEB_BG = "#0a0b0c"      # near-black
+WEB_BG_EDGE = "#050708"  # darker vignette edge
+WEB_GLOW = "#1f7d4d"     # green glow
+WEB_INK = "#e8efe9"      # headline line 1
+WEB_MINT = "#86d3a6"     # headline accent line (matches site wordmark)
+WEB_GREY = "#9aa3a0"     # subhead
+WEB_FOOT = "#6f7a75"     # footer
+
+
 def gradient_bg() -> Image.Image:
-    """Vertical brand gradient + a soft accent glow top-right (matches the
-    Play feature graphic)."""
-    top, bot = rgb(PAL["bg"]), rgb(PAL["bg_hi"])
-    bg = Image.new("RGB", (W, H))
-    px = bg.load()
-    for y in range(H):
-        t = y / (H - 1)
-        row = tuple(int(top[i] + (bot[i] - top[i]) * t) for i in range(3))
-        for x in range(W):
-            px[x, y] = row
+    """Near-black website background with a soft vignette and a green glow
+    behind where the phone sits."""
+    bg = Image.new("RGB", (W, H), rgb(WEB_BG))
+    # vignette: darken toward the edges
+    vig = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(vig).ellipse(
+        [-W * 0.25, -H * 0.15, W * 1.25, H * 1.05], fill=255)
+    vig = vig.filter(ImageFilter.GaussianBlur(240))
+    bg = Image.composite(bg, Image.new("RGB", (W, H), rgb(WEB_BG_EDGE)), vig)
+    # soft green glow centered where the framed phone will sit
     glow = Image.new("L", (W, H), 0)
-    gd = ImageDraw.Draw(glow)
-    cx, cy, r = int(W * 0.80), int(H * 0.15), int(W * 0.55)
-    gd.ellipse([cx - r, cy - r, cx + r, cy + r], fill=70)
-    glow = glow.filter(ImageFilter.GaussianBlur(190))
-    acc = Image.new("RGB", (W, H), rgb(PAL["accent"]))
-    return Image.composite(acc, bg, glow)
+    cx, cy, r = int(W * 0.5), int(H * 0.52), int(W * 0.62)
+    ImageDraw.Draw(glow).ellipse([cx - r, cy - r, cx + r, cy + r], fill=48)
+    glow = glow.filter(ImageFilter.GaussianBlur(260))
+    return Image.composite(Image.new("RGB", (W, H), rgb(WEB_GLOW)), bg, glow)
 
 
 def rounded(im: Image.Image, rad: int) -> Image.Image:
@@ -109,7 +119,7 @@ def build(srcdir: Path, src: str, headline, subhead: str, top_crop: int,
     fh = ImageFont.truetype(F_HEAD, 112)
     y = 170
     for text, accent in headline:
-        col = rgb(PAL["accent_hi"]) if accent else rgb(PAL["ink"])
+        col = rgb(WEB_MINT) if accent else rgb(WEB_INK)
         w = d.textlength(text, font=fh)
         d.text(((W - w) / 2, y), text, font=fh, fill=col)
         y += 128
@@ -117,7 +127,7 @@ def build(srcdir: Path, src: str, headline, subhead: str, top_crop: int,
     # ---- subhead ----
     fs = ImageFont.truetype(F_SUB, 46)
     w = d.textlength(subhead, font=fs)
-    d.text(((W - w) / 2, y + 22), subhead, font=fs, fill=rgb(PAL["muted"]))
+    d.text(((W - w) / 2, y + 22), subhead, font=fs, fill=rgb(WEB_GREY))
 
     # ---- framed app screenshot ----
     im = Image.open(srcdir / src).convert("RGB")
@@ -146,7 +156,7 @@ def build(srcdir: Path, src: str, headline, subhead: str, top_crop: int,
     # ---- footer ----
     d = ImageDraw.Draw(bg)
     w = d.textlength(FOOTER, font=fs)
-    d.text(((W - w) / 2, H - 130), FOOTER, font=fs, fill=rgb(PAL["accent_hi"]))
+    d.text(((W - w) / 2, H - 130), FOOTER, font=fs, fill=rgb(WEB_MINT))
 
     out.parent.mkdir(parents=True, exist_ok=True)
     bg.convert("RGB").save(out)
