@@ -21,6 +21,12 @@ abstract class InfoPage extends BasePage {
   Key? get buttonKey;
   void Function(BuildContext) get onPressed;
 
+  /// The illustration shown at the top of the page. Defaults to the static
+  /// image at [imageLightPath]/[imageDarkPath]; subclasses can override to
+  /// supply an animated widget instead.
+  Widget buildIllustration(BuildContext context, String image) =>
+      HashImageWidget(imageUrl: image);
+
   @override
   bool get gradientBackground => true;
 
@@ -56,7 +62,7 @@ abstract class InfoPage extends BasePage {
                   ),
                   child: AspectRatio(
                     aspectRatio: 0.9,
-                    child: HashImageWidget(imageUrl: image),
+                    child: buildIllustration(context, image),
                   ),
                 ),
               ),

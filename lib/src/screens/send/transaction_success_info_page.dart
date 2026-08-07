@@ -1,5 +1,6 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/screens/Info_page.dart';
+import 'package:hash_wallet/src/widgets/hash_bag_success_animation.dart';
 import 'package:flutter/cupertino.dart';
 
 class TransactionSuccessPage extends InfoPage {
@@ -10,6 +11,10 @@ class TransactionSuccessPage extends InfoPage {
         );
 
   final String content;
+
+  @override
+  Widget buildIllustration(BuildContext context, String image) =>
+      const HashBagSuccessAnimation();
 
   @override
   bool get onWillPop => false;
