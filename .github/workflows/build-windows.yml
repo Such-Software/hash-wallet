@@ -127,6 +127,32 @@ jobs:
           echo "RUSTUP_HOME=$RUSTUP_HOME" >> "$GITHUB_ENV"
           /c/Rust/cargo/bin/rustc --version
 
+      # ---- Windows Developer Mode (symlink support) ------------------------
+      # `flutter build windows` materialises each plugin under
+      # windows/flutter/ephemeral/.plugin_symlinks/ as a real NTFS symlink, and
+      # creating one needs SeCreateSymbolicLinkPrivilege. Flutter doesn't test
+      # the privilege directly — it reads the AppModelUnlock registry key and
+      # bails with:
+      #   "Building with plugins requires symlink support.
+      #    Please enable Developer Mode in your system settings."
+      # Setting the key is exactly what the Settings toggle does; HKLM is
+      # writable by the LocalSystem service account, so no interactive login
+      # is involved. Idempotent — a no-op once the value is 1.
+      - name: Enable Developer Mode (symlink support for plugin builds)
+        run: |
+          set -e
+          powershell -NoProfile -Command '
+            $key = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"
+            if (-not (Test-Path $key)) { New-Item -Path $key -Force | Out-Null }
+            $cur = (Get-ItemProperty -Path $key -Name AllowDevelopmentWithoutDevLicense -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense
+            if ($cur -eq 1) {
+              Write-Host "Developer Mode already enabled"
+            } else {
+              Set-ItemProperty -Path $key -Name AllowDevelopmentWithoutDevLicense -Value 1 -Type DWord
+              Write-Host "Developer Mode enabled (was: $cur)"
+            }
+          '
+
       # ---- Toolchain sanity ------------------------------------------------
       # Our self-hosted runner has Flutter / Rust / VS Build Tools / Inno
       # Setup pre-installed (see scripts/windows/setup-windows-runner.ps1).
