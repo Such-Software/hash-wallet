@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/new_primary_button.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -145,7 +145,7 @@ class VersionNumberHeader extends StatelessWidget {
           spacing: 8,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CakeImageWidget(
+            HashImageWidget(
               imageUrl: "assets/images/cake_logo_dark.svg",
               height: 32,
               width: 32,
@@ -175,7 +175,7 @@ class ChangelogItemWidget extends StatelessWidget {
       spacing: 12,
       children: [
         if (item.iconFilename.isNotEmpty)
-          CakeImageWidget(
+          HashImageWidget(
             imageUrl: "$changelogIconLocation/${item.iconFilename}.svg",
             height: 36,
             width: 36,

@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/generate_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -21,7 +21,7 @@ class NetworkPathPill extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        CakeImageWidget(
+        HashImageWidget(
           imageUrl: 'assets/new-ui/chain_badges/${sourceChainName.toLowerCase()}.svg',
           width: 24,
           height: 24,
@@ -47,7 +47,7 @@ class NetworkPathPill extends StatelessWidget {
             color: scheme.primary,
           ),
         ),
-        CakeImageWidget(
+        HashImageWidget(
           imageUrl: 'assets/new-ui/chain_badges/${destChainName.toLowerCase()}.svg',
           width: 24,
           height: 24,

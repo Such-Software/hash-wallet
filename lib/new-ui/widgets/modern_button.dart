@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -42,7 +42,7 @@ class ModernButton extends StatelessWidget {
     final resolvedBackgroundColor =
         backgroundColor ?? Theme.of(context).colorScheme.surfaceContainer;
     final Widget resolvedIcon = svgPath != null
-        ? CakeImageWidget(
+        ? HashImageWidget(
             imageUrl: svgPath!,
             width: resolvedIconSize,
             height: resolvedIconSize,

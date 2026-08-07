@@ -1,7 +1,7 @@
 import 'package:hash_wallet/exchange/exchange_provider_description.dart';
 import 'package:hash_wallet/exchange/trade_state.dart';
 import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class HistoryTradeTile extends StatelessWidget {
       width: 50,
       child: Stack(
         children: [
-          CakeImageWidget(
+          HashImageWidget(
               imageUrl: _getIconPath(from), width: currencyIconSize, height: currencyIconSize),
           Positioned(
             top: currencyIconSize / 2,
@@ -49,7 +49,7 @@ class HistoryTradeTile extends StatelessWidget {
                   border:
                       Border.all(width: 2, color: Theme.of(context).colorScheme.surfaceContainer),
                   shape: BoxShape.circle),
-              child: CakeImageWidget(
+              child: HashImageWidget(
                 imageUrl: _getIconPath(to),
                 width: currencyIconSize,
                 height: currencyIconSize,
@@ -73,7 +73,7 @@ class HistoryTradeTile extends StatelessWidget {
         spacing: 4,
         children: [
           Text(swapState.title),
-          CakeImageWidget(imageUrl: provider.image, width: 14, height: 14)
+          HashImageWidget(imageUrl: provider.image, width: 14, height: 14)
         ],
       ),
       date: date,
@@ -87,7 +87,7 @@ class HistoryTradeTile extends StatelessWidget {
                   fontWeight: FontWeight.w500)),
           Text(from.title, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           if (fromChainIcon.isNotEmpty)
-            CakeImageWidget(
+            HashImageWidget(
               imageUrl: fromChainIcon,
               width: 12,
               height: 12,
@@ -109,7 +109,7 @@ class HistoryTradeTile extends StatelessWidget {
           Text(
             to.title,
           ),
-          if (toChainIcon.isNotEmpty) CakeImageWidget(imageUrl: toChainIcon, width: 12, height: 12)
+          if (toChainIcon.isNotEmpty) HashImageWidget(imageUrl: toChainIcon, width: 12, height: 12)
         ],
       ),
       leadingIcon: _getLeadingStack(context),

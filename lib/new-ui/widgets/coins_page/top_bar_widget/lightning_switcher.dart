@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,7 +48,7 @@ class LightningSwitcher extends StatelessWidget {
                       duration: Duration(milliseconds: 150),
                       transitionBuilder: (child, animation) =>
                           FadeTransition(opacity: animation, child: child),
-                      child: CakeImageWidget(imageUrl:'assets/new-ui/switcher-bitcoin.svg',
+                      child: HashImageWidget(imageUrl:'assets/new-ui/switcher-bitcoin.svg',
                         key: ValueKey(lightningMode),
                         width: 32,
                         height: 32,
@@ -64,7 +64,7 @@ class LightningSwitcher extends StatelessWidget {
                       duration: Duration(milliseconds: 150),
                       transitionBuilder: (child, animation) =>
                           FadeTransition(opacity: animation, child: child),
-                      child: CakeImageWidget(imageUrl: 'assets/new-ui/switcher-lightning.svg',
+                      child: HashImageWidget(imageUrl: 'assets/new-ui/switcher-lightning.svg',
                         key: ValueKey(lightningMode),
                         width: 32,
                         height: 32,

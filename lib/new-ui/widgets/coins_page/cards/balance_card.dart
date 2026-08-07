@@ -1,5 +1,5 @@
 import 'package:hash_wallet/generated/i18n.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/card_design.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -94,7 +94,7 @@ class BalanceCard extends StatelessWidget {
                 ? ClipRSuperellipse(
                   borderRadius: BorderRadius.circular(borderRadius),
                   key: ValueKey(design.imagePath),
-                    child: CakeImageWidget(
+                    child: HashImageWidget(
                       imageUrl: design.imagePath,
                       width: width,
                       height: height,
@@ -247,7 +247,7 @@ class BalanceCard extends StatelessWidget {
                       switchInCurve: Curves.easeInOut,
                       switchOutCurve: Curves.easeInOut,
                       child: design.backgroundType == CardDesignBackgroundTypes.svgIcon
-                          ? CakeImageWidget(
+                          ? HashImageWidget(
                               imageUrl: design.imagePath,
                               key: const ValueKey('svgIcon'),
                               height: iconWidth,
@@ -279,7 +279,7 @@ class BalanceCard extends StatelessWidget {
                   height: 40,
                   width: 40,
                   child: Center(
-                    child: CakeImageWidget(
+                    child: HashImageWidget(
                       imageUrl: "assets/new-ui/3dots_vertical.svg",
                       alignment: Alignment.topRight,
                       colorFilter:

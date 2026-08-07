@@ -436,7 +436,7 @@ class BuySellPage extends BasePage {
         currencies: buySellViewModel.cryptoCurrencies,
         onCurrencySelected: (currency) => buySellViewModel.changeCryptoCurrency(currency: currency),
         imageArrow: Image.asset(
-          'assets/images/arrow_bottom_cake_green.png',
+          'assets/images/arrow_bottom_green.png',
           color: Theme.of(context).colorScheme.primary,
           height: 8,
         ),

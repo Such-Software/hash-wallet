@@ -3,7 +3,7 @@
 import 'dart:math';
 
 import 'package:hash_wallet/entities/seed_type.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/search_bar_widget.dart';
 import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
@@ -498,7 +498,7 @@ class _PickerState<Item> extends State<Picker<Item>> {
   Widget? _getItemIcon(Item item) {
     if (item is Currency) {
       if (item.iconPath != null) {
-        return CakeImageWidget(
+        return HashImageWidget(
           imageUrl: item.iconPath!,
           height: 20.0,
           width: 20.0,

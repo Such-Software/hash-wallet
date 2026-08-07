@@ -2,7 +2,7 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/new_primary_button.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/new-ui/widgets/send_page/send_address_input.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,7 +52,7 @@ class _RefundAddressModalState extends State<RefundAddressModal> {
               child: Column(
                 spacing: 24,
                 children: [
-                  CakeImageWidget(
+                  HashImageWidget(
                     imageUrl:"assets/new-ui/refund_address.svg",
                     colorFilter:
                         ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),

@@ -46,8 +46,8 @@ class _RestoreOptionsBodyState extends State<_RestoreOptionsBody> {
       : 'assets/images/restore_hw.png';
 
   String get imageRestoreCupcakePath => widget.themeType == ThemeType.dark
-      ? 'assets/images/restore_cupcake_dark.png'
-      : 'assets/images/restore_cupcake.png';
+      ? 'assets/images/restore_hashbag.png'
+      : 'assets/images/restore_hashbag.png';
 
   String get imageRestoreQRPath => widget.themeType == ThemeType.dark
       ? 'assets/images/restore_qr_dark.png'

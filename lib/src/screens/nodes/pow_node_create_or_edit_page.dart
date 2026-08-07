@@ -4,7 +4,7 @@ import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/src/screens/nodes/widgets/node_form.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/view_model/node_list/node_create_or_edit_view_model.dart';
 import 'package:cw_core/node.dart';
@@ -82,7 +82,7 @@ class _PowNodeCreateOrEditPageState extends State<PowNodeCreateOrEditPage> {
               title: widget.editingNode != null ? S.current.edit_node : S.current.node_new,
               leadingIcon: Icon(Icons.arrow_back_ios_new),
               onLeadingPressed: Navigator.of(context).pop,
-              trailingIcon: CakeImageWidget(imageUrl:
+              trailingIcon: HashImageWidget(imageUrl:
               "assets/new-ui/scan.svg",width:24,height:24,
                 colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
               ),

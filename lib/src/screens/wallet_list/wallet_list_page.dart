@@ -17,7 +17,7 @@ import 'package:hash_wallet/src/screens/wallet_list/edit_wallet_button_widget.da
 import 'package:hash_wallet/src/screens/wallet_list/filtered_list.dart';
 import 'package:hash_wallet/src/screens/wallet_unlock/wallet_unlock_arguments.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/store/settings_store.dart';
@@ -195,7 +195,7 @@ class WalletListBodyState extends State<WalletListBody> {
                                 borderRadius: BorderRadius.all(Radius.circular(18)),
                                 title: groupName,
                                 tileKey: ValueKey('group_wallets_expansion_tile_widget_$index'),
-                                leadingWidget: CakeImageWidget(
+                                leadingWidget: HashImageWidget(
                                   imageUrl: "assets/new-ui/navbar/wallets.svg",
                                   width: 28,
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -296,7 +296,7 @@ class WalletListBodyState extends State<WalletListBody> {
                                               ),
                                             )
                                           : SizedBox(width: 6),
-                                      CakeImageWidget(
+                                      HashImageWidget(
                                         imageUrl: getCryptoCurrencyIconForWalletListItem(
                                           wallet.type,
                                         ),

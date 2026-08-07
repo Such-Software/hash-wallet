@@ -1,6 +1,6 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/themes/core/material_base_theme.dart';
 import 'package:hash_wallet/themes/theme_classes/black_theme.dart';
 import 'package:hash_wallet/view_model/settings/display_settings_view_model.dart';
@@ -65,7 +65,7 @@ class SettingsThemeChoicesCell extends StatelessWidget {
                           )),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(cellRadius),
-                            child: CakeImageWidget(
+                            child: HashImageWidget(
                               imageUrl: _displaySettingsViewModel.getImageForTheme(theme),
                               fit: BoxFit.cover,
                               height: previewHeight,

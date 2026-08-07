@@ -3,7 +3,7 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/src/screens/exchange/widgets/currency_picker.dart';
 import 'package:hash_wallet/src/widgets/bottom_sheet/base_bottom_sheet_widget.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/picker.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
@@ -148,7 +148,7 @@ class _TokenSelectionContentState extends State<_TokenSelectionContent> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CakeImageWidget(
+          HashImageWidget(
             imageUrl: _getNetworkIcon(),
             width: 50,
             height: 50,
@@ -240,7 +240,7 @@ class _TokenSelectionContentState extends State<_TokenSelectionContent> {
           closeOnItemSelected: true,
           hasTitleSpacing: true,
           images: evmNetworks
-              .map((network) => CakeImageWidget(
+              .map((network) => HashImageWidget(
                   imageUrl: getChainMonoImage(network),
                   width: 20,
                   height: 20,
@@ -381,7 +381,7 @@ class TokenSelectionTileWidget extends StatelessWidget {
           child: Row(
             children: [
               if (imagePath != null) ...[
-                CakeImageWidget(
+                HashImageWidget(
                   imageUrl: imagePath!,
                   color: color,
                   width: 20,

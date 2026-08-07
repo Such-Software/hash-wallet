@@ -120,84 +120,22 @@ abstract class DashboardViewModelBase with Store {
             //     caption: S.current.transactions_by_date,
             //     onChanged: null),
           ],
-          'Orders': [
-            FilterItem(
-                value: () => orderFilterStore.displayCakePay,
-                caption: 'Cake Pay',
-                onChanged: () =>
-                    orderFilterStore.toggleDisplayOrder(OrderProviderDescription.cakePay)),
-          ],
+          // Orders (Cake Pay) section removed — Hash Bags does not integrate
+          // Cake Pay. MoonPay buy orders are source:buy and have no filter row.
           S.current.trades: [
             FilterItem(
                 value: () => tradeFilterStore.displayAllTrades,
                 caption: S.current.all_trades,
                 onChanged: () =>
                     tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.all)),
-            FilterItem(
-                value: () => tradeFilterStore.displayChangeNow,
-                caption: ExchangeProviderDescription.changeNow.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.changeNow)),
-            FilterItem(
-                value: () => tradeFilterStore.displaySideShift,
-                caption: ExchangeProviderDescription.sideShift.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.sideShift)),
-            FilterItem(
-                value: () => tradeFilterStore.displaySimpleSwap,
-                caption: ExchangeProviderDescription.simpleSwap.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.simpleSwap)),
+            // Only Trocador is enabled as a swap provider (see
+            // exchange_view_model.dart _allProviders); other providers are
+            // disabled pending affiliate keys, so they are omitted here too.
             FilterItem(
                 value: () => tradeFilterStore.displayTrocador,
                 caption: ExchangeProviderDescription.trocador.title,
                 onChanged: () =>
                     tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.trocador)),
-            FilterItem(
-                value: () => tradeFilterStore.displayExolix,
-                caption: ExchangeProviderDescription.exolix.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.exolix)),
-            FilterItem(
-                value: () => tradeFilterStore.displayChainflip,
-                caption: ExchangeProviderDescription.chainflip.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.chainflip)),
-            FilterItem(
-                value: () => tradeFilterStore.displayThorChain,
-                caption: ExchangeProviderDescription.thorChain.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.thorChain)),
-            FilterItem(
-                value: () => tradeFilterStore.displayLetsExchange,
-                caption: ExchangeProviderDescription.letsExchange.title,
-                onChanged: () => tradeFilterStore
-                    .toggleDisplayExchange(ExchangeProviderDescription.letsExchange)),
-            FilterItem(
-                value: () => tradeFilterStore.displayStealthEx,
-                caption: ExchangeProviderDescription.stealthEx.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.stealthEx)),
-            FilterItem(
-                value: () => tradeFilterStore.displayXOSwap,
-                caption: ExchangeProviderDescription.xoSwap.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.xoSwap)),
-            FilterItem(
-                value: () => tradeFilterStore.displaySwapTrade,
-                caption: ExchangeProviderDescription.swapTrade.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.swapTrade)),
-            FilterItem(
-                value: () => tradeFilterStore.displaySwapXyz,
-                caption: ExchangeProviderDescription.swapsXyz.title,
-                onChanged: () =>
-                    tradeFilterStore.toggleDisplayExchange(ExchangeProviderDescription.swapsXyz)),
-            FilterItem(
-                value: () => tradeFilterStore.displayNearIntents,
-                caption: ExchangeProviderDescription.nearIntents.title,
-                onChanged: () => tradeFilterStore
-                    .toggleDisplayExchange(ExchangeProviderDescription.nearIntents)),
           ]
         },
         subname = '',

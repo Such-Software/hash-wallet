@@ -2,7 +2,7 @@ import 'package:hash_wallet/core/sync_status_title.dart';
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/new-ui/widgets/coins_page/top_bar_widget/pulsing_dot.dart';
 import 'package:hash_wallet/src/screens/settings/manage_nodes_page.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/sync_status.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +53,7 @@ class SyncBar extends StatelessWidget {
                   spacing: 6,
                   children: [
                     if (dashboardViewModel.isTorEnabled)
-                      CakeImageWidget(
+                      HashImageWidget(
                         imageUrl: "assets/new-ui/tor.svg",
                         width: 20,
                         height: 20,
@@ -147,14 +147,14 @@ class SyncBar extends StatelessWidget {
 
   Widget? _getIcon(BuildContext context, Type status) {
     if (status == LostConnectionSyncStatus || status == FailedSyncStatus) {
-      return CakeImageWidget(imageUrl:
+      return HashImageWidget(imageUrl:
         "assets/new-ui/offline.svg",
         colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.error, BlendMode.srcIn),
       );
     }
 
     if (failStatuses.contains(status)) {
-      return CakeImageWidget(imageUrl:
+      return HashImageWidget(imageUrl:
         "assets/new-ui/warning.svg",
         colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.error, BlendMode.srcIn),
       );
@@ -163,18 +163,18 @@ class SyncBar extends StatelessWidget {
     final List<Widget> children = [];
 
     if (dashboardViewModel.isTorEnabled) {
-      children.add(CakeImageWidget(imageUrl:"assets/new-ui/tor_sync.svg",
+      children.add(HashImageWidget(imageUrl:"assets/new-ui/tor_sync.svg",
           colorFilter: ColorFilter.mode(Color(0xFF8A38F5), BlendMode.srcIn)));
     }
     if (dashboardViewModel.hasMweb) {
-      children.add(CakeImageWidget(imageUrl:
+      children.add(HashImageWidget(imageUrl:
         "assets/new-ui/mweb_sync.svg",
         colorFilter:
         ColorFilter.mode(Theme.of(context).colorScheme.onSurfaceVariant, BlendMode.srcIn),
       ));
     }
     if (dashboardViewModel.hasSilentPayments) {
-      children.add(CakeImageWidget(imageUrl:
+      children.add(HashImageWidget(imageUrl:
         "assets/new-ui/silent_sync.svg",
         colorFilter: ColorFilter.mode(Color(0xFFEFBA5E), BlendMode.srcIn),
       ));

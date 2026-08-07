@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
-class CakeImageWidget extends StatelessWidget {
-  const CakeImageWidget({
+class HashImageWidget extends StatelessWidget {
+  const HashImageWidget({
     super.key,
     this.imageUrl,
     this.height,

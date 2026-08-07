@@ -7,7 +7,7 @@ import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/src/screens/exchange/widgets/present_provider_picker.dart';
 import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
 import 'package:hash_wallet/src/widgets/bottom_sheet/swap_details_bottom_sheet.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/utils/address_formatter.dart';
 import 'package:hash_wallet/utils/debounce.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
@@ -151,7 +151,7 @@ class SwapConfirmationContentState extends State<SwapConfirmationContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CakeImageWidget(
+                HashImageWidget(
                   imageUrl: widget.exchangeViewModel.depositCurrency.iconPath!,
                   width: 32,
                   height: 32,
@@ -162,7 +162,7 @@ class SwapConfirmationContentState extends State<SwapConfirmationContent> {
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    CakeImageWidget(
+                    HashImageWidget(
                       imageUrl: detectedCurrency.iconPath ?? '',
                       width: 32,
                       height: 32,
@@ -171,7 +171,7 @@ class SwapConfirmationContentState extends State<SwapConfirmationContent> {
                       Positioned(
                         bottom: -4,
                         right: -4,
-                        child: CakeImageWidget(
+                        child: HashImageWidget(
                           imageUrl: getCryptoCurrencyIconForWalletListItem(
                             widget.paymentFlowResult.walletType!,
                             chainId: widget.paymentFlowResult.chainId,

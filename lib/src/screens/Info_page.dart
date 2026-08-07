@@ -1,5 +1,5 @@
 import 'package:hash_wallet/src/screens/base_page.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
@@ -20,6 +20,12 @@ abstract class InfoPage extends BasePage {
   String get buttonText;
   Key? get buttonKey;
   void Function(BuildContext) get onPressed;
+
+  /// The illustration shown at the top of the page. Defaults to the static
+  /// image at [imageLightPath]/[imageDarkPath]; subclasses can override to
+  /// supply an animated widget instead.
+  Widget buildIllustration(BuildContext context, String image) =>
+      HashImageWidget(imageUrl: image);
 
   @override
   bool get gradientBackground => true;
@@ -56,7 +62,7 @@ abstract class InfoPage extends BasePage {
                   ),
                   child: AspectRatio(
                     aspectRatio: 0.9,
-                    child: CakeImageWidget(imageUrl: image),
+                    child: buildIllustration(context, image),
                   ),
                 ),
               ),

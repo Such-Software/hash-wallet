@@ -9,7 +9,7 @@ import 'package:hash_wallet/new-ui/pages/swap_page.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
@@ -44,7 +44,7 @@ class CoinActionRow extends StatelessWidget {
         spacing: MediaQuery.of(context).size.width * 0.05,
         children: [
           CoinActionButton(
-            icon: CakeImageWidget(imageUrl:
+            icon: HashImageWidget(imageUrl:
               "assets/new-ui/send.svg",
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,
@@ -82,7 +82,7 @@ class CoinActionRow extends StatelessWidget {
             },
           ),
           CoinActionButton(
-            icon: CakeImageWidget(imageUrl:
+            icon: HashImageWidget(imageUrl:
               "assets/new-ui/receive.svg",
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,
@@ -115,7 +115,7 @@ class CoinActionRow extends StatelessWidget {
           ),
           if (showSwap)
             CoinActionButton(
-              icon: CakeImageWidget(imageUrl:
+              icon: HashImageWidget(imageUrl:
                 "assets/new-ui/exchange.svg",
                 colorFilter: ColorFilter.mode(
                   Theme.of(context).colorScheme.primary,
@@ -141,7 +141,7 @@ class CoinActionRow extends StatelessWidget {
               },
             ),
           CoinActionButton(
-            icon: CakeImageWidget(imageUrl:
+            icon: HashImageWidget(imageUrl:
               "assets/new-ui/scan.svg",
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,

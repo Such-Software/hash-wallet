@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/apps_widget.dart';
 import 'package:hash_wallet/routes.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/dashboard_card_widget.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/view_model/dashboard/cake_features_view_model.dart';

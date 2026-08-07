@@ -1,6 +1,6 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/rounded_checkbox.dart';
 import 'package:hash_wallet/src/widgets/section_divider.dart';
 import 'package:hash_wallet/view_model/dashboard/receive_option_view_model.dart';
@@ -160,7 +160,7 @@ class _ReceiveAddressTypeSelectorState extends State<ReceiveAddressTypeSelector>
                                             ReceiveAddressTypeSelector.otherOptionsExpandDuration,
                                         turns: _otherOptionsExpanded ? 0.0 : 0.5,
                                         curve: Curves.easeOut,
-                                        child: CakeImageWidget(imageUrl:"assets/new-ui/dropdown_arrow.svg"))
+                                        child: HashImageWidget(imageUrl:"assets/new-ui/dropdown_arrow.svg"))
                                   ],
                                 ),
                               ),
@@ -280,7 +280,7 @@ class ReceiveAddressTypeRow extends StatelessWidget {
                 Row(
                   children: [
                     if (iconPath != null)
-                      CakeImageWidget(imageUrl:iconPath!, width: iconSize, height: iconSize,colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurfaceVariant,BlendMode.srcIn),)
+                      HashImageWidget(imageUrl:iconPath!, width: iconSize, height: iconSize,colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurfaceVariant,BlendMode.srcIn),)
                     else
                       Container(width: iconSize, height: iconSize),
                     Padding(

@@ -1,5 +1,5 @@
 import 'package:hash_wallet/generated/i18n.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 
@@ -30,7 +30,7 @@ class WCPairingItemWidget extends StatelessWidget {
       leading: SizedBox(
         width: 60,
         height: 60,
-        child: CakeImageWidget(
+        child: HashImageWidget(
           borderRadius: 8,
           width: 60,
           height: 60,

@@ -3,7 +3,7 @@ import 'package:hash_wallet/new-ui/widgets/line_tab_switcher.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/dashboard/widgets/filter_widget.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -69,7 +69,7 @@ class AssetsTopBar extends StatelessWidget {
                     child: Row(
                       spacing: 6,
                       children: [
-                    CakeImageWidget(
+                    HashImageWidget(
                         imageUrl: "assets/new-ui/options_slider.svg",
                         colorFilter: ColorFilter.mode(
                             Theme.of(context).colorScheme.primary, BlendMode.srcIn)),

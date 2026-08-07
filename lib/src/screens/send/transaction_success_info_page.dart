@@ -1,15 +1,20 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/screens/Info_page.dart';
+import 'package:hash_wallet/src/widgets/hash_bag_success_animation.dart';
 import 'package:flutter/cupertino.dart';
 
 class TransactionSuccessPage extends InfoPage {
   TransactionSuccessPage({required this.content})
       : super(
-          imageLightPath: 'assets/images/birthday_cake.png',
-          imageDarkPath: 'assets/images/birthday_cake.png',
+          imageLightPath: 'assets/images/hash_bag.png',
+          imageDarkPath: 'assets/images/hash_bag.png',
         );
 
   final String content;
+
+  @override
+  Widget buildIllustration(BuildContext context, String image) =>
+      const HashBagSuccessAnimation();
 
   @override
   bool get onWillPop => false;

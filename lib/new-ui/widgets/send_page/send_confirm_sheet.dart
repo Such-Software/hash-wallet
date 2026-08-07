@@ -6,7 +6,7 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/animated_dropdown.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/new-ui/widgets/send_page/send_confirm_bottom_widget.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/utils/address_formatter.dart';
 import 'package:hash_wallet/view_model/send/send_view_model.dart';
 import 'package:hash_wallet/view_model/send/send_view_model_state.dart';
@@ -119,7 +119,7 @@ class SendTransactionDetails extends StatelessWidget {
                   spacing: 8,
                   children: [
                     if (resolvedIconPath.toLowerCase().endsWith(".svg"))
-                      CakeImageWidget(imageUrl:
+                      HashImageWidget(imageUrl:
                         resolvedIconPath,
                         width: 28,
                         height: 28,
@@ -418,7 +418,7 @@ class TransactionCommitedScreen extends StatelessWidget {
             S.of(context).transaction_sent_new,
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
           ),
-          Image.asset(width: 256, height: 256, "assets/images/birthday_cake.png")
+          Image.asset(width: 256, height: 256, "assets/images/hash_bag.png")
         ],
       ),
     );

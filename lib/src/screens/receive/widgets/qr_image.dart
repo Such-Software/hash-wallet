@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,7 +25,7 @@ class QrImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imagePath = embeddedImagePath ?? 'assets/images/qr-cake.png';
+    final imagePath = embeddedImagePath ?? 'assets/images/qr-hashbag.png';
     final isSvg = imagePath.endsWith('.svg');
 
     if (isSvg) {
@@ -44,7 +44,7 @@ class QrImage extends StatelessWidget {
             backgroundColor: backgroundColor,
             padding: const EdgeInsets.all(12.0),
           ),
-          CakeImageWidget(imageUrl:
+          HashImageWidget(imageUrl:
             imagePath,
             width: logoSize * 0.8,
             height: logoSize * 0.8,

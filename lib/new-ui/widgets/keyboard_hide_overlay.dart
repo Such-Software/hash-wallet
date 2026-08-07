@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -74,7 +74,7 @@ class _KeyboardHideButtonState extends State<KeyboardHideButton> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: CakeImageWidget(
+                    child: HashImageWidget(
                       imageUrl:
                       "assets/new-ui/hide_keyboard.svg",
                       colorFilter: ColorFilter.mode(

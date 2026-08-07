@@ -10,7 +10,7 @@ import 'package:hash_wallet/new-ui/widgets/coins_page/cards/balance_card.dart';
 import 'package:hash_wallet/new-ui/widgets/long_press_menu.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/routes.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/utils/address_formatter.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
@@ -440,7 +440,7 @@ class AddressRow extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (selected) CakeImageWidget(imageUrl: "assets/new-ui/checkmark.svg")
+                  if (selected) HashImageWidget(imageUrl: "assets/new-ui/checkmark.svg")
                 ],
               ),
             ),
@@ -479,7 +479,7 @@ class ShowHiddenButton extends StatelessWidget {
                       Text(S.of(context).show_hidden_addresses),
                       RotatedBox(
                           quarterTurns: 1,
-                          child: CakeImageWidget(imageUrl: "assets/new-ui/dropdown_arrow.svg"))
+                          child: HashImageWidget(imageUrl: "assets/new-ui/dropdown_arrow.svg"))
                     ],
                   ),
                 ),

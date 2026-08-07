@@ -2,7 +2,7 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/section_divider.dart';
 import 'package:hash_wallet/src/widgets/standard_list.dart';
 import 'package:hash_wallet/view_model/set_up_2fa_viewmodel.dart';
@@ -31,7 +31,7 @@ class Setup2FAPage extends BasePage {
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
             child: AspectRatio(
               aspectRatio: 0.764,
-              child: CakeImageWidget(imageUrl: 'assets/images/2fa.png'),
+              child: HashImageWidget(imageUrl: 'assets/images/2fa.png'),
             ),
           ),
         ),

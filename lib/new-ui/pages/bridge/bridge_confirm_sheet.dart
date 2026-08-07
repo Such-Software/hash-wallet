@@ -4,7 +4,7 @@ import 'package:hash_wallet/new-ui/widgets/bridge/network_path_pill.dart';
 import 'package:hash_wallet/new-ui/widgets/confirm_swiper.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/new-ui/widgets/send_page/send_confirm_bottom_widget.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/view_model/bridge/bridge_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +70,7 @@ class _BridgeConfirmSheetState extends State<BridgeConfirmSheet> {
                   leadingWidget: Row(
                     spacing: 8,
                     children: [
-                      CakeImageWidget(
+                      HashImageWidget(
                         imageUrl: bridgeViewModel.selectedToken?.iconPath ?? '',
                         width: 36,
                         height: 36,

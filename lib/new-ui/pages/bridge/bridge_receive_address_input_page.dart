@@ -4,7 +4,7 @@ import 'package:hash_wallet/new-ui/pages/bridge/bridge_confirm_sheet.dart';
 import 'package:hash_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/new-ui/widgets/send_page/send_address_input.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/view_model/bridge/bridge_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -85,7 +85,7 @@ class _BridgeReceiveAddressInputPageState extends State<BridgeReceiveAddressInpu
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  CakeImageWidget(
+                                  HashImageWidget(
                                     imageUrl:
                                         'assets/new-ui/chain_badges/${chainName?.toLowerCase()}.svg',
                                     width: 24,

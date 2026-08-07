@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/evm_switcher.dart';
 import 'package:hash_wallet/src/widgets/standard_switch.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class EvmSwitcherRow extends StatelessWidget {
               Row(
                 spacing: 8.0,
                 children: [
-                  CakeImageWidget(
+                  HashImageWidget(
                     imageUrl: data.svgPath,
                     width: 16,
                     height: 16,
@@ -55,7 +55,7 @@ class EvmSwitcherRow extends StatelessWidget {
                     style: TextStyle(color: resolvedForegroundColor, fontSize: 14),
                   ),
                   if (selected && !editMode)
-                    CakeImageWidget(
+                    HashImageWidget(
                       imageUrl: "assets/images/evm_switcher_checkmark.svg",
                       width: 18,
                       height: 18,

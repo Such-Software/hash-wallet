@@ -5,7 +5,7 @@ import 'package:hash_wallet/src/widgets/address_text_field.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
 import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/checkbox_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
@@ -394,7 +394,7 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                   alignment: Alignment.center,
                   children: [
                     ClipOval(
-                      child: CakeImageWidget(
+                      child: HashImageWidget(
                         imageUrl: _tokenIconPathController.text,
                         width: 75,
                         height: 75,

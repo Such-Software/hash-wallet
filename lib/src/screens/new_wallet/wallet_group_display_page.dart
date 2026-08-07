@@ -3,7 +3,7 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/new_wallet/widgets/grouped_wallet_expansion_tile.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/themes/core/material_base_theme.dart';
 import 'package:hash_wallet/view_model/wallet_groups_display_view_model.dart';
@@ -94,7 +94,7 @@ class WalletGroupsDisplayBody extends StatelessWidget {
                                 title: wallet.name,
                                 isSelected:
                                     walletGroupsDisplayViewModel.selectedSingleWallet == wallet,
-                                leadingWidget: CakeImageWidget(
+                                leadingWidget: HashImageWidget(
                                   imageUrl: getCryptoCurrencyIconForWalletListItem(wallet.type),
                                   width: 32,
                                   height: 32,
@@ -168,7 +168,7 @@ class WalletGroupEmptyStateWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CakeImageWidget(
+        HashImageWidget(
           imageUrl: currentTheme.isDark
               ? 'assets/new-ui/hero/wallet_group_empty_dark.svg'
               : 'assets/new-ui/hero/wallet_group_empty_light.svg',
