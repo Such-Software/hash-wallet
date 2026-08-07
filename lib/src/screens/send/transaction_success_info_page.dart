@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 class TransactionSuccessPage extends InfoPage {
   TransactionSuccessPage({required this.content})
       : super(
-          imageLightPath: 'assets/images/birthday_cake.png',
-          imageDarkPath: 'assets/images/birthday_cake.png',
+          imageLightPath: 'assets/images/hash_bag.png',
+          imageDarkPath: 'assets/images/hash_bag.png',
         );
 
   final String content;

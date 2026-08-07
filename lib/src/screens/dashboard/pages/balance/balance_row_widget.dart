@@ -5,7 +5,7 @@ import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/exchange_trade/information_page.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
@@ -179,7 +179,7 @@ class BalanceRowWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            CakeImageWidget(
+                            HashImageWidget(
                               imageUrl: currency.iconPath,
                               height: 40,
                               width: 40,

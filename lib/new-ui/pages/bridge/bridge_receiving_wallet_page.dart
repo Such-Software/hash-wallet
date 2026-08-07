@@ -3,7 +3,7 @@ import 'package:hash_wallet/new-ui/pages/bridge/bridge_confirm_sheet.dart';
 import 'package:hash_wallet/new-ui/pages/bridge/bridge_receive_address_input_page.dart';
 import 'package:hash_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/new_list_row/list_Item_style_wrapper.dart';
 import 'package:hash_wallet/view_model/bridge/bridge_view_model.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class _BridgeReceivingWalletPageState extends State<BridgeReceivingWalletPage> {
                         children: [
                           const SizedBox(height: 8),
                           Center(
-                            child: CakeImageWidget(
+                            child: HashImageWidget(
                               borderRadius: 8,
                               imageUrl: chainName.isNotEmpty
                                   ? 'assets/images/crypto/${chainName.toLowerCase()}.webp'
@@ -251,7 +251,7 @@ class _BridgeReceivingWalletRow extends StatelessWidget {
                 ],
               ),
             ),
-            CakeImageWidget(
+            HashImageWidget(
               imageUrl: 'assets/new-ui/arrow_forward.svg',
               height: 16,
               color: Theme.of(ctx).colorScheme.onSurfaceVariant,

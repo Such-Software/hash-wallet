@@ -24,7 +24,7 @@ import 'package:hash_wallet/src/screens/exchange/widgets/present_provider_picker
 import 'package:hash_wallet/src/screens/send/widgets/extract_address_from_parsed.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/utils/debounce.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
@@ -463,7 +463,7 @@ class _NewSwapPageState extends State<NewSwapPage> {
               title: S.of(context).swap,
               leadingIcon: Icon(Icons.close),
               onLeadingPressed: Navigator.of(context).maybePop,
-              trailingIcon: CakeImageWidget(imageUrl:
+              trailingIcon: HashImageWidget(imageUrl:
                 "assets/new-ui/options.svg",
                 colorFilter:
                     ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
@@ -752,7 +752,7 @@ class SwapProviderPreview extends StatelessWidget {
                   spacing: 12,
                   children: [
                     if (provider != null)
-                      CakeImageWidget(imageUrl:provider.description.image,width:28,height:28),
+                      HashImageWidget(imageUrl:provider.description.image,width:28,height:28),
                     if (provider == null) CupertinoActivityIndicator(),
                     Text(
                       provider?.title ?? "${S.of(context).finding_provider}...",
@@ -775,7 +775,7 @@ class SwapProviderPreview extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                             color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
-                      CakeImageWidget(imageUrl:
+                      HashImageWidget(imageUrl:
                         "assets/new-ui/chooser.svg",
                         colorFilter: ColorFilter.mode(
                             Theme.of(context).colorScheme.onSurfaceVariant, BlendMode.srcIn),
@@ -936,7 +936,7 @@ class SwapAmountBoxState extends State<SwapAmountBox> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CakeImageWidget(imageUrl: _selectedCurrency.iconPath ?? "",
+                                HashImageWidget(imageUrl: _selectedCurrency.iconPath ?? "",
                                     width: 28, height: 28),
                                 SizedBox(width: 10),
                                 Text(
@@ -945,7 +945,7 @@ class SwapAmountBoxState extends State<SwapAmountBox> {
                                 ),
                                 if (chainIconPath != null && chainIconPath.isNotEmpty) ...[
                                   SizedBox(width: 4),
-                                  CakeImageWidget(
+                                  HashImageWidget(
                                     imageUrl: chainIconPath,
                                     width: 12,
                                     height: 12,
@@ -966,7 +966,7 @@ class SwapAmountBoxState extends State<SwapAmountBox> {
                                     padding: const EdgeInsets.all(4.0),
                                     child: RotatedBox(
                                           quarterTurns: 2,
-                                          child: CakeImageWidget(imageUrl:
+                                          child: HashImageWidget(imageUrl:
                                             "assets/new-ui/dropdown_arrow.svg",
                                             width: 4,
                                             height: 4,
@@ -1078,7 +1078,7 @@ class SwapAmountBoxState extends State<SwapAmountBox> {
                                       ),
                                       RotatedBox(
                                         quarterTurns: 2,
-                                        child: CakeImageWidget(imageUrl:
+                                        child: HashImageWidget(imageUrl:
                                           "assets/new-ui/dropdown_arrow.svg",
                                           colorFilter: ColorFilter.mode(
                                               (addressEmpty && widget.isReceiverCard)

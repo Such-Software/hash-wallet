@@ -1,5 +1,5 @@
 import 'package:hash_wallet/exchange/trade.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/utils/address_formatter.dart';
 import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:flutter/material.dart';
@@ -169,7 +169,7 @@ class _SwapDetailsBottomSheetState extends State<SwapDetailsBottomSheet> {
                   return InfoBottomSheet(
                     footerType: FooterType.singleActionButton,
                     titleText: S.of(bottomSheetContext).transaction_sent,
-                    contentImage: 'assets/images/birthday_cake.png',
+                    contentImage: 'assets/images/hash_bag.png',
                     singleActionButtonText: S.of(bottomSheetContext).close,
                     singleActionButtonKey: ValueKey('swap_details_sent_dialog_ok_button_key'),
                     onSingleActionButtonPressed: () {
@@ -373,7 +373,7 @@ class _SwapDetailsContent extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        CakeImageWidget(
+                        HashImageWidget(
                           imageUrl: trade.provider.image,
                           width: 36,
                           height: 36,

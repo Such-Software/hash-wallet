@@ -1,5 +1,5 @@
 import 'package:hash_wallet/core/new_wallet_arguments.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:cw_core/wallet_type.dart';
@@ -31,7 +31,7 @@ class WalletGroupDescriptionPage extends BasePage {
       child: Column(
         children: [
           SizedBox(height: 48),
-          CakeImageWidget(
+          HashImageWidget(
             imageUrl: currentTheme.isDark
                 ? 'assets/new-ui/hero/wallet_group_options_dark.svg'
                 : 'assets/new-ui/hero/wallet_group_options_light.svg',

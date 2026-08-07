@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -76,7 +76,7 @@ class AppsWidget extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
-                        child: CakeImageWidget(imageUrl: image, height: 54, width: 54),
+                        child: HashImageWidget(imageUrl: image, height: 54, width: 54),
                       ),
                       Expanded(
                         child: Column(

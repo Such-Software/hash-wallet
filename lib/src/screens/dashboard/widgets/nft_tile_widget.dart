@@ -1,7 +1,7 @@
 import 'package:hash_wallet/entities/wallet_nft_response.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/dashboard/pages/nft_details_page.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 
 class NFTTileWidget extends StatelessWidget {
@@ -45,7 +45,7 @@ class NFTTileWidget extends StatelessWidget {
                 ),
                 color: Theme.of(context).colorScheme.surface,
               ),
-              child: CakeImageWidget(
+              child: HashImageWidget(
                 imageUrl: nftAsset.normalizedMetadata?.imageUrl,
               ),
             ),

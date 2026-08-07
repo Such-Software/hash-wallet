@@ -1,6 +1,6 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_address_type_selector.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/view_model/dashboard/receive_option_view_model.dart';
 import 'package:cw_core/receive_page_option.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class ReceiveAddressTypeDisplay extends StatelessWidget {
             spacing: 12.0,
             children: [
               if (iconPath != null)
-                CakeImageWidget(imageUrl:iconPath,
+                HashImageWidget(imageUrl:iconPath,
                   width: 24,
                   height: 24,
                   colorFilter: ColorFilter.mode(

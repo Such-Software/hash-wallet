@@ -1,7 +1,7 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/option_tile.dart';
 import 'package:hash_wallet/utils/device_info.dart';
 import 'package:hash_wallet/view_model/support_view_model.dart';
@@ -40,19 +40,19 @@ class SupportPage extends BasePage {
             spacing: 16,
             children: [
               OptionTile(
-                image: CakeImageWidget(imageUrl: _imageSupportChat, width: 55, height: 55),
+                image: HashImageWidget(imageUrl: _imageSupportChat, width: 55, height: 55),
                 title: S.of(context).support_title_live_chat,
                 description: S.of(context).support_description_live_chat,
                 onPressed: () => _onPressedSupportChat(context),
               ),
               OptionTile(
-                image: CakeImageWidget(imageUrl: _imageSupportDocs, width: 55, height: 55),
+                image: HashImageWidget(imageUrl: _imageSupportDocs, width: 55, height: 55),
                 title: S.of(context).support_title_guides,
                 description: S.of(context).support_description_guides,
                 onPressed: () => _launchUrl(supportViewModel.docsUrl),
               ),
               OptionTile(
-                image: CakeImageWidget(imageUrl: _imageSupportLinks, width: 55, height: 55),
+                image: HashImageWidget(imageUrl: _imageSupportLinks, width: 55, height: 55),
                 title: S.of(context).support_title_other_links,
                 description: S.of(context).support_description_other_links,
                 onPressed: () => Navigator.pushNamed(context, Routes.supportOtherLinks),

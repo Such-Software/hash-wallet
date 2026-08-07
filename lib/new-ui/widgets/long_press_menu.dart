@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -75,7 +75,7 @@ class _LongPressMenuState extends State<LongPressMenu> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             spacing: 8,
                             children: [
-                              CakeImageWidget(
+                              HashImageWidget(
                                 imageUrl:
                                 item.iconPath,
                                 height: 20,

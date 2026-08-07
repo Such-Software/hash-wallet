@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +59,7 @@ class WelcomePage extends BasePage {
                     aspectRatio: aspectRatioImage,
                     child: FittedBox(
                       fit: BoxFit.contain,
-                      child: CakeImageWidget(imageUrl: welcomeImage),
+                      child: HashImageWidget(imageUrl: welcomeImage),
                     ),
                   ),
                   Padding(

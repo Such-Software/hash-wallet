@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:hash_wallet/entities/auto_generate_subaddress_status.dart';
 import 'package:hash_wallet/generated/i18n.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +63,7 @@ class ReceiveInfoBox extends StatelessWidget {
             spacing: 10,
             children: [
               if(iconPath.isNotEmpty)
-              CakeImageWidget(imageUrl:
+              HashImageWidget(imageUrl:
                 iconPath,
                 width: 16,
                 height: 16,
@@ -130,7 +130,7 @@ class InfoboxCurrencyRow extends StatelessWidget {
     return Row(
       spacing: 8,
       children: [
-        CakeImageWidget(
+        HashImageWidget(
           imageUrl: chainIconPath,
           width: 20,
           height: 20,
@@ -174,7 +174,7 @@ class InfoboxCurrencyRow extends StatelessWidget {
                                   color: Theme.of(context).colorScheme.surfaceContainer,
                                   width: iconBorder),
                               borderRadius: BorderRadius.circular(9999999)),
-                          child: CakeImageWidget(
+                          child: HashImageWidget(
                             imageUrl: entry.value.iconPath,
                             width: 24,
                             height: 24,

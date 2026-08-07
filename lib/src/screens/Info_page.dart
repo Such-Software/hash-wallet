@@ -1,5 +1,5 @@
 import 'package:hash_wallet/src/screens/base_page.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
@@ -56,7 +56,7 @@ abstract class InfoPage extends BasePage {
                   ),
                   child: AspectRatio(
                     aspectRatio: 0.9,
-                    child: CakeImageWidget(imageUrl: image),
+                    child: HashImageWidget(imageUrl: image),
                   ),
                 ),
               ),

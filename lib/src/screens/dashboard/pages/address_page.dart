@@ -5,7 +5,7 @@ import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/anonpay/anonpay_donation_link_info.dart';
 import 'package:hash_wallet/entities/preferences_key.dart';
 import 'package:hash_wallet/src/screens/receive/anonpay_receive_page.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/receive_page_option.dart';
 import 'package:hash_wallet/src/screens/dashboard/widgets/present_receive_option_picker.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
@@ -182,7 +182,7 @@ class AddressPage extends BasePage {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CakeImageWidget(
+                        HashImageWidget(
                           imageUrl: addressListViewModel.monoImage,
                           height: 16,
                           width: 16,
@@ -230,7 +230,7 @@ class AddressPage extends BasePage {
                                         borderRadius: BorderRadius.circular(24),
                                       ),
                                       child: ClipOval(
-                                        child: CakeImageWidget(
+                                        child: HashImageWidget(
                                           height: 35,
                                           width: 35,
                                           imageUrl: walletImages[i],

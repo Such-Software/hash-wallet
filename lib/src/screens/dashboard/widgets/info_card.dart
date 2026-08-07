@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/dashboard_card_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -86,7 +86,7 @@ class InfoCard extends StatelessWidget {
           color: Theme.of(context).colorScheme.surfaceContainer,
           shape: BoxShape.circle,
         ),
-        child: CakeImageWidget(
+        child: HashImageWidget(
           imageUrl: image,
           height: 40,
           width: 40,

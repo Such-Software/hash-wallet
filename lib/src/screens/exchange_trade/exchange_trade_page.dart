@@ -363,7 +363,7 @@ class ExchangeTradeState extends State<ExchangeTradeForm> {
                   return InfoBottomSheet(
                     footerType: FooterType.singleActionButton,
                     titleText: S.of(bottomSheetContext).transaction_sent,
-                    contentImage: 'assets/images/birthday_cake.png',
+                    contentImage: 'assets/images/hash_bag.png',
                     singleActionButtonText: S.of(bottomSheetContext).close,
                     singleActionButtonKey: ValueKey('send_page_sent_dialog_ok_button_key'),
                     onSingleActionButtonPressed: () {

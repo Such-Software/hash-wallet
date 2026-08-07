@@ -11,7 +11,7 @@ import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/dashboard/favorite_token_modal.dart';
 import 'package:hash_wallet/src/screens/settings/widgets/settings_cell_with_arrow.dart';
 import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/screens/settings/widgets/settings_picker_cell.dart';
 import 'package:hash_wallet/src/screens/settings/widgets/settings_switcher_cell.dart';
 import 'package:hash_wallet/src/widgets/new_list_row/new_list_section.dart';
@@ -189,7 +189,7 @@ class HomeSettingsPage extends BasePage {
                           leading: Container(
                             clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(shape: BoxShape.circle),
-                            child: CakeImageWidget(
+                            child: HashImageWidget(
                               imageUrl: token.iconPath,
                               height: 40,
                               width: 40,

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -220,7 +220,7 @@ class _NEWNewMainNavBarState extends State<NewMainNavBar> {
                                           builder: (context, value, child) {
                                               return Container(
                                                 height: NewMainNavBar.barHeight,
-                                                  child: CakeImageWidget(imageUrl:
+                                                  child: HashImageWidget(imageUrl:
                                                     visibleActions[i].image,
                                                     width: iconWidth,
                                                     height: iconHeight,

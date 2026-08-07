@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,7 +23,7 @@ class ReceiveLabelWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ClipRect(
-                  child: CakeImageWidget(imageUrl:"assets/new-ui/label.svg",
+                  child: HashImageWidget(imageUrl:"assets/new-ui/label.svg",
                 width: 24,
                 height: 24,
                 colorFilter: ColorFilter.mode(

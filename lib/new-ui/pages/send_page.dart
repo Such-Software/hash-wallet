@@ -20,7 +20,7 @@ import 'package:hash_wallet/new-ui/widgets/send_page/send_confirm_sheet.dart';
 import 'package:hash_wallet/new-ui/widgets/send_page/send_memo_input.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/src/widgets/bottom_sheet/token_selection_bottom_sheet.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/new_list_row/list_item_regular_row_widget.dart';
 import 'package:hash_wallet/src/widgets/standard_checkbox.dart';
 import 'package:hash_wallet/store/app_store.dart';
@@ -291,7 +291,7 @@ class _NewSendPageState extends State<NewSendPage> {
                           if (widget.sendViewModel.outputs.length > 1)
                             ModernButton(
                                 size: 36,
-                                icon: CakeImageWidget(imageUrl:
+                                icon: HashImageWidget(imageUrl:
                                   "assets/new-ui/remove_recipient.svg",
                                   colorFilter: ColorFilter.mode(
                                     Theme.of(context).colorScheme.primary,
@@ -322,7 +322,7 @@ class _NewSendPageState extends State<NewSendPage> {
                           if (widget.mode.helpContent != null)
                             ModernButton(
                                 size: 36,
-                                icon: CakeImageWidget(imageUrl:
+                                icon: HashImageWidget(imageUrl:
                                   "assets/new-ui/help.svg",
                                   colorFilter: ColorFilter.mode(
                                       Theme.of(context).colorScheme.primary, BlendMode.srcIn),
@@ -1343,7 +1343,7 @@ class SendHelpPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CakeImageWidget(imageUrl:content.imagePath),
+                HashImageWidget(imageUrl:content.imagePath),
                 Text(
                   content.description,
                   textAlign: TextAlign.center,

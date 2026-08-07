@@ -1,7 +1,7 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/new-ui/widgets/send_page/send_address_input.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/new_list_row/new_simple_checkbox.dart';
 import 'package:hash_wallet/view_model/exchange/exchange_view_model.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
@@ -153,7 +153,7 @@ class _SwapAddressSelectionModalState extends State<SwapAddressSelectionModal> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             spacing: 10,
                             children: [
-                              CakeImageWidget(imageUrl:"assets/new-ui/send_from_external.svg",
+                              HashImageWidget(imageUrl:"assets/new-ui/send_from_external.svg",
                                   colorFilter: ColorFilter.mode(
                                       Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
                               Text(S.of(context).send_from_external,
@@ -272,7 +272,7 @@ class _SwapAddressSelectionModalRowState extends State<SwapAddressSelectionModal
                             duration: Duration(milliseconds: 200),
                             curve: Curves.easeOutCubic,
                             turns: _isExpanded ? 0 : 0.5,
-                            child:CakeImageWidget(imageUrl:
+                            child:HashImageWidget(imageUrl:
                               "assets/new-ui/dropdown_arrow.svg",
                               colorFilter: ColorFilter.mode(
                                   Theme.of(context).colorScheme.onSurfaceVariant, BlendMode.srcIn),
@@ -316,7 +316,7 @@ class _SwapAddressSelectionModalRowState extends State<SwapAddressSelectionModal
                                 child: Row(
                                   spacing: 12,
                                   children: [
-                                    CakeImageWidget(imageUrl:
+                                    HashImageWidget(imageUrl:
                                       "assets/new-ui/account.svg",
                                       colorFilter: ColorFilter.mode(
                                           Theme.of(context).colorScheme.onSurfaceVariant,

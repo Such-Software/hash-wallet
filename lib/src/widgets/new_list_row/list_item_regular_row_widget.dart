@@ -1,6 +1,6 @@
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/copy_wrapper.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/new_list_row/list_Item_style_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -76,7 +76,7 @@ class ListItemRegularRowWidget extends StatelessWidget {
                             if (iconPath != null)
                               Padding(
                                   padding: const EdgeInsets.only(right: 12.0),
-                                  child: CakeImageWidget(
+                                  child: HashImageWidget(
                                     imageUrl: iconPath!,
                                     width: 24,
                                     height: 24,
@@ -121,7 +121,7 @@ class ListItemRegularRowWidget extends StatelessWidget {
                           if (trailingWidget != null)
                             trailingWidget!
                           else if (trailingIconPath != null)
-                            CakeImageWidget(
+                            HashImageWidget(
                               imageUrl: trailingIconPath!,
                               height: trailingIconSize ?? 18,
                               width: trailingIconSize ?? 18,
@@ -132,7 +132,7 @@ class ListItemRegularRowWidget extends StatelessWidget {
                           else if (showArrow)
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 7.0),
-                                child: CakeImageWidget(imageUrl:
+                                child: HashImageWidget(imageUrl:
                                 "assets/new-ui/arrow_forward.svg",
                                     height: 14,
                                     color: theme.colorScheme.onSurfaceVariant

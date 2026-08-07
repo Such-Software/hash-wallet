@@ -4,7 +4,7 @@ import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_regular
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/modal_page_wrapper.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/new_list_row/new_list_section.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,12 +14,12 @@ import 'package:url_launcher/url_launcher.dart';
 const List<String> aboutPageEasterEggs = [
   "Designed in (S)pain",
   "Proudly managing over 🤷‍♂️ XMR",
-  "The cake is not a lie 🍰",
+  "The bag is not a lie 💰",
   "I don’t play soccer because I enjoy the sport. I’m just doing it for kicks.",
   "Markets in red? Big deal.\nWhat color is the grass outside?",
   "Conquered Web3, now working on Web6-7",
   "Proud owner of none of your funds\n(we are not impressed)",
-  "*writing down my seedphrase*\ncake cake cake cake cake cake cake ca...",
+  "*writing down my seedphrase*\nhash hash hash hash hash hash hash ha...",
   "Don't forget to actually use your crypto to pay for stuff in the real world 🙂",
   "A chain of blocks? That's preposterous!",
   "IOU a hug <3",
@@ -69,7 +69,7 @@ class _AboutPageState extends State<AboutPage> {
                     SizedBox(),
                     GestureDetector(
                       onTap: _easterEgg,
-                      child: CakeImageWidget(
+                      child: HashImageWidget(
                         imageUrl: "assets/new-ui/cake_squircle_icon.svg",
                         width: 128,
                         height: 128,

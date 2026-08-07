@@ -1,4 +1,4 @@
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:hash_wallet/view_model/wallet_list/wallet_list_item.dart';
@@ -129,7 +129,7 @@ class GroupedWalletExpansionTile extends StatelessWidget {
                           )
                         : SizedBox(width: 7),
                     SizedBox(width: 24),
-                    CakeImageWidget(
+                    HashImageWidget(
                       imageUrl: getCryptoCurrencyIconForWalletListItem(item.type),
                       width: 32,
                       height: 32,

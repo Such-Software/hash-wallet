@@ -5,7 +5,7 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/modal_navigator.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/routes.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/new_list_row/new_list_section.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/wallet_info.dart';
@@ -147,7 +147,7 @@ class SettingsMainPage extends StatelessWidget {
                         child: Row(
                           spacing: 8,
                           children: [
-                            CakeImageWidget(imageUrl: section.titleIconPath,
+                            HashImageWidget(imageUrl: section.titleIconPath,
                                 colorFilter: ColorFilter.mode(
                                   Theme.of(context).colorScheme.onSurfaceVariant,
                                   BlendMode.srcIn,

@@ -4,7 +4,7 @@ import 'package:hash_wallet/entities/wallet_nft_response.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/dashboard/widgets/menu_widget.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 
@@ -102,7 +102,7 @@ class _NFTImageWidget extends StatelessWidget {
         ),
         color: Theme.of(context).colorScheme.surface,
       ),
-      child: CakeImageWidget(imageUrl: imageUrl),
+      child: HashImageWidget(imageUrl: imageUrl),
     );
   }
 }

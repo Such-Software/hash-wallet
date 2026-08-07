@@ -1,6 +1,6 @@
 import 'package:hash_wallet/entities/bridge_transfer.dart';
 import 'package:hash_wallet/evm/evm.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/themes/core/custom_theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -87,7 +87,7 @@ class TransferHistoryRow extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  CakeImageWidget(
+                  HashImageWidget(
                     imageUrl: 'assets/images/crypto/${sourceChainName?.toLowerCase()}.webp',
                     width: 28,
                     height: 28,
@@ -95,7 +95,7 @@ class TransferHistoryRow extends StatelessWidget {
                   Positioned(
                     top: 14,
                     left: 12,
-                    child: CakeImageWidget(
+                    child: HashImageWidget(
                       imageUrl: 'assets/images/crypto/${destChainName?.toLowerCase()}.webp',
                       width: 28,
                       height: 28,

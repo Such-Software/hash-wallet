@@ -3,7 +3,7 @@ import 'package:hash_wallet/entities/preferences_key.dart';
 import 'package:hash_wallet/entities/service_status.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/src/widgets/service_status_tile.dart';
 import 'package:hash_wallet/utils/device_info.dart';
@@ -41,7 +41,7 @@ class _ServicesUpdatesWidgetState extends State<ServicesUpdatesWidget> {
                 );
               });
         },
-        child: CakeImageWidget(
+        child: HashImageWidget(
           imageUrl: "assets/images/notif.svg",
           color: Theme.of(context).colorScheme.primary,
           width: DeviceInfo.instance.isDesktop ? 30 : 20,
@@ -133,7 +133,7 @@ class _ServicesUpdatesWidgetState extends State<ServicesUpdatesWidget> {
                 : null,
             child: Stack(
               children: [
-                CakeImageWidget(
+                HashImageWidget(
                   imageUrl: "assets/images/notif.svg",
                   color: Theme.of(context).colorScheme.primary,
                   width: DeviceInfo.instance.isDesktop ? 30 : 20,

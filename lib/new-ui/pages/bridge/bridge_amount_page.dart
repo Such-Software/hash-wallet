@@ -66,7 +66,7 @@ class _BridgeAmountPageState extends State<BridgeAmountPage> {
           return InfoBottomSheet(
             footerType: FooterType.doubleActionButton,
             titleText: 'Bridge initiated!',
-            contentImage: 'assets/images/birthday_cake.png',
+            contentImage: 'assets/images/hash_bag.png',
             content: 'The bridging will take between 30 seconds and 3 '
                 'minutes to complete.',
             doubleActionLeftButtonText: S.of(bottomSheetContext).close,

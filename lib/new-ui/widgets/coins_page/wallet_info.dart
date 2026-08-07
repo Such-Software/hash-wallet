@@ -1,5 +1,5 @@
 import 'package:hash_wallet/new-ui/widgets/modern_button.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +46,7 @@ class WalletInfoBar extends StatelessWidget {
                 ? const SizedBox.shrink(key: ValueKey("empty"))
                 : Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: CakeImageWidget(imageUrl:
+                    child: HashImageWidget(imageUrl:
                       hardwareWalletIcon!,
                       key: ValueKey("hardware_wallet_icon"),
                       width: 24,

@@ -9,7 +9,7 @@ import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/new_wallet/widgets/select_button.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
 import 'package:hash_wallet/src/widgets/picker.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
@@ -157,7 +157,7 @@ class _WalletNameFormState extends State<WalletNameForm> {
                   child: AspectRatio(
                     aspectRatio: aspectRatioImage,
                     child: FittedBox(
-                      child: CakeImageWidget(imageUrl: widget.walletImage),
+                      child: HashImageWidget(imageUrl: widget.walletImage),
                       fit: BoxFit.contain,
                     ),
                   ),

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,7 @@ class CreatePinWelcomePage extends BasePage {
                   AspectRatio(
                     aspectRatio: imageAspectRatio,
                     child: FittedBox(
-                      child: CakeImageWidget(
+                      child: HashImageWidget(
                         imageUrl: welcomeImage,
                         fit: BoxFit.contain,
                       ),
@@ -137,7 +137,7 @@ class CreatePinWelcomePage extends BasePage {
                             SizedBox(width: 8),
                             if (!isMoneroOnly) ...[
                               SizedBox(width: 8),
-                              CakeImageWidget(
+                              HashImageWidget(
                                 height: 40,
                                 imageUrl: cakeLogoThemed,
                                 fit: BoxFit.contain,

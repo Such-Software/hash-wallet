@@ -8,7 +8,7 @@ import 'package:hash_wallet/new-ui/pages/send_page.dart';
 import 'package:hash_wallet/new-ui/pages/swap_page.dart';
 import 'package:hash_wallet/new-ui/widgets/modern_button.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:hash_wallet/src/widgets/cake_image_widget.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/unspent_coin_type.dart';
@@ -77,7 +77,7 @@ class AssetDetailsModal extends StatelessWidget {
                       child: Stack(
                         children: [
                           if (iconPath.isNotEmpty)
-                            CakeImageWidget(imageUrl: iconPath, width: 75, height: 75)
+                            HashImageWidget(imageUrl: iconPath, width: 75, height: 75)
                           else
                             Container(
                               width: 75,
@@ -103,7 +103,7 @@ class AssetDetailsModal extends StatelessWidget {
                           //               color: Colors.white),
                           //           child: Padding(
                           //             padding: const EdgeInsets.all(4.0),
-                          //             child: CakeImageWidget(imageUrl:
+                          //             child: HashImageWidget(imageUrl:
                           //               chainIconPath,
                           //               width: 18,
                           //               height: 18,
@@ -150,7 +150,7 @@ class AssetDetailsModal extends StatelessWidget {
                             spacing: 4,
                             children: [
                               if (chainIconPath.isNotEmpty)
-                                CakeImageWidget(
+                                HashImageWidget(
                                   imageUrl: chainIconPath,
                                   width: 16,
                                   height: 16,
