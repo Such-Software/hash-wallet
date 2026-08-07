@@ -70,7 +70,7 @@ class _AboutPageState extends State<AboutPage> {
                     GestureDetector(
                       onTap: _easterEgg,
                       child: HashImageWidget(
-                        imageUrl: "assets/new-ui/cake_squircle_icon.svg",
+                        imageUrl: "assets/new-ui/hash_squircle_icon.svg",
                         width: 128,
                         height: 128,
                       ),

@@ -44,8 +44,8 @@ class ReceiveQrCode extends StatelessWidget {
               opacity: largeQrMode ? 1 : 0,
               child: HashImageWidget(imageUrl:
                 isLightMode
-                    ? "assets/new-ui/cakewallet-wordmark-light.svg"
-                    : "assets/new-ui/cakewallet-wordmark.svg",
+                    ? "assets/new-ui/hash-wordmark-light.svg"
+                    : "assets/new-ui/hash-wordmark.svg",
                 height: 45,
               )),
         ),
