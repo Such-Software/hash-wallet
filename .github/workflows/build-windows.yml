@@ -59,6 +59,74 @@ jobs:
           git config --global user.name "Hash Bags CI"
           git config --global --list
 
+      # ---- Rust toolchain ---------------------------------------------------
+      # The dnssec_proof plugin builds its native lib through cargokit
+      # (windows/CMakeLists.txt -> apply_cargokit), so `flutter build windows`
+      # genuinely needs cargo/rustc — the prebuilt monero_c bundle doesn't
+      # cover it.
+      #
+      # setup-windows-runner.ps1 installs Rust to C:\Rust and puts
+      # C:\Rust\cargo\bin on the *Machine* PATH, but the act_runner service
+      # only picks up Machine PATH changes when it restarts, and a rebuilt or
+      # re-imaged box loses it entirely. Either way the job died at exit 127
+      # ("rustc: command not found"). Locate it ourselves, and install it if
+      # it really isn't there, so CI doesn't depend on the box's env being
+      # right. No-op when rustc is already on PATH.
+      - name: Ensure Rust toolchain is on PATH
+        run: |
+          set -e
+          if command -v rustc >/dev/null 2>&1 && command -v cargo >/dev/null 2>&1; then
+            echo "Rust already on PATH: $(command -v rustc)"
+            exit 0
+          fi
+
+          # Known install locations, in preference order. First is where
+          # setup-windows-runner.ps1 puts it; the rest cover a rustup-init
+          # run under a normal user account.
+          CANDIDATES=(
+            "/c/Rust/cargo/bin"
+            "$USERPROFILE/.cargo/bin"
+            "/c/Users/Administrator/.cargo/bin"
+            "/c/Windows/System32/config/systemprofile/.cargo/bin"
+          )
+          for d in "${CANDIDATES[@]}"; do
+            if [[ -x "$d/rustc.exe" ]]; then
+              echo "Found Rust at $d — adding to PATH for later steps"
+              export PATH="$d:$PATH"
+              # $GITHUB_PATH wants a Windows-style path; MSYS converts the
+              # resulting semicolon PATH back to POSIX form on shell start.
+              cygpath -w "$d" >> "$GITHUB_PATH"
+              # rustup's shims resolve toolchains via RUSTUP_HOME; without it
+              # they look in %USERPROFILE%\.rustup, which is empty for the
+              # LocalSystem service account.
+              if [[ -d "$(dirname "$(dirname "$d")")/rustup" ]]; then
+                RUSTUP_DIR="$(dirname "$(dirname "$d")")/rustup"
+                echo "RUSTUP_HOME=$(cygpath -w "$RUSTUP_DIR")" >> "$GITHUB_ENV"
+                echo "CARGO_HOME=$(cygpath -w "$(dirname "$d")")"  >> "$GITHUB_ENV"
+              fi
+              rustc --version
+              exit 0
+            fi
+          done
+
+          echo "Rust not found in any known location — installing to C:\\Rust"
+          CARGO_HOME="C:\\Rust\\cargo"
+          RUSTUP_HOME="C:\\Rust\\rustup"
+          export CARGO_HOME RUSTUP_HOME
+          mkdir -p /c/Rust/cargo /c/Rust/rustup
+          # act_runner sets RUNNER_TEMP, but don't hard-depend on it.
+          DL_DIR="${RUNNER_TEMP:-/c/Rust}"
+          curl -fsSL -o "$DL_DIR/rustup-init.exe" https://win.rustup.rs/x86_64
+          "$DL_DIR/rustup-init.exe" -y \
+            --default-toolchain stable \
+            --profile minimal \
+            --target x86_64-pc-windows-msvc \
+            --no-modify-path
+          echo "C:\\Rust\\cargo\\bin"   >> "$GITHUB_PATH"
+          echo "CARGO_HOME=$CARGO_HOME"   >> "$GITHUB_ENV"
+          echo "RUSTUP_HOME=$RUSTUP_HOME" >> "$GITHUB_ENV"
+          /c/Rust/cargo/bin/rustc --version
+
       # ---- Toolchain sanity ------------------------------------------------
       # Our self-hosted runner has Flutter / Rust / VS Build Tools / Inno
       # Setup pre-installed (see scripts/windows/setup-windows-runner.ps1).
