@@ -112,25 +112,46 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
         super(appStore: _appStore) {
     _useTorOnly = _settingsStore.exchangeStatus == ExchangeApiMode.torOnly;
     _setProviders();
-    // Hash Bags: chains removed from the wallet are not offered as swap targets.
-    const removedChainCurrencies = [
-      CryptoCurrency.sol,
-      CryptoCurrency.trx,
-      CryptoCurrency.zec,
-      CryptoCurrency.dcr,
-      CryptoCurrency.zano,
-      CryptoCurrency.usdcsol,
-      CryptoCurrency.usdtSol,
-      CryptoCurrency.usdcTrc20,
-      CryptoCurrency.usdttrc20,
-    ];
-    const excludeDepositCurrencies = [CryptoCurrency.btt, ...removedChainCurrencies];
-    const excludeReceiveCurrencies = [
-      CryptoCurrency.xlm,
-      CryptoCurrency.xrp,
+    // Hash Bags: the swap picker is a curated allowlist — natives of chains
+    // the wallet actually ships plus major stables. Everything else stays
+    // defined in CryptoCurrency (raw ids back Hive-stored trade history) but
+    // is hidden from the swap UI. LTC is receive-only; BNB stays deposit-only
+    // (inherited upstream restriction).
+    const swapDepositAllowlist = [
+      CryptoCurrency.wow,
+      CryptoCurrency.xmr,
+      CryptoCurrency.btc,
+      CryptoCurrency.bch,
+      CryptoCurrency.doge,
+      CryptoCurrency.nano,
+      CryptoCurrency.eth,
+      CryptoCurrency.baseEth,
+      CryptoCurrency.arbEth,
       CryptoCurrency.bnb,
-      CryptoCurrency.btt,
-      ...removedChainCurrencies,
+      CryptoCurrency.maticpoly,
+      CryptoCurrency.usdterc20,
+      CryptoCurrency.usdtbsc,
+      CryptoCurrency.usdc,
+      CryptoCurrency.usdcpoly,
+      CryptoCurrency.dai,
+    ];
+    const swapReceiveAllowlist = [
+      CryptoCurrency.wow,
+      CryptoCurrency.xmr,
+      CryptoCurrency.btc,
+      CryptoCurrency.bch,
+      CryptoCurrency.doge,
+      CryptoCurrency.nano,
+      CryptoCurrency.eth,
+      CryptoCurrency.baseEth,
+      CryptoCurrency.arbEth,
+      CryptoCurrency.maticpoly,
+      CryptoCurrency.usdterc20,
+      CryptoCurrency.usdtbsc,
+      CryptoCurrency.usdc,
+      CryptoCurrency.usdcpoly,
+      CryptoCurrency.dai,
+      CryptoCurrency.ltc,
     ];
     _initialPairBasedOnWallet();
 
@@ -199,11 +220,11 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
     }, delay: 300));
 
     receiveCurrencies = CryptoCurrency.all
-        .where((cryptoCurrency) => !excludeReceiveCurrencies.contains(cryptoCurrency))
+        .where(swapReceiveAllowlist.contains)
         .toList()
         .asObservable();
     depositCurrencies = CryptoCurrency.all
-        .where((cryptoCurrency) => !excludeDepositCurrencies.contains(cryptoCurrency))
+        .where(swapDepositAllowlist.contains)
         .toList()
         .asObservable();
 
