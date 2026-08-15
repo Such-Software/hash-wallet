@@ -10,8 +10,12 @@ MAX_PARALLEL_TESTS=${MAX_PARALLEL_TESTS:-2}
 TEST_TIMEOUT=${TEST_TIMEOUT:-600}
 RETRY_COUNT=${RETRY_COUNT:-1}
 
-# Data directories to clean
+# Data directories to clean (current app dirs plus legacy pre-rename ones,
+# since root_dir.dart migrates legacy data into the current dir on startup)
 DATA_DIRS=(
+    "$HOME/.local/share/com.suchsoftware.hashwallet"
+    "$HOME/Documents/hash_wallet"
+    "$HOME/.config/hash_wallet"
     "$HOME/.local/share/com.example.cake_wallet"
     "$HOME/Documents/cake_wallet"
     "$HOME/.config/cake_wallet"

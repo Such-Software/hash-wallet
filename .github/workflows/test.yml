@@ -1,0 +1,77 @@
+name: Tests and analysis
+
+# Fast, pure-Dart verification: no native builds, no signing secrets.
+# Runs on every push and PR (unlike the manual-dispatch build workflows,
+# this finishes in minutes and needs nothing beyond pub get).
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      # Same prebuilt image as the build workflows (bundles Flutter 3.32.0).
+      image: ghcr.io/cake-tech/cake_wallet:debian13-flutter3.32.0-ndkr28-go1.24.1-ruststablenightly
+
+    steps:
+      - name: Fix Actions HOME (writeable for ~/.cache)
+        run: echo "HOME=/root" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Configure git inside the container
+        run: git config --global --add safe.directory '*'
+
+      # pubspec.yaml has path deps under scripts/ that must exist before
+      # pub get; fetch the same prebuilt bundles the build workflows use.
+      - name: Fetch prebuilt torch_dart
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf torch_dart torch_dart.tar.gz
+            wget -q https://github.com/MrCyjaneK/torch_dart/releases/download/v1.0.17/torch_dart-v1.0.17.tar.gz -O torch_dart.tar.gz
+            mkdir torch_dart
+            tar -xzf torch_dart.tar.gz -C torch_dart
+            rm torch_dart.tar.gz
+          popd
+
+      - name: Fetch prebuilt reown_flutter
+        run: |
+          set -x -e
+          pushd scripts
+            rm -rf reown_flutter reown_flutter.tar.gz
+            wget -q https://github.com/cake-tech/reown_flutter/releases/download/v0.0.4/reown_flutter-v0.0.4.tar.gz -O reown_flutter.tar.gz
+            mkdir reown_flutter
+            tar -xzf reown_flutter.tar.gz -C reown_flutter
+            rm reown_flutter.tar.gz
+          popd
+
+      - name: Clone BitBox Flutter
+        run: |
+          set -x -e
+          pushd scripts
+            ./build_bitbox_flutter.sh
+          popd
+
+      - name: flutter pub get
+        run: flutter pub get
+
+      - name: flutter analyze (errors are fatal, existing warnings are not)
+        run: flutter analyze lib --no-fatal-infos --no-fatal-warnings
+
+      - name: flutter test
+        run: flutter test

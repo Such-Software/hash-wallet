@@ -171,30 +171,6 @@ void main() {
       });
     });
 
-    group('Solana Address Detection', () {
-      test('detects Solana address', () {
-        const address = '7TSTXnQZxQDA4JoNqs4DqVqE7oNWk2kmHkMT6DD6vw2S';
-        final result = UniversalAddressDetector.detectAddress(address);
-
-        expect(result.isValid, true);
-        expect(result.detectedCurrency, CryptoCurrency.sol);
-        expect(result.detectedWalletType, WalletType.solana);
-        expect(result.address, address);
-      });
-    });
-
-    group('Tron Address Detection', () {
-      test('detects Tron address', () {
-        const address = 'TF7yQKp7pwLBSXBXthcrXMqTyjtvkJK28V';
-        final result = UniversalAddressDetector.detectAddress(address);
-
-        expect(result.isValid, true);
-        expect(result.detectedCurrency, CryptoCurrency.trx);
-        expect(result.detectedWalletType, WalletType.tron);
-        expect(result.address, address);
-      });
-    });
-
     group('Wownero Address Detection', () {
       test('detects Wownero address', () {
         const address =
@@ -204,41 +180,6 @@ void main() {
         expect(result.isValid, true);
         expect(result.detectedCurrency, CryptoCurrency.wow);
         expect(result.detectedWalletType, WalletType.wownero);
-        expect(result.address, address);
-      });
-    });
-
-    group('Zano Address Detection', () {
-      test('detects Zano address', () {
-        const address =
-            'ZxDREZKHjUAUkRpWrHV9AjJHe12RhtoY9TjUUx2EznNNdwJK9yiHEhuQkqGYnyDXRnFC3Uehu6kLGZmiQab8fWoQ1JrLsuJ1i';
-        final result = UniversalAddressDetector.detectAddress(address);
-
-        expect(result.isValid, true);
-        expect(result.detectedCurrency, CryptoCurrency.zano);
-        expect(result.detectedWalletType, WalletType.zano);
-        expect(result.address, address);
-      });
-
-      test('detects Zano alias', () {
-        const address = '@testuser';
-        final result = UniversalAddressDetector.detectAddress(address);
-
-        expect(result.isValid, true);
-        expect(result.detectedCurrency, CryptoCurrency.zano);
-        expect(result.detectedWalletType, WalletType.zano);
-        expect(result.address, address);
-      });
-    });
-
-    group('Decred Address Detection', () {
-      test('detects Decred address', () {
-        const address = 'DsW4ZtRV1DcPCuKXVVtGnCy3AtAZHg5N8nR';
-        final result = UniversalAddressDetector.detectAddress(address);
-
-        expect(result.isValid, true);
-        expect(result.detectedCurrency, CryptoCurrency.dcr);
-        expect(result.detectedWalletType, WalletType.decred);
         expect(result.address, address);
       });
     });

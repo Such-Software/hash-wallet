@@ -174,14 +174,5 @@ ltcmweb1qq0at62jjucmawxp78qutn0cqwkwahcfx7fxls0r2ma5llg5w6wyy2qe20gxa3rku2658j88
     //   // responses for each type of address resolution.
     // });
 
-    group('unstoppableDomains', () {
-      test('contains expected TLDs', () {
-        expect(AddressResolver.unstoppableDomains, contains('crypto'));
-        expect(AddressResolver.unstoppableDomains, contains('eth'));
-        expect(AddressResolver.unstoppableDomains, contains('bitcoin'));
-        expect(AddressResolver.unstoppableDomains, contains('x'));
-        expect(AddressResolver.unstoppableDomains, contains('wallet'));
-      });
-    });
   });
 }

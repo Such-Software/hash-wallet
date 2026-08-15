@@ -7,25 +7,11 @@ analyzer:
     scripts/**,
     lib/**.g.dart,
     cw_core/lib/**.g.dart,
-    cw_haven/lib/**.g.dart,
     cw_monero/lib/**.g.dart,
     lib/generated/*.dart,
     cw_monero/ios/External/**,
     cw_shared_external/**,
     shared_external/**,
-    lib/bitcoin/cw_bitcoin.dart,
-    lib/bitcoin_cash/cw_bitcoin_cash.dart,
-    lib/ethereum/cw_ethereum.dart,
-    lib/haven/cw_haven.dart,
-    lib/monero/cw_monero.dart,
-    lib/nano/cw_nano.dart,
-    lib/polygon/cw_polygon.dart,
-    lib/solana/cw_solana.dart,
-    lib/tron/cw_tron.dart,
-    lib/wownero/cw_wownero.dart,
-    lib/zano/cw_zano.dart,
-    lib/base/cw_base.dart,
-    lib/arbitrum/cw_arbitrum.dart,
     ]
   language:
     strict-casts: true
@@ -36,6 +22,14 @@ linter:
     - cancel_subscriptions
     - always_declare_return_types
     - prefer_final_fields
+    - empty_catches
+    - await_only_futures
+    - valid_regexps
+    - unrelated_type_equality_checks
+    - hash_and_equals
+    - test_types_in_equals
+    - throw_in_finally
+    - control_flow_in_finally
 
 
 formatter:
