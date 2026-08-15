@@ -5,8 +5,6 @@ import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/entities/parse_address_from_domain.dart';
 import 'package:hash_wallet/entities/qr_scanner.dart';
 import 'package:hash_wallet/exchange/exchange_trade_state.dart';
-import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/thorchain_exchange.provider.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
 import 'package:hash_wallet/new-ui/widgets/modern_button.dart';
@@ -281,14 +279,7 @@ class _NewSwapPageState extends State<NewSwapPage> {
         if (depositAmountController.text != widget.exchangeViewModel.depositAmount &&
             depositAmountController.text != S.of(context).all) {
           widget.exchangeViewModel.isSendAllEnabled = false;
-          final isThorChain = widget.exchangeViewModel.selectedProviders
-              .any((provider) => provider is ThorChainExchangeProvider);
-          final isChainflip = widget.exchangeViewModel.selectedProviders
-              .any((provider) => provider is ChainflipExchangeProvider);
-
-          _depositAmountDebounce = isThorChain || isChainflip
-              ? Debounce(Duration(milliseconds: 1000))
-              : Debounce(Duration(milliseconds: 500));
+          _depositAmountDebounce = Debounce(Duration(milliseconds: 500));
 
           _depositAmountDebounce.run(() {
             widget.exchangeViewModel.calculateBestRate();

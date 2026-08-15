@@ -193,47 +193,11 @@ class PaymentMethod extends SelectableOption {
         customIconPath: 'assets/images/dollar_coin.svg');
   }
 
-  factory PaymentMethod.fromOnramperJson(Map<String, dynamic> json) {
-    final type = PaymentMethod.getPaymentTypeId(json['paymentTypeId'] as String?);
-    return PaymentMethod(
-        paymentMethodType: type ?? PaymentType.unknown,
-        customPaymentMethodType: json['paymentTypeId'] as String?,
-        customTitle: json['name'] as String? ?? 'Unknown',
-        customIconPath: json['icon'] as String? ?? 'assets/images/card.png',
-        customDescription: json['description'] as String?);
-  }
-
-  factory PaymentMethod.fromDFX(String paymentMethod, PaymentType paymentType) {
-    return PaymentMethod(
-        paymentMethodType: paymentType,
-        customTitle: paymentMethod,
-        customIconPath: 'assets/images/card.png');
-  }
-
   factory PaymentMethod.fromMoonPayJson(Map<String, dynamic> json, PaymentType paymentType) {
     return PaymentMethod(
         paymentMethodType: paymentType,
         customTitle: json['paymentMethod'] as String,
         customIconPath: 'assets/images/card.png');
-  }
-
-  factory PaymentMethod.fromMeldJson(Map<String, dynamic> json) {
-    final type = PaymentMethod.getPaymentTypeId(json['paymentMethod'] as String?);
-    final logos = json['logos'] as Map<String, dynamic>;
-    return PaymentMethod(
-        paymentMethodType: type ?? PaymentType.unknown,
-        customTitle: json['name'] as String? ?? 'Unknown',
-        customIconPath: logos['dark'] as String? ?? 'assets/images/card.png',
-        customDescription: json['description'] as String?);
-  }
-
-  factory PaymentMethod.fromKryptonimJson(Map<String, dynamic> json) {
-    final type = PaymentMethod.getPaymentTypeId(json['payment_method'] as String?);
-    return PaymentMethod(
-      paymentMethodType: type ?? PaymentType.unknown,
-      customTitle: json['payment_method'] as String? ?? 'Unknown',
-      customIconPath: 'assets/images/card.png',
-    );
   }
 
   static PaymentType? getPaymentTypeId(String? type) {

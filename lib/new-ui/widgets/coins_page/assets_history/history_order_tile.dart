@@ -32,7 +32,7 @@ class HistoryOrderTile extends StatelessWidget {
       date: date,
       amount: amount,
       amountFiat: amountFiat,
-      leadingIcon:Image.asset("assets/images/cakepay.png"),
+      leadingIcon: Image.asset("assets/images/card.png"),
       roundedTop: roundedTop,
       roundedBottom: roundedBottom,
       bottomSeparator: bottomSeparator,

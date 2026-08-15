@@ -1,10 +1,5 @@
 import 'package:hash_wallet/buy/buy_provider.dart';
-import 'package:hash_wallet/buy/dfx/dfx_buy_provider.dart';
-import 'package:hash_wallet/buy/kryptonim/kryptonim.dart';
-import 'package:hash_wallet/buy/meld/meld_buy_provider.dart';
 import 'package:hash_wallet/buy/moonpay/moonpay_provider.dart';
-import 'package:hash_wallet/buy/onramper/onramper_buy_provider.dart';
-import 'package:hash_wallet/buy/robinhood/robinhood_buy_provider.dart';
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/.secrets.g.dart' as secrets;
 
@@ -61,18 +56,12 @@ class ProvidersHelper {
 
   static BuyProvider getProviderByType(ProviderType type) {
     switch (type) {
-      case ProviderType.robinhood:
-        return getIt.get<RobinhoodBuyProvider>();
-      case ProviderType.dfx:
-        return getIt.get<DFXBuyProvider>();
-      case ProviderType.onramper:
-        return getIt.get<OnRamperBuyProvider>();
       case ProviderType.moonpay:
         return getIt.get<MoonPayProvider>();
-      case ProviderType.meld:
-        return getIt.get<MeldBuyProvider>();
-      case ProviderType.kriptonim:
-        return getIt.get<KryptonimBuyProvider>();
-      }
+      // The remaining provider implementations (Robinhood/DFX/Onramper/Meld/
+      // Kryptonim) were removed; their enum values stay for future re-enable.
+      default:
+        throw UnsupportedError('Buy provider ${type.title} is not available in this build');
+    }
   }
 }

@@ -3,10 +3,6 @@ import 'package:cw_core/utils/tor/disabled.dart';
 import 'package:flutter/foundation.dart';
 
 class FeatureFlag {
-  static const bool isCakePayEnabled = false;
-  static const bool isCakePayPurchaseSimulationEnabled = true;
-  static const bool isCakePayRedemptionFlowEnabled = false;
-  static const bool isExolixEnabled = true;
   // Hash Bags: Lightning disabled — running Greenlight/LSP infra is out of
   // scope for now. Re-enable once we have an LSP relationship lined up.
   static const bool isLightningEnabled = false;

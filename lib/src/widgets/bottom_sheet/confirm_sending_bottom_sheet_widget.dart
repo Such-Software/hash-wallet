@@ -5,14 +5,12 @@ import 'package:hash_wallet/src/widgets/rounded_icon_button.dart';
 import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:hash_wallet/utils/address_formatter.dart';
 import 'package:hash_wallet/utils/image_utill.dart';
-import 'package:hash_wallet/view_model/cake_pay/cake_pay_buy_card_view_model.dart';
 import 'package:hash_wallet/view_model/send/output.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/pending_transaction.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'base_bottom_sheet_widget.dart';
 
@@ -26,9 +24,6 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
     bool isSlideActionEnabled = true,
     String? accessibleNavigationModeSlideActionButtonText,
     required this.currency,
-    this.paymentId,
-    this.paymentIdValue,
-    this.expirationTime,
     required this.amount,
     required this.amountValue,
     required this.fiatAmountValue,
@@ -41,8 +36,6 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
     this.change,
     this.explanation,
     this.isOpenCryptoPay = false,
-    this.cakePayBuyCardViewModel,
-    this.quantity,
     Key? key,
   })  : showScrollbar = outputs.length > 3,
         super(
@@ -58,9 +51,6 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
             key: key);
 
   final CryptoCurrency currency;
-  final String? paymentId;
-  final String? paymentIdValue;
-  final String? expirationTime;
   final String amount;
   final String amountValue;
   final String fiatAmountValue;
@@ -71,8 +61,6 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
   final WalletType walletType;
   final PendingChange? change;
   final bool isOpenCryptoPay;
-  final CakePayBuyCardViewModel? cakePayBuyCardViewModel;
-  final String? quantity;
   final String? explanation;
   final AmountParsingProxy? amountParsingProxy;
 
@@ -103,26 +91,6 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
       padding: EdgeInsets.fromLTRB(8, 0, showScrollbar ? 16 : 8, 8),
       child: Column(
         children: [
-          if (paymentId != null && paymentIdValue != null && cakePayBuyCardViewModel != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Observer(
-                  builder: (_) => AddressTile(
-                        itemTitle: paymentId!,
-                        itemTitleTextStyle: itemTitleTextStyle,
-                        amountTextStyle: itemSubTitleTextStyle,
-                        walletType: walletType,
-                        amount: expirationTime != null
-                            ? S.current.offer_expires_in +
-                                ' ${cakePayBuyCardViewModel!.formattedRemainingTime}'
-                            : null,
-                        address: paymentIdValue!,
-                        itemSubTitleTextStyle: itemSubTitleTextStyle,
-                        tileBackgroundColor: tileBackgroundColor,
-                        applyAddressFormatting: false,
-                        copyButton: true,
-                      )),
-            ),
           if (explanation != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -163,12 +131,11 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
                     final isBatchSending = outputs.length > 1;
                     final item = outputs[index];
                     final contactName = item.parsedAddress.name;
-                    final isCakePayName = contactName == 'Cake Pay';
                     final batchContactTitle =
                         '${index + 1}/${outputs.length} - ${contactName.isEmpty ? 'Address' : contactName}';
                     final _address = item.isParsedAddress ? item.extractedAddress : item.address;
                     final _amount = '${item.cryptoAmount.replaceAll(',', '.')} ${amountParsingProxy?.getCryptoSymbol(currency) ?? currency.title}';
-                    return isBatchSending || (contactName.isNotEmpty && !isCakePayName)
+                    return isBatchSending || contactName.isNotEmpty
                         ? ExpansionAddressTile(
                             contactType: isOpenCryptoPay ? 'Open CryptoPay' : S.of(context).contact,
                             name: isBatchSending ? batchContactTitle : contactName,
@@ -181,15 +148,11 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
                             tileBackgroundColor: tileBackgroundColor,
                           )
                         : AddressTile(
-                            itemTitle: isCakePayName
-                                ? item.parsedAddress.profileName
-                                : S.of(context).address,
-                            imagePath: isCakePayName ? item.parsedAddress.profileImageUrl : null,
+                            itemTitle: S.of(context).address,
                             itemTitleTextStyle: itemTitleTextStyle,
                             walletType: walletType,
-                            amount: isCakePayName ? item.fiatAmount : _amount,
+                            amount: _amount,
                             address: _address,
-                            itemSubTitle: isCakePayName ? quantity : null,
                             itemSubTitleTextStyle: itemSubTitleTextStyle,
                             tileBackgroundColor: tileBackgroundColor,
                           );

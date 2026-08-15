@@ -1,23 +1,12 @@
 import 'dart:async';
 import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/simpleswap_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
 import 'package:hash_wallet/exchange/trade.dart';
 import 'package:hash_wallet/exchange/trade_state.dart';
 import 'package:hash_wallet/store/dashboard/trades_store.dart';
 import 'package:hash_wallet/entities/exchange_api_mode.dart';
 import 'package:hash_wallet/exchange/exchange_provider_description.dart';
-import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/changenow_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/exolix_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/letsexchange_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swaptrade_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/sideshift_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/stealth_ex_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/thorchain_exchange.provider.dart';
 import 'package:hash_wallet/exchange/provider/trocador_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/xoswap_exchange_provider.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,31 +27,13 @@ class TradeMonitor {
   final SharedPreferences preferences;
 
   ExchangeProvider? _getProviderByDescription(ExchangeProviderDescription description) {
+    // Providers whose implementations were removed (ChangeNow, SideShift,
+    // SimpleSwap, Exolix, ThorChain, SwapTrade, LetsExchange, StealthEx,
+    // Chainflip, XOSwap, SwapsXyz) fall through to null; their trades are
+    // skipped as "provider not supported".
     switch (description) {
-      case ExchangeProviderDescription.changeNow:
-        return ChangeNowExchangeProvider(settingsStore: appStore.settingsStore);
-      case ExchangeProviderDescription.sideShift:
-        return SideShiftExchangeProvider();
-      case ExchangeProviderDescription.simpleSwap:
-        return SimpleSwapExchangeProvider();
       case ExchangeProviderDescription.trocador:
         return TrocadorExchangeProvider();
-      case ExchangeProviderDescription.exolix:
-        return ExolixExchangeProvider();
-      case ExchangeProviderDescription.thorChain:
-        return ThorChainExchangeProvider();
-      case ExchangeProviderDescription.swapTrade:
-        return SwapTradeExchangeProvider();
-      case ExchangeProviderDescription.letsExchange:
-        return LetsExchangeExchangeProvider();
-      case ExchangeProviderDescription.stealthEx:
-        return StealthExExchangeProvider();
-      case ExchangeProviderDescription.chainflip:
-        return ChainflipExchangeProvider();
-      case ExchangeProviderDescription.xoSwap:
-        return XOSwapExchangeProvider();
-      case ExchangeProviderDescription.swapsXyz:
-        return SwapsXyzExchangeProvider();
       case ExchangeProviderDescription.nearIntents:
         return NearIntentsExchangeProvider();
     }

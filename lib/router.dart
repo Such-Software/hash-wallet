@@ -30,7 +30,6 @@ import 'package:hash_wallet/src/screens/buy/buy_sell_options_page.dart';
 import 'package:hash_wallet/src/screens/buy/buy_webview_page.dart';
 import 'package:hash_wallet/src/screens/buy/payment_method_options_page.dart';
 import 'package:hash_wallet/src/screens/buy/webview_page.dart';
-import 'package:hash_wallet/cake_pay/cake_pay.dart';
 import 'package:hash_wallet/src/screens/connect_device/connect_device_page.dart';
 import 'package:hash_wallet/src/screens/connect_device/monero_hardware_wallet_options_page.dart';
 import 'package:hash_wallet/src/screens/connect_device/select_device_manufacturer_page.dart';
@@ -778,36 +777,9 @@ Route<dynamic> createRoute(RouteSettings settings) {
                 param1: settings.arguments as QrViewData,
               ));
 
-    case Routes.cakePayCardsPage:
-      return handleRouteWithPlatformAwareness(
-        (context) => getIt.get<CakePayCardsPage>(),
-      );
-
     case Routes.aboutPage:
       final page = getIt.get<AboutPage>();
       return handleRouteWithPlatformAwareness((context) => page);
-
-    case Routes.cakePayBuyCardPage:
-      final args = settings.arguments as List;
-      return handleRouteWithPlatformAwareness(
-        (context) => getIt.get<CakePayBuyCardPage>(param1: args),
-      );
-
-    case Routes.cakePayWelcomePage:
-      return handleRouteWithPlatformAwareness<bool>(
-        (context) => getIt.get<CakePayWelcomePage>(),
-      );
-
-    case Routes.cakePayVerifyOtpPage:
-      final args = settings.arguments as List;
-      return handleRouteWithPlatformAwareness<bool>(
-        (context) => getIt.get<CakePayVerifyOtpPage>(param1: args),
-      );
-
-    case Routes.cakePayAccountPage:
-      return handleRouteWithPlatformAwareness<bool>(
-        (context) => getIt.get<CakePayAccountPage>(),
-      );
 
     case Routes.webViewPage:
       final args = settings.arguments as List;

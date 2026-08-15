@@ -1,24 +1,17 @@
-import 'dart:io';
-
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/apps_widget.dart';
-import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/dashboard_card_widget.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
-import 'package:hash_wallet/view_model/dashboard/cake_features_view_model.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
-import 'package:cw_core/utils/print_verbose.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:hash_wallet/src/widgets/gradient_background.dart';
 
 class CakeFeaturesPage extends StatelessWidget {
-  CakeFeaturesPage({required this.dashboardViewModel, required this.cakeFeaturesViewModel});
+  CakeFeaturesPage({required this.dashboardViewModel});
 
   final DashboardViewModel dashboardViewModel;
-  final CakeFeaturesViewModel cakeFeaturesViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -102,23 +95,4 @@ class CakeFeaturesPage extends StatelessWidget {
     );
   }
 
-  void _onCakePayTap(BuildContext context) {
-    if (Platform.isMacOS) {
-      _launchUrl("buy.cakepay.com");
-    } else {
-      _navigatorToGiftCardsPage(context);
-    }
-  }
-
-  void _launchUrl(String url) {
-    try {
-      launchUrl(Uri.https(url), mode: LaunchMode.externalApplication);
-    } catch (e) {
-      printV(e);
-    }
-  }
-
-  void _navigatorToGiftCardsPage(BuildContext context) {
-    Navigator.pushNamed(context, Routes.cakePayCardsPage);
-  }
 }

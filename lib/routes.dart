@@ -72,12 +72,6 @@ class Routes {
   static const unspentCoinsDetails = '/unspent_coins_details';
   static const addressPage = '/address_page';
   static const fullscreenQR = '/fullscreen_qr';
-  static const cakePayWelcomePage = '/cake_pay_welcome_page';
-  static const cakePayLoginPage = '/cake_pay_login_page';
-  static const cakePayCardsPage = '/cake_pay_cards_page';
-  static const cakePayBuyCardPage = '/cake_pay_buy_card_page';
-  static const cakePayVerifyOtpPage = '/cake_pay_verify_otp_page';
-  static const cakePayAccountPage = '/cake_pay_account_page';
   static const webViewPage = '/web_view_page';
   static const silentPaymentsSettings = '/silent_payments_settings';
   static const silentPaymentsLogs = '/silent_payments_logs';

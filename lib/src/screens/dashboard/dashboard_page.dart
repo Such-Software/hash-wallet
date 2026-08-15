@@ -14,7 +14,6 @@ import 'package:hash_wallet/src/widgets/vulnerable_seeds_popup.dart';
 import 'package:hash_wallet/utils/device_info.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/utils/version_comparator.dart';
-import 'package:hash_wallet/view_model/dashboard/cake_features_view_model.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/yat_emoji_id.dart';
@@ -327,7 +326,6 @@ class _DashboardPageView extends BasePage {
           label: S.of(context).apps,
           child: CakeFeaturesPage(
             dashboardViewModel: dashboardViewModel,
-            cakeFeaturesViewModel: getIt.get<CakeFeaturesViewModel>(),
           ),
         ),
       );

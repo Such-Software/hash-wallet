@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:hash_wallet/buy/buy_provider.dart';
 import 'package:hash_wallet/buy/buy_quote.dart';
-import 'package:hash_wallet/buy/onramper/onramper_buy_provider.dart';
 import 'package:hash_wallet/buy/payment_method.dart';
 import 'package:hash_wallet/buy/sell_buy_states.dart';
 import 'package:hash_wallet/core/selectable_option.dart';
@@ -455,18 +454,6 @@ abstract class BuySellViewModelBase extends WalletChangeListenerViewModel with S
       return true;
     }).toList();
 
-    final List<Quote> successRateQuotes = validQuotes
-        .where((element) =>
-            element.provider is OnRamperBuyProvider &&
-            element.recommendations.contains(ProviderRecommendation.successRate))
-        .toList();
-
-    for (final quote in successRateQuotes) {
-      if (!uniqueProviderQuotes.contains(quote)) {
-        uniqueProviderQuotes.add(quote);
-      }
-    }
-
     sortedRecommendedQuotes.addAll(uniqueProviderQuotes);
 
     sortedQuotes = ObservableList.of(
@@ -476,12 +463,6 @@ abstract class BuySellViewModelBase extends WalletChangeListenerViewModel with S
       sortedRecommendedQuotes.first
         ..setIsBestRate = true;
       bestRateQuote = sortedRecommendedQuotes.first;
-
-      sortedRecommendedQuotes.sort((a, b) {
-        if (a.provider is OnRamperBuyProvider) return -1;
-        if (b.provider is OnRamperBuyProvider) return 1;
-        return 0;
-      });
 
       final Quote effectiveBestRateQuote =
       sortedRecommendedQuotes.reduce((a, b) {

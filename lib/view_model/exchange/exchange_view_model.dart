@@ -23,17 +23,8 @@ import 'package:hash_wallet/exchange/exchange_template.dart';
 import 'package:hash_wallet/exchange/exchange_trade_state.dart';
 import 'package:hash_wallet/exchange/limits.dart';
 import 'package:hash_wallet/exchange/limits_state.dart';
-import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/letsexchange_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/changenow_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/exolix_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/stealth_ex_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swaptrade_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/trocador_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/xoswap_exchange_provider.dart';
 import 'package:hash_wallet/exchange/trade.dart';
 import 'package:hash_wallet/exchange/trade_request.dart';
 import 'package:hash_wallet/generated/i18n.dart';
@@ -49,7 +40,6 @@ import 'package:hash_wallet/store/settings_store.dart';
 import 'package:hash_wallet/store/templates/exchange_template_store.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/utils/token_utilities.dart';
 import 'package:hash_wallet/view_model/contact_list/contact_list_view_model.dart';
 import 'package:hash_wallet/view_model/send/fees_view_model.dart';
@@ -197,8 +187,7 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
     final initialProvider = provider;
     provider!.checkIsAvailable().then((bool isAvailable) {
       if (!isAvailable && provider == initialProvider) {
-        provider = providerList.firstWhere((provider) => provider is ChangeNowExchangeProvider,
-            orElse: () => providerList.last);
+        provider = providerList.last;
         _onPairChange();
       }
     });
@@ -323,20 +312,10 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
 
   // Hash Bags: trimmed to Trocador only. Trocador's aggregator already fronts
   // ChangeNow, LetsExchange, Exolix, StealthEx, FixedFloat, Quantex, etc.,
-  // letting us collect markup as the affiliate. Re-enable individual providers
-  // here only after registering Such Software affiliate keys per provider.
+  // letting us collect markup as the affiliate. The individual provider
+  // implementations were deleted; restore them from Cake Wallet upstream and
+  // register Such Software affiliate keys per provider before re-adding any.
   List<ExchangeProvider> get _allProviders => [
-        // ChangeNowExchangeProvider(settingsStore: _settingsStore),
-        // SideShiftExchangeProvider(),
-        // ChainflipExchangeProvider(),
-        // if (FeatureFlag.isExolixEnabled) ExolixExchangeProvider(),
-        // SwapTradeExchangeProvider(),
-        // LetsExchangeExchangeProvider(),
-        // StealthExExchangeProvider(),
-        // XOSwapExchangeProvider(),
-        // SwapsXyzExchangeProvider(),
-        // JupiterExchangeProvider(),
-        // NearIntentsExchangeProvider(),
         TrocadorExchangeProvider(
             useTorOnly: _useTorOnly, providerStates: _settingsStore.trocadorProviderStates),
       ];
@@ -1501,16 +1480,6 @@ abstract class ExchangeViewModelBase extends WalletChangeListenerViewModel with 
   }
 
   void _defineIsReceiveAmountEditable() {
-    /*if ((provider is ChangeNowExchangeProvider)
-        &&(depositCurrency == CryptoCurrency.xmr)
-        &&(receiveCurrency == CryptoCurrency.btc)) {
-      isReceiveAmountEditable = true;
-    } else {
-      isReceiveAmountEditable = false;
-    }*/
-    //isReceiveAmountEditable = false;
-    // isReceiveAmountEditable = selectedProviders.any((provider) => provider is ChangeNowExchangeProvider);
-    // isReceiveAmountEditable = provider is ChangeNowExchangeProvider ||  provider is SimpleSwapExchangeProvider;
     isReceiveAmountEditable = true;
   }
 

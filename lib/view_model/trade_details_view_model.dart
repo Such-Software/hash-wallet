@@ -1,20 +1,9 @@
 import 'dart:async';
 
 import 'package:hash_wallet/exchange/exchange_provider_description.dart';
-import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/changenow_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/exolix_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/letsexchange_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swaptrade_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/sideshift_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/simpleswap_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/stealth_ex_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/thorchain_exchange.provider.dart';
 import 'package:hash_wallet/exchange/provider/trocador_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/xoswap_exchange_provider.dart';
 import 'package:hash_wallet/exchange/trade.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/screens/trade_details/track_trade_list_item.dart';
@@ -40,41 +29,11 @@ abstract class TradeDetailsViewModelBase with Store {
     required this.appStore,
   })  : items = ObservableList<StandartListItem>(),
         trade = tradeForDetails {
+    // Trades from providers whose implementations were removed keep a null
+    // _provider and show the "provider unsupported" item with stored data.
     switch (trade.provider) {
-      case ExchangeProviderDescription.changeNow:
-        _provider = ChangeNowExchangeProvider(settingsStore: appStore.settingsStore);
-        break;
-      case ExchangeProviderDescription.sideShift:
-        _provider = SideShiftExchangeProvider();
-        break;
-      case ExchangeProviderDescription.simpleSwap:
-        _provider = SimpleSwapExchangeProvider();
-        break;
       case ExchangeProviderDescription.trocador:
         _provider = TrocadorExchangeProvider();
-        break;
-      case ExchangeProviderDescription.exolix:
-        _provider = ExolixExchangeProvider();
-        break;
-      case ExchangeProviderDescription.thorChain:
-        _provider = ThorChainExchangeProvider();
-        break;
-      case ExchangeProviderDescription.swapTrade:
-        _provider = SwapTradeExchangeProvider();
-      case ExchangeProviderDescription.letsExchange:
-        _provider = LetsExchangeExchangeProvider();
-        break;
-      case ExchangeProviderDescription.stealthEx:
-        _provider = StealthExExchangeProvider();
-        break;
-      case ExchangeProviderDescription.chainflip:
-        _provider = ChainflipExchangeProvider();
-        break;
-      case ExchangeProviderDescription.xoSwap:
-        _provider = XOSwapExchangeProvider();
-        break;
-      case ExchangeProviderDescription.swapsXyz:
-        _provider = SwapsXyzExchangeProvider();
         break;
       case ExchangeProviderDescription.nearIntents:
         _provider = NearIntentsExchangeProvider();

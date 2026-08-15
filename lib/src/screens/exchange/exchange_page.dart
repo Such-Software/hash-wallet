@@ -1,6 +1,4 @@
 import 'package:hash_wallet/exchange/exchange_provider_description.dart';
-import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/thorchain_exchange.provider.dart';
 import 'package:hash_wallet/core/auth_service.dart';
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/src/screens/exchange/widgets/desktop_exchange_cards_section.dart';
@@ -542,14 +540,7 @@ class ExchangePage extends BasePage {
       if (depositAmountController.text != exchangeViewModel.depositAmount &&
           depositAmountController.text != S.of(context).all) {
         exchangeViewModel.isSendAllEnabled = false;
-        final isThorChain = exchangeViewModel.selectedProviders
-            .any((provider) => provider is ThorChainExchangeProvider);
-        final isChainflip = exchangeViewModel.selectedProviders
-            .any((provider) => provider is ChainflipExchangeProvider);
-
-        _depositAmountDebounce = isThorChain || isChainflip
-            ? Debounce(Duration(milliseconds: 1000))
-            : Debounce(Duration(milliseconds: 500));
+        _depositAmountDebounce = Debounce(Duration(milliseconds: 500));
 
         _depositAmountDebounce.run(() {
           exchangeViewModel.calculateBestRate();

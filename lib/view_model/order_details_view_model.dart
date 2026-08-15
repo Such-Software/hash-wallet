@@ -1,25 +1,16 @@
 import 'dart:async';
 
 import 'package:hash_wallet/buy/buy_provider_description.dart';
-import 'package:hash_wallet/cake_pay/src/models/cake_pay_order.dart';
-import 'package:hash_wallet/cake_pay/src/services/cake_pay_service.dart';
 import 'package:hash_wallet/core/utilities.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/order/order.dart';
 import 'package:hash_wallet/order/order_provider.dart';
-import 'package:hash_wallet/order/order_provider_adapter/cake_pay_order_provider_adapter.dart';
-import 'package:hash_wallet/order/order_provider_description.dart';
 import 'package:hash_wallet/order/order_source_description.dart';
-import 'package:hash_wallet/src/screens/order_details/cake_pay_detail_list_card_item.dart';
 import 'package:hash_wallet/src/screens/trade_details/track_trade_list_item.dart';
 import 'package:hash_wallet/src/screens/trade_details/trade_details_status_item.dart';
 import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
-import 'package:hash_wallet/utils/date_formatter.dart';
-import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_base.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,7 +23,6 @@ abstract class OrderDetailsViewModelBase with Store {
   OrderDetailsViewModelBase({
     required WalletBase wallet,
     required Order orderForDetails,
-    required this.cakePayService,
     required this.orders,
   })  : items = ObservableList<StandartListItem>(),
         order = orderForDetails {
@@ -44,9 +34,8 @@ abstract class OrderDetailsViewModelBase with Store {
         break;
 
       case OrderSourceDescription.order:
-        if (order.orderProvider == OrderProviderDescription.cakePay) {
-          _provider = CakePayOrderProviderAdapter(wallet: wallet, cakePayService: cakePayService);
-        }
+        // Cake Pay orders: the Cake Pay integration was removed, so stored
+        // orders are shown from persisted data only (_provider stays null).
         break;
     }
 
@@ -61,10 +50,8 @@ abstract class OrderDetailsViewModelBase with Store {
   @observable
   ObservableList<StandartListItem> items;
 
-  final CakePayService cakePayService;
   final Box<Order> orders;
   OrderProvider? _provider;
-  List<OrderCard> cards = [];
 
   Timer? timer;
 
@@ -75,10 +62,6 @@ abstract class OrderDetailsViewModelBase with Store {
 
       final updatedOrderObj = await _provider!.findOrderById(order.id);
       final updatedOrder = updatedOrderObj.$1;
-
-      if (_provider is CakePayOrderProviderAdapter) {
-        cards = updatedOrderObj.$2 as List<OrderCard>? ?? [];
-      }
 
       final existing = orders.values.firstWhereOrNull((e) => e.id == updatedOrder.id);
       if (existing != null) {
@@ -98,29 +81,10 @@ abstract class OrderDetailsViewModelBase with Store {
   }
 
   void _updateItems() {
-    final dateFormat = DateFormatter.withCurrentLocal();
     items.clear();
 
     items.add(
         DetailsListStatusItem(title: S.current.trade_details_state, value: order.state.toString()));
-
-    if (_provider is CakePayOrderProviderAdapter) {
-      items.add(CakePayDetailsListCardItem(
-        title: '',
-        value: '',
-        id: order.id,
-        createdAt: dateFormat.format(order.createdAt),
-        price: order.receiveAmount,
-        quantity: order.quantity,
-        from: order.from ?? '',
-        to: order.to ?? '',
-        cards: cards,
-        onTap: (BuildContext context) {
-          Clipboard.setData(ClipboardData(text: '${order.id}'));
-          showBar<void>(context, S.of(context).copied_to_clipboard);
-        },
-      ));
-    }
 
     items.add(StandartListItem(title: 'Order provider', value: _provider?.title ?? ''));
 

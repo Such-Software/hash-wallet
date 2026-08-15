@@ -4,19 +4,9 @@ import 'package:hash_wallet/core/amount_parsing_proxy.dart';
 import 'package:hash_wallet/entities/calculate_fiat_amount.dart';
 import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:hash_wallet/exchange/exchange_provider_description.dart';
-import 'package:hash_wallet/exchange/provider/chainflip_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/changenow_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/exolix_exchange_provider.dart';
 import 'package:hash_wallet/exchange/provider/near_Intents_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swapsxyz_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/swaptrade_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/sideshift_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/simpleswap_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/stealth_ex_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/thorchain_exchange.provider.dart';
 import 'package:hash_wallet/exchange/provider/trocador_exchange_provider.dart';
-import 'package:hash_wallet/exchange/provider/xoswap_exchange_provider.dart';
 import 'package:hash_wallet/exchange/trade.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
@@ -51,40 +41,11 @@ abstract class ExchangeTradeViewModelBase with Store {
         isSwapsXYZCanSendFromExternal = _checkIfSwapsXYZCanSendFromExternal(tradesStore.trade!, wallet),
         items = ObservableList<ExchangeTradeItem>() {
     setUpOutput();
+    // Trades from providers whose implementations were removed keep a null
+    // _provider; status polling is simply skipped for them.
     switch (trade.provider) {
-      case ExchangeProviderDescription.changeNow:
-        _provider =
-            ChangeNowExchangeProvider(settingsStore: sendViewModel.balanceViewModel.settingsStore);
-        break;
-      case ExchangeProviderDescription.sideShift:
-        _provider = SideShiftExchangeProvider();
-        break;
-      case ExchangeProviderDescription.simpleSwap:
-        _provider = SimpleSwapExchangeProvider();
-        break;
       case ExchangeProviderDescription.trocador:
         _provider = TrocadorExchangeProvider();
-        break;
-      case ExchangeProviderDescription.exolix:
-        _provider = ExolixExchangeProvider();
-        break;
-      case ExchangeProviderDescription.swapTrade:
-        _provider = SwapTradeExchangeProvider();
-        break;
-      case ExchangeProviderDescription.stealthEx:
-        _provider = StealthExExchangeProvider();
-        break;
-      case ExchangeProviderDescription.thorChain:
-        _provider = ThorChainExchangeProvider();
-        break;
-      case ExchangeProviderDescription.chainflip:
-        _provider = ChainflipExchangeProvider();
-        break;
-      case ExchangeProviderDescription.xoSwap:
-        _provider = XOSwapExchangeProvider();
-        break;
-      case ExchangeProviderDescription.swapsXyz:
-        _provider = SwapsXyzExchangeProvider();
         break;
       case ExchangeProviderDescription.nearIntents:
         _provider = NearIntentsExchangeProvider();
@@ -195,7 +156,6 @@ abstract class ExchangeTradeViewModelBase with Store {
     output = sendViewModel.outputs.first;
     output.address = trade.inputAddress ?? '';
     output.setCryptoAmount(trade.amount);
-    if (_provider is ThorChainExchangeProvider) output.memo = trade.memo ?? "";
     if (trade.isSendAll == true) output.sendAll = true;
   }
 
@@ -211,19 +171,7 @@ abstract class ExchangeTradeViewModelBase with Store {
 
     sendViewModel.selectedCryptoCurrency = selected;
 
-    final pendingTransaction =
-        await sendViewModel.createTransaction(provider: _provider, trade: trade);
-
-    if (_provider is SwapsXyzExchangeProvider) {
-      final hash = pendingTransaction?.evmTxHashFromRawHex ?? pendingTransaction?.id ?? '';
-      trade.txId = hash;
-      await trade.save();
-    }
-
-    if (_provider is ThorChainExchangeProvider) {
-      trade.id = pendingTransaction?.id ?? '';
-      await trade.save();
-    }
+    await sendViewModel.createTransaction(provider: _provider, trade: trade);
   }
 
   @action

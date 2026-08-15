@@ -7,10 +7,8 @@ import 'package:hash_wallet/src/screens/dashboard/widgets/info_card.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
 import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
 import 'package:hash_wallet/src/widgets/dashboard_card_widget.dart';
-import 'package:hash_wallet/src/widgets/introducing_card.dart';
 import 'package:hash_wallet/src/widgets/standard_switch.dart';
 import 'package:hash_wallet/themes/core/theme_extension.dart';
-import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
 import 'package:cw_core/wallet_info.dart';
@@ -139,18 +137,6 @@ class CryptoBalanceWidget extends StatelessWidget {
                         ),
                       ],
                     )),
-          Observer(
-            builder: (_) {
-              if (dashboardViewModel.balanceViewModel.isShowCard && FeatureFlag.isCakePayEnabled) {
-                return IntroducingCard(
-                    title: S.of(context).introducing_cake_pay,
-                    subTitle: S.of(context).cake_pay_learn_more,
-                    borderColor: Theme.of(context).colorScheme.outline,
-                    closeCard: dashboardViewModel.balanceViewModel.disableIntroCakePayCard);
-              }
-              return Container();
-            },
-          ),
           Observer(builder: (_) {
             if (!dashboardViewModel.showRepWarning) {
               return const SizedBox();

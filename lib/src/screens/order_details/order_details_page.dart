@@ -1,6 +1,4 @@
-import 'package:hash_wallet/src/screens/order_details/cake_pay_detail_list_card_item.dart';
 import 'package:hash_wallet/src/screens/trade_details/trade_details_status_item.dart';
-import 'package:hash_wallet/src/widgets/cake_pay_order_list_card.dart';
 import 'package:hash_wallet/src/widgets/standard_list.dart';
 import 'package:hash_wallet/src/widgets/standard_list_status_row.dart';
 import 'package:hash_wallet/themes/core/material_base_theme.dart';
@@ -62,21 +60,6 @@ class OrderDetailsPageBodyState extends State<OrderDetailsPageBody> {
 
             if (item is DetailsListStatusItem) {
               return StandardListStatusRow(title: item.title, value: item.value);
-            }
-
-            if (item is CakePayDetailsListCardItem) {
-              final cardImagePath = (item.cards.isNotEmpty) ? item.cards.first.cardImagePath : null;
-
-              return CakePayOrderListCard(
-                id: item.id,
-                create: item.createdAt,
-                price: item.price,
-                quantity: item.quantity,
-                pair: '${item.from} → ${item.to}',
-                currentTheme: widget.currentTheme.type,
-                onTap: item.onTap,
-                backgroundImage: cardImagePath,
-              );
             }
 
             if (item is TrackTradeListItem) {

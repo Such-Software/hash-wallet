@@ -22,19 +22,6 @@ extension RecommendationTitle on ProviderRecommendation {
   }
 }
 
-ProviderRecommendation? getRecommendationFromString(String title) {
-  switch (title) {
-    case 'BEST RATE':
-      return ProviderRecommendation.bestRate;
-    case 'LowKyc':
-      return ProviderRecommendation.lowKyc;
-    case 'SuccessRate':
-      return ProviderRecommendation.successRate;
-    default:
-      return null;
-  }
-}
-
 class Quote extends SelectableOption {
   Quote({
     required this.rate,
@@ -135,69 +122,6 @@ class Quote extends SelectableOption {
 
   set setLimits(Limits limits) => this.limits = limits;
 
-  factory Quote.fromOnramperJson(Map<String, dynamic> json, bool isBuyAction,
-      Map<String, dynamic> metaData, PaymentType paymentType, String? customPaymentMethodType) {
-    final rate = _toDouble(json['rate']) ?? 0.0;
-    final networkFee = _toDouble(json['networkFee']) ?? 0.0;
-    final transactionFee = _toDouble(json['transactionFee']) ?? 0.0;
-    final feeAmount = double.parse((networkFee + transactionFee).toStringAsFixed(2));
-
-    final rampId = json['ramp'] as String? ?? '';
-    final rampData = metaData[rampId] ?? {};
-    final rampName = rampData['displayName'] as String? ?? '';
-    final rampIconPath = rampData['svg'] as String? ?? '';
-
-    final recommendations = json['recommendations'] != null
-        ? List<String>.from(json['recommendations'] as List<dynamic>)
-        : <String>[];
-
-    final enumRecommendations = recommendations
-        .map((e) => getRecommendationFromString(e))
-        .whereType<ProviderRecommendation>()
-        .toList();
-
-    final availablePaymentMethods = json['availablePaymentMethods'] as List<dynamic>? ?? [];
-    double minLimit = 0.0;
-    double maxLimit = double.infinity;
-
-    for (var paymentMethod in availablePaymentMethods) {
-      if (paymentMethod is Map<String, dynamic>) {
-        final details = paymentMethod['details'] as Map<String, dynamic>?;
-
-        if (details != null) {
-          final limits = details['limits'] as Map<String, dynamic>?;
-
-          if (limits != null && limits.isNotEmpty) {
-            final firstLimitEntry = limits.values.first as Map<String, dynamic>?;
-            if (firstLimitEntry != null) {
-              minLimit = _toDouble(firstLimitEntry['min'])?.roundToDouble() ?? 0.0;
-              maxLimit = _toDouble(firstLimitEntry['max'])?.roundToDouble() ?? double.infinity;
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    return Quote(
-      rate: rate,
-      feeAmount: feeAmount,
-      networkFee: networkFee,
-      transactionFee: transactionFee,
-      payout: json['payout'] as double? ?? 0.0,
-      rampId: rampId,
-      rampName: rampName,
-      rampIconPath: rampIconPath,
-      paymentType: paymentType,
-      customPaymentMethodType: customPaymentMethodType,
-      quoteId: json['quoteId'] as String? ?? '',
-      recommendations: enumRecommendations,
-      provider: ProvidersHelper.getProviderByType(ProviderType.onramper),
-      isBuyAction: isBuyAction,
-      limits: Limits(min: minLimit, max: maxLimit),
-    );
-  }
-
   factory Quote.fromMoonPayJson(
       Map<String, dynamic> json, bool isBuyAction, PaymentType paymentType) {
     final rate = isBuyAction
@@ -231,92 +155,6 @@ class Quote extends SelectableOption {
       isBuyAction: isBuyAction,
       limits: Limits(min: minLimit, max: maxLimit),
     );
-  }
-
-  factory Quote.fromDFXJson(
-    Map<String, dynamic> json,
-    bool isBuyAction,
-    PaymentType paymentType,
-  ) {
-    final rate = _toDouble(json['exchangeRate']) ?? 0.0;
-    final fees = json['fees'] as Map<String, dynamic>;
-
-    final minVolume = _toDouble(json['minVolume']) ?? 0.0;
-    final maxVolume = _toDouble(json['maxVolume']) ?? double.infinity;
-
-    return Quote(
-      rate: isBuyAction ? rate : 1 / rate,
-      feeAmount: _toDouble(json['feeAmount']) ?? 0.0,
-      networkFee: _toDouble(fees['network']) ?? 0.0,
-      transactionFee: _toDouble(fees['rate']) ?? 0.0,
-      payout: _toDouble(json['payout']) ?? 0.0,
-      paymentType: paymentType,
-      recommendations: [ProviderRecommendation.lowKyc],
-      provider: ProvidersHelper.getProviderByType(ProviderType.dfx),
-      isBuyAction: isBuyAction,
-      limits: Limits(min: minVolume, max: maxVolume),
-    );
-  }
-
-  factory Quote.fromRobinhoodJson(
-      Map<String, dynamic> json, bool isBuyAction, PaymentType paymentType) {
-    final networkFee = json['networkFee'] as Map<String, dynamic>;
-    final processingFee = json['processingFee'] as Map<String, dynamic>;
-    final networkFeeAmount = _toDouble(networkFee['fiatAmount']) ?? 0.0;
-    final transactionFeeAmount = _toDouble(processingFee['fiatAmount']) ?? 0.0;
-    final feeAmount = double.parse((networkFeeAmount + transactionFeeAmount).toStringAsFixed(2));
-
-    return Quote(
-      rate: _toDouble(json['price']) ?? 0.0,
-      feeAmount: feeAmount,
-      networkFee: _toDouble(networkFee['fiatAmount']) ?? 0.0,
-      transactionFee: _toDouble(processingFee['fiatAmount']) ?? 0.0,
-      payout: _toDouble(json['cryptoAmount']) ?? 0.0,
-      paymentType: paymentType,
-      recommendations: [],
-      provider: ProvidersHelper.getProviderByType(ProviderType.robinhood),
-      isBuyAction: isBuyAction,
-      limits: Limits(min: 0.0, max: double.infinity),
-    );
-  }
-
-  factory Quote.fromMeldJson(Map<String, dynamic> json, bool isBuyAction, PaymentType paymentType) {
-    final quotes = json['quotes'][0] as Map<String, dynamic>;
-    return Quote(
-      rate: quotes['exchangeRate'] as double? ?? 0.0,
-      feeAmount: quotes['totalFee'] as double? ?? 0.0,
-      networkFee: quotes['networkFee'] as double? ?? 0.0,
-      transactionFee: quotes['transactionFee'] as double? ?? 0.0,
-      payout: quotes['payout'] as double? ?? 0.0,
-      paymentType: paymentType,
-      recommendations: [],
-      provider: ProvidersHelper.getProviderByType(ProviderType.meld),
-      isBuyAction: isBuyAction,
-      limits: Limits(min: 0.0, max: double.infinity),
-    );
-  }
-
-  factory Quote.fromKryptonimJson(
-      Map<String, dynamic> json, bool isBuyAction, PaymentType paymentType) {
-    final fees = json['fees'] as Map<String, dynamic>;
-    // final rate = _toDouble(json['rate']) ?? 0.0;
-    final limits = json['limits'] as Map<String, dynamic>;
-    final minLimit = _toDouble(limits['min_amount']) ?? 0.0;
-    final maxLimit = _toDouble(limits['max_amount']) ?? double.infinity;
-    final convertedAmount = _toDouble(json['converted_amount']) ?? 0.0;
-    final amount = _toDouble(json['amount']) ?? 0.0;
-    final calculatedRate = amount / convertedAmount;
-    return Quote(
-        rate: calculatedRate,
-        feeAmount: _toDouble(fees['totalFee']) ?? 0.0,
-        networkFee: _toDouble(fees['network_fee']) ?? 0.0,
-        transactionFee: _toDouble(fees['operation_fee']) ?? 0.0,
-        payout: _toDouble(json['amount']) ?? 0.0,
-        paymentType: paymentType,
-        recommendations: [],
-        provider: ProvidersHelper.getProviderByType(ProviderType.kriptonim),
-        isBuyAction: isBuyAction,
-        limits: Limits(min: minLimit, max: maxLimit));
   }
 
   static double? _toDouble(dynamic value) {
