@@ -43,7 +43,6 @@ class EvmChainRegistry {
           'eth.llamarpc.com',
           'rpc.flashbots.net',
           'eth-mainnet.public.blastapi.io',
-          'eth.nownodes.io',
           'ethereum.publicnode.com',
         ],
         explorerUrls: [
@@ -77,7 +76,6 @@ class EvmChainRegistry {
           'polygon-rpc.com',
           'polygon-bor-rpc.publicnode.com',
           'polygon.llamarpc.com',
-          'matic.nownodes.io',
         ],
         explorerUrls: [
           'https://polygonscan.com',
@@ -107,7 +105,6 @@ class EvmChainRegistry {
           supportsENS: false,
         ),
         defaultRpcEndpoints: [
-          'base.nownodes.io',
           'base.llamarpc.com',
           'base-rpc.publicnode.com',
           '1rpc.io/base',
@@ -140,7 +137,6 @@ class EvmChainRegistry {
           supportsENS: false,
         ),
         defaultRpcEndpoints: [
-          'arbitrum.nownodes.io',
           'arbitrum.drpc.org',
           'arbitrum-one-rpc.publicnode.com',
         ],

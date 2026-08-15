@@ -1,6 +1,6 @@
 -
   uri: node.wownero.org:443
-  is_default: false
+  is_default: true
   useSSL: true
   isEnabledForAutoSwitching: true
 -
@@ -10,7 +10,7 @@
   isEnabledForAutoSwitching: true
 -
   uri: node3.monerodevs.org:34568
-  is_default: true
+  is_default: false
   useSSL: false
   isEnabledForAutoSwitching: true
 -

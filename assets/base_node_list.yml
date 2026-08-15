@@ -1,8 +1,4 @@
 -
-  uri: base.nownodes.io
-  useSSL: true
-  isEnabledForAutoSwitching: true
--
   uri: base.llamarpc.com
   useSSL: true
 -

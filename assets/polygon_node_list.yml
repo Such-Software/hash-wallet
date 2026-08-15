@@ -8,7 +8,5 @@
 -
   uri: polygon.llamarpc.com
   useSSL: true
--
-  uri: matic.nownodes.io
   useSSL: true
   isEnabledForAutoSwitching: true

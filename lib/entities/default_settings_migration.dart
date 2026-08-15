@@ -45,13 +45,13 @@ const nanoDefaultPowNodeUri = 'rpc.nano.to';
 const solanaDefaultNodeUri = 'solana-mainnet.core.chainstack.com';
 const tronDefaultNodeUri = 'api.trongrid.io';
 const newCakeWalletBitcoinUri = 'electrum.blockstream.info:50002';  // Hash Bags: default flipped to Blockstream
-const wowneroDefaultNodeUri = 'node3.monerodevs.org:34568';
+const wowneroDefaultNodeUri = 'node.wownero.org:443';
 const zanoDefaultNodeUri = '37.27.100.59:10500';
 const moneroWorldNodeUri = '.moneroworld.com';
 const decredDefaultUri = "default-spv-nodes";
 const dogecoinDefaultNodeUri = 'dogecoin.stackwallet.com:50022';
 const baseDefaultNodeUri = 'base-rpc.publicnode.com';
-const arbitrumDefaultNodeUri = 'arbitrum.nownodes.io';
+const arbitrumDefaultNodeUri = 'arbitrum-one-rpc.publicnode.com';
 const bscDefaultNodeUri = 'bsc-dataseed.bnbchain.org';
 
 Future<void> defaultSettingsMigration(
