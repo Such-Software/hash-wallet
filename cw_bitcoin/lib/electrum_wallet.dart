@@ -748,7 +748,7 @@ abstract class ElectrumWalletBase
     if (await checkIfMempoolAPIIsEnabled() && type == WalletType.bitcoin) {
       try {
         final response = await ProxyWrapper()
-            .get(clearnetUri: Uri.parse("https://mempool.cakewallet.com/api/v1/fees/recommended"))
+            .get(clearnetUri: Uri.parse("https://mempool.space/api/v1/fees/recommended"))
             .timeout(Duration(seconds: 15));
 
         final result = json.decode(response.body) as Map<String, dynamic>;
@@ -2292,7 +2292,7 @@ abstract class ElectrumWalletBase
           final blockHash = await ProxyWrapper()
               .get(
                 clearnetUri: Uri.parse(
-                  "https://mempool.cakewallet.com/api/v1/block-height/$height",
+                  "https://mempool.space/api/block-height/$height",
                 ),
               )
               .timeout(Duration(seconds: 15));
@@ -2303,7 +2303,7 @@ abstract class ElectrumWalletBase
             final blockResponse = await ProxyWrapper()
                 .get(
                   clearnetUri: Uri.parse(
-                    "https://mempool.cakewallet.com/api/v1/block/${blockHash.body}",
+                    "https://mempool.space/api/block/${blockHash.body}",
                   ),
                 )
                 .timeout(Duration(seconds: 15));
@@ -3137,7 +3137,7 @@ abstract class ElectrumWalletBase
         final blockHashResp = await ProxyWrapper()
             .get(
           clearnetUri: Uri.parse(
-            'https://mempool.cakewallet.com/api/v1/block-height/$h',
+            'https://mempool.space/api/block-height/$h',
           ),
         )
             .timeout(const Duration(seconds: 15));
@@ -3150,7 +3150,7 @@ abstract class ElectrumWalletBase
         final blockResp = await ProxyWrapper()
             .get(
           clearnetUri: Uri.parse(
-            'https://mempool.cakewallet.com/api/v1/block/$blockHash',
+            'https://mempool.space/api/block/$blockHash',
           ),
         )
             .timeout(const Duration(seconds: 15));
@@ -4086,7 +4086,7 @@ Future<void> _handleScanSilentPayments(ScanData scanData) async {
               // So, if blockDate exists, reuse
               if (isDateNow) {
                 try {
-                  final rootURL = "https://cake.mempool.space";
+                  final rootURL = "https://mempool.space";
                   final tweakBlockHash = await ProxyWrapper()
                       .get(clearnetUri: Uri.parse("$rootURL/api/block-height/$tweakHeight"))
                       .timeout(Duration(seconds: 15));

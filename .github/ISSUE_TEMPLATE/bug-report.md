@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Platform:**
  - OS: [e.g. iOS 15.1, Android 14]
  - Device: [e.g. iPhone 14, Galaxy S21]
- - Cake Wallet Version: [e.g. 4.12.1]
+ - Hash Bags Version: [e.g. 1.0.0]
 
 
 **Additional context**

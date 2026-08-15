@@ -22,22 +22,6 @@ class DomainLookupsPage extends BasePage {
           child: Column(
             children: [
               SettingsSwitcherCell(
-                  title: 'Twitter',
-                  value: _connectionsSyncViewModel.lookupTwitter,
-                  onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsTwitter(value)),
-              SettingsSwitcherCell(
-                  title: 'Mastodon',
-                  value: _connectionsSyncViewModel.looksUpMastodon,
-                  onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsMastodon(value)),
-              SettingsSwitcherCell(
-                  title: 'Yat service',
-                  value: _connectionsSyncViewModel.looksUpYatService,
-                  onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsYatService(value)),
-              SettingsSwitcherCell(
-                  title: 'Unstoppable Domains',
-                  value: _connectionsSyncViewModel.looksUpUnstoppableDomains,
-                  onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsUnstoppableDomains(value)),
-              SettingsSwitcherCell(
                   title: 'OpenAlias',
                   value: _connectionsSyncViewModel.looksUpOpenAlias,
                   onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsOpenAlias(value)),
@@ -49,12 +33,6 @@ class DomainLookupsPage extends BasePage {
                   title: '.well-known',
                   value: _connectionsSyncViewModel.looksUpWellKnown,
                   onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsWellKnown(value)),
-              SettingsSwitcherCell(
-                  title: 'Zano Aliases',
-                  value: _connectionsSyncViewModel.lookupsZanoAlias,
-                  onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsZanoAlias(value)),
-
-              //if (!isHaven) it does not work correctly
             ],
           ),
         );

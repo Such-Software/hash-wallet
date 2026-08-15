@@ -121,13 +121,13 @@ class TranslationChecker {
     required String destinationFile,
   }) {
     return '''
-You are a professional translator checking the accuracy of a translation for a cryptocurrency wallet called Cake Wallet.
+You are a professional translator checking the accuracy of a translation for a cryptocurrency wallet called Hash Bags.
 
 source file is: ${sourceFile}, destination file is: ${destinationFile}.
 
 Rules you must obey:
-- respect company branding and style (Cake Wallet, Cake Pay, Bird Pay and other brandings stay the same no matter the language)
-- be accurate and remember that Cake Wallet lets you hold cryptocurrency, so use words that are associated with cryptocurrency and wallets more preferably than words that are associated with banks.
+- respect company branding and style (the product name "Hash Bags" stays the same no matter the language; never introduce "Cake Wallet" or other third-party brand names)
+- be accurate and remember that Hash Bags lets you hold cryptocurrency, so use words that are associated with cryptocurrency and wallets more preferably than words that are associated with banks.
 - elements with \${value} should remain non-translated as they are used by codegen to dynamically insert the value.
 - make sure that the translation that you output improves the original translation, and doesn't change the meaning of it.
 - if original translation contains abbreviations, make sure to translate them as well, and do not expand them.

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective: July 2, 2026**
+**Effective: August 15, 2026**
 
 The canonical, always-current version of this policy is published at
 **https://hash.boats/privacy**. This file mirrors it for the source repository;
@@ -68,6 +68,27 @@ phrase still restores the wallet elsewhere.
 - **Price data.** The app fetches exchange rates from `prices.neroswap.com`, a
   service we operate that aggregates public sources. It sees your IP and the
   currencies you display — not your addresses or balances.
+- **Bitcoin fee and block data.** For Bitcoin wallets, the app queries the
+  public `mempool.space` API for recommended fee rates and block timestamps.
+  It sees your IP and the block heights queried — not your addresses or
+  transactions. This is on by default and can be turned off in settings.
+- **Name lookups.** If you type a human-readable name instead of an address,
+  the app can resolve it. Every resolver is limited to infrastructure implied
+  by the name itself, and each can be toggled in Settings → Domain lookups:
+  OpenAlias and BIP-353 query DNS; `.well-known` and Lightning-address
+  lookups contact the domain in the identifier you typed; ENS (`.eth` names)
+  queries the public Ethereum RPC at `ethereum-rpc.publicnode.com`. Hash Bags
+  does not send what you type to social networks or third-party identity
+  services.
+- **Silent Payments scanning (opt-in, Bitcoin).** If you enable Silent
+  Payments, scanning uses a compatible Electrum server (the current default,
+  `electrs.cakewallet.com`, is operated by Cake Labs, a third party). That
+  server sees your IP and the block ranges you scan — not your keys. You can
+  point it at your own server in settings.
+- **Payjoin (opt-in, Bitcoin, off by default).** If you enable Payjoin,
+  traffic is relayed through an oblivious-HTTP relay chosen from a small
+  public pool (currently operated by bobspacebkk.com, achow101.com, and
+  Cake Labs). The relay sees your IP but not the transaction contents.
 - **Trocador (swaps).** When you start a swap, order details (input/output coin,
   amount, receiving address) are sent to Trocador's API. Trocador is an
   independent controller with its own policy at

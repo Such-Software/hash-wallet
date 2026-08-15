@@ -29,7 +29,6 @@ import 'package:hash_wallet/core/totp_request_details.dart';
 import 'package:hash_wallet/core/trade_monitor.dart';
 import 'package:hash_wallet/core/wallet_creation_service.dart';
 import 'package:hash_wallet/core/wallet_loading_service.dart';
-import 'package:hash_wallet/core/yat_service.dart';
 import 'package:hash_wallet/entities/biometric_auth.dart';
 import 'package:hash_wallet/entities/bridge_transfer.dart';
 import 'package:hash_wallet/entities/contact.dart';
@@ -1580,10 +1579,7 @@ Future<void> setup({
             param1: item, param2: unspentCoinsListViewModel));
   });
 
-  getIt.registerFactory(() => YatService());
-
   getIt.registerFactory(() => AddressResolver(
-      yatService: getIt.get<YatService>(),
       wallet: getIt.get<AppStore>().wallet!,
       settingsStore: getIt.get<SettingsStore>()));
 
