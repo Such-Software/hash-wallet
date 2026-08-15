@@ -41,10 +41,6 @@
         <dict>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
             <key>CFBundleURLName</key>
             <string>bitcoin</string>
             <key>CFBundleURLSchemes</key>

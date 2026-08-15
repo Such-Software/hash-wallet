@@ -14,8 +14,14 @@ Future<Uint8List> secRandom(int count) async {
       final rng = Random.secure();
       return Uint8List.fromList(List<int>.generate(count, (_) => rng.nextInt(byteSize)));
     }
-    return await utils.invokeMethod<Uint8List>('sec_random', {'count': count}) ?? Uint8List.fromList([]);
-  } on PlatformException catch (_) {
-    return Uint8List.fromList([]);
+    final bytes = await utils.invokeMethod<Uint8List>('sec_random', {'count': count});
+    if (bytes == null || bytes.length != count) {
+      throw StateError('sec_random returned ${bytes?.length ?? 0} bytes, expected $count');
+    }
+    return bytes;
+  } on PlatformException catch (e) {
+    // Never fail open: an entropy source that cannot deliver must throw,
+    // not hand back an empty buffer for key material.
+    throw StateError('sec_random platform call failed: ${e.message}');
   }
 }

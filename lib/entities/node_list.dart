@@ -82,6 +82,7 @@ Future<List<Node>> loadDefaultNanoPowNodes() async {
 }
 
 Future<void> resetToDefault(Box<Node> nodeSource) async {
+  final wowneroNodes = await loadDefaultNodes(WalletType.wownero);
   final moneroNodes = await loadDefaultNodes(WalletType.monero);
   final bitcoinElectrumServerList = await loadDefaultNodes(WalletType.bitcoin);
   final litecoinElectrumServerList = await loadDefaultNodes(WalletType.litecoin);
@@ -94,7 +95,8 @@ Future<void> resetToDefault(Box<Node> nodeSource) async {
   final arbitrumNodes = await loadDefaultNodes(WalletType.arbitrum);
   final bscNodes = await loadDefaultNodes(WalletType.bsc);
 
-  final nodes = moneroNodes +
+  final nodes = wowneroNodes +
+      moneroNodes +
       bitcoinElectrumServerList +
       litecoinElectrumServerList +
       ethereumNodes +

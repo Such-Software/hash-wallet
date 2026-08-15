@@ -389,7 +389,7 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
       case WalletType.monero:
         return monero!.getCurrentAccount(wallet).label;
       case WalletType.wownero:
-        wownero!.getCurrentAccount(wallet).label;
+        return wownero!.getCurrentAccount(wallet).label;
       default:
         return '';
     }

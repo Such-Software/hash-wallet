@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
@@ -223,9 +224,35 @@ abstract class WowneroWalletBase
 
       wownero_wallet.setTrustedDaemon(node.trusted);
       syncStatus = ConnectedSyncStatus();
+      unawaited(_updateBaseFeeEstimate(node));
     } catch (e) {
       syncStatus = FailedSyncStatus();
       printV(e);
+    }
+  }
+
+  Future<void> _updateBaseFeeEstimate(Node node) async {
+    try {
+      final rpcUri = node.isSSL
+          ? Uri.https(node.uri.authority, '/json_rpc')
+          : Uri.http(node.uri.authority, '/json_rpc');
+      final client = ProxyWrapper().getHttpIOClient();
+      final response = await client
+          .post(rpcUri,
+              headers: {'Content-Type': 'application/json'},
+              body: json.encode({'jsonrpc': '2.0', 'id': '0', 'method': 'get_fee_estimate'}))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return;
+
+      final result =
+          (json.decode(response.body) as Map<String, dynamic>)['result'] as Map<String, dynamic>?;
+      final feePerByte = result?['fee'] as int?;
+      if (feePerByte != null && feePerByte > 0) {
+        _cachedBaseFeePerByte = feePerByte;
+      }
+    } catch (e) {
+      printV('get_fee_estimate failed, keeping fallback fee table: $e');
     }
   }
 
@@ -352,11 +379,26 @@ abstract class WowneroWalletBase
     return PendingWowneroTransaction(pendingTransactionDescription);
   }
 
+  // Base fee per byte in atomic units, fetched from the connected daemon's
+  // get_fee_estimate RPC. Null until the first successful fetch.
+  int? _cachedBaseFeePerByte;
+
+  // Typical 2-in/2-out ring-22 transaction weight. Only used for the
+  // pre-confirmation estimate; the real fee comes from wallet2 when the
+  // transaction is built.
+  static const _estimatedTxWeightBytes = 2300;
+
   @override
   int calculateEstimatedFee(TransactionPriority priority, int? amount) {
-    // FIXME: hardcoded value;
-
     if (priority is MoneroTransactionPriority) {
+      final baseFeePerByte = _cachedBaseFeePerByte;
+      if (baseFeePerByte != null) {
+        return baseFeePerByte * _estimatedTxWeightBytes * _feeMultiplier(priority);
+      }
+
+      // Fallback while no daemon estimate is available yet. Inherited from
+      // upstream and calibrated for XMR, not WOW — kept only so the send
+      // screen shows something before get_fee_estimate returns.
       switch (priority) {
         case MoneroTransactionPriority.slow:
           return 24590000;
@@ -372,6 +414,23 @@ abstract class WowneroWalletBase
     }
 
     return 0;
+  }
+
+  int _feeMultiplier(MoneroTransactionPriority priority) {
+    switch (priority) {
+      case MoneroTransactionPriority.slow:
+        return 1;
+      case MoneroTransactionPriority.automatic:
+        return 5;
+      case MoneroTransactionPriority.medium:
+        return 10;
+      case MoneroTransactionPriority.fast:
+        return 25;
+      case MoneroTransactionPriority.fastest:
+        return 1000;
+      default:
+        return 5;
+    }
   }
 
   @override
