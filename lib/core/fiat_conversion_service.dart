@@ -4,12 +4,12 @@ import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'dart:convert';
 
 // Hash Bags price endpoint. Backed by the Cloudflare Worker in
-// github.com/Such-Software/hash-wallet-prices — Kraken for majors, NonKYC for
-// WOW, KV-cached every 60s.
+// github.com/Such-Software/hash-wallet-prices: Kraken for majors, Nonlogs +
+// volume-weighted CexSwap for WOW, KV-cached every 60s.
 //
-// USD-only. The wallet still lets the user pick other fiats from the UI, but
-// non-USD requests will return price=0 until forex conversion is added on the
-// server side.
+// Non-USD fiats are converted server-side through ECB daily reference rates
+// (since 2026-08-16). An unknown quote currency returns price=0 and the UI
+// shows the existing "price unavailable" fallback.
 //
 // TODO: add a .onion mirror once we deploy a Tor hidden service and update
 // _fiatApiOnionAuthority — Tor users currently fall back to clearnet.
