@@ -271,9 +271,14 @@ class AccountPreviewHeader extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      monero?.getCurrentAccount(dashboardViewModel.wallet).label ??
-                          wownero?.getCurrentAccount(dashboardViewModel.wallet).label ??
-                          "",
+                      // Dispatch by wallet type: the null-aware operator only
+                      // guards plugin presence, so monero?. on a Wownero
+                      // wallet still executes CWMonero's cast and throws.
+                      dashboardViewModel.wallet.type == WalletType.monero
+                          ? monero?.getCurrentAccount(dashboardViewModel.wallet).label ?? ""
+                          : dashboardViewModel.wallet.type == WalletType.wownero
+                              ? wownero?.getCurrentAccount(dashboardViewModel.wallet).label ?? ""
+                              : "",
                       style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary),
                     ),
                     Text(
