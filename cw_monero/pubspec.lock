@@ -50,7 +50,7 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: HEAD
+      ref: "05755063b593aa6cca0a4820a318e0ce17de6192"
       resolved-ref: "05755063b593aa6cca0a4820a318e0ce17de6192"
       url: "https://github.com/cake-tech/bech32.git"
     source: git
@@ -172,7 +172,7 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: main
+      ref: "3aba867dcab6737f6707782f5db15d71f303db38"
       resolved-ref: "3aba867dcab6737f6707782f5db15d71f303db38"
       url: "https://github.com/cake-tech/cake_backup.git"
     source: git

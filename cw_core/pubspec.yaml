@@ -22,7 +22,7 @@ dependencies:
   cake_backup:
     git:
       url: https://github.com/cake-tech/cake_backup.git
-      ref: main
+      ref: 3aba867dcab6737f6707782f5db15d71f303db38
       version: 1.0.0
   socks5_proxy:
     git:
@@ -48,6 +48,7 @@ dependencies:
   bech32:
     git:
       url: https://github.com/cake-tech/bech32.git
+      ref: 05755063b593aa6cca0a4820a318e0ce17de6192
   sqlite3_flutter_libs: 0.5.40
 
 dev_dependencies:
