@@ -82,6 +82,12 @@ jobs:
           flutter pub get
           dart run tool/generate_new_secrets.dart
 
+      - name: Generate models and localization
+        run: |
+          set -e
+          bash model_generator.sh
+          dart run tool/generate_localization.dart
+
       - name: flutter analyze (errors are fatal, existing warnings are not)
         run: flutter analyze lib --no-fatal-infos --no-fatal-warnings
 
