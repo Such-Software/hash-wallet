@@ -67,8 +67,20 @@ jobs:
             ./build_bitbox_flutter.sh
           popd
 
-      - name: flutter pub get
-        run: flutter pub get
+      # pubspec.yaml, the cw_* wiring in it, wallet_types.g.dart, and the
+      # .secrets.g.dart files are all GENERATED and untracked; a bare
+      # `flutter pub get` on a fresh checkout can never succeed. Mirror the
+      # build lanes' generation sequence (empty secrets are fine for tests).
+      - name: Generate workspace (pubspec, coin modules, empty secrets)
+        run: |
+          set -x -e
+          cp pubspec_description.yaml pubspec.yaml
+          flutter pub get
+          dart run tool/generate_pubspec.dart
+          flutter pub get
+          dart run tool/configure.dart --monero --bitcoin --ethereum --polygon --nano --bitcoinCash --wownero --dogecoin --base --arbitrum --bsc
+          flutter pub get
+          dart run tool/generate_new_secrets.dart
 
       - name: flutter analyze (errors are fatal, existing warnings are not)
         run: flutter analyze lib --no-fatal-infos --no-fatal-warnings
