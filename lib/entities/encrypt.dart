@@ -71,19 +71,28 @@ String decodeWalletPassword({required String password}) {
 // self-heals on its first successful unlock. A wrong key can slip past
 // PKCS7 unpadding (~0.4%), so decoded output is validated before acceptance.
 
-// 32-hex `key` candidates (PIN blobs). Includes every plausible constant from
-// the 1.0.1 Android string table; wrong entries fail validation harmlessly.
+// 32-hex `key` candidates (PIN blobs), recovered from the shipped Android
+// binaries' string tables. Values present in BOTH binaries are library
+// constants and excluded; wrong entries fail validation harmlessly.
 const _legacyPinKeys = [
+  // 1.0.0 (Play build 9/10)
+  '0412c5758f2daac3937a67f4254ba23b',
+  '78bcd8e2ae16cd49fdff3a4b15f94a24',
+  'd3fa832318c19c65a706032eb5bf3c38',
+  // 1.0.1 (Play build 11)
   '51f918406bc771b5827e2479ce24dae0',
-  '5a0e830aa102994045c19a4fef0d3156',
   '76d489cc1eb5704e6e4bea65bb2618b3',
   'bba3031d10f37f741c9bcd2b26227cba',
-  'd6031998d1b3bbfebf59cc9bbff9aee1',
-  '5eeefca380d02919dc2c6558bb6d8a5d',
 ];
 
-// shortKey+walletSalt concatenations (wallet-password blobs), 1.0.1 Android.
+// shortKey+walletSalt concatenations (wallet-password blobs).
 const _legacyWalletPasswordKeys = [
+  // 1.0.0 (2 shortKey x 2 walletSalt candidates)
+  '18cfc5c2438f9db902ade81f96b5ee0b',
+  '18cfc5c2438f9db902ade81fa70fe053',
+  '98cc2fc78b56148a67fa442b96b5ee0b',
+  '98cc2fc78b56148a67fa442ba70fe053',
+  // 1.0.1
   'b77ed95e692db912ff0463821f37e159',
   'be2a818b190ab41010f0e2871f37e159',
 ];
