@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:encrypt/encrypt.dart';
 // import 'package:password/password.dart';
 import 'package:hash_wallet/.secrets.g.dart' as secrets;
@@ -108,12 +110,28 @@ String? _tryDecrypt({required String source, required String key}) {
   }
 }
 
+// A wallet password is generateKey() output: base64(512-byte key) +
+// base64(8-byte iv) = 696 base64 chars. Validate against that exact shape so a
+// wrong AES key (which could unpad to arbitrary printable bytes) cannot be
+// re-saved as a bogus password. base64.decode round-trips to the exact byte
+// lengths, which is astronomically unlikely for a false PKCS7 hit.
+bool _looksLikeWalletPassword(String s) {
+  if (s.length != 696) return false;
+  try {
+    final key = base64.decode(s.substring(0, s.length - 12));
+    final iv = base64.decode(s.substring(s.length - 12));
+    return key.length == 512 && iv.length == 8;
+  } catch (_) {
+    return false;
+  }
+}
+
 /// Decode a stored wallet password written by a build with rotated secrets.
 /// Returns null when no legacy key fits.
 String? decodeWalletPasswordLegacy({required String password}) {
   for (final key in _legacyWalletPasswordKeys) {
     final decrypted = _tryDecrypt(source: password, key: key);
-    if (decrypted != null) return decrypted;
+    if (decrypted != null && _looksLikeWalletPassword(decrypted)) return decrypted;
   }
   return null;
 }
