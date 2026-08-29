@@ -221,6 +221,42 @@ jobs:
       - name: Generate per-module secrets.g.dart files (all empty defaults)
         run: dart run tool/generate_new_secrets.dart
 
+
+      - name: Pin crypto secrets (never ship random salts)
+        env:
+          CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
+          CRYPTO_KEYCHAIN_SALT: ${{ secrets.CRYPTO_KEYCHAIN_SALT }}
+          CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+          CRYPTO_WALLET_SALT: ${{ secrets.CRYPTO_WALLET_SALT }}
+          CRYPTO_SHORT_KEY: ${{ secrets.CRYPTO_SHORT_KEY }}
+          CRYPTO_BACKUP_SALT: ${{ secrets.CRYPTO_BACKUP_SALT }}
+          CRYPTO_BACKUP_KEYCHAIN_SALT: ${{ secrets.CRYPTO_BACKUP_KEYCHAIN_SALT }}
+          CRYPTO_WALLET_GROUP_SALT: ${{ secrets.CRYPTO_WALLET_GROUP_SALT }}
+        run: |
+          set -e
+          # generate_new_secrets.dart mints RANDOM salts each run. Shipping
+          # those breaks decryption of everything the previous build stored
+          # (2026-08-29 "Corrupted seeds" incident). Overwrite with the pinned
+          # values and refuse to build if any is missing.
+          for v in CRYPTO_SALT CRYPTO_KEYCHAIN_SALT CRYPTO_KEY CRYPTO_WALLET_SALT CRYPTO_SHORT_KEY CRYPTO_BACKUP_SALT CRYPTO_BACKUP_KEYCHAIN_SALT CRYPTO_WALLET_GROUP_SALT; do
+            eval "val=\${$v:-}"
+            [ -n "$val" ] || { echo "FATAL: $v is empty — refusing to ship random crypto secrets"; exit 1; }
+          done
+          sed -i.bak \
+            -e "s|const salt = '.*';|const salt = '${CRYPTO_SALT}';|" \
+            -e "s|const keychainSalt = '.*';|const keychainSalt = '${CRYPTO_KEYCHAIN_SALT}';|" \
+            -e "s|const key = '.*';|const key = '${CRYPTO_KEY}';|" \
+            -e "s|const walletSalt = '.*';|const walletSalt = '${CRYPTO_WALLET_SALT}';|" \
+            -e "s|const shortKey = '.*';|const shortKey = '${CRYPTO_SHORT_KEY}';|" \
+            -e "s|const backupSalt = '.*';|const backupSalt = '${CRYPTO_BACKUP_SALT}';|" \
+            -e "s|const backupKeychainSalt = '.*';|const backupKeychainSalt = '${CRYPTO_BACKUP_KEYCHAIN_SALT}';|" \
+            -e "s|const walletGroupSalt = '.*';|const walletGroupSalt = '${CRYPTO_WALLET_GROUP_SALT}';|" \
+            lib/.secrets.g.dart
+          rm -f lib/.secrets.g.dart.bak
+          for c in salt keychainSalt key walletSalt shortKey backupSalt backupKeychainSalt walletGroupSalt; do
+            grep -qE "^const $c = '[0-9a-f]{8,}';" lib/.secrets.g.dart || { echo "FATAL: $c not pinned"; exit 1; }
+          done
+          echo "crypto secrets pinned (values not printed)"
       - name: Inject Trocador affiliate secrets
         env:
           TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}

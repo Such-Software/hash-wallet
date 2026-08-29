@@ -43,7 +43,19 @@ class KeyService {
           'restore this wallet from its seed.');
     }
 
-    return decodeWalletPassword(password: encodedPassword);
+    try {
+      return decodeWalletPassword(password: encodedPassword);
+    } catch (e) {
+      // Legacy-build fallback: blobs written by a build whose generated
+      // crypto secrets differed (pre-1.0.2 CI rotated them every build).
+      // On success, re-encode under the current key so this install heals.
+      final legacy = decodeWalletPasswordLegacy(password: encodedPassword);
+      if (legacy != null) {
+        await saveWalletPassword(walletName: walletName, password: legacy);
+        return legacy;
+      }
+      rethrow;
+    }
   }
 
   Future<void> saveWalletPassword({required String walletName, required String password}) async {

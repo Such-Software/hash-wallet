@@ -89,9 +89,28 @@ class AuthService with Store {
   Future<bool> authenticate(String pin) async {
     final regularKey = generateStoreKeyFor(key: SecretStoreKey.pinCodePassword);
     final encodedRegularPin = await secureStorage.read(key: regularKey);
-    final decodedRegularPin = decodedPinCode(pin: encodedRegularPin!);
+    if (encodedRegularPin == null) {
+      return false;
+    }
+
+    String? decodedRegularPin;
+    try {
+      decodedRegularPin = decodedPinCode(pin: encodedRegularPin);
+    } catch (e) {
+      printV("Primary pin decode failed (legacy-build blob?): $e");
+    }
 
     if (decodedRegularPin == pin) {
+      return true;
+    }
+
+    // Legacy-build fallback: the stored blob was encrypted by a build whose
+    // generated crypto secrets differed (pre-1.0.2 CI rotated them every
+    // build). If a legacy key decodes to the entered PIN, accept it and
+    // re-encode the blob under the current key so this install heals.
+    final legacyDecodedPin = decodedPinCodeLegacy(pin: encodedRegularPin);
+    if (legacyDecodedPin != null && legacyDecodedPin == pin) {
+      await secureStorage.write(key: regularKey, value: encodedPinCode(pin: pin));
       return true;
     }
 
@@ -106,6 +125,7 @@ class AuthService with Store {
       } catch (e) {
         printV("Failed to decode duress pin: $e");
       }
+      decodedDuressPin ??= decodedPinCodeLegacy(pin: encodedDuressPin);
     }
 
     if (decodedDuressPin == pin) {
