@@ -1,1 +1,4 @@
 lib*_wallet2_api_c.so
+
+# embedded Wownero node daemon (provisioned at build time, like the wallet libs)
+libwownerod.so

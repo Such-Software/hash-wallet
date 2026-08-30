@@ -24,6 +24,7 @@ import java.security.SecureRandom;
 
 public class MainActivity extends FlutterFragmentActivity {
     final String UTILS_CHANNEL = "com.cake_wallet/native_utils";
+    final String NODE_CHANNEL = "cash.hashbags/embedded_node";
     boolean isAppSecure = false;
 
     @Override
@@ -35,6 +36,50 @@ public class MainActivity extends FlutterFragmentActivity {
                         UTILS_CHANNEL);
 
         utilsChannel.setMethodCallHandler(this::handle);
+
+        MethodChannel nodeChannel =
+                new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(),
+                        NODE_CHANNEL);
+
+        nodeChannel.setMethodCallHandler(this::handleNode);
+    }
+
+    private void handleNode(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        try {
+            switch (call.method) {
+                case "start": {
+                    Boolean pruned = call.argument("pruned");
+                    boolean ok = EmbeddedNode.start(getApplicationContext(), pruned == null || pruned);
+                    handler.post(() -> result.success(ok));
+                    break;
+                }
+                case "stop":
+                    EmbeddedNode.stop();
+                    handler.post(() -> result.success(null));
+                    break;
+                case "progress": {
+                    long[] p = EmbeddedNode.progress();
+                    java.util.HashMap<String, Object> m = new java.util.HashMap<>();
+                    m.put("running", p[0] == 1);
+                    m.put("height", p[1]);
+                    m.put("targetHeight", p[2]);
+                    m.put("synced", p[3] == 1);
+                    handler.post(() -> result.success(m));
+                    break;
+                }
+                case "rpcPort":
+                    handler.post(() -> result.success(EmbeddedNode.RPC_PORT));
+                    break;
+                case "logs":
+                    handler.post(() -> result.success(EmbeddedNode.logs()));
+                    break;
+                default:
+                    handler.post(() -> result.notImplemented());
+            }
+        } catch (Exception e) {
+            handler.post(() -> result.error("EMBEDDED_NODE_ERROR", e.getMessage(), null));
+        }
     }
 
     private void handle(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
