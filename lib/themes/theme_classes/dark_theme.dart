@@ -14,7 +14,7 @@ class DarkTheme extends MaterialThemeBase {
   //  - Primary: mint (#7FCAA0) — light enough to read on dark surface
   //  - Secondary: soft pink (#E16FA6)
   //  - Tertiary: soft blue (#6AB7E6)
-  //  - Surface: deep green (#0B1F14)
+  //  - Surface: deep green (#10281B) — lifted slightly from #0B1F14 (too dark)
   @override
   Color get primaryColor => const Color(0xFF7FCAA0);
 
@@ -25,7 +25,7 @@ class DarkTheme extends MaterialThemeBase {
   Color get errorColor => const Color(0xFFFFB4AB);
 
   @override
-  Color get surfaceColor => const Color(0xFF0B1F14);
+  Color get surfaceColor => const Color(0xFF10281B);
 
   @override
   Color get tertiaryColor => const Color(0xFF6AB7E6);
