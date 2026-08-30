@@ -8,5 +8,4 @@
 -
   uri: polygon.llamarpc.com
   useSSL: true
-  useSSL: true
   isEnabledForAutoSwitching: true
