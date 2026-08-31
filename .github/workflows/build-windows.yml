@@ -445,6 +445,66 @@ jobs:
           cp -v "$REDIST_DIR/msvcp140.dll" "$REDIST_DIR/vcruntime140.dll" "$REDIST_DIR/vcruntime140_1.dll" \
             build/windows/x64/runner/Release/
 
+      # ---- Authenticode sign the launcher ----------------------------------
+      # This workflow already runs on the machine with the EV code-signing
+      # token in it, but the runner (NT SERVICE\act_runner) cannot use the
+      # token: SafeNet holds the login per user and an operator establishes it
+      # interactively. So the exe is queued for the Fleet-installed signing
+      # broker (such-fleet roles/windows_code_signing), which signs it in the
+      # operator's session. CI never holds the key or the token password, so it
+      # cannot spend one of the token's three password attempts.
+      #
+      # Only HashWallet.exe is signed. The bundled MSVC runtime DLLs are
+      # already Microsoft-signed and must not be re-signed, and the plugin DLLs
+      # are loaded by an already-trusted process -- it is the launcher the user
+      # double-clicks that SmartScreen judges.
+      - name: Sign HashWallet.exe with the hardware token
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $release = "build\windows\x64\runner\Release"
+          $exe     = Join-Path $release 'HashWallet.exe'
+          if (-not (Test-Path $exe)) { throw "no HashWallet.exe at $exe" }
+
+          if (Test-Path 'C:\signing\SIGNING_LOCKED') {
+            Get-Content 'C:\signing\SIGNING_LOCKED'
+            throw "The signing broker's circuit breaker is tripped. An operator must clear it."
+          }
+
+          $queued  = "hashbags-$env:GITHUB_RUN_ID.exe"
+          $inPath  = "C:\signing\in\$queued"
+          $outPath = "C:\signing\out\$queued"
+          Copy-Item $exe $inPath -Force
+          Set-Content -LiteralPath "$inPath.ready" -Value $env:GITHUB_RUN_ID
+          Write-Host "queued $queued"
+
+          $deadline = (Get-Date).AddMinutes(10)
+          while ((Get-Date) -lt $deadline) {
+            if (Test-Path "$outPath.done") { break }
+            if (Test-Path 'C:\signing\SIGNING_LOCKED') {
+              Get-Content 'C:\signing\SIGNING_LOCKED'
+              throw "The broker tripped its circuit breaker while signing this artifact."
+            }
+            Start-Sleep -Seconds 5
+          }
+          if (-not (Test-Path "$outPath.done")) { throw "Timed out waiting for the signing broker." }
+
+          Move-Item $outPath $exe -Force
+          Remove-Item "$outPath.done" -Force -ErrorAction SilentlyContinue
+
+          # Verify on the binary that actually ships. A bad signature or a
+          # missing timestamp blocks the release.
+          $sig = Get-AuthenticodeSignature $exe
+          $sig | Format-List Status, StatusMessage,
+            @{n='Signer';e={$_.SignerCertificate.Subject}},
+            @{n='TimeStamper';e={$_.TimeStamperCertificate.Subject}}
+          if ($sig.Status -ne 'Valid') { throw "Authenticode status is $($sig.Status)" }
+          if (-not $sig.TimeStamperCertificate) { throw "Signature carries no RFC 3161 timestamp" }
+          if ($sig.SignerCertificate.Subject -notmatch 'Such Software LLC') {
+            throw "Unexpected signer: $($sig.SignerCertificate.Subject)"
+          }
+          Write-Host "SHA256 $((Get-FileHash $exe -Algorithm SHA256).Hash)"
+
       # ---- Package + upload ------------------------------------------------
       - name: List built artifacts (for debug visibility)
         run: |
