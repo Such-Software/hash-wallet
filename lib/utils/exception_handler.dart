@@ -103,7 +103,17 @@ class ExceptionHandler {
       // don't bother trimming here.
       await Clipboard.setData(ClipboardData(text: fullBody));
 
-      final uri = Uri.parse(_reportUrl);
+      // Carry the build in the URL as well as in the pasted body. A report is
+      // only useful if we can tell which binary produced it, and the body is
+      // the one part of this flow we do not control: on 2026-09-17 somebody
+      // typed a sentence into the trace box instead of pasting, and the report
+      // arrived with no version, no platform and no stack. The query string
+      // survives that, because the form reads it rather than the user.
+      final packageInfo = await PackageInfo.fromPlatform();
+      final uri = Uri.parse(_reportUrl).replace(queryParameters: {
+        'v': '${packageInfo.version}+${packageInfo.buildNumber}',
+        'p': _platformName(),
+      });
       final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (!launched) {
         printV('Could not open report URL: $uri');
@@ -318,6 +328,15 @@ class ExceptionHandler {
     "support for coin removed, your seedphrase:"
   ];
 
+  static String _platformName() {
+    if (Platform.isAndroid) return 'Android';
+    if (Platform.isIOS) return 'iOS';
+    if (Platform.isLinux) return 'Linux';
+    if (Platform.isMacOS) return 'macOS';
+    if (Platform.isWindows) return 'Windows';
+    return 'unknown';
+  }
+
   static Future<void> _addDeviceInfo(File file) async {
     final packageInfo = await PackageInfo.fromPlatform();
     final currentVersion = packageInfo.version;
@@ -344,8 +363,12 @@ class ExceptionHandler {
       deviceInfo["Platform"] = "Windows";
     }
 
+    // The build number matters as much as the version: 1.0.0 shipped as Play
+    // builds 9 and 10, which encrypted under different keys, so "1.0.0" alone
+    // cannot tell us which binary wrote a wallet we are being asked to heal.
     await file.writeAsString(
-      "App Version: $currentVersion\nApp Name: $appName\nPackage: $package\n\nDevice Info $deviceInfo\n\n",
+      "App Version: $currentVersion+${packageInfo.buildNumber}\n"
+      "App Name: $appName\nPackage: $package\n\nDevice Info $deviceInfo\n\n",
       mode: FileMode.append,
     );
   }
