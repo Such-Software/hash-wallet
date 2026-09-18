@@ -18,13 +18,13 @@ case $APP_MACOS_TYPE in
 	ICON_512_PATH=`pwd`/../../assets/images/macos_icons/monero_macos_icons/monero_macos_512.png
 	ICON_1024_PATH=`pwd`/../../assets/images/macos_icons/monero_macos_icons/monero_macos_1024.png;;
 	"cakewallet")
-	ICON_16_PATH=`pwd`/../../assets/images/macos_icons/cakewallet_macos_icons/cakewallet_macos_16.png
-	ICON_32_PATH=`pwd`/../../assets/images/macos_icons/cakewallet_macos_icons/cakewallet_macos_32.png
-	ICON_64_PATH=`pwd`/../../assets/images/macos_icons/cakewallet_macos_icons/cakewallet_macos_64.png
-	ICON_128_PATH=`pwd`/../../assets/images/macos_icons/cakewallet_macos_icons/cakewallet_macos_128.png
-	ICON_256_PATH=`pwd`/../../assets/images/macos_icons/cakewallet_macos_icons/cakewallet_macos_256.png
-	ICON_512_PATH=`pwd`/../../assets/images/macos_icons/cakewallet_macos_icons/cakewallet_macos_512.png
-	ICON_1024_PATH=`pwd`/../../assets/images/macos_icons/cakewallet_macos_icons/cakewallet_macos_1024.png;;
+	ICON_16_PATH=`pwd`/../../assets/images/macos_icons/hashbags_macos_icons/hashbags_macos_16.png
+	ICON_32_PATH=`pwd`/../../assets/images/macos_icons/hashbags_macos_icons/hashbags_macos_32.png
+	ICON_64_PATH=`pwd`/../../assets/images/macos_icons/hashbags_macos_icons/hashbags_macos_64.png
+	ICON_128_PATH=`pwd`/../../assets/images/macos_icons/hashbags_macos_icons/hashbags_macos_128.png
+	ICON_256_PATH=`pwd`/../../assets/images/macos_icons/hashbags_macos_icons/hashbags_macos_256.png
+	ICON_512_PATH=`pwd`/../../assets/images/macos_icons/hashbags_macos_icons/hashbags_macos_512.png
+	ICON_1024_PATH=`pwd`/../../assets/images/macos_icons/hashbags_macos_icons/hashbags_macos_1024.png;;
 esac
 
 rm $DEST_DIR_PATH/app_icon_16.png

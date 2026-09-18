@@ -21,13 +21,13 @@ modules:
       - "mkdir -p /app/bin"
       - "ln -s /app/hash_wallet/hash_wallet /app/bin/hash_wallet"
       - "mkdir -p /app/share/icons/hicolor/scalable/apps"
-      - "cp cakewallet_icon_180.png /app/share/icons/hicolor/scalable/apps/com.suchsoftware.HashWallet.png"
+      - "cp cakewallet_logo.png /app/share/icons/hicolor/scalable/apps/com.suchsoftware.HashWallet.png"
       - "mkdir -p /app/share/applications"
       - "cp com.suchsoftware.HashWallet.desktop /app/share/applications"
     sources:
       - type: dir
         path: build/linux/x64/release
       - type: file
-        path: assets/images/cakewallet_icon_180.png
+        path: assets/images/cakewallet_logo.png
       - type: file
         path: linux/com.suchsoftware.HashWallet.desktop

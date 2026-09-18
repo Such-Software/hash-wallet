@@ -249,21 +249,17 @@ abstract class DisplaySettingsViewModelBase with Store {
   @action
   void setBackgroundImage(String path) => _settingsStore.backgroundImage = path;
 
+  /// Preview icon for the theme picker.
+  ///
+  /// This matched on `theme.title`, which is built from the accent colour's
+  /// display name, so renaming an accent silently changed which icon a theme
+  /// got. It did: the list still named Cake Primary, Tron Red and Frosting
+  /// Purple, none of which ship any more, while Such Pink and Such Blue were
+  /// absent and fell through to the plain dark icon. Ask the theme what it is
+  /// instead of what it is called.
   String getImageForTheme(MaterialThemeBase theme) {
-    switch (theme.title) {
-      case 'Dark Theme':
-        return 'assets/new-ui/dark.svg';
-      case 'Light Theme':
-        return 'assets/new-ui/light.svg';
-      case 'Black Theme (Cake Primary)':
-      case 'Black Theme (BCH Green)':
-      case 'Black Theme (Bitcoin Yellow)':
-      case 'Black Theme (Monero Orange)':
-      case 'Black Theme (Tron Red)':
-      case 'Black Theme (Frosting Purple)':
-        return 'assets/new-ui/black_accent.svg';
-      default:
-        return 'assets/new-ui/dark.svg';
-    }
+    if (theme is BlackTheme) return 'assets/new-ui/black_accent.svg';
+    if (theme.type == ThemeType.light) return 'assets/new-ui/light.svg';
+    return 'assets/new-ui/dark.svg';
   }
 }
