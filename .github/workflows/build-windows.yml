@@ -101,8 +101,17 @@ jobs:
               # LocalSystem service account.
               if [[ -d "$(dirname "$(dirname "$d")")/rustup" ]]; then
                 RUSTUP_DIR="$(dirname "$(dirname "$d")")/rustup"
-                echo "RUSTUP_HOME=$(cygpath -w "$RUSTUP_DIR")" >> "$GITHUB_ENV"
-                echo "CARGO_HOME=$(cygpath -w "$(dirname "$d")")"  >> "$GITHUB_ENV"
+                # Export for THIS step as well as writing to $GITHUB_ENV.
+                # $GITHUB_ENV only reaches later steps, and the verification on
+                # the next line is itself a rustup shim: without the export it
+                # falls back to %USERPROFILE%\.rustup, which on this runner is
+                # a file rather than a directory, so it fails with os error 183
+                # having ignored the toolchain we just found.
+                RUSTUP_HOME="$(cygpath -w "$RUSTUP_DIR")"
+                CARGO_HOME="$(cygpath -w "$(dirname "$d")")"
+                export RUSTUP_HOME CARGO_HOME
+                echo "RUSTUP_HOME=$RUSTUP_HOME" >> "$GITHUB_ENV"
+                echo "CARGO_HOME=$CARGO_HOME"   >> "$GITHUB_ENV"
               fi
               rustc --version
               exit 0
