@@ -171,23 +171,34 @@ jobs:
       # hive_generator against build_resolvers and the build died at exit 69
       # long before it compiled anything. A build machine's drifting toolchain
       # must not decide which dependencies resolve.
-      - name: Check Flutter 3.32.0
-        id: flutter_check
+      - name: Require Flutter 3.32.0
         run: |
-          if command -v flutter >/dev/null && flutter --version 2>/dev/null | grep -q "3\.32\.0"; then
-            echo "installed=true"  >> "$GITHUB_OUTPUT"
-            flutter --version
-          else
-            echo "installed=false" >> "$GITHUB_OUTPUT"
-          fi
+          set -e
+          ver="$(flutter --version 2>/dev/null | head -1 || true)"
+          echo "runner has: ${ver:-<no flutter on PATH>}"
+          case "$ver" in
+            *3.32.0*) exit 0 ;;
+          esac
+          cat >&2 <<'MSG'
 
-      - name: Install Flutter 3.32.0 (if missing)
-        if: steps.flutter_check.outputs.installed != 'true'
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.32.0'
-          channel: stable
-          cache: true
+          Refusing to build: this runner's Flutter is not the pinned 3.32.0.
+
+          Every other platform is pinned, Linux and Android by the
+          cake_wallet debian13-flutter3.32.0 image and iOS by installing it,
+          so a drifted Windows SDK breaks this platform alone and does it
+          during dependency resolution rather than at compile time.
+
+          Fix it on the runner rather than here. Installing an SDK per build
+          would download a gigabyte to paper over a machine that provisioning
+          is supposed to own, and subosito/flutter-action cannot do it anyway:
+          its setup script needs jq, which this runner does not have.
+
+            powershell -File scripts\windows\setup-windows-runner.ps1
+
+          That now checks the version rather than only that flutter.bat
+          exists, which is why it had been reporting a drifted SDK as done.
+          MSG
+          exit 1
 
       # ---- Toolchain sanity ------------------------------------------------
       # Our self-hosted runner has Flutter / Rust / VS Build Tools / Inno
