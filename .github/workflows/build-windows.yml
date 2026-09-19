@@ -162,6 +162,33 @@ jobs:
             }
           '
 
+      # ---- Flutter, pinned -------------------------------------------------
+      # Every other platform builds on 3.32.0: Linux and Android inside the
+      # cake_wallet debian13-flutter3.32.0 image, iOS by installing it
+      # explicitly. Windows was the one that took whatever the runner happened
+      # to have, and on 2026-09-19 that was 3.38.5 / Dart 3.10.4. Dart 3.10
+      # removed the _macros package, so `flutter pub get` could not solve
+      # hive_generator against build_resolvers and the build died at exit 69
+      # long before it compiled anything. A build machine's drifting toolchain
+      # must not decide which dependencies resolve.
+      - name: Check Flutter 3.32.0
+        id: flutter_check
+        run: |
+          if command -v flutter >/dev/null && flutter --version 2>/dev/null | grep -q "3\.32\.0"; then
+            echo "installed=true"  >> "$GITHUB_OUTPUT"
+            flutter --version
+          else
+            echo "installed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Flutter 3.32.0 (if missing)
+        if: steps.flutter_check.outputs.installed != 'true'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: stable
+          cache: true
+
       # ---- Toolchain sanity ------------------------------------------------
       # Our self-hosted runner has Flutter / Rust / VS Build Tools / Inno
       # Setup pre-installed (see scripts/windows/setup-windows-runner.ps1).
