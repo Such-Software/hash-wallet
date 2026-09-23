@@ -1,4 +1,14 @@
 lib*_wallet2_api_c.so
 
-# embedded Wownero node daemon (provisioned at build time, like the wallet libs)
+# Embedded Wownero node daemon. NOT provisioned by any build step: no script
+# here and no CI job stages it, so a CI-built APK does not contain it. It is
+# built by hand and kept out of the tree entirely, at
+# ~/Build/hash-wallet/embedded-node/<abi>/libwownerod.so.
+#
+# Binaries do not belong in src even when ignored. Everything else in this
+# directory is staging output that build_monero_all.sh or the Android workflow
+# regenerates; this one had no generator, which is why it sat here for weeks.
+# When the UI toggle and foreground service land, it needs a provisioning step
+# beside the monero_c one, and shipping it before then would put 20 MB of
+# unreachable executable in front of a store reviewer for no reason.
 libwownerod.so

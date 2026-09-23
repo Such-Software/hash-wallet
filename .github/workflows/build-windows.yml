@@ -9,11 +9,24 @@ name: Hash Bags Windows build
 # → Hash Bags.
 
 on:
-  # Manual-only. Trigger via Actions → "Hash Bags Windows build" → Run workflow.
-  # workflow_dispatch runs as the triggering user, so secrets are always
-  # available (PR triggers from forks would strip them — not relevant here
-  # since the runner is self-hosted and listening on a self-hosted Gitea).
+  # Manual, or a release tag. workflow_dispatch runs as the triggering user, so
+  # secrets are always available (PR triggers from forks would strip them — not
+  # relevant here since the runner is self-hosted and listening on a
+  # self-hosted Gitea). A tag builds automatically because a tag is the thing a
+  # release is cut from, and the signed artifact should come from it rather
+  # than from whatever happened to be dispatched by hand.
+  push:
+    tags:
+      - 'hash-bags-*'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: >-
+          Existing release tag to publish this build to (e.g. hash-bags-1.0.3).
+          Leave empty to build without publishing. The release must already
+          exist; this never creates one.
+        required: false
+        default: ''
 
 # Cancel in-flight runs when a newer commit lands on the same branch.
 concurrency:
@@ -584,3 +597,55 @@ jobs:
           name: hash-bags-windows-${{ github.sha }}
           path: HashBags-windows-${{ github.sha }}.zip
           retention-days: 14
+
+      # ---- Publish to the GitHub release ------------------------------------
+      # PowerShell rather than the bash used elsewhere in this file: this step
+      # parses JSON, and git-bash here has neither python nor node guaranteed,
+      # while ConvertFrom-Json is native. Skips quietly without a token.
+      - name: Resolve the release tag
+        id: reltag
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_REF:-}" != "${GITHUB_REF#refs/tags/}" ]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="${{ github.event.inputs.release_tag }}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if [ -n "$TAG" ]; then echo "publishing to $TAG"; else echo "no tag; build only"; fi
+
+      - name: Publish the signed zip to the GitHub release
+        if: steps.reltag.outputs.tag != ''
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          TAG: ${{ steps.reltag.outputs.tag }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (-not $env:GH_TOKEN) {
+            Write-Host 'GH_RELEASE_TOKEN not set; skipping the GitHub upload'
+            exit 0
+          }
+          $repo = 'Such-Software/hash-wallet'
+          $api  = "https://api.github.com/repos/$repo"
+          $hdr  = @{ Authorization = "Bearer $env:GH_TOKEN"; 'User-Agent' = 'hash-bags-ci' }
+          $src  = Get-ChildItem -Path . -Filter 'HashBags-windows-*.zip' | Select-Object -First 1
+          if (-not $src) { throw 'no Windows zip to upload' }
+          # Named for the tag, not the commit: a release asset called
+          # HashBags-windows-<40 hex>.zip tells a downloader nothing.
+          $name = "HashBags-windows-$env:TAG.zip"
+          try {
+            $rel = Invoke-RestMethod -Headers $hdr -Uri "$api/releases/tags/$env:TAG"
+          } catch {
+            Write-Host "no GitHub release for $env:TAG; skipping"
+            exit 0
+          }
+          # Replace a same-named asset from an earlier attempt, so a re-run does
+          # not leave two that differ only by which build produced them.
+          foreach ($a in @($rel.assets | Where-Object { $_.name -eq $name })) {
+            Invoke-RestMethod -Headers $hdr -Method Delete -Uri "$api/releases/assets/$($a.id)" | Out-Null
+          }
+          $up = "https://uploads.github.com/repos/$repo/releases/$($rel.id)/assets?name=$name"
+          Invoke-RestMethod -Headers $hdr -Method Post -ContentType 'application/octet-stream' `
+            -InFile $src.FullName -Uri $up | Out-Null
+          Write-Host "uploaded $name to the GitHub release $env:TAG"

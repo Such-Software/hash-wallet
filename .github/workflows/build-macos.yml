@@ -1,0 +1,353 @@
+# Hash Bags macOS build: signed with Developer ID, notarized, stapled.
+#
+# This is DIRECT distribution, not the Mac App Store, so it needs a
+# "Developer ID Application" certificate. That is a different certificate from
+# the "Apple Distribution" one build-ios-testflight.yml uses, and the two are
+# not interchangeable: a build signed with the App Store cert is rejected by
+# Gatekeeper when a user downloads it from a web page. Notarization, on the
+# other hand, reuses the App Store Connect API key that repository already has.
+#
+# Secrets, all optional. Absent ones do not fail the build; they downgrade it,
+# loudly, and the preflight below prints exactly which stage you will lose.
+#   APPLE_CERTIFICATE            base64 of the Developer ID Application .p12
+#   APPLE_CERTIFICATE_PASSWORD   password set when the .p12 was exported
+#   APPLE_SIGNING_IDENTITY       "Developer ID Application: Such Software LLC (D8PL9F7X33)"
+#   APPLE_TEAM_ID                D8PL9F7X33
+#   APPLE_KEYCHAIN_PASSWORD      any value; scopes a throwaway keychain
+#   APPLE_API_KEY_P8_BASE64      base64 of AuthKey_<id>.p8   (notarization)
+#   APPLE_API_KEY                key id                      (notarization)
+#   APPLE_API_ISSUER             issuer UUID                 (notarization)
+#   GH_RELEASE_TOKEN             publishes the zip to the GitHub release
+#
+# The same names smirk-monorepo uses, deliberately: both repositories live under
+# the Builds owner, so an organisation-level secret serves both and a reader
+# comparing the two workflows is not left wondering whether the difference means
+# something.
+
+name: Hash Bags macOS build
+
+on:
+  push:
+    tags:
+      - 'hash-bags-*'
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: >-
+          Existing release tag to publish to (e.g. hash-bags-1.0.3). Leave empty
+          to build without publishing. The release must already exist; this
+          never creates one, because a release created here would go public
+          half-populated while the other platforms are still building.
+        required: false
+        default: ''
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build, sign, notarize
+    runs-on: macos-latest
+    timeout-minutes: 90
+    env:
+      APP_MACOS_TYPE: cakewallet
+      LANG: en_US.UTF-8
+      LC_ALL: en_US.UTF-8
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # Cheap guards first: this reports what the run can actually produce
+      # before spending forty minutes finding out. Lengths only, never values.
+      - name: Preflight — which signing stages are available
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          have() { [ -n "${1:-}" ] && echo "present (${#1} chars)" || echo "ABSENT"; }
+          echo "APPLE_CERTIFICATE         : $(have "${APPLE_CERTIFICATE:-}")"
+          echo "APPLE_CERTIFICATE_PASSWORD: $(have "${APPLE_CERTIFICATE_PASSWORD:-}")"
+          echo "APPLE_SIGNING_IDENTITY    : $(have "${APPLE_SIGNING_IDENTITY:-}")"
+          echo "APPLE_API_KEY_P8_BASE64   : $(have "${APPLE_API_KEY_P8_BASE64:-}")"
+          echo "APPLE_API_KEY             : $(have "${APPLE_API_KEY:-}")"
+          echo "APPLE_API_ISSUER          : $(have "${APPLE_API_ISSUER:-}")"
+          echo "GH_RELEASE_TOKEN          : $(have "${GH_TOKEN:-}")"
+          echo
+          if [ -n "${APPLE_CERTIFICATE:-}" ] && [ -n "${APPLE_SIGNING_IDENTITY:-}" ]; then
+            echo "VERDICT: will code-sign with Developer ID"
+          else
+            echo "VERDICT: NO Developer ID cert — the .app will be ad-hoc signed and"
+            echo "         Gatekeeper will refuse it on any machine but this one."
+          fi
+          if [ -n "${APPLE_API_KEY_P8_BASE64:-}" ] && [ -n "${APPLE_API_KEY:-}" ] && [ -n "${APPLE_API_ISSUER:-}" ]; then
+            echo "VERDICT: will notarize and staple"
+          else
+            echo "VERDICT: NO notarization credentials — users get the unidentified"
+            echo "         developer warning even with a valid Developer ID signature."
+          fi
+
+      - name: Check Flutter 3.32.0
+        id: flutter_check
+        run: |
+          if command -v flutter >/dev/null && flutter --version 2>/dev/null | grep -q "3\.32\.0"; then
+            echo "installed=true"  >> "$GITHUB_OUTPUT"
+            flutter --version
+          else
+            echo "installed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Flutter 3.32.0 (if missing)
+        if: steps.flutter_check.outputs.installed != 'true'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.0'
+          channel: stable
+          cache: true
+
+      - name: Install CocoaPods (if missing)
+        run: |
+          set -euo pipefail
+          if command -v pod >/dev/null; then pod --version; exit 0; fi
+          if command -v brew >/dev/null; then
+            brew install cocoapods
+          else
+            export GEM_HOME="$HOME/.gem"
+            echo "GEM_HOME=$HOME/.gem" >> "$GITHUB_ENV"
+            echo "$HOME/.gem/bin" >> "$GITHUB_PATH"
+            gem install --user-install cocoapods
+          fi
+
+      # ---- Native crypto cores ----------------------------------------------
+      # Same prebuilt bundle the iOS and Android legs use, so all three ship the
+      # same wallet core rather than three builds of it.
+      - name: Fetch prebuilt monero_c bundle
+        run: |
+          set -euo pipefail
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          echo "monero_c TAG: $MONERO_C_TAG"
+          mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
+          pushd "scripts/monero_c/release/$MONERO_C_TAG"
+            if [ ! -d aarch64-apple-darwin ]; then
+              curl -fsSL -O https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
+              unzip -q release-bundle.zip
+              rm release-bundle.zip
+            fi
+            ls -la aarch64-apple-darwin x86_64-apple-darwin
+          popd
+
+      # Runner.xcodeproj already references these two by bare filename with
+      # CodeSignOnCopy, so they belong beside the project at macos/.
+      - name: Stage universal dylibs into macos/
+        run: |
+          set -euo pipefail
+          MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
+          BUNDLE="scripts/monero_c/release/$MONERO_C_TAG"
+          for lib in libmonero_wallet2_api_c libwownero_wallet2_api_c; do
+            arm="$BUNDLE/aarch64-apple-darwin/$lib.dylib"
+            x86="$BUNDLE/x86_64-apple-darwin/$lib.dylib"
+            [ -f "$arm" ] || { echo "missing $arm"; exit 1; }
+            # Universal, so one download serves Apple Silicon and Intel. A
+            # single-arch build looks fine on the machine that made it and
+            # fails on half the users' machines, which is the worst way to
+            # find out.
+            if [ -f "$x86" ]; then
+              lipo -create "$arm" "$x86" -output "macos/$lib.dylib"
+            else
+              echo "no x86_64 slice for $lib; shipping arm64 only"
+              cp "$arm" "macos/$lib.dylib"
+            fi
+            lipo -info "macos/$lib.dylib"
+          done
+
+      - name: Configure the app (bundle id, version, icons)
+        run: |
+          set -euo pipefail
+          # Copies pubspec_description.yaml over pubspec.yaml, so the version
+          # comes from the one file every platform reads.
+          pushd scripts/macos
+            bash ./app_config.sh
+          popd
+          grep -m1 '^version:' pubspec.yaml
+
+      - name: flutter pub get
+        run: flutter pub get
+
+      - name: Build macOS release
+        run: |
+          set -euo pipefail
+          flutter build macos --release
+          ls -la build/macos/Build/Products/Release/
+
+      # ---- Developer ID signing ---------------------------------------------
+      - name: Import the Developer ID certificate
+        id: cert
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APPLE_CERTIFICATE:-}" ]; then
+            echo "no Developer ID certificate; skipping import"
+            echo "imported=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          KEYCHAIN_PASSWORD="${APPLE_KEYCHAIN_PASSWORD:-hashbags-ci}"
+          KEYCHAIN_PATH="$RUNNER_TEMP/hashbags-macos.keychain-db"
+          # A dedicated throwaway keychain, never the login keychain: this runner
+          # is a shared Mac and a build should not be able to read, or leave
+          # anything in, the operator's own keys.
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | sed 's/"//g')
+          P12="$RUNNER_TEMP/developer_id.p12"
+          echo "$APPLE_CERTIFICATE" | openssl base64 -d -A > "$P12"
+          security import "$P12" -k "$KEYCHAIN_PATH" -P "${APPLE_CERTIFICATE_PASSWORD:-}" \
+            -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          rm -f "$P12"
+          security find-identity -v -p codesigning "$KEYCHAIN_PATH"
+          echo "keychain=$KEYCHAIN_PATH" >> "$GITHUB_OUTPUT"
+          echo "imported=true" >> "$GITHUB_OUTPUT"
+
+      - name: Codesign the app
+        if: steps.cert.outputs.imported == 'true'
+        env:
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+        run: |
+          set -euo pipefail
+          APP=$(ls -d build/macos/Build/Products/Release/*.app | head -1)
+          echo "signing $APP"
+          # --deep is deliberately NOT used: Apple deprecated it and it skips
+          # nested code it does not recognise. Sign inside-out by hand so every
+          # dylib is covered and a failure names the file it could not sign.
+          find "$APP/Contents" -type f \( -name '*.dylib' -o -name '*.so' \) -print0 |
+            while IFS= read -r -d '' lib; do
+              codesign --force --timestamp --options runtime \
+                --sign "$APPLE_SIGNING_IDENTITY" "$lib"
+            done
+          find "$APP/Contents/Frameworks" -maxdepth 1 -name '*.framework' -print0 2>/dev/null |
+            while IFS= read -r -d '' fw; do
+              codesign --force --timestamp --options runtime \
+                --sign "$APPLE_SIGNING_IDENTITY" "$fw"
+            done
+          # Hardened runtime is what notarization requires; entitlements come
+          # from the templated Release.entitlements written by app_config.sh.
+          codesign --force --timestamp --options runtime \
+            --entitlements macos/Runner/Release.entitlements \
+            --sign "$APPLE_SIGNING_IDENTITY" "$APP"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+
+      # ---- Notarization ------------------------------------------------------
+      - name: Notarize and staple
+        id: notarize
+        if: steps.cert.outputs.imported == 'true'
+        env:
+          APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APPLE_API_KEY_P8_BASE64:-}" ] || [ -z "${APPLE_API_KEY:-}" ] || [ -z "${APPLE_API_ISSUER:-}" ]; then
+            echo "no notarization credentials; the build stays signed but un-notarized"
+            echo "notarized=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          APP=$(ls -d build/macos/Build/Products/Release/*.app | head -1)
+          KEY="$RUNNER_TEMP/AuthKey.p8"
+          echo "$APPLE_API_KEY_P8_BASE64" | openssl base64 -d -A > "$KEY"
+          ZIP="$RUNNER_TEMP/notarize.zip"
+          # ditto, not zip: it preserves the bundle's symlinks and extended
+          # attributes, and a plain zip of a .app arrives at Apple as something
+          # it will not accept.
+          ditto -c -k --keepParent "$APP" "$ZIP"
+          xcrun notarytool submit "$ZIP" \
+            --key "$KEY" --key-id "$APPLE_API_KEY" --issuer "$APPLE_API_ISSUER" \
+            --wait --timeout 45m
+          rm -f "$KEY" "$ZIP"
+          # Stapling writes the ticket into the bundle so Gatekeeper clears it
+          # without a network round trip, which is what a user on a bad
+          # connection or behind a firewall actually needs.
+          xcrun stapler staple "$APP"
+          xcrun stapler validate "$APP"
+          echo "notarized=true" >> "$GITHUB_OUTPUT"
+
+      - name: Package the app
+        id: package
+        run: |
+          set -euo pipefail
+          APP=$(ls -d build/macos/Build/Products/Release/*.app | head -1)
+          VERSION=$(awk -F': ' '/^version:/ {print $2; exit}' pubspec_description.yaml | cut -d+ -f1)
+          OUT="HashBags-macos-${VERSION}.zip"
+          ditto -c -k --keepParent "$APP" "$OUT"
+          shasum -a 256 "$OUT" | tee "$OUT.sha256"
+          ls -la "$OUT"
+          echo "file=$OUT" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: hash-wallet-macos-${{ github.sha }}
+          path: ${{ steps.package.outputs.file }}
+          retention-days: 14
+
+      - name: Resolve the release tag
+        id: reltag
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_REF:-}" != "${GITHUB_REF#refs/tags/}" ]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="${{ github.event.inputs.release_tag }}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if [ -n "$TAG" ]; then echo "publishing to $TAG"; else echo "no tag; build only"; fi
+
+      - name: Publish to the GitHub release
+        if: steps.reltag.outputs.tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          TAG: ${{ steps.reltag.outputs.tag }}
+          FILE: ${{ steps.package.outputs.file }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "GH_RELEASE_TOKEN not set; skipping the GitHub upload"
+            exit 0
+          fi
+          REPO="Such-Software/hash-wallet"
+          API="https://api.github.com/repos/$REPO"
+          AUTH="Authorization: Bearer $GH_TOKEN"
+          NAME="$(basename "$FILE")"
+          code=$(curl -sS -o rel-gh.json -w '%{http_code}' -H "$AUTH" "$API/releases/tags/$TAG" || true)
+          if [ "$code" != "200" ]; then
+            echo "no GitHub release for $TAG (HTTP $code); skipping"
+            exit 0
+          fi
+          ID=$(python3 -c 'import json;print(json.load(open("rel-gh.json"))["id"])')
+          for oid in $(python3 -c 'import json,sys;d=json.load(open("rel-gh.json"));print(" ".join(str(a["id"]) for a in d.get("assets",[]) if a["name"]==sys.argv[1]))' "$NAME"); do
+            curl -sS -o /dev/null -X DELETE -H "$AUTH" "$API/releases/assets/$oid" || true
+          done
+          curl -sS --fail-with-body -o /dev/null -X POST -H "$AUTH" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@$FILE" \
+            "https://uploads.github.com/repos/$REPO/releases/$ID/assets?name=$NAME"
+          echo "uploaded $NAME to the GitHub release $TAG"
+
+      - name: Clean up the keychain
+        if: always() && steps.cert.outputs.imported == 'true'
+        run: security delete-keychain "${{ steps.cert.outputs.keychain }}" || true

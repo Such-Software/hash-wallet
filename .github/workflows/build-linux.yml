@@ -5,10 +5,26 @@ name: Hash Bags Linux build
 # - on PRs targeting dev/main (gates merges)
 # - manual via workflow_dispatch ("Run workflow" button in the UI)
 on:
-  # Manual-only for now — auto-run on every push was too noisy. Trigger
+  # Manual-only for pushes — auto-run on every push was too noisy. Trigger
   # via Actions → "Hash Bags Linux build" → Run workflow when you want a
-  # build. Add `push:` back here if/when we want pre-merge validation.
+  # build. Add `push: branches:` back here if/when we want pre-merge validation.
+  #
+  # Tags DO build automatically: a tag is a deliberate act and it is the thing
+  # a release is cut from, so the artifact that gets signed and published should
+  # come from the tag rather than from whatever was dispatched by hand.
+  push:
+    tags:
+      - 'hash-bags-*'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: >-
+          Existing release tag to publish this build to (e.g. hash-bags-1.0.3).
+          Leave empty to build without publishing. The release must already
+          exist: this never creates one, because a release created here would
+          go public half-populated while the other platforms are still building.
+        required: false
+        default: ''
 
 concurrency:
   group: linux-${{ github.ref }}
@@ -295,3 +311,63 @@ jobs:
           name: hash-wallet-linux-appimage-${{ github.sha }}
           path: build/linux/x64/release/Hash_Bags-x86_64.AppImage
           retention-days: 14
+
+      # ---- Publish to the release pages -------------------------------------
+      # Artifact retrieval through Gitea Actions is unreliable here: uploads
+      # succeed and then list as zero, so a build nobody can download is a build
+      # that did not happen. Release assets are the path that actually returns
+      # bytes, and GitHub is where users are told to look.
+      #
+      # Both steps skip quietly without a token, so a fork or a local runner
+      # does not fail a build over a credential it was never given.
+      - name: Resolve the release tag
+        id: reltag
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_REF:-}" != "${GITHUB_REF#refs/tags/}" ]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="${{ github.event.inputs.release_tag }}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if [ -n "$TAG" ]; then echo "publishing to $TAG"; else echo "no tag; build only"; fi
+
+      - name: Publish the AppImage to the GitHub release
+        if: steps.reltag.outputs.tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          TAG: ${{ steps.reltag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "GH_RELEASE_TOKEN not set; skipping the GitHub upload"
+            exit 0
+          fi
+          REPO="Such-Software/hash-wallet"
+          API="https://api.github.com/repos/$REPO"
+          AUTH="Authorization: Bearer $GH_TOKEN"
+          FILE="build/linux/x64/release/Hash_Bags-x86_64.AppImage"
+          [ -f "$FILE" ] || { echo "no AppImage to upload"; exit 1; }
+          NAME="$(basename "$FILE")"
+          code=$(curl -sS -o rel-gh.json -w '%{http_code}' -H "$AUTH" "$API/releases/tags/$TAG" || true)
+          if [ "$code" != "200" ]; then
+            echo "no GitHub release for $TAG (HTTP $code); skipping"
+            exit 0
+          fi
+          # Fail rather than skip if there is no JSON parser. An upload that
+          # quietly did not happen leaves a release page that looks finished
+          # and a user with nothing to download.
+          PY=""
+          for c in python3 python; do command -v "$c" >/dev/null && { PY="$c"; break; }; done
+          [ -n "$PY" ] || { echo "no python available to parse the release JSON"; exit 1; }
+          ID=$($PY -c 'import json;print(json.load(open("rel-gh.json"))["id"])')
+          # Replace a same-named asset from an earlier attempt, so a re-run does
+          # not leave two that differ only by which build produced them.
+          for oid in $($PY -c 'import json,sys;d=json.load(open("rel-gh.json"));print(" ".join(str(a["id"]) for a in d.get("assets",[]) if a["name"]==sys.argv[1]))' "$NAME"); do
+            curl -sS -o /dev/null -X DELETE -H "$AUTH" "$API/releases/assets/$oid" || true
+          done
+          curl -sS --fail-with-body -o /dev/null -X POST -H "$AUTH" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@$FILE" \
+            "https://uploads.github.com/repos/$REPO/releases/$ID/assets?name=$NAME"
+          echo "uploaded $NAME to the GitHub release $TAG"
