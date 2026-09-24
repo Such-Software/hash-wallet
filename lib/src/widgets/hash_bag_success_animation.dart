@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
 /// "Transaction sent" celebration: the Hash Bags money sack sits at the bottom
-/// and money glyphs (#, $, ₿) erupt from its mouth, rising and fading on a loop.
+/// and money glyphs erupt from its mouth, rising and fading on a loop.
 ///
 /// The glyphs are image assets (not text) because the app doesn't bundle a font
 /// containing a bitcoin glyph — rendering them as PNGs keeps them consistent
 /// across platforms.
+///
+/// The chain glyphs are Monero and Wownero as well as Bitcoin. A Wownero-first
+/// wallet that celebrates every send by throwing only bitcoin out of the bag is
+/// advertising somebody else's coin on the one screen a user reaches after
+/// parting with their own. The XMR and WOW sprites are rendered at 128px from
+/// res/pictures/crypto_full_icons/{monero,wownero}.svg, which is the same
+/// artwork the chain icons elsewhere in the app use, so they match rather than
+/// being a second opinion about what those coins look like.
 class HashBagSuccessAnimation extends StatefulWidget {
   const HashBagSuccessAnimation({super.key});
 
@@ -28,15 +36,23 @@ class _HashBagSuccessAnimationState extends State<HashBagSuccessAnimation>
   static const String _hash = 'assets/images/hashbag_sym_hash.png';
   static const String _dollar = 'assets/images/hashbag_sym_dollar.png';
   static const String _btc = 'assets/images/hashbag_sym_btc.png';
+  static const String _xmr = 'assets/images/hashbag_sym_xmr.png';
+  static const String _wow = 'assets/images/hashbag_sym_wow.png';
 
+  // Ordered by phase, so the stagger stays even as glyphs are added. WOW leads
+  // and is the largest: this wallet is Wownero-first and the animation should
+  // say so before it says anything else.
   static const List<_Particle> _particles = <_Particle>[
-    _Particle(_btc, 0.00, 0.00, 0.20),
-    _Particle(_hash, -0.18, 0.13, 0.16),
-    _Particle(_dollar, 0.19, 0.24, 0.16),
-    _Particle(_hash, 0.11, 0.40, 0.12),
-    _Particle(_dollar, -0.13, 0.54, 0.11),
-    _Particle(_btc, 0.06, 0.68, 0.12),
-    _Particle(_hash, -0.07, 0.83, 0.10),
+    _Particle(_wow, 0.00, 0.00, 0.20),
+    _Particle(_hash, -0.18, 0.10, 0.16),
+    _Particle(_xmr, 0.19, 0.20, 0.18),
+    _Particle(_dollar, -0.09, 0.30, 0.14),
+    _Particle(_btc, 0.13, 0.40, 0.16),
+    _Particle(_hash, 0.11, 0.50, 0.12),
+    _Particle(_wow, -0.16, 0.60, 0.13),
+    _Particle(_dollar, 0.06, 0.70, 0.11),
+    _Particle(_xmr, -0.05, 0.80, 0.12),
+    _Particle(_btc, 0.16, 0.90, 0.11),
   ];
 
   @override
