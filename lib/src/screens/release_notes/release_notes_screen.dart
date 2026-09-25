@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:hash_wallet/src/widgets/alert_background.dart';
 import 'package:hash_wallet/src/widgets/alert_close_button.dart';
-import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,8 +12,13 @@ class ReleaseNotesScreen extends StatelessWidget {
   final String title;
 
   Future<List<String>> _loadStrings() async {
-    String notesContent = await rootBundle.loadString(
-        isMoneroOnly ? 'assets/text/Monerocom_Release_Notes.txt' : 'assets/text/Release_Notes.txt');
+    // One notes file. The monero.com branch this inherited pointed at
+    // Monerocom_Release_Notes.txt, which does not exist in this repository, so
+    // any build where isMoneroOnly went true would have thrown here rather than
+    // shown release notes. Hash Bags ships many chains and that flag is always
+    // false, which is the only reason it never fired.
+    String notesContent =
+        await rootBundle.loadString('assets/text/Release_Notes.txt');
     return LineSplitter().convert(notesContent);
   }
 

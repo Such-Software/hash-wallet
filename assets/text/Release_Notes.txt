@@ -1,2 +1,5 @@
-Add support for Bitcoin Lightning
-New Design
+Wownero and Monero now fly out of the bag when you send
+Fixed the app icon and logo showing the wrong artwork
+Fixed a crash when using Polygon wallets
+The Wownero logo no longer appears as a grey circle
+Error reports now identify the exact app build
