@@ -20,9 +20,13 @@ MONERO_COM_VERSION="6.1.0"
 MONERO_COM_BUILD_NUMBER=79
 MONERO_COM_BUNDLE_ID="com.cakewallet.monero"
 
+# Version and build come from pubspec_description.yaml, the one file every
+# platform reads. A hardcoded value here overrides it silently: Android shipped
+# versionCode 1 that way once, and this file said 1.0.0 (1) until 1.0.4.
+_PUBSPEC_VERSION=$(awk -F': ' '/^version:/ {print $2; exit}' "$(dirname "${BASH_SOURCE[0]:-$0}")/../../pubspec_description.yaml")
 CAKEWALLET_NAME="Hash Bags"
-CAKEWALLET_VERSION="1.0.0"
-CAKEWALLET_BUILD_NUMBER=1
+CAKEWALLET_VERSION="${_PUBSPEC_VERSION%+*}"
+CAKEWALLET_BUILD_NUMBER="${_PUBSPEC_VERSION#*+}"
 CAKEWALLET_BUNDLE_ID="com.suchsoftware.hashwallet"
 
 if ! [[ " ${TYPES[*]} " =~ " ${APP_MACOS_TYPE} " ]]; then

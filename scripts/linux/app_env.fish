@@ -14,8 +14,10 @@ if test -n "$argv[1]"
 end
 
 set -g CAKEWALLET_NAME "Cake Wallet"
-set -g CAKEWALLET_VERSION "1.9.0"
-set -g CAKEWALLET_BUILD_NUMBER 29
+# From pubspec_description.yaml, like app_env.sh. These were Cake's 1.9.0 (29).
+set -l _pubspec_version (awk -F': ' '/^version:/ {print $2; exit}' (dirname (status --current-filename))/../../pubspec_description.yaml)
+set -g CAKEWALLET_VERSION (string split -f1 '+' $_pubspec_version)
+set -g CAKEWALLET_BUILD_NUMBER (string split -f2 '+' $_pubspec_version)
 
 if not contains -- $APP_LINUX_TYPE $TYPES
     echo "Wrong app type."

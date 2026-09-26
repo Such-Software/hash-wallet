@@ -130,12 +130,58 @@ jobs:
             gem install --user-install cocoapods
           fi
 
+      # ---- Prerequisites ------------------------------------------------------
+      # Ported step for step from build-linux.yml, which is the desktop build
+      # known to pass, rather than written fresh. The first version of this
+      # workflow was written fresh: it skipped the clone that creates
+      # scripts/monero_c and died there, and behind that it had also skipped the
+      # step that pins the crypto salts. curl instead of wget, and BSD sed's
+      # -i.bak form, because this runner is a Mac.
+      - name: Fetch prebuilt torch_dart
+        run: |
+          set -euo pipefail
+          pushd scripts
+            rm -rf torch_dart torch_dart.tar.gz
+            curl -fsSL https://github.com/MrCyjaneK/torch_dart/releases/download/v1.0.17/torch_dart-v1.0.17.tar.gz -o torch_dart.tar.gz
+            mkdir torch_dart
+            tar -xzf torch_dart.tar.gz -C torch_dart
+            rm torch_dart.tar.gz
+          popd
+
+      - name: Fetch prebuilt reown_flutter
+        run: |
+          set -euo pipefail
+          pushd scripts
+            rm -rf reown_flutter reown_flutter.tar.gz
+            curl -fsSL https://github.com/cake-tech/reown_flutter/releases/download/v0.0.4/reown_flutter-v0.0.4.tar.gz -o reown_flutter.tar.gz
+            mkdir reown_flutter
+            tar -xzf reown_flutter.tar.gz -C reown_flutter
+            rm reown_flutter.tar.gz
+          popd
+
+      # The iOS variant, not build_bitbox_flutter.sh: that script also builds
+      # the Android .aar through gomobile, which an Apple target does not use.
+      - name: Clone BitBox Flutter (Apple — skip Android bindings)
+        run: |
+          set -euo pipefail
+          pushd scripts
+            if [[ ! -d bitbox_flutter ]]; then
+              git clone https://github.com/konstantinullrich/bitbox_flutter
+            fi
+            cd bitbox_flutter
+            git fetch -a
+            git reset --hard
+            git checkout 5a6e6dd388ef64003f86094af80d5453518b601d
+            git reset --hard
+          popd
+
       # ---- Native crypto cores ----------------------------------------------
-      # Same prebuilt bundle the iOS and Android legs use, so all three ship the
-      # same wallet core rather than three builds of it.
+      # prepare_moneroc.sh clones scripts/monero_c at the pinned revision. It
+      # is not a submodule, so checkout alone leaves the directory absent.
       - name: Fetch prebuilt monero_c bundle
         run: |
           set -euo pipefail
+          ./scripts/prepare_moneroc.sh
           MONERO_C_TAG=$(cd scripts/monero_c && git describe --tags)
           echo "monero_c TAG: $MONERO_C_TAG"
           mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
@@ -161,8 +207,7 @@ jobs:
             [ -f "$arm" ] || { echo "missing $arm"; exit 1; }
             # Universal, so one download serves Apple Silicon and Intel. A
             # single-arch build looks fine on the machine that made it and
-            # fails on half the users' machines, which is the worst way to
-            # find out.
+            # fails on half the users' machines.
             if [ -f "$x86" ]; then
               lipo -create "$arm" "$x86" -output "macos/$lib.dylib"
             else
@@ -172,18 +217,90 @@ jobs:
             lipo -info "macos/$lib.dylib"
           done
 
-      - name: Configure the app (bundle id, version, icons)
+      # ---- Configure --------------------------------------------------------
+      # app_env.sh sets the name, bundle id and version that app_config.sh
+      # writes into Info.plist; without it PlistBuddy writes empty strings. It
+      # has to be sourced in the same shell, and app_config.sh has to start in
+      # scripts/macos because it walks up with relative cds.
+      - name: Run configure (cakewallet build profile)
         run: |
           set -euo pipefail
-          # Copies pubspec_description.yaml over pubspec.yaml, so the version
-          # comes from the one file every platform reads.
           pushd scripts/macos
-            bash ./app_config.sh
+            source ./app_env.sh cakewallet
+            ./app_config.sh
           popd
-          grep -m1 '^version:' pubspec.yaml
+          /usr/libexec/PlistBuddy -c "Print :CFBundleName" macos/Runner/Info.plist
+          /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" macos/Runner/Info.plist
+          /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" macos/Runner/Info.plist
 
-      - name: flutter pub get
-        run: flutter pub get
+      - name: Generate per-module secrets.g.dart files (all empty defaults)
+        run: |
+          set -euo pipefail
+          flutter pub get
+          dart run tool/generate_new_secrets.dart
+
+      - name: Pin crypto secrets (never ship random salts)
+        env:
+          CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
+          CRYPTO_KEYCHAIN_SALT: ${{ secrets.CRYPTO_KEYCHAIN_SALT }}
+          CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+          CRYPTO_WALLET_SALT: ${{ secrets.CRYPTO_WALLET_SALT }}
+          CRYPTO_SHORT_KEY: ${{ secrets.CRYPTO_SHORT_KEY }}
+          CRYPTO_BACKUP_SALT: ${{ secrets.CRYPTO_BACKUP_SALT }}
+          CRYPTO_BACKUP_KEYCHAIN_SALT: ${{ secrets.CRYPTO_BACKUP_KEYCHAIN_SALT }}
+          CRYPTO_WALLET_GROUP_SALT: ${{ secrets.CRYPTO_WALLET_GROUP_SALT }}
+        run: |
+          set -euo pipefail
+          # generate_new_secrets.dart mints RANDOM salts each run. Shipping
+          # those breaks decryption of everything the previous build stored
+          # (2026-08-29 "Corrupted seeds" incident). The same pinned values as
+          # every other platform, so a wallet moves between them intact.
+          for v in CRYPTO_SALT CRYPTO_KEYCHAIN_SALT CRYPTO_KEY CRYPTO_WALLET_SALT CRYPTO_SHORT_KEY CRYPTO_BACKUP_SALT CRYPTO_BACKUP_KEYCHAIN_SALT CRYPTO_WALLET_GROUP_SALT; do
+            eval "val=\${$v:-}"
+            [ -n "$val" ] || { echo "FATAL: $v is empty — refusing to ship random crypto secrets"; exit 1; }
+          done
+          sed -i.bak \
+            -e "s|const salt = '.*';|const salt = '${CRYPTO_SALT}';|" \
+            -e "s|const keychainSalt = '.*';|const keychainSalt = '${CRYPTO_KEYCHAIN_SALT}';|" \
+            -e "s|const key = '.*';|const key = '${CRYPTO_KEY}';|" \
+            -e "s|const walletSalt = '.*';|const walletSalt = '${CRYPTO_WALLET_SALT}';|" \
+            -e "s|const shortKey = '.*';|const shortKey = '${CRYPTO_SHORT_KEY}';|" \
+            -e "s|const backupSalt = '.*';|const backupSalt = '${CRYPTO_BACKUP_SALT}';|" \
+            -e "s|const backupKeychainSalt = '.*';|const backupKeychainSalt = '${CRYPTO_BACKUP_KEYCHAIN_SALT}';|" \
+            -e "s|const walletGroupSalt = '.*';|const walletGroupSalt = '${CRYPTO_WALLET_GROUP_SALT}';|" \
+            lib/.secrets.g.dart
+          rm -f lib/.secrets.g.dart.bak
+          for c in salt keychainSalt key walletSalt shortKey backupSalt backupKeychainSalt walletGroupSalt; do
+            grep -qE "^const $c = '[0-9a-f]{8,}';" lib/.secrets.g.dart || { echo "FATAL: $c not pinned"; exit 1; }
+          done
+          echo "crypto secrets pinned (values not printed)"
+
+      - name: Inject Trocador affiliate secrets
+        env:
+          TROCADOR_API_KEY: ${{ secrets.TROCADOR_API_KEY }}
+          TROCADOR_MONERO_API_KEY: ${{ secrets.TROCADOR_MONERO_API_KEY }}
+          TROCADOR_EXCHANGE_MARKUP: ${{ secrets.TROCADOR_EXCHANGE_MARKUP }}
+        run: |
+          set -euo pipefail
+          sed -i.bak \
+            -e "s|const trocadorApiKey = '';|const trocadorApiKey = '${TROCADOR_API_KEY}';|" \
+            -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
+            -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
+            lib/.secrets.g.dart
+          rm -f lib/.secrets.g.dart.bak
+          awk -F"'" '/^const (trocador[A-Za-z]*) = / { split($1, a, " "); v = (length($2) ? "set (" length($2) " chars)" : "EMPTY"); print a[2] ": " v }' lib/.secrets.g.dart   # lengths only; values never reach the log
+
+      - name: Build generated code (mobx + hive adapters)
+        run: bash model_generator.sh
+
+      - name: Generate localization
+        run: dart run tool/generate_localization.dart
+
+      # res/pictures is the source for every compiled brand asset. Skipping this
+      # would fall back to raw SVGs, and it is the step whose inputs shipped
+      # Cake's artwork in 1.0.3, so it runs here exactly as it does elsewhere.
+      - name: Compile SVG assets (res/pictures/*.svg → assets/new-ui/*.svg.vec)
+        run: ./compile_graphics.sh
 
       - name: Build macOS release
         run: |

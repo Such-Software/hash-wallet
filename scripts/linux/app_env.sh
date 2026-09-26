@@ -13,9 +13,14 @@ if [ -n "$1" ]; then
 	APP_LINUX_TYPE=$1
 fi
 
+# Version and build come from pubspec_description.yaml, the one file every
+# platform reads. These said 6.1.0 (79), Cake Wallet's own numbers, which only
+# never reached a binary because app_config.sh's substitution looks for a
+# version: 0.0.0 placeholder that pubspec_description.yaml does not contain.
+_PUBSPEC_VERSION=$(awk -F': ' '/^version:/ {print $2; exit}' "$(dirname "${BASH_SOURCE[0]:-$0}")/../../pubspec_description.yaml")
 CAKEWALLET_NAME="Hash Bags"
-CAKEWALLET_VERSION="6.1.0"
-CAKEWALLET_BUILD_NUMBER=79
+CAKEWALLET_VERSION="${_PUBSPEC_VERSION%+*}"
+CAKEWALLET_BUILD_NUMBER="${_PUBSPEC_VERSION#*+}"
 
 if ! [[ " ${TYPES[*]} " =~ " ${APP_LINUX_TYPE} " ]]; then
     echo "Wrong app type."

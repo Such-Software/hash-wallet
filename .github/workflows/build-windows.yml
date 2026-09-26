@@ -444,7 +444,7 @@ jobs:
             -e "s|const trocadorMoneroApiKey = '';|const trocadorMoneroApiKey = '${TROCADOR_MONERO_API_KEY}';|" \
             -e "s|const trocadorExchangeMarkup = '';|const trocadorExchangeMarkup = '${TROCADOR_EXCHANGE_MARKUP:-1}';|" \
             lib/.secrets.g.dart
-          grep '^const trocador' lib/.secrets.g.dart
+          awk -F"'" '/^const (trocador[A-Za-z]*) = / { split($1, a, " "); v = (length($2) ? "set (" length($2) " chars)" : "EMPTY"); print a[2] ": " v }' lib/.secrets.g.dart   # lengths only; values never reach the log
 
       # ---- Codegen ---------------------------------------------------------
       - name: Build generated code (mobx + hive adapters)
