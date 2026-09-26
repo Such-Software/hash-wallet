@@ -1,6 +1,6 @@
 name: hash_wallet
 description: Hash Bags — a noncustodial multi-currency wallet by Such Software LLC.
-version: 1.0.3+13
+version: 1.0.4+14
 publish_to: none
 
 environment:
