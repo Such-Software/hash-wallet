@@ -306,17 +306,38 @@ jobs:
             echo "apksigner not on PATH; skipping sig print"
           fi
 
+      # Flutter names every build app-release.{apk,aab}, so two releases unzip
+      # to identical filenames and an old one in ~/Downloads looks exactly like
+      # the new one. That is how 1.0.3's AAB got dropped into the 1.0.4 Play
+      # release. Name the files after the version they carry.
+      - name: Name the outputs after their version
+        id: names
+        run: |
+          set -euo pipefail
+          FULL=$(awk '/^version:/ {print $2; exit}' pubspec_description.yaml)
+          VER="${FULL%%+*}"; BUILD="${FULL#*+}"
+          if [ -z "$VER" ] || [ "$BUILD" = "$FULL" ]; then
+            echo "pubspec_description.yaml version '$FULL' is not <name>+<build>; refusing to guess a name" >&2
+            exit 1
+          fi
+          BASE="hash-bags-${VER}-build${BUILD}"
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk "dist/${BASE}.apk"
+          cp build/app/outputs/bundle/release/app-release.aab "dist/${BASE}.aab"
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          ls -la dist
+
       # actions/upload-artifact@v4 doesn't work on Gitea; pin to v3.
       - name: Upload APK artifact (sideload-able)
         uses: actions/upload-artifact@v3
         with:
-          name: hash-wallet-android-apk-${{ github.sha }}
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: ${{ steps.names.outputs.base }}-apk-${{ github.sha }}
+          path: dist/${{ steps.names.outputs.base }}.apk
           retention-days: 14
 
       - name: Upload AAB artifact (for Play Console)
         uses: actions/upload-artifact@v3
         with:
-          name: hash-wallet-android-aab-${{ github.sha }}
-          path: build/app/outputs/bundle/release/app-release.aab
+          name: ${{ steps.names.outputs.base }}-aab-${{ github.sha }}
+          path: dist/${{ steps.names.outputs.base }}.aab
           retention-days: 30
