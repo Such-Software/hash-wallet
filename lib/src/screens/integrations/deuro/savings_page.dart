@@ -134,7 +134,7 @@ class DEuroSavingsPage extends BasePage {
       await _requireHardwareWallet(context);
       _dEuroViewModel.prepareSavingsEdit(amount, false);
     }
-      _editSheetIsOpen = false;
+    _editSheetIsOpen = false;
   }
 
   Future<void> _onReinvestInterest(BuildContext context) async {

@@ -14,7 +14,7 @@ class CoinControlListItem extends StatelessWidget {
     required this.isFrozen,
     required this.isChange,
     required this.isSilentPayment,
-    required this.isFirst, 
+    required this.isFirst,
     required this.isLast,
     required this.isLoading,
     this.onCheckBoxTap,
@@ -36,61 +36,70 @@ class CoinControlListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:70,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.vertical(
-          top: isFirst ? Radius.circular(12) : Radius.circular(0),
-          bottom: isLast ? Radius.circular(12) : Radius.circular(0),
+        height: 70,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          borderRadius: BorderRadius.vertical(
+            top: isFirst ? Radius.circular(12) : Radius.circular(0),
+            bottom: isLast ? Radius.circular(12) : Radius.circular(0),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              spacing: 12,
-              children: [
-                _getLeading(context),
-                // NewSimpleCheckbox(value: isSending, onChanged: (value){onCheckBoxTap?.call();}),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 4,
-                  children: [
-                    Row(
-                      spacing:4,
-                      children: [
-                        Text(amount, style: TextStyle(fontSize:14,fontWeight: FontWeight.w400,color: Theme.of(context).colorScheme.onSurface),),
-                        if(address.toLowerCase().contains("mweb")) // hack carried over from old ui, we really should just have a boolean in the object
-                          HashImageWidget(imageUrl:
-                              "assets/new-ui/address-type-picker-icons/mweb.svg",
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                spacing: 12,
+                children: [
+                  _getLeading(context),
+                  // NewSimpleCheckbox(value: isSending, onChanged: (value){onCheckBoxTap?.call();}),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 4,
+                    children: [
+                      Row(
+                        spacing: 4,
+                        children: [
+                          Text(
+                            amount,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                          if (address.toLowerCase().contains(
+                              "mweb")) // hack carried over from old ui, we really should just have a boolean in the object
+                            HashImageWidget(
+                              imageUrl: "assets/new-ui/address-type-picker-icons/mweb.svg",
                               width: 18,
                               height: 18,
                               colorFilter: ColorFilter.mode(
                                   Theme.of(context).colorScheme.onSurfaceVariant, BlendMode.srcIn),
                             ),
-                        if(isSilentPayment)
-                          HashImageWidget(imageUrl:
-                            "assets/new-ui/address-type-picker-icons/silent.svg",
-                            width: 18,
-                            height: 18,
-                            colorFilter: ColorFilter.mode(
-                                Theme.of(context).colorScheme.onSurfaceVariant, BlendMode.srcIn),
-                          ),
+                          if (isSilentPayment)
+                            HashImageWidget(
+                              imageUrl: "assets/new-ui/address-type-picker-icons/silent.svg",
+                              width: 18,
+                              height: 18,
+                              colorFilter: ColorFilter.mode(
+                                  Theme.of(context).colorScheme.onSurfaceVariant, BlendMode.srcIn),
+                            ),
                         ],
-                    ),
-                    AutoSizeText(
-                      '${address.substring(0, 5)}...${address.substring(address.length - 5)}',
-                      style: TextStyle(fontSize:12,fontWeight: FontWeight.w400,color: Theme.of(context).colorScheme.onSurfaceVariant),
-                      maxLines: 1,
-                    ),
-                  ],
-
-                )
-              ],
-            ),
+                      ),
+                      AutoSizeText(
+                        '${address.substring(0, 5)}...${address.substring(address.length - 5)}',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        maxLines: 1,
+                      ),
+                    ],
+                  )
+                ],
+              ),
               Row(
                 spacing: 8,
                 children: [
@@ -101,8 +110,8 @@ class CoinControlListItem extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         color: Theme.of(context).colorScheme.onSurfaceVariant),
                   ),
-                  HashImageWidget(imageUrl:
-                    "assets/new-ui/arrow_right.svg",
+                  HashImageWidget(
+                    imageUrl: "assets/new-ui/arrow_right.svg",
                     colorFilter: ColorFilter.mode(
                         Theme.of(context).colorScheme.onSurfaceVariant, BlendMode.srcIn),
                   ),
@@ -110,20 +119,24 @@ class CoinControlListItem extends StatelessWidget {
               )
             ],
           ),
-      )
-    );
+        ));
   }
 
   Widget _getLeading(BuildContext context) {
-    if(isLoading) {
-      return CircularProgressIndicator(color: Theme.of(context).colorScheme.primary,);
+    if (isLoading) {
+      return CircularProgressIndicator(
+        color: Theme.of(context).colorScheme.primary,
+      );
     }
 
-    if(isFrozen) {
-      return HashImageWidget(imageUrl:"assets/new-ui/frozen.svg");
+    if (isFrozen) {
+      return HashImageWidget(imageUrl: "assets/new-ui/frozen.svg");
     }
 
-    return NewSimpleCheckbox(value: isSending, onChanged: (value){onCheckBoxTap?.call();});
-
+    return NewSimpleCheckbox(
+        value: isSending,
+        onChanged: (value) {
+          onCheckBoxTap?.call();
+        });
   }
 }

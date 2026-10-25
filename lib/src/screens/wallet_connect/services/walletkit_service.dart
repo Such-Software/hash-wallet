@@ -163,7 +163,6 @@ abstract class WalletKitServiceBase with Store {
         );
       }
     }
-
   }
 
   @action

@@ -71,7 +71,8 @@ class _TransactionDetailsModalState extends State<TransactionDetailsModal> {
                             child: Column(
                               children: [
                                 HashImageWidget(
-                                    imageUrl: widget.transactionDetailsViewModel.transactionAsset.iconPath ??
+                                    imageUrl: widget.transactionDetailsViewModel.transactionAsset
+                                            .iconPath ??
                                         "",
                                     width: 64,
                                     height: 64),
@@ -99,7 +100,7 @@ class _TransactionDetailsModalState extends State<TransactionDetailsModal> {
                                                   item.value.length > 25;
 
                                               return ListItemRegularRow(
-                                                copyableText: item.value,
+                                                  copyableText: item.value,
                                                   showArrow: false,
                                                   keyValue:
                                                       ((item.key as ValueKey?)?.value as String?) ??

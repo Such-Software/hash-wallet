@@ -52,8 +52,7 @@ class EmbeddedNode {
 
   /// Poll status until the RPC is reachable (or [timeout]); lets a caller wait
   /// before pointing the wallet at the local node.
-  static Future<bool> waitUntilReady(
-      {Duration timeout = const Duration(seconds: 90)}) async {
+  static Future<bool> waitUntilReady({Duration timeout = const Duration(seconds: 90)}) async {
     final deadline = DateTime.now().add(timeout);
     while (DateTime.now().isBefore(deadline)) {
       final s = await status();
@@ -67,8 +66,7 @@ class EmbeddedNode {
   static Future<bool> _rpcReachable() async {
     try {
       final port = supported ? (await _channel.invokeMethod<int>('rpcPort') ?? 34568) : 34568;
-      final socket = await Socket.connect('127.0.0.1', port,
-          timeout: const Duration(seconds: 2));
+      final socket = await Socket.connect('127.0.0.1', port, timeout: const Duration(seconds: 2));
       socket.destroy();
       return true;
     } catch (_) {
@@ -96,6 +94,5 @@ class EmbeddedNodeStatus {
         targetHeight = 0,
         synced = false;
 
-  double get progress =>
-      targetHeight > 0 ? (height / targetHeight).clamp(0.0, 1.0) : 0.0;
+  double get progress => targetHeight > 0 ? (height / targetHeight).clamp(0.0, 1.0) : 0.0;
 }

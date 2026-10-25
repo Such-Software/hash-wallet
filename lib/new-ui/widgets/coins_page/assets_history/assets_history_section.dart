@@ -33,7 +33,8 @@ class _AssetsHistorySectionState extends State<AssetsHistorySection> {
   void reloadTabs() {
     final oldTabLength = tabs.length;
     tabs = [
-      if (widget.dashboardViewModel.balanceViewModel.isHomeScreenSettingsEnabled || (widget.dashboardViewModel.hasMweb && widget.dashboardViewModel.mwebEnabled))
+      if (widget.dashboardViewModel.balanceViewModel.isHomeScreenSettingsEnabled ||
+          (widget.dashboardViewModel.hasMweb && widget.dashboardViewModel.mwebEnabled))
         AssetsHistorySectionTab(
             S.current.assets,
             AssetsSection(
@@ -60,10 +61,10 @@ class _AssetsHistorySectionState extends State<AssetsHistorySection> {
     super.initState();
     reloadTabs();
 
-    reaction((_)=>widget.dashboardViewModel.balanceViewModel.formattedBalances, (value) {
+    reaction((_) => widget.dashboardViewModel.balanceViewModel.formattedBalances, (value) {
       reloadTabs();
     });
-    reaction((_)=>widget.dashboardViewModel.mwebEnabled, (_)=>reloadTabs());
+    reaction((_) => widget.dashboardViewModel.mwebEnabled, (_) => reloadTabs());
   }
 
   @override
@@ -76,11 +77,11 @@ class _AssetsHistorySectionState extends State<AssetsHistorySection> {
           tabs: tabs.map((item) => item.title).toList(),
           onTabChange: (index) {
             setState(() {
-                _selectedTab = index;
-              });
-            },
-            selectedTab: _selectedTab,
-          ),
+              _selectedTab = index;
+            });
+          },
+          selectedTab: _selectedTab,
+        ),
         tabs[_selectedTab].content
       ],
     );

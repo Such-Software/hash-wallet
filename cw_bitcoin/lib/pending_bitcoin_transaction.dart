@@ -74,7 +74,7 @@ class PendingBitcoinTransaction with PendingTransaction {
   String get feeFormatted => "$feeFormattedValue ${_feeCurrency}";
 
   String get _feeCurrency {
-    switch(type) {
+    switch (type) {
       case WalletType.bitcoin:
         return "BTC";
       case WalletType.litecoin:
@@ -86,9 +86,7 @@ class PendingBitcoinTransaction with PendingTransaction {
       default:
         return type.name;
     }
-
   }
-
 
   @override
   String get feeFormattedValue => bitcoinAmountToString(amount: fee);
@@ -155,14 +153,12 @@ class PendingBitcoinTransaction with PendingTransaction {
 
   Future<void> _ltcCommit() async {
     try {
-      final resp = await CwMweb.broadcast(
-          BroadcastRequest(rawTx: BytesUtils.fromHexString(hex)));
+      final resp = await CwMweb.broadcast(BroadcastRequest(rawTx: BytesUtils.fromHexString(hex)));
       idOverride = resp.txid;
     } on GrpcError catch (e) {
       throw BitcoinTransactionCommitFailed(errorMessage: e.message);
     } catch (e) {
-      throw BitcoinTransactionCommitFailed(
-          errorMessage: "Unknown error: ${e.toString()}");
+      throw BitcoinTransactionCommitFailed(errorMessage: "Unknown error: ${e.toString()}");
     }
   }
 
@@ -181,8 +177,7 @@ class PendingBitcoinTransaction with PendingTransaction {
     _listeners.forEach((listener) => listener(transactionInfo()));
   }
 
-  void addListener(
-          void Function(ElectrumTransactionInfo transaction) listener) =>
+  void addListener(void Function(ElectrumTransactionInfo transaction) listener) =>
       _listeners.add(listener);
 
   ElectrumTransactionInfo transactionInfo() => ElectrumTransactionInfo(type,
@@ -207,8 +202,8 @@ class PendingBitcoinTransaction with PendingTransaction {
     var cborEncoder = CBOREncoder();
     cborEncoder.encodeBytes(sourceBytes);
     var ur = UR("psbt", cborEncoder.getBytes());
-    var urLegacy = UR("crypto-psbt", cborEncoder.getBytes());  
-    // var ur = UR("psbt", Uint8List.fromList(List.generate(64*1024, (int x) => x % 256)));    
+    var urLegacy = UR("crypto-psbt", cborEncoder.getBytes());
+    // var ur = UR("psbt", Uint8List.fromList(List.generate(64*1024, (int x) => x % 256)));
     var encoded = UREncoder(ur, 120);
     var encodedLegacy = UREncoder(urLegacy, 120);
     List<String> values = [];
@@ -230,8 +225,7 @@ class PendingBitcoinTransaction with PendingTransaction {
     return Future.value({
       "Cupcake bcur": values.join("\n"),
       "ColdCard bbqr": bbqr.join("\n"),
-      if (kDebugMode)
-        "SeedSigner bcur legacy": valuesLegacy.join("\n"),
+      if (kDebugMode) "SeedSigner bcur legacy": valuesLegacy.join("\n"),
     });
   }
 }

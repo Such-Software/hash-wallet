@@ -13,21 +13,21 @@ const srcDir = 'srcDir';
 const defaultLocale = 'en';
 
 Future<void> main(List<String> args) async {
-  final extraInfo = args.isNotEmpty ?
-  args.fold(<String, dynamic>{}, (Map<String, dynamic> acc, String arg) {
-    final parts = arg.split('=');
-    var key = normalizeKeyName(parts[0]);
-    if (key.contains('--')) {
-      key = key.substring(2);
-    }
-    acc[key] = parts.length > 1
-        ? parts[1].isNotEmpty
-          ? parts[1]
-          : inputPath
-        : inputPath;
-    return acc;
-  })
-  : <String, dynamic> {srcDir : inputPath};
+  final extraInfo = args.isNotEmpty
+      ? args.fold(<String, dynamic>{}, (Map<String, dynamic> acc, String arg) {
+          final parts = arg.split('=');
+          var key = normalizeKeyName(parts[0]);
+          if (key.contains('--')) {
+            key = key.substring(2);
+          }
+          acc[key] = parts.length > 1
+              ? parts[1].isNotEmpty
+                  ? parts[1]
+                  : inputPath
+              : inputPath;
+          return acc;
+        })
+      : <String, dynamic>{srcDir: inputPath};
 
   final outputDir = Directory(outputPath);
 
@@ -52,7 +52,11 @@ Future<void> main(List<String> args) async {
     final localePath = <String, dynamic>{};
     await dir.list(recursive: false).forEach((element) {
       try {
-        final shortLocale = element.path.split('_',)[1].split('.')[0];
+        final shortLocale = element.path
+            .split(
+              '_',
+            )[1]
+            .split('.')[0];
         localePath[shortLocale] = element.path;
       } catch (e) {
         printV('Wrong file: ${element.path}');
@@ -71,8 +75,7 @@ Future<void> main(List<String> args) async {
       output += part1;
       output += textDirectionDeclaration;
 
-      var inputContent =
-        File(localePath[defaultLocale].toString()).readAsStringSync();
+      var inputContent = File(localePath[defaultLocale].toString()).readAsStringSync();
       var config = json.decode(inputContent) as Map<String, dynamic>;
 
       output += localizedStrings(config: config, hasOverride: false);
@@ -154,4 +157,3 @@ String localizedStrings({required Map<String, dynamic> config, required bool has
 
   return output;
 }
-

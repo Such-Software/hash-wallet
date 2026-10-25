@@ -159,8 +159,11 @@ class _NewReceivePageState extends State<NewReceivePage> {
             .whereType<CryptoCurrency>()
             .toList(), onDismissed: () {
       widget.addressListViewModel.dismissInfobox();
-          setState(() {});
-        }, autoGenerateSubaddressStatus: widget.lightningMode ? AutoGenerateSubaddressStatus.disabled : widget.dashboardViewModel.settingsStore.autoGenerateSubaddressStatus);
+      setState(() {});
+    },
+        autoGenerateSubaddressStatus: widget.lightningMode
+            ? AutoGenerateSubaddressStatus.disabled
+            : widget.dashboardViewModel.settingsStore.autoGenerateSubaddressStatus);
 
     return Container(
       decoration: BoxDecoration(

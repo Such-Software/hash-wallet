@@ -28,7 +28,7 @@ class WalletConnectConnectionsView extends StatelessWidget {
   void _triggerPairingFromDeeplink(Uri? launchUri) async {
     if (launchUri == null) return;
 
-    if(launchUri.scheme == "wc") {
+    if (launchUri.scheme == "wc") {
       await walletKitService.pairWithUri(launchUri);
       return;
     }

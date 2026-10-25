@@ -25,8 +25,7 @@ class Setup2FAQRPage extends BasePage {
   Widget body(BuildContext context) {
     final copyImage = Image.asset('assets/images/copy_content.png',
         height: 16, width: 16, color: Theme.of(context).colorScheme.onSurface);
-    final cake2FAHowToUseUrl = Uri.parse(
-        'https://github.com/Such-Software/hash-wallet');
+    final cake2FAHowToUseUrl = Uri.parse('https://github.com/Such-Software/hash-wallet');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(

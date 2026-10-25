@@ -146,7 +146,7 @@ class Bip353Record {
         context: context,
         builder: (dialogContext) {
           return AlertWithPickerOption(
-            alertTitle:  S.of(context).multiple_addresses_detected + '\n$bip353Name',
+            alertTitle: S.of(context).multiple_addresses_detected + '\n$bip353Name',
             alertTitleTextSize: 14,
             alertSubtitle: S.of(context).please_choose_one + ':',
             options: displayItems,
@@ -168,5 +168,4 @@ class Bip353Record {
     final end = value.substring(value.length - back);
     return '$start...$end';
   }
-
 }

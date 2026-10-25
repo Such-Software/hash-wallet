@@ -37,16 +37,15 @@ class NodeCreateOrEditPage extends StatefulWidget {
 class _NodeCreateOrEditPageState extends State<NodeCreateOrEditPage> {
   final _nodeFormKey = GlobalKey<NodeFormState>();
 
-
   @override
   void initState() {
     super.initState();
     reaction(
-          (_) => widget.nodeCreateOrEditViewModel.connectionState,
-          (ExecutionState state) {
+      (_) => widget.nodeCreateOrEditViewModel.connectionState,
+      (ExecutionState state) {
         if (state is ExecutedSuccessfullyState) {
           WidgetsBinding.instance.addPostFrameCallback(
-                (_) => showPopUp<void>(
+            (_) => showPopUp<void>(
               context: context,
               builder: (context) => AlertWithOneAction(
                 alertTitle: S.of(context).new_node_testing,
@@ -62,7 +61,7 @@ class _NodeCreateOrEditPageState extends State<NodeCreateOrEditPage> {
 
         if (state is FailureState) {
           WidgetsBinding.instance.addPostFrameCallback(
-                (_) => showPopUp<void>(
+            (_) => showPopUp<void>(
               context: context,
               builder: (context) => AlertWithOneAction(
                 alertTitle: S.of(context).error,
@@ -75,12 +74,10 @@ class _NodeCreateOrEditPageState extends State<NodeCreateOrEditPage> {
         }
       },
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: SafeArea(
@@ -90,11 +87,15 @@ class _NodeCreateOrEditPageState extends State<NodeCreateOrEditPage> {
               title: widget.editingNode != null ? S.current.edit_node : S.current.node_new,
               leadingIcon: Icon(Icons.arrow_back_ios_new),
               onLeadingPressed: Navigator.of(context).pop,
-              trailingIcon: HashImageWidget(imageUrl:
-                "assets/new-ui/scan.svg",width:24,height:24,
-                colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
+              trailingIcon: HashImageWidget(
+                imageUrl: "assets/new-ui/scan.svg",
+                width: 24,
+                height: 24,
+                colorFilter:
+                    ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
               ),
-              onTrailingPressed: () => widget.nodeCreateOrEditViewModel.scanQRCodeForNewNode(context),
+              onTrailingPressed: () =>
+                  widget.nodeCreateOrEditViewModel.scanQRCodeForNewNode(context),
             ),
             Expanded(
               child: KeyboardHideOverlay(
@@ -128,7 +129,7 @@ class _NodeCreateOrEditPageState extends State<NodeCreateOrEditPage> {
                                         ),
                                       ) ??
                                       false;
-        
+
                                   if (confirmed) {
                                     await widget.editingNode!.delete();
                                     Navigator.of(context).pop();
@@ -148,12 +149,14 @@ class _NodeCreateOrEditPageState extends State<NodeCreateOrEditPage> {
                               padding: const EdgeInsets.only(left: 8.0),
                               child: PrimaryButton(
                                 onPressed: () async {
-                                  if (_nodeFormKey.currentState != null && !_nodeFormKey.currentState!.validate()) {
+                                  if (_nodeFormKey.currentState != null &&
+                                      !_nodeFormKey.currentState!.validate()) {
                                     return;
                                   }
-        
+
                                   await widget.nodeCreateOrEditViewModel.save(
-                                      editingNode: widget.editingNode, saveAsCurrent: widget.isSelected ?? false);
+                                      editingNode: widget.editingNode,
+                                      saveAsCurrent: widget.isSelected ?? false);
                                   if (context.mounted) {
                                     Navigator.of(context).pop();
                                   }
@@ -162,7 +165,8 @@ class _NodeCreateOrEditPageState extends State<NodeCreateOrEditPage> {
                                 color: Theme.of(context).colorScheme.primary,
                                 textColor: Theme.of(context).colorScheme.onPrimary,
                                 isDisabled: (!widget.nodeCreateOrEditViewModel.isReady) ||
-                                    (widget.nodeCreateOrEditViewModel.connectionState is IsExecutingState),
+                                    (widget.nodeCreateOrEditViewModel.connectionState
+                                        is IsExecutingState),
                               ),
                             ),
                           ),

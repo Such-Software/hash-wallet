@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'choose_yat_address_alert.dart';
 
-Future<String> extractAddressFromParsed(
-    BuildContext? context,
-    ParsedAddress parsedAddress) async {
+Future<String> extractAddressFromParsed(BuildContext? context, ParsedAddress parsedAddress) async {
   if (context == null || !context.mounted) return parsedAddress.addresses.first;
 
   var title = '';

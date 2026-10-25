@@ -229,7 +229,6 @@ abstract class SettingsStoreBase with Store {
       priority[WalletType.ethereum] = initialEthereumTransactionPriority;
     }
 
-
     if (initialPolygonTransactionPriority != null) {
       priority[WalletType.polygon] = initialPolygonTransactionPriority;
     }
@@ -274,7 +273,8 @@ abstract class SettingsStoreBase with Store {
     reaction((_) => shouldShowRepWarning,
         (bool val) => sharedPreferences.setBool(PreferencesKey.shouldShowRepWarning, val));
 
-    reaction((_)=>mwebAdDismissed, (val)=>sharedPreferences.setBool(PreferencesKey.mwebAdDismissed, val));
+    reaction((_) => mwebAdDismissed,
+        (val) => sharedPreferences.setBool(PreferencesKey.mwebAdDismissed, val));
 
     priority.observe((change) {
       final String? key;
@@ -651,8 +651,8 @@ abstract class SettingsStoreBase with Store {
 
     reaction(
         (_) => showZcashMissingFundsCard,
-        (bool showZcashMissingFundsCard) =>
-            _sharedPreferences.setBool(PreferencesKey.showZcashMissingFundsCard, showZcashMissingFundsCard));
+        (bool showZcashMissingFundsCard) => _sharedPreferences.setBool(
+            PreferencesKey.showZcashMissingFundsCard, showZcashMissingFundsCard));
 
     reaction((_) => mwebEnabled,
         (bool mwebEnabled) => _sharedPreferences.setBool(PreferencesKey.mwebEnabled, mwebEnabled));
@@ -690,8 +690,8 @@ abstract class SettingsStoreBase with Store {
 
     reaction(
         (_) => balanceHideCounter,
-        (int balanceHideCounter) => _sharedPreferences.setInt(PreferencesKey.balanceHideCounter, balanceHideCounter)
-    );
+        (int balanceHideCounter) =>
+            _sharedPreferences.setInt(PreferencesKey.balanceHideCounter, balanceHideCounter));
 
     this.nodes.observe((change) {
       if (change.newValue != null && change.key != null) {
@@ -953,7 +953,7 @@ abstract class SettingsStoreBase with Store {
 
   @observable
   bool mwebCardDisplay;
-  
+
   @observable
   bool showZcashMissingFundsCard;
 
@@ -1051,7 +1051,8 @@ abstract class SettingsStoreBase with Store {
     return priority[walletType];
   }
 
-  void setPriority(WalletType walletType, TransactionPriority priority, {int? chainId}) => this.priority[walletType] = priority;
+  void setPriority(WalletType walletType, TransactionPriority priority, {int? chainId}) =>
+      this.priority[walletType] = priority;
 
   bool isBitcoinBuyEnabled;
 
@@ -1162,10 +1163,14 @@ abstract class SettingsStoreBase with Store {
         sharedPreferences.getBool(PreferencesKey.shouldShowMarketPlaceInDashboard) ?? true;
     final showAddressBookPopupEnabled =
         sharedPreferences.getBool(PreferencesKey.showAddressBookPopupEnabled) ?? true;
-    final forceDecentralizedExchanges = await sharedPreferences.getBool(PreferencesKey.forceDecentralizedExchanges) ?? false;
-    final decentralizedExchangesPromptDismissed = await sharedPreferences.getBool(PreferencesKey.decentralizedExchangesPromptDismissed) ?? false;
+    final forceDecentralizedExchanges =
+        await sharedPreferences.getBool(PreferencesKey.forceDecentralizedExchanges) ?? false;
+    final decentralizedExchangesPromptDismissed =
+        await sharedPreferences.getBool(PreferencesKey.decentralizedExchangesPromptDismissed) ??
+            false;
     final syncStatusDisplayMode = SyncStatusDisplayModeExtension.fromString(
-        sharedPreferences.getString(PreferencesKey.syncStatusDisplayMode) ?? SyncStatusDisplayMode.blocksRemaining.name);
+        sharedPreferences.getString(PreferencesKey.syncStatusDisplayMode) ??
+            SyncStatusDisplayMode.blocksRemaining.name);
     final exchangeStatus = ExchangeApiMode.deserialize(
         raw: sharedPreferences.getInt(PreferencesKey.exchangeStatusKey) ??
             ExchangeApiMode.enabled.raw);
@@ -1211,7 +1216,8 @@ abstract class SettingsStoreBase with Store {
         sharedPreferences.getBool(PreferencesKey.silentPaymentsCardDisplay) ?? true;
     final mwebAlwaysScan = sharedPreferences.getBool(PreferencesKey.mwebAlwaysScan) ?? false;
     final mwebCardDisplay = sharedPreferences.getBool(PreferencesKey.mwebCardDisplay) ?? true;
-    final showZcashMissingFundsCard = sharedPreferences.getBool(PreferencesKey.showZcashMissingFundsCard) ?? true;
+    final showZcashMissingFundsCard =
+        sharedPreferences.getBool(PreferencesKey.showZcashMissingFundsCard) ?? true;
     final mwebEnabled = sharedPreferences.getBool(PreferencesKey.mwebEnabled) ?? false;
     final hasEnabledMwebBefore =
         sharedPreferences.getBool(PreferencesKey.hasEnabledMwebBefore) ?? false;
@@ -1469,8 +1475,9 @@ abstract class SettingsStoreBase with Store {
 
     final mwebAdDismissed =
         await sharedPreferences.getBool(PreferencesKey.mwebAdDismissed) ?? false;
-    
-    final balanceHideCounter = await sharedPreferences.getInt(PreferencesKey.balanceHideCounter) ?? 0;
+
+    final balanceHideCounter =
+        await sharedPreferences.getInt(PreferencesKey.balanceHideCounter) ?? 0;
 
     return SettingsStore(
       secureStorage: secureStorage,
@@ -1685,7 +1692,8 @@ abstract class SettingsStoreBase with Store {
         sharedPreferences.getBool(PreferencesKey.showAddressBookPopupEnabled) ??
             showAddressBookPopupEnabled;
     syncStatusDisplayMode = SyncStatusDisplayModeExtension.fromString(
-        sharedPreferences.getString(PreferencesKey.syncStatusDisplayMode) ?? SyncStatusDisplayMode.blocksRemaining.name);
+        sharedPreferences.getString(PreferencesKey.syncStatusDisplayMode) ??
+            SyncStatusDisplayMode.blocksRemaining.name);
     exchangeStatus = ExchangeApiMode.deserialize(
         raw: sharedPreferences.getInt(PreferencesKey.exchangeStatusKey) ??
             ExchangeApiMode.enabled.raw);
@@ -1742,7 +1750,8 @@ abstract class SettingsStoreBase with Store {
         sharedPreferences.getBool(PreferencesKey.silentPaymentsCardDisplay) ?? true;
     mwebAlwaysScan = sharedPreferences.getBool(PreferencesKey.mwebAlwaysScan) ?? false;
     mwebCardDisplay = sharedPreferences.getBool(PreferencesKey.mwebCardDisplay) ?? true;
-    showZcashMissingFundsCard = sharedPreferences.getBool(PreferencesKey.showZcashMissingFundsCard) ?? true;
+    showZcashMissingFundsCard =
+        sharedPreferences.getBool(PreferencesKey.showZcashMissingFundsCard) ?? true;
     mwebEnabled = sharedPreferences.getBool(PreferencesKey.mwebEnabled) ?? false;
     hasEnabledMwebBefore = sharedPreferences.getBool(PreferencesKey.hasEnabledMwebBefore) ?? false;
     final nodeId = sharedPreferences.getInt(PreferencesKey.currentNodeIdKey);

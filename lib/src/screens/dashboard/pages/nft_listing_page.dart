@@ -89,8 +89,7 @@ class NFTListWidget extends StatelessWidget {
         if (nftViewModel.nftAssetByWalletModels.isEmpty) return emptyMessage;
 
         return Padding(
-          padding: EdgeInsets.only(
-             bottom:  64),
+          padding: EdgeInsets.only(bottom: 64),
           child: ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),

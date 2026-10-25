@@ -5,9 +5,9 @@ class YatRecord {
   });
 
   YatRecord.fromJson(Map<String, dynamic> json)
-    : address = json['address'] as String,
-      category = json['category'] as String;
+      : address = json['address'] as String,
+        category = json['category'] as String;
 
   String category;
-  String address; 
+  String address;
 }

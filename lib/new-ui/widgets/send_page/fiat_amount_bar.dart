@@ -16,7 +16,9 @@ class FiatAmountBar extends StatelessWidget {
       required this.fiatCurrency,
       this.allAmount,
       this.foregroundElementColor,
-      this.textColor, this.allAmountColor, this.allAmountTextColor});
+      this.textColor,
+      this.allAmountColor,
+      this.allAmountTextColor});
 
   final bool fiatInputMode;
   final VoidCallback onSwitchButtonPressed;
@@ -49,14 +51,15 @@ class FiatAmountBar extends StatelessWidget {
             ),
             Observer(
                 builder: (_) => GestureDetector(
-                  onTap: onSwitchButtonPressed,
-                  child: Text(
+                      onTap: onSwitchButtonPressed,
+                      child: Text(
                         fiatInputMode
                             ? "${cryptoAmount.isEmpty ? "0" : cryptoAmount.withMaxDecimals(8)} ${cryptoCurrency}"
                             : "${fiatAmount.isEmpty ? "0" : fiatAmount} ${fiatCurrency}",
-                        style: TextStyle(color: textColor ?? Theme.of(context).colorScheme.onSurface),
+                        style:
+                            TextStyle(color: textColor ?? Theme.of(context).colorScheme.onSurface),
                       ),
-                )),
+                    )),
           ],
         ),
         if (allAmount != null && allAmount!.isNotEmpty)
@@ -68,10 +71,11 @@ class FiatAmountBar extends StatelessWidget {
                 style: TextStyle(color: textColor ?? Theme.of(context).colorScheme.onSurface),
               ),
               Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999999)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(999999)),
                 child: Material(
-                    color: allAmountColor ?? foregroundElementColor ?? Theme.of(context).colorScheme.surfaceContainer,
+                    color: allAmountColor ??
+                        foregroundElementColor ??
+                        Theme.of(context).colorScheme.surfaceContainer,
                     borderRadius: BorderRadius.circular(99999),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(99999),
@@ -80,7 +84,8 @@ class FiatAmountBar extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                         child: Text(
                           formatAmount(allAmount!),
-                          style: TextStyle(color:  allAmountTextColor ?? Theme.of(context).colorScheme.primary),
+                          style: TextStyle(
+                              color: allAmountTextColor ?? Theme.of(context).colorScheme.primary),
                         ),
                       ),
                     )),
@@ -94,7 +99,7 @@ class FiatAmountBar extends StatelessWidget {
   String formatAmount(String amount) {
     try {
       return double.parse(amount).toStringAsPrecision(8).replaceFirst(RegExp(r"\.?0+$"), "");
-    } catch(e) {
+    } catch (e) {
       return amount;
     }
   }

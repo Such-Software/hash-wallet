@@ -31,9 +31,9 @@ class _NewCoinControlPageState extends State<NewCoinControlPage> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: !widget.unspentCoinsListViewModel.isSavingItems,
-      onPopInvokedWithResult: (didPop, result) async{
+      onPopInvokedWithResult: (didPop, result) async {
         await widget.unspentCoinsListViewModel.dispose();
-        if(!didPop && mounted) Navigator.of(context).pop();
+        if (!didPop && mounted) Navigator.of(context).pop();
       },
       child: Material(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),

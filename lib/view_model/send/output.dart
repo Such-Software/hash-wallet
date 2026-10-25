@@ -80,7 +80,7 @@ abstract class OutputBase with Store {
 
   @observable
   String note;
-  
+
   @observable
   String memo;
 
@@ -92,7 +92,6 @@ abstract class OutputBase with Store {
 
   @observable
   String extractedAddress;
-
 
   @computed
   bool get isParsedAddress =>
@@ -194,7 +193,8 @@ abstract class OutputBase with Store {
                 _wallet, _settingsStore.customBitcoinFeeRate, formattedCryptoAmount);
           }
 
-          estimatedFee = _appStore.amountParsingProxy.getDisplayCryptoString(fee, cryptoCurrencyHandler());
+          estimatedFee =
+              _appStore.amountParsingProxy.getDisplayCryptoString(fee, cryptoCurrencyHandler());
           break;
 
         /// EVMs
@@ -234,12 +234,11 @@ abstract class OutputBase with Store {
     final _ = _wallet.syncStatus;
 
     try {
-      final currency = isEVMCompatibleChain(_wallet.type)
-          ? _wallet.currency
-          : cryptoCurrencyHandler();
+      final currency =
+          isEVMCompatibleChain(_wallet.type) ? _wallet.currency : cryptoCurrencyHandler();
 
-      final cryptoAmount =
-          double.parse(_appStore.amountParsingProxy.getCanonicalCryptoAmount(estimatedFee, currency));
+      final cryptoAmount = double.parse(
+          _appStore.amountParsingProxy.getCanonicalCryptoAmount(estimatedFee, currency));
 
       return calculateFiatAmountRaw(
           price: _fiatConversationStore.prices[currency]!, cryptoAmount: cryptoAmount);
@@ -291,6 +290,7 @@ abstract class OutputBase with Store {
   }
 
   @action
+
   /// [setCryptoAmount] always takes in the canonical representation eg. Bitcoin and not Sats
   void setCryptoAmount(String amount) {
     if (amount.toUpperCase() != S.current.all) sendAll = false;
@@ -357,7 +357,7 @@ abstract class OutputBase with Store {
     final domain = address;
     final currency = cryptoCurrencyHandler();
     parsedAddress = await getIt.get<AddressResolver>().resolve(context, domain, currency);
-    if(parsedAddress.name.isNotEmpty) {
+    if (parsedAddress.name.isNotEmpty) {
       displayName = parsedAddress.name;
     }
     extractedAddress = await extractAddressFromParsed(context, parsedAddress);

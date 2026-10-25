@@ -4,7 +4,7 @@ import 'package:hash_wallet/themes/core/custom_theme_colors.dart';
 class LightThemeCustomColors extends CustomThemeColors {
   @override
   Color get warningContainerColor => const Color(0xFFFFCC00);
-  
+
   @override
   Color get warningOutlineColor => const Color(0xFF312938);
 

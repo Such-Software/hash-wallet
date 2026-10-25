@@ -38,8 +38,7 @@ abstract class WalletNewVMBase extends WalletCreationVM with Store {
   @observable
   String selectedMnemonicLanguage;
 
-  bool get hasLanguageSelector =>
-      [WalletType.monero, WalletType.wownero].contains(type);
+  bool get hasLanguageSelector => [WalletType.monero, WalletType.wownero].contains(type);
 
   bool get showLanguageSelector => newWalletArguments?.mnemonic == null && hasLanguageSelector;
 

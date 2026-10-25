@@ -30,7 +30,8 @@ class _NewSendAmountInputState extends State<NewSendAmountInput> {
 
   @override
   void initState() {
-    widget.amountController.addListener(()=>formFieldKey.currentState?.didChange(widget.amountController.text));
+    widget.amountController
+        .addListener(() => formFieldKey.currentState?.didChange(widget.amountController.text));
     super.initState();
   }
 
@@ -109,11 +110,14 @@ class _NewSendAmountInputState extends State<NewSendAmountInput> {
                                     spacing: 8,
                                     children: [
                                       if (widget.hasPicker && widget.currencyIconPath.isNotEmpty)
-                                        HashImageWidget(imageUrl: widget.currencyIconPath, width: 24, height: 24),
+                                        HashImageWidget(
+                                            imageUrl: widget.currencyIconPath,
+                                            width: 24,
+                                            height: 24),
                                       Text(widget.currency),
                                       if (widget.hasPicker)
-                                        HashImageWidget(imageUrl:
-                                          "assets/new-ui/chooser.svg",
+                                        HashImageWidget(
+                                          imageUrl: "assets/new-ui/chooser.svg",
                                           width: 12,
                                           height: 12,
                                           colorFilter: ColorFilter.mode(

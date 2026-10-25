@@ -107,9 +107,7 @@ class _HashBagSuccessAnimationState extends State<HashBagSuccessAnimation>
               final double spread = w * p.dx * (0.35 + t);
               final double x = mouthX + spread - sz / 2;
               final double y = mouthY - rise - sz / 2;
-              final double opacity = (t < 0.15
-                      ? t / 0.15
-                      : (t > 0.78 ? (1.0 - t) / 0.22 : 1.0))
+              final double opacity = (t < 0.15 ? t / 0.15 : (t > 0.78 ? (1.0 - t) / 0.22 : 1.0))
                   .clamp(0.0, 1.0)
                   .toDouble();
               final double scale = 0.55 + 0.45 * (t < 0.3 ? t / 0.3 : 1.0);

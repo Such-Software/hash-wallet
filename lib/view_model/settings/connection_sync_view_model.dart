@@ -65,7 +65,6 @@ abstract class ConnectionSyncViewModelBase with Store {
   @computed
   bool get builtinTor => _settingsStore.currentBuiltinTor;
 
-
   @computed
   bool get hasPowNodes => [WalletType.nano, WalletType.banano].contains(_wallet.type);
 

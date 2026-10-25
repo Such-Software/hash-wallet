@@ -16,7 +16,7 @@ part 'contact_view_model.g.dart';
 class ContactViewModel = ContactViewModelBase with _$ContactViewModel;
 
 abstract class ContactViewModelBase with Store {
-  ContactViewModelBase(this._contacts,  {ContactRecord? contact})
+  ContactViewModelBase(this._contacts, {ContactRecord? contact})
       : state = InitialExecutionState(),
         currencies = CryptoCurrency.all,
         _contact = contact,
@@ -25,7 +25,6 @@ abstract class ContactViewModelBase with Store {
         displayName = contact?.displayName ?? '',
         currency = contact?.type,
         lastChange = contact?.lastChange;
-
 
   @observable
   ExecutionState state;
@@ -46,9 +45,7 @@ abstract class ContactViewModelBase with Store {
 
   @computed
   bool get isReady =>
-      name.isNotEmpty &&
-      (currency?.toString().isNotEmpty ?? false) &&
-      address.isNotEmpty;
+      name.isNotEmpty && (currency?.toString().isNotEmpty ?? false) && address.isNotEmpty;
 
   final List<CryptoCurrency> currencies;
   final Box<Contact> _contacts;
@@ -61,10 +58,10 @@ abstract class ContactViewModelBase with Store {
     currency = null;
   }
 
-  Future<void> extractParsedAddress(BuildContext context) async{
-    if(currency == null) return;
+  Future<void> extractParsedAddress(BuildContext context) async {
+    if (currency == null) return;
     final parsedAddress = await getIt.get<AddressResolver>().resolve(context, address, currency!);
-    if(parsedAddress.name.isNotEmpty) {
+    if (parsedAddress.name.isNotEmpty) {
       displayName = parsedAddress.name;
     }
     address = await extractAddressFromParsed(null, parsedAddress);
@@ -92,11 +89,15 @@ abstract class ContactViewModelBase with Store {
         _contact.lastChange = now;
         await _contact.save();
       } else {
-        await _contacts
-            .add(Contact(name: name, address: address, type: currency!, lastChange: now, displayName: displayName));
+        await _contacts.add(Contact(
+            name: name,
+            address: address,
+            type: currency!,
+            lastChange: now,
+            displayName: displayName));
       }
 
-            lastChange = now;
+      lastChange = now;
       state = ExecutedSuccessfullyState();
     } catch (e) {
       state = FailureState(e.toString());

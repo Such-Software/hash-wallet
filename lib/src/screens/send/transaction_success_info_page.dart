@@ -13,8 +13,7 @@ class TransactionSuccessPage extends InfoPage {
   final String content;
 
   @override
-  Widget buildIllustration(BuildContext context, String image) =>
-      const HashBagSuccessAnimation();
+  Widget buildIllustration(BuildContext context, String image) => const HashBagSuccessAnimation();
 
   @override
   bool get onWillPop => false;

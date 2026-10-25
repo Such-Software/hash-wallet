@@ -178,8 +178,7 @@ class ElectrumTransactionInfo extends TransactionInfo {
 
     // MWEB HogEx
     final isHogExTx = (BtcTransaction tx) {
-      if (tx.inputs.isEmpty || tx.inputs.first.txIndex > 0 || tx.outputs.isEmpty)
-        return false;
+      if (tx.inputs.isEmpty || tx.inputs.first.txIndex > 0 || tx.outputs.isEmpty) return false;
       final b = tx.outputs.first.scriptPubKey.toBytes();
       return b.length == 34 && b[0] == 88 && b[1] == 32;
     };

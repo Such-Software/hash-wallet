@@ -171,7 +171,7 @@ abstract class DEuroViewModelBase with Store {
       }
 
       final amount = tryParseFixed(amountRaw, 18);
-      
+
       if (amount == BigInt.zero || amount == null) {
         throw Exception('Invalid amount: amount cannot be zero');
       }

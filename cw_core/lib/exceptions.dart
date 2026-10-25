@@ -57,7 +57,6 @@ class SignSPLTokenTransactionRentException implements Exception {}
 
 class NoAssociatedTokenAccountException implements Exception {}
 
-
 /// ==============================================================================
 /// ==============================================================================
 

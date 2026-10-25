@@ -72,8 +72,12 @@ class _ReceiveBottomButtonsState extends State<ReceiveBottomButtons> {
                     svgPath: "assets/new-ui/copy.svg",
                     onPressed: handleCopy,
                     label: copied ? S.of(context).copied : S.of(context).copy,
-                    iconColor: copied ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surfaceContainer,
-                    backgroundColor: copied ? Theme.of(context).colorScheme.surfaceContainerHighest : Theme.of(context).colorScheme.primary,
+                    iconColor: copied
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surfaceContainer,
+                    backgroundColor: copied
+                        ? Theme.of(context).colorScheme.surfaceContainerHighest
+                        : Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 ModernButton.svg(
@@ -104,21 +108,19 @@ class _ReceiveBottomButtonsState extends State<ReceiveBottomButtons> {
     );
   }
 
-
-
   // android 13 (sdk 33) added a built-in "text was copied to clipboard" ui element
   // older android and iphone still needs an indicator though
   Future<bool> shouldShowCopied() async {
     if (!Platform.isAndroid) return true;
 
     try {
-        final deviceInfo = DeviceInfoPlugin();
-        final androidInfo = await deviceInfo.androidInfo;
-        final sdk = androidInfo.version.sdkInt;
-    
-        return sdk < 33;
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+      final sdk = androidInfo.version.sdkInt;
+
+      return sdk < 33;
     } catch (_) {
-        return true;
+      return true;
     }
   }
 }

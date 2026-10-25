@@ -191,7 +191,7 @@ class BlockchainHeightState extends State<BlockchainHeightWidget> {
       } else {
         if (widget.walletType == WalletType.monero) {
           height = monero!.getHeightByDate(date: date);
-        } else if (widget.walletType == WalletType.wownero){
+        } else if (widget.walletType == WalletType.wownero) {
           height = wownero!.getHeightByDate(date: date);
         } else {
           throw Exception("unknown currency in BlockchainHeightWidget");

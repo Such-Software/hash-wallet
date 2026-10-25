@@ -56,8 +56,8 @@ class _L2ActionWalletSelectorState extends State<L2ActionWalletSelector> {
     super.initState();
     if (widget.showOtherWallets) {
       () async {
-        items.addAll((await WalletInfo.getAll())
-            .where((item) => item.type == widget.sendViewModel.walletType && item.hardwareWalletType == null));
+        items.addAll((await WalletInfo.getAll()).where((item) =>
+            item.type == widget.sendViewModel.walletType && item.hardwareWalletType == null));
         items.sort((a, b) {
           if (a.name == widget.sendViewModel.wallet.name)
             return -1;
@@ -252,8 +252,8 @@ class _L2ActionWalletSelectorState extends State<L2ActionWalletSelector> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   spacing: 10,
                                   children: [
-                                  HashImageWidget(imageUrl:
-                                      "assets/new-ui/send_from_external.svg",
+                                    HashImageWidget(
+                                      imageUrl: "assets/new-ui/send_from_external.svg",
                                       colorFilter: ColorFilter.mode(
                                           Theme.of(context).colorScheme.primary, BlendMode.srcIn),
                                     ),

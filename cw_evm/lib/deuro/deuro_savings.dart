@@ -120,7 +120,8 @@ class DEuro {
         contractAddress: _savingsGateway.self.address.hexEip55,
         receivingAddressHex: _savingsGateway.self.address.hexEip55,
         priority: priority,
-        data: _savingsGateway.self.abi.functions[24].encodeCall([_address, amount, hexToBytes(frontendCode)]),
+        data: _savingsGateway.self.abi.functions[24]
+            .encodeCall([_address, amount, hexToBytes(frontendCode)]),
       );
 
       final sendTransaction = () => _wallet.getWeb3Client()!.sendRawTransaction(signedTransaction);
@@ -145,7 +146,8 @@ class DEuro {
     try {
       await _checkEthBalanceForGasFees(priority);
 
-      final signedTransaction = await _savingsGateway.refreshBalance((owner: _address),
+      final signedTransaction = await _savingsGateway.refreshBalance(
+        (owner: _address),
         credentials: _wallet.evmChainPrivateKey,
       );
 
@@ -200,4 +202,3 @@ class DEuro {
     }
   }
 }
-

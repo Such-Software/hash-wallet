@@ -23,13 +23,14 @@ class ContactPage extends BasePage {
         _nameController = TextEditingController(),
         _addressController = TextEditingController(),
         _currencyTypeController = TextEditingController(),
-        addressFocusNode = FocusNode(){
+        addressFocusNode = FocusNode() {
     _nameController.text = contactViewModel.name;
     _addressController.text = contactViewModel.address;
     _nameController.addListener(() => contactViewModel.name = _nameController.text);
     _addressController.addListener(() => contactViewModel.address = _addressController.text);
 
-    autorun((_) => _currencyTypeController.text = "${contactViewModel.currency?.toString() ?? ""} ${contactViewModel.currency?.tag != null ? "(${contactViewModel.currency?.tag})" : ""}");
+    autorun((_) => _currencyTypeController.text =
+        "${contactViewModel.currency?.toString() ?? ""} ${contactViewModel.currency?.tag != null ? "(${contactViewModel.currency?.tag})" : ""}");
   }
 
   @override
@@ -96,12 +97,12 @@ class ContactPage extends BasePage {
                       builder: (_) {
                         return NewSendAddressInput(
                           focusNode: addressFocusNode,
-                        displayName: contactViewModel.displayName,
-                        addressController: _addressController,
-                        onEditingComplete: ()=> contactViewModel.extractParsedAddress(context),
-                        validator: AddressValidator(type: contactViewModel.currency!),
-                        selectedCurrency: contactViewModel.currency!,
-                      );
+                          displayName: contactViewModel.displayName,
+                          addressController: _addressController,
+                          onEditingComplete: () => contactViewModel.extractParsedAddress(context),
+                          validator: AddressValidator(type: contactViewModel.currency!),
+                          selectedCurrency: contactViewModel.currency!,
+                        );
                       },
                     ),
                   )
@@ -197,8 +198,8 @@ class ContactPage extends BasePage {
       }
     });
 
-    reaction((_)=>contactViewModel.address, (val){
-      if(val != _addressController.text) {
+    reaction((_) => contactViewModel.address, (val) {
+      if (val != _addressController.text) {
         _addressController.text = val;
       }
     });

@@ -248,8 +248,7 @@ class CryptoBalanceWidget extends StatelessWidget {
                               GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () => launchUrl(
-                                  Uri.parse(
-                                      "https://github.com/Such-Software/hash-wallet"),
+                                  Uri.parse("https://github.com/Such-Software/hash-wallet"),
                                   mode: LaunchMode.externalApplication,
                                 ),
                                 child: Row(

@@ -56,10 +56,12 @@ class WalletLoadingService {
     }
   }
 
-  Future<WalletBase> load(WalletType type, String name, {String? password, bool isBackground = false}) async {
+  Future<WalletBase> load(WalletType type, String name,
+      {String? password, bool isBackground = false}) async {
     try {
       if (!isBackground) {
-        await sharedPreferences.setString(PreferencesKey.backgroundSyncLastTrigger(name), DateTime.now().toIso8601String());
+        await sharedPreferences.setString(
+            PreferencesKey.backgroundSyncLastTrigger(name), DateTime.now().toIso8601String());
       }
       final walletService = walletServiceFactory.call(type);
       final walletPassword = password ?? (await keyService.getWalletPassword(walletName: name));
@@ -97,8 +99,7 @@ class WalletLoadingService {
             await updateMoneroWalletPassword(wallet);
           }
 
-          await sharedPreferences.setString(
-              PreferencesKey.currentWalletName, wallet.name);
+          await sharedPreferences.setString(PreferencesKey.currentWalletName, wallet.name);
           await sharedPreferences.setInt(
               PreferencesKey.currentWalletType, serializeToInt(wallet.type));
 
@@ -121,22 +122,22 @@ class WalletLoadingService {
       // if all user's wallets are corrupted throw exception
       final msg = error.toString() + "\n" + corruptedWalletsSeeds;
       if (navigatorKey.currentContext != null) {
-      await showPopUp<void>(
-        context: navigatorKey.currentContext!,
-        builder: (BuildContext context) {
-          return AlertWithTwoActions(
-              alertTitle: "Corrupted seeds",
-              alertContent: S.of(context).corrupted_seed_notice,
-              leftButtonText: S.of(context).cancel,
-              rightButtonText: S.of(context).show_seed,
-              actionLeftButton: () {
-                if (context.mounted && Navigator.of(context).canPop()) {
-                  Navigator.of(context).pop();
-                }
-              },
-              actionRightButton: () => showSeedsPopup(context, msg),
-            );
-        });
+        await showPopUp<void>(
+            context: navigatorKey.currentContext!,
+            builder: (BuildContext context) {
+              return AlertWithTwoActions(
+                alertTitle: "Corrupted seeds",
+                alertContent: S.of(context).corrupted_seed_notice,
+                leftButtonText: S.of(context).cancel,
+                rightButtonText: S.of(context).show_seed,
+                actionLeftButton: () {
+                  if (context.mounted && Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                actionRightButton: () => showSeedsPopup(context, msg),
+              );
+            });
       } else {
         throw msg;
       }
@@ -150,21 +151,21 @@ class WalletLoadingService {
   Future<void> showSeedsPopup(BuildContext context, String message) async {
     Navigator.of(context).pop();
     await showPopUp<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertWithTwoActions(
-          alertTitle: "Corrupted seeds",
-          alertContent: message,
-          leftButtonText: S.of(context).copy,
-          rightButtonText: S.of(context).ok,
-          actionLeftButton: () async {
-            await Clipboard.setData(ClipboardData(text: message));
-          },
-          actionRightButton: () async {
-            Navigator.of(context).pop();
-          },
-        );
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertWithTwoActions(
+            alertTitle: "Corrupted seeds",
+            alertContent: message,
+            leftButtonText: S.of(context).copy,
+            rightButtonText: S.of(context).ok,
+            actionLeftButton: () async {
+              await Clipboard.setData(ClipboardData(text: message));
+            },
+            actionRightButton: () async {
+              Navigator.of(context).pop();
+            },
+          );
+        });
   }
 
   Future<void> updateMoneroWalletPassword(WalletBase wallet) async {

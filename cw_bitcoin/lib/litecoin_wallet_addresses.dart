@@ -59,9 +59,11 @@ abstract class LitecoinWalletAddressesBase extends ElectrumWalletAddresses with 
       ? hex.decode(scanSecretOverride!)
       : mwebHd?.childKey(Bip32KeyIndex(0x80000000)).privateKey.privKey.raw ?? List.filled(32, 0);
 
-  List<int> get spendPubkey => (spendPubkeyOverride != null && spendPubkeyOverride?.isNotEmpty == true)
-      ? hex.decode(spendPubkeyOverride!)
-      : mwebHd?.childKey(Bip32KeyIndex(0x80000001)).publicKey.pubKey.compressed ?? List.filled(32, 0);
+  List<int> get spendPubkey =>
+      (spendPubkeyOverride != null && spendPubkeyOverride?.isNotEmpty == true)
+          ? hex.decode(spendPubkeyOverride!)
+          : mwebHd?.childKey(Bip32KeyIndex(0x80000001)).publicKey.pubKey.compressed ??
+              List.filled(32, 0);
 
   @override
   Future<void> init() async {
@@ -81,7 +83,7 @@ abstract class LitecoinWalletAddressesBase extends ElectrumWalletAddresses with 
       return null;
     }
     if ((scanSecret.length < 1 || scanSecret.reduce((a, b) => a + b) == 0) &&
-       (spendPubkey.length < 1 || spendPubkey.reduce((a, b) => a + b) == 0)) {
+        (spendPubkey.length < 1 || spendPubkey.reduce((a, b) => a + b) == 0)) {
       return null;
     }
 

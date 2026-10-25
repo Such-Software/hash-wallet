@@ -11,7 +11,6 @@ class WCConnectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
@@ -30,8 +29,8 @@ class WCConnectionWidget extends StatelessWidget {
             child: Text(
               title,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),

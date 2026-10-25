@@ -19,16 +19,13 @@ class DemoConfig {
   /// *destination shown on camera*, so it should be an address you are happy
   /// to publish — the capture script defaults it to the demo wallet's own
   /// address rather than a stranger's.
-  static const String sendToAddress =
-      String.fromEnvironment('DEMO_SEND_ADDRESS');
+  static const String sendToAddress = String.fromEnvironment('DEMO_SEND_ADDRESS');
 
   /// Amount typed into the Send screen. Never broadcast in the core scenario.
-  static const String sendAmount =
-      String.fromEnvironment('DEMO_SEND_AMOUNT', defaultValue: '0.5');
+  static const String sendAmount = String.fromEnvironment('DEMO_SEND_AMOUNT', defaultValue: '0.5');
 
   /// Amount typed into the Swap screen.
-  static const String swapAmount =
-      String.fromEnvironment('DEMO_SWAP_AMOUNT', defaultValue: '10');
+  static const String swapAmount = String.fromEnvironment('DEMO_SWAP_AMOUNT', defaultValue: '10');
 
   /// PIN used for the demo wallet.
   static List<int> get pin {

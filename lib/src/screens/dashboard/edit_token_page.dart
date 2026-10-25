@@ -349,8 +349,7 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
 
       if (token != null) {
         if (_tokenNameController.text.isEmpty) _tokenNameController.text = token.name;
-        if (_tokenSymbolController.text.isEmpty)
-          _tokenSymbolController.text = token.title;
+        if (_tokenSymbolController.text.isEmpty) _tokenSymbolController.text = token.title;
         if (_tokenIconPathController.text.isEmpty)
           _tokenIconPathController.text = token.iconPath ?? '';
         if (_tokenDecimalController.text.isEmpty)

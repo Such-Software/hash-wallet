@@ -62,7 +62,8 @@ class BridgeNetworkPage extends StatelessWidget {
                                   label: chainName,
                                   onTap: () {
                                     bridgeViewModel.setDestinationChain(chain.chainId);
-                                    Navigator.pushNamed(context, Routes.bridgeReceivingWalletPage, arguments: bridgeViewModel);
+                                    Navigator.pushNamed(context, Routes.bridgeReceivingWalletPage,
+                                        arguments: bridgeViewModel);
                                   },
                                 );
                               },

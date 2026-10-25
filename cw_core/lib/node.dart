@@ -297,7 +297,6 @@ class Node extends HiveObject with Keyable {
       final ProxySocket socket;
       socket = await ProxyWrapper().getSocksSocket(useSSL ?? false, uri.host, uri.port);
 
-
       socket.destroy();
       return true;
     } catch (_) {
@@ -317,7 +316,7 @@ class Node extends HiveObject with Keyable {
           },
         ),
       );
-      
+
       final data = jsonDecode(response.body);
       if (response.statusCode != 200 ||
           data["error"] != null ||
@@ -334,9 +333,12 @@ class Node extends HiveObject with Keyable {
 
   Future<bool> requestEthereumServer() async {
     try {
-      final req = await ProxyWrapper().getHttpClient()
-        .getUrl(uri,)
-        .timeout(Duration(seconds: 15));
+      final req = await ProxyWrapper()
+          .getHttpClient()
+          .getUrl(
+            uri,
+          )
+          .timeout(Duration(seconds: 15));
       final response = await req.close();
 
       return response.statusCode >= 200 && response.statusCode < 300;
@@ -345,7 +347,6 @@ class Node extends HiveObject with Keyable {
       return false;
     }
   }
-
 }
 
 /// https://github.com/ManyMath/digest_auth/

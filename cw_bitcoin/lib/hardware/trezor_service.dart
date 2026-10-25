@@ -90,7 +90,8 @@ class BitcoinTrezorService extends HardwareWalletService with BitcoinHardwareWal
   }
 }
 
-class LitecoinTrezorService extends HardwareWalletService with BitcoinHardwareWalletService, LitecoinHardwareWalletService {
+class LitecoinTrezorService extends HardwareWalletService
+    with BitcoinHardwareWalletService, LitecoinHardwareWalletService {
   LitecoinTrezorService(this.connect);
 
   final TrezorConnect connect;

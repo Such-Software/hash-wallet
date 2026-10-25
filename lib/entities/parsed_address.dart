@@ -59,7 +59,7 @@ class ParsedAddress {
     );
   }
 
-  factory ParsedAddress.fetchBip353AddressAddress ({
+  factory ParsedAddress.fetchBip353AddressAddress({
     required String address,
     required String name,
     String? dnsProof,

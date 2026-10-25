@@ -102,7 +102,8 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
             ),
           StandardTile(
             itemTitle: amount,
-            itemValue: '$amountValue ${amountParsingProxy?.getCryptoSymbol(currency) ?? currency.title}',
+            itemValue:
+                '$amountValue ${amountParsingProxy?.getCryptoSymbol(currency) ?? currency.title}',
             itemTitleTextStyle: itemTitleTextStyle,
             itemSubTitle: fiatAmountValue,
             itemSubTitleTextStyle: itemSubTitleTextStyle,
@@ -134,7 +135,8 @@ class ConfirmSendingBottomSheet extends BaseBottomSheet {
                     final batchContactTitle =
                         '${index + 1}/${outputs.length} - ${contactName.isEmpty ? 'Address' : contactName}';
                     final _address = item.isParsedAddress ? item.extractedAddress : item.address;
-                    final _amount = '${item.cryptoAmount.replaceAll(',', '.')} ${amountParsingProxy?.getCryptoSymbol(currency) ?? currency.title}';
+                    final _amount =
+                        '${item.cryptoAmount.replaceAll(',', '.')} ${amountParsingProxy?.getCryptoSymbol(currency) ?? currency.title}';
                     return isBatchSending || contactName.isNotEmpty
                         ? ExpansionAddressTile(
                             contactType: isOpenCryptoPay ? 'Open CryptoPay' : S.of(context).contact,

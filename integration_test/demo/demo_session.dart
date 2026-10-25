@@ -161,8 +161,7 @@ class DemoSession {
       final words = needle.split(RegExp(r'\s+')).toSet();
       final onScreenWords = haystack.split(RegExp(r'[^a-z]+')).toSet();
       final overlap = words.intersection(onScreenWords).length;
-      if (words.length >= _mnemonicWordThreshold &&
-          overlap >= _mnemonicWordThreshold) {
+      if (words.length >= _mnemonicWordThreshold && overlap >= _mnemonicWordThreshold) {
         fail('SEED ON CAMERA (demo seed words rendered individually, '
             '$overlap matches) ${because ?? ''} — scenario "$scenario".');
       }

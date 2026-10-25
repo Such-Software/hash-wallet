@@ -23,8 +23,7 @@ class ModalHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            HashImageWidget(
-                imageUrl: iconPath, width: 36, height: 36),
+            HashImageWidget(imageUrl: iconPath, width: 36, height: 36),
             Text(
               title,
               style: TextStyle(

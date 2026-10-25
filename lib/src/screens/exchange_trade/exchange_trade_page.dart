@@ -179,7 +179,6 @@ class ExchangeTradeState extends State<ExchangeTradeForm> {
                     ? Theme.of(context).colorScheme.onSecondaryContainer
                     : Theme.of(context).colorScheme.onPrimary,
               ),
-
             SizedBox(height: 16),
             Observer(
               builder: (_) {
@@ -299,12 +298,17 @@ class ExchangeTradeState extends State<ExchangeTradeForm> {
             final isSwapsXyz = trade.provider == ExchangeProviderDescription.swapsXyz;
             final isEVMWallet = widget.exchangeTradeViewModel.sendViewModel.isEVMWallet;
 
-            final amountValue = isSwapsXyz && isEVMWallet && !widget.exchangeTradeViewModel.isSwapsXYZCanSendFromExternal
+            final amountValue = isSwapsXyz &&
+                    isEVMWallet &&
+                    !widget.exchangeTradeViewModel.isSwapsXYZCanSendFromExternal
                 ? trade.amount
                 : widget.exchangeTradeViewModel.sendViewModel.pendingTransaction!.amountFormatted;
 
-            final fiatAmountValue = isSwapsXyz && isEVMWallet && !widget.exchangeTradeViewModel.isSwapsXYZCanSendFromExternal
-                ? widget.exchangeTradeViewModel.sendViewModel.calculateTransactionFiatAmount(amountValue)
+            final fiatAmountValue = isSwapsXyz &&
+                    isEVMWallet &&
+                    !widget.exchangeTradeViewModel.isSwapsXYZCanSendFromExternal
+                ? widget.exchangeTradeViewModel.sendViewModel
+                    .calculateTransactionFiatAmount(amountValue)
                 : widget.exchangeTradeViewModel.sendViewModel.pendingTransactionFiatAmountFormatted;
 
             if (context.mounted) {
@@ -330,14 +334,13 @@ class ExchangeTradeState extends State<ExchangeTradeForm> {
                     fee: isEVMCompatibleChain(sendVM.walletType)
                         ? S.of(bottomSheetContext).send_estimated_fee
                         : S.of(bottomSheetContext).send_fee,
-                    feeValue: "${sendVM.amountParsingProxy.getDisplayCryptoAmount(
-                        sendVM.pendingTransaction!.feeFormattedValue,
-                        sendVM.selectedCryptoCurrency)} ${sendVM.amountParsingProxy
-                        .getCryptoSymbol(sendVM.wallet.currency)}",
+                    feeValue:
+                        "${sendVM.amountParsingProxy.getDisplayCryptoAmount(sendVM.pendingTransaction!.feeFormattedValue, sendVM.selectedCryptoCurrency)} ${sendVM.amountParsingProxy.getCryptoSymbol(sendVM.wallet.currency)}",
                     feeFiatAmount: sendVM.pendingTransactionFeeFiatAmountFormatted,
                     outputs: sendVM.outputs,
                     onSlideActionComplete: () async {
-                      if (bottomSheetContext.mounted && Navigator.canPop(bottomSheetContext)) Navigator.of(bottomSheetContext).pop(true);
+                      if (bottomSheetContext.mounted && Navigator.canPop(bottomSheetContext))
+                        Navigator.of(bottomSheetContext).pop(true);
 
                       sendVM.commitTransaction(context);
                     },

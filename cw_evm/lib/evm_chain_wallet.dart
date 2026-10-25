@@ -1281,9 +1281,7 @@ abstract class EVMChainWalletBase
       } else if (newTxInfo.direction == TransactionDirection.incoming &&
           existingTxInfo.direction == TransactionDirection.outgoing) {
         result[transactionModel.hash] = newTxInfo;
-      } 
-      
-      else if (newTxInfo.direction == TransactionDirection.outgoing &&
+      } else if (newTxInfo.direction == TransactionDirection.outgoing &&
           existingTxInfo.direction == TransactionDirection.outgoing &&
           _hasEvmTokenContractAddress(newTxInfo) &&
           !_hasEvmTokenContractAddress(existingTxInfo)) {
@@ -1293,7 +1291,6 @@ abstract class EVMChainWalletBase
 
     return result;
   }
-
 
   bool _hasEvmTokenContractAddress(EVMChainTransactionInfo info) {
     final c = info.contractAddress;

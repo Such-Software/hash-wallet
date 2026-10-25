@@ -114,7 +114,6 @@ class AppsWidget extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         size: 20,
                       )
-
                     ],
                   ),
                   if (hint != null) ...[
@@ -137,11 +136,8 @@ class AppsWidget extends StatelessWidget {
             ),
         ],
       );
-    }
-    else {
-      return Stack(
-
-      );
+    } else {
+      return Stack();
     }
   }
 }

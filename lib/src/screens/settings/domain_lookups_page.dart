@@ -24,7 +24,8 @@ class DomainLookupsPage extends BasePage {
               SettingsSwitcherCell(
                   title: 'OpenAlias',
                   value: _connectionsSyncViewModel.looksUpOpenAlias,
-                  onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsOpenAlias(value)),
+                  onValueChange: (_, bool value) =>
+                      _connectionsSyncViewModel.setLookupsOpenAlias(value)),
               SettingsSwitcherCell(
                   title: 'Ethereum Name Service',
                   value: _connectionsSyncViewModel.looksUpENS,
@@ -32,7 +33,8 @@ class DomainLookupsPage extends BasePage {
               SettingsSwitcherCell(
                   title: '.well-known',
                   value: _connectionsSyncViewModel.looksUpWellKnown,
-                  onValueChange: (_, bool value) => _connectionsSyncViewModel.setLookupsWellKnown(value)),
+                  onValueChange: (_, bool value) =>
+                      _connectionsSyncViewModel.setLookupsWellKnown(value)),
             ],
           ),
         );

@@ -37,8 +37,7 @@ abstract class ContactListViewModelBase with Store {
     for (final info in walletInfos) {
       final addressInfos = await info.getAddressInfos();
       final addresses = await info.getAddresses();
-      if ([WalletType.monero, WalletType.wownero].contains(info.type) &&
-          addressInfos.isNotEmpty) {
+      if ([WalletType.monero, WalletType.wownero].contains(info.type) && addressInfos.isNotEmpty) {
         for (var key in addressInfos.keys) {
           final value = addressInfos[key];
           final address = value?.first;
@@ -55,8 +54,7 @@ abstract class ContactListViewModelBase with Store {
           }
         }
       } else if (addresses.isNotEmpty == true && addresses.length > 1) {
-        if ([WalletType.monero, WalletType.wownero]
-            .contains(info.type)) {
+        if ([WalletType.monero, WalletType.wownero].contains(info.type)) {
           final address = info.address;
           final name = _createName(info.name, "", key: 0);
           walletContacts.add(WalletContact(
@@ -89,9 +87,7 @@ abstract class ContactListViewModelBase with Store {
         walletContacts.add(WalletContact(
           info.address,
           _createName(info.name, "",
-              key: [WalletType.monero, WalletType.wownero].contains(info.type)
-                  ? 0
-                  : null),
+              key: [WalletType.monero, WalletType.wownero].contains(info.type) ? 0 : null),
           getCryptoCurrencyForWalletListItem(
             info.type,
           ),

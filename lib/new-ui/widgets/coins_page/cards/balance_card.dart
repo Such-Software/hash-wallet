@@ -10,30 +10,30 @@ class BalanceCardAction {
   final VoidCallback onTap;
   final double? iconSize;
 
-  const BalanceCardAction({required this.label, required this.icon, required this.onTap, this.iconSize = 16});
+  const BalanceCardAction(
+      {required this.label, required this.icon, required this.onTap, this.iconSize = 16});
 }
 
 class BalanceCard extends StatelessWidget {
-  const BalanceCard({
-    super.key,
-    required this.width,
-    required this.design,
-    this.gradient,
-    this.borderRadius = 20,
-    this.selected = false,
-    this.accountName = "",
-    this.accountBalance = "",
-    this.balance = "",
-    this.fiatBalance = "",
-    this.assetName = "",
-    this.fiatCurrencyTitle = "",
-    this.designSwitchDuration = const Duration(),
-    this.actions = const [],
-    this.capitalizeAssetName = true,
-    this.onCustomizeTapped,
-    this.accountIndex,
-    this.fiatFirst = false
-  });
+  const BalanceCard(
+      {super.key,
+      required this.width,
+      required this.design,
+      this.gradient,
+      this.borderRadius = 20,
+      this.selected = false,
+      this.accountName = "",
+      this.accountBalance = "",
+      this.balance = "",
+      this.fiatBalance = "",
+      this.assetName = "",
+      this.fiatCurrencyTitle = "",
+      this.designSwitchDuration = const Duration(),
+      this.actions = const [],
+      this.capitalizeAssetName = true,
+      this.onCustomizeTapped,
+      this.accountIndex,
+      this.fiatFirst = false});
 
   final double width;
   final double borderRadius;
@@ -71,8 +71,6 @@ class BalanceCard extends StatelessWidget {
 
     final height = width * 0.62;
 
-
-
     return AnimatedContainer(
       duration: designSwitchDuration,
       width: width,
@@ -92,15 +90,15 @@ class BalanceCard extends StatelessWidget {
             switchOutCurve: Curves.easeInOut,
             child: design.backgroundType == CardDesignBackgroundTypes.svgFull
                 ? ClipRSuperellipse(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  key: ValueKey(design.imagePath),
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    key: ValueKey(design.imagePath),
                     child: HashImageWidget(
                       imageUrl: design.imagePath,
                       width: width,
                       height: height,
                       fit: BoxFit.fill,
                     ),
-                )
+                  )
                 : const SizedBox.shrink(
                     key: ValueKey('svgFullOff'),
                   ),
@@ -117,10 +115,10 @@ class BalanceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      if(leadText.isNotEmpty || accountBalance.isNotEmpty)
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      if (leadText.isNotEmpty || accountBalance.isNotEmpty)
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               spacing: 4,
@@ -139,7 +137,9 @@ class BalanceCard extends StatelessWidget {
                                 AnimatedDefaultTextStyle(
                                   duration: designSwitchDuration,
                                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                      fontWeight: FontWeight.w500, color: design.colors.textColor.withAlpha(leadText == accountName ? 255 : 128)),
+                                      fontWeight: FontWeight.w500,
+                                      color: design.colors.textColor
+                                          .withAlpha(leadText == accountName ? 255 : 128)),
                                   child: Text(leadText),
                                 ),
                               ],
@@ -150,10 +150,10 @@ class BalanceCard extends StatelessWidget {
                               child: Text(
                                 accountBalance,
                                 style: TextStyle(color: design.colors.textColor, fontSize: 14),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                       AnimatedOpacity(
                         opacity: selected ? 1 : 0,
                         duration: textFadeDuration,
@@ -174,16 +174,20 @@ class BalanceCard extends StatelessWidget {
                             children: [
                               AnimatedDefaultTextStyle(
                                 duration: designSwitchDuration,
-                                style: DefaultTextStyle.of(context)
-                                    .style
-                                    .copyWith(color: design.colors.textColor, fontSize: 28, fontWeight: FontWeight.w500, letterSpacing: -0.4),
+                                style: DefaultTextStyle.of(context).style.copyWith(
+                                    color: design.colors.textColor,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: -0.4),
                                 child: Text(fiatFirst ? fiatBalance : balance),
                               ),
                               AnimatedDefaultTextStyle(
                                 duration: designSwitchDuration,
-                                style: DefaultTextStyle.of(context)
-                                    .style
-                                    .copyWith(color: design.colors.textColorSecondary, fontSize: 28, fontWeight: FontWeight.w400, letterSpacing: -0.4),
+                                style: DefaultTextStyle.of(context).style.copyWith(
+                                    color: design.colors.textColorSecondary,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -0.4),
                                 child: Text(resolvedAssetName),
                               ),
                             ],

@@ -68,8 +68,7 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
   static const moneroSeedMnemonicLength = 25;
 
   late List<WalletRestoreMode> availableModes;
-  late final bool hasSeedLanguageSelector =
-      [WalletType.monero, WalletType.wownero].contains(type);
+  late final bool hasSeedLanguageSelector = [WalletType.monero, WalletType.wownero].contains(type);
 
   late final bool hasBlockchainHeightSelector =
       [WalletType.monero, WalletType.wownero].contains(type);
@@ -203,15 +202,14 @@ abstract class WalletRestoreViewModelBase extends WalletCreationVM with Store {
 
         case WalletType.monero:
           return monero!.createMoneroRestoreWalletFromKeysCredentials(
-            name: name,
-            height: height,
-            spendKey: spendKey!,
-            viewKey: viewKey!,
-            address: address!,
-            password: password,
-            language: 'English',
-            hardwareWalletType: hardwareWalletType
-          );
+              name: name,
+              height: height,
+              spendKey: spendKey!,
+              viewKey: viewKey!,
+              address: address!,
+              password: password,
+              language: 'English',
+              hardwareWalletType: hardwareWalletType);
 
         case WalletType.nano:
           return nano!.createNanoRestoreWalletFromKeysCredentials(

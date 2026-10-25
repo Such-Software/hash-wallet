@@ -19,7 +19,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobx/mobx.dart';
 
 class SendConfirmSheet extends StatefulWidget {
-  const SendConfirmSheet({super.key, required this.sendViewModel, this.isPage = false, this.title, this.iconPath});
+  const SendConfirmSheet(
+      {super.key, required this.sendViewModel, this.isPage = false, this.title, this.iconPath});
 
   final SendViewModel sendViewModel;
   final bool isPage;
@@ -52,7 +53,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
         }
       },
       child: SafeArea(
-        bottom:false,
+        bottom: false,
         minimum: widget.isPage ? EdgeInsets.zero : EdgeInsets.only(top: 64),
         child: Container(
           decoration: BoxDecoration(
@@ -95,13 +96,13 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
 }
 
 class SendTransactionDetails extends StatelessWidget {
-  const SendTransactionDetails({super.key, required this.sendViewModel, required this.isPage, this.title, this.iconPath});
+  const SendTransactionDetails(
+      {super.key, required this.sendViewModel, required this.isPage, this.title, this.iconPath});
 
   final SendViewModel sendViewModel;
   final bool isPage;
   final String? title;
   final String? iconPath;
-
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +120,8 @@ class SendTransactionDetails extends StatelessWidget {
                   spacing: 8,
                   children: [
                     if (resolvedIconPath.toLowerCase().endsWith(".svg"))
-                      HashImageWidget(imageUrl:
-                        resolvedIconPath,
+                      HashImageWidget(
+                        imageUrl: resolvedIconPath,
                         width: 28,
                         height: 28,
                       )
@@ -139,7 +140,9 @@ class SendTransactionDetails extends StatelessWidget {
                 trailingIcon: Icon(Icons.close),
                 onTrailingPressed: Navigator.of(context).maybePop,
               ),
-              isPage ? Expanded(child: _buildMainContent(context)) : Flexible(child: _buildMainContent(context))
+              isPage
+                  ? Expanded(child: _buildMainContent(context))
+                  : Flexible(child: _buildMainContent(context))
             ]);
       },
     );
@@ -151,19 +154,18 @@ class SendTransactionDetails extends StatelessWidget {
   BigInt sumByBigInt<T>(List<T> list, BigInt Function(T) picker) =>
       list.map(picker).fold(BigInt.zero, (a, b) => a + b);
 
-  String sumStr<T>(List<T> list, double Function(T) picker) =>
-      sumBy(list, picker).toString();
+  String sumStr<T>(List<T> list, double Function(T) picker) => sumBy(list, picker).toString();
 
   String sumWithUnit<T>(List<T> list, double Function(T) picker, String unit, {int? decimals}) {
     final str = sumStr(list, picker);
     return "${decimals == null ? str : str.withDecimals(decimals)} $unit";
   }
 
-
   Widget _buildMainContent(BuildContext context) {
     final transaction = sendViewModel.pendingTransaction;
 
-    final currencySymbol = sendViewModel.amountParsingProxy.getCryptoSymbol(sendViewModel.selectedCryptoCurrency);
+    final currencySymbol =
+        sendViewModel.amountParsingProxy.getCryptoSymbol(sendViewModel.selectedCryptoCurrency);
 
     final amount = (transaction == null)
         ? sendViewModel.amountParsingProxy.getDisplayCryptoStringFromBigInt(
@@ -200,8 +202,7 @@ class SendTransactionDetails extends StatelessWidget {
             sendViewModel.outputs,
             (o) => double.tryParse(o.fiatAmount.replaceAll(",", "")) ?? 0,
             sendViewModel.fiatCurrency.title,
-      decimals:2
-          )
+            decimals: 2)
         : sendViewModel.pendingTransactionFiatAmountFormatted;
 
     final fiatFee = (transaction == null)
@@ -209,8 +210,7 @@ class SendTransactionDetails extends StatelessWidget {
             sendViewModel.outputs,
             (o) => double.tryParse(o.estimatedFeeFiatAmount.replaceAll(",", "")) ?? 0,
             sendViewModel.fiatCurrency.title,
-        decimals:2
-          )
+            decimals: 2)
         : sendViewModel.pendingTransactionFeeFiatAmountFormatted;
 
     final showAddress = !sendViewModel.outputs.any((e) =>
@@ -259,7 +259,9 @@ class SendTransactionDetails extends StatelessWidget {
                 ),
               ],
             ),
-            if (outputs.length >= 1 && (outputs.first.extractedAddress.isNotEmpty || outputs.first.address.isNotEmpty) && showAddress)
+            if (outputs.length >= 1 &&
+                (outputs.first.extractedAddress.isNotEmpty || outputs.first.address.isNotEmpty) &&
+                showAddress)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 12,
@@ -280,7 +282,9 @@ class SendTransactionDetails extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: AddressFormatter.buildSegmentedAddress(
-                            address: outputs.first.isParsedAddress ? outputs.first.extractedAddress : outputs.first.address,
+                            address: outputs.first.isParsedAddress
+                                ? outputs.first.extractedAddress
+                                : outputs.first.address,
                             evenTextStyle:
                                 TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                       ),
@@ -290,7 +294,8 @@ class SendTransactionDetails extends StatelessWidget {
                         content: Column(
                           children: outputs
                               .map(
-                                (item) => Column(children: [
+                                (item) => Column(
+                                  children: [
                                     MultiSendAddressPreview(
                                       index: outputs.indexOf(item) + 1,
                                       address: item.isParsedAddress
@@ -301,9 +306,13 @@ class SendTransactionDetails extends StatelessWidget {
                                       fiatAmount:
                                           "${item.fiatAmount.withLocalSeperator(sendViewModel.languageCode)} ${sendViewModel.fiatCurrency.title}",
                                     ),
-                                    if(item != outputs.last)
-                                    Container(width: double.infinity, height: 1, color: Theme.of(context).colorScheme.surfaceContainerHigh)
-                                ],),
+                                    if (item != outputs.last)
+                                      Container(
+                                          width: double.infinity,
+                                          height: 1,
+                                          color: Theme.of(context).colorScheme.surfaceContainerHigh)
+                                  ],
+                                ),
                               )
                               .toList(),
                         ),
@@ -385,8 +394,8 @@ class SendTransactionDetails extends StatelessWidget {
               ),
             ),
             SendConfirmBottomWidget(sendViewModel: sendViewModel),
-            if(Platform.isAndroid) // spacing between bottom widget and system navbar
-            SizedBox(),
+            if (Platform.isAndroid) // spacing between bottom widget and system navbar
+              SizedBox(),
           ],
         ),
       ),
@@ -396,7 +405,7 @@ class SendTransactionDetails extends StatelessWidget {
   String formatAmount(String amount) {
     try {
       return amount.withMaxDecimals(8);
-    } catch(e) {
+    } catch (e) {
       return amount;
     }
   }
@@ -424,7 +433,6 @@ class TransactionCommitedScreen extends StatelessWidget {
     );
   }
 }
-
 
 class MultiSendAddressPreview extends StatefulWidget {
   const MultiSendAddressPreview(

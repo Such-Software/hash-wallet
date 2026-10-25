@@ -24,6 +24,7 @@ void main() {
         failures.add('${f.path}: $e');
       }
     }
-    expect(failures, isEmpty, reason: 'YAML assets rejected by package:yaml:\n${failures.join('\n')}');
+    expect(failures, isEmpty,
+        reason: 'YAML assets rejected by package:yaml:\n${failures.join('\n')}');
   });
 }

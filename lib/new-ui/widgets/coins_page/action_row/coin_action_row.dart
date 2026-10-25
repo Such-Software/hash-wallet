@@ -28,7 +28,8 @@ import '../../../pages/scan_page.dart';
 import 'coin_action_button.dart';
 
 class CoinActionRow extends StatelessWidget {
-  const CoinActionRow({super.key, this.lightningMode = false, this.showSwap = true, required this.walletType});
+  const CoinActionRow(
+      {super.key, this.lightningMode = false, this.showSwap = true, required this.walletType});
 
   final bool lightningMode;
   final bool showSwap;
@@ -44,8 +45,8 @@ class CoinActionRow extends StatelessWidget {
         spacing: MediaQuery.of(context).size.width * 0.05,
         children: [
           CoinActionButton(
-            icon: HashImageWidget(imageUrl:
-              "assets/new-ui/send.svg",
+            icon: HashImageWidget(
+              imageUrl: "assets/new-ui/send.svg",
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,
                 BlendMode.srcIn,
@@ -76,14 +77,14 @@ class CoinActionRow extends StatelessWidget {
                 );
               } else {
                 Map<String, dynamic>? args;
-                if (lightningMode) args = {'coinTypeToSpendFrom' : UnspentCoinType.lightning};
+                if (lightningMode) args = {'coinTypeToSpendFrom': UnspentCoinType.lightning};
                 Navigator.of(context).pushNamed(Routes.send, arguments: args);
               }
             },
           ),
           CoinActionButton(
-            icon: HashImageWidget(imageUrl:
-              "assets/new-ui/receive.svg",
+            icon: HashImageWidget(
+              imageUrl: "assets/new-ui/receive.svg",
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,
                 BlendMode.srcIn,
@@ -97,7 +98,7 @@ class CoinActionRow extends StatelessWidget {
                   context: context,
                   barrierColor: Colors.black.withAlpha(60),
                   builder: (context) {
-                      return Material(child: ModalNavigator(parentContext:context,rootPage: page));
+                    return Material(child: ModalNavigator(parentContext: context, rootPage: page));
                   },
                 );
               } else {
@@ -115,8 +116,8 @@ class CoinActionRow extends StatelessWidget {
           ),
           if (showSwap)
             CoinActionButton(
-              icon: HashImageWidget(imageUrl:
-                "assets/new-ui/exchange.svg",
+              icon: HashImageWidget(
+                imageUrl: "assets/new-ui/exchange.svg",
                 colorFilter: ColorFilter.mode(
                   Theme.of(context).colorScheme.primary,
                   BlendMode.srcIn,
@@ -124,7 +125,8 @@ class CoinActionRow extends StatelessWidget {
               ),
               label: S.of(context).swap,
               action: () {
-                final page = getIt.get<NewSwapPage>(param2: lightningMode ? CryptoCurrency.btcln : null);
+                final page =
+                    getIt.get<NewSwapPage>(param2: lightningMode ? CryptoCurrency.btcln : null);
                 if (FeatureFlag.hasNewUiExtraPages) {
                   CupertinoScaffold.showCupertinoModalBottomSheet(
                     context: context,
@@ -141,8 +143,8 @@ class CoinActionRow extends StatelessWidget {
               },
             ),
           CoinActionButton(
-            icon: HashImageWidget(imageUrl:
-              "assets/new-ui/scan.svg",
+            icon: HashImageWidget(
+              imageUrl: "assets/new-ui/scan.svg",
               colorFilter: ColorFilter.mode(
                 Theme.of(context).colorScheme.primary,
                 BlendMode.srcIn,
@@ -179,7 +181,8 @@ class CoinActionRow extends StatelessWidget {
         req = PaymentRequest(code, amount, "", "", "");
       } else if (SendViewModelBase.isLnurlInvoice(code)) {
         unspentCoinType = UnspentCoinType.lightning;
-        final amount = CryptoCurrency.btcln.formatAmount(BigInt.from(await LNURL.getPayRequestAmount(code) ?? 0));
+        final amount = CryptoCurrency.btcln
+            .formatAmount(BigInt.from(await LNURL.getPayRequestAmount(code) ?? 0));
         req = PaymentRequest(code, amount, "", "", "");
       } else if (OpenCryptoPayService.isOpenCryptoPayQR(code)) {
         req = PaymentRequest(code, "", "", "", "");

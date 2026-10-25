@@ -82,8 +82,7 @@ Future<void> maybeSetupDemoWallet() async {
       // Model shares WalletCreationVM.create, so it builds walletInfo/paths and
       // finalizes (changeCurrentWallet + allowedCreate) just like the new-wallet
       // flow.
-      final vm = getIt.get<WalletRestoreViewModel>(
-          param1: WalletType.wownero, param2: null);
+      final vm = getIt.get<WalletRestoreViewModel>(param1: WalletType.wownero, param2: null);
       vm.name = _demoWalletName;
       // getCredentials() reads name/passphrase FROM the options map (not the vm
       // field), and casts name as a non-null String — so it must be present.
@@ -105,8 +104,7 @@ Future<void> maybeSetupDemoWallet() async {
     // the WalletInfo, derivation, and paths, creates + saves the wallet, calls
     // AppStore.changeCurrentWallet (persisting currentWalletName/type) and
     // AuthenticationStore.allowedCreate() on success.
-    final vm = getIt.get<WalletNewVM>(
-        param1: NewWalletArguments(type: WalletType.wownero));
+    final vm = getIt.get<WalletNewVM>(param1: NewWalletArguments(type: WalletType.wownero));
     vm.name = _demoWalletName;
     await vm.create(options: <dynamic>['English', MoneroSeedType.polyseed]);
 

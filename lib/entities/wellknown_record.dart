@@ -48,7 +48,7 @@ class WellKnownRecord {
       if (response.statusCode != 200) {
         return null;
       }
-      
+
       final Map<String, dynamic> decoded = json.decode(response.body) as Map<String, dynamic>;
 
       // Access the first element in the names array and retrieve its address

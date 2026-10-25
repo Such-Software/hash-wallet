@@ -325,9 +325,9 @@ abstract class DashboardViewModelBase with Store {
   }
 
   bool showBridge(CryptoCurrency currency) {
-    if(!isEVMCompatibleChain(wallet.type)) return false;
+    if (!isEVMCompatibleChain(wallet.type)) return false;
 
-    if(evm!.isUSDT0Token(wallet, currency)) return true;
+    if (evm!.isUSDT0Token(wallet, currency)) return true;
 
     return false;
   }
@@ -421,16 +421,20 @@ abstract class DashboardViewModelBase with Store {
       }
       // printV("Transaction disposer callback (relevantTxs: ${relevantTxs.length} current: ${transactions.length})");
 
-      String _txIdentityString(String txHash, TransactionDirection direction) => "${txHash}_$direction";
-      String _txIdentityStringConfirmations(String txHash, TransactionDirection direction, int confirmations) => "${txHash}_${direction}_$confirmations";
-
+      String _txIdentityString(String txHash, TransactionDirection direction) =>
+          "${txHash}_$direction";
+      String _txIdentityStringConfirmations(
+              String txHash, TransactionDirection direction, int confirmations) =>
+          "${txHash}_${direction}_$confirmations";
 
       final existingKeys = transactions
-          .map((item) => _txIdentityStringConfirmations(item.transaction.txHash, item.transaction.direction, item.transaction.confirmations))
+          .map((item) => _txIdentityStringConfirmations(
+              item.transaction.txHash, item.transaction.direction, item.transaction.confirmations))
           .toSet();
 
       final newTransactions = relevantTxs
-          .where((tx) => !existingKeys.contains(_txIdentityStringConfirmations(tx.txHash, tx.direction, tx.confirmations)))
+          .where((tx) => !existingKeys
+              .contains(_txIdentityStringConfirmations(tx.txHash, tx.direction, tx.confirmations)))
           .map((tx) => TransactionListItem(
                 transaction: tx,
                 balanceViewModel: balanceViewModel,
@@ -444,7 +448,8 @@ abstract class DashboardViewModelBase with Store {
           .toSet();
 
       transactions.removeWhere(
-        (item) => newKeys.contains(_txIdentityString(item.transaction.txHash, item.transaction.direction)),
+        (item) => newKeys
+            .contains(_txIdentityString(item.transaction.txHash, item.transaction.direction)),
       );
 
       transactions.addAll(newTransactions);
@@ -589,7 +594,9 @@ abstract class DashboardViewModelBase with Store {
       }).toList();
 
   @computed
-  bool get shouldShowBalanceHiddenMessage => balanceDisplayMode == BalanceDisplayMode.hiddenBalance && appStore.settingsStore.balanceHideCounter < 10;
+  bool get shouldShowBalanceHiddenMessage =>
+      balanceDisplayMode == BalanceDisplayMode.hiddenBalance &&
+      appStore.settingsStore.balanceHideCounter < 10;
 
   @computed
   List<OrderListItem> get orders =>
@@ -709,7 +716,7 @@ abstract class DashboardViewModelBase with Store {
       // if (wallet.seed == "") "wallet seed is empty",
       // if (monero!.getSubaddressList(wallet).getAll(wallet)[0].address ==
       //     "41d7FXjswpK1111111111111111111111111111111111111111111111111111111111111111111111111111112KhNi4")
-        // "primary address is invalid, you won't be able to receive / spend funds",
+      // "primary address is invalid, you won't be able to receive / spend funds",
     ];
     return errors;
   }

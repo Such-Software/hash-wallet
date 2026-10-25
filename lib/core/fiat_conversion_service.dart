@@ -18,7 +18,6 @@ const _fiatApiOnionAuthority = '';
 const _fiatApiPath = '/v2/rates';
 
 Future<double> _fetchPrice(String crypto, String fiat, bool torOnly) async {
-
   final Map<String, String> queryParams = {
     'base': crypto.split(".").first,
     'quote': fiat,
@@ -57,9 +56,8 @@ Future<double> _fetchPrice(String crypto, String fiat, bool torOnly) async {
 /// Override specific [CryptoCurrency] to fix its price to the price of another
 /// e.g. nDEPS should have the same price as DEPS, but only DEPS is tracked
 CryptoCurrency _overrideCryptoCurrency(CryptoCurrency crypto) {
-  if (crypto.title == CryptoCurrency.ndeps.title)
-      return CryptoCurrency.deps;
-    return crypto;
+  if (crypto.title == CryptoCurrency.ndeps.title) return CryptoCurrency.deps;
+  return crypto;
 }
 
 class FiatConversionService {

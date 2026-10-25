@@ -92,7 +92,8 @@ abstract class NFTViewModelBase with Store {
 
       final decodedResponse = jsonDecode(response.body);
 
-      final result = WalletNFTsResponseModel.fromJson(decodedResponse as Map<String, dynamic>).result ?? [];
+      final result =
+          WalletNFTsResponseModel.fromJson(decodedResponse as Map<String, dynamic>).result ?? [];
 
       nftAssetByWalletModels.clear();
 

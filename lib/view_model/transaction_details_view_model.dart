@@ -62,15 +62,11 @@ class TxDetailRowDefinition {
         keyString: "standard_list_item_transaction_details_date_key",
         title: S.current.transaction_details_date,
         valueGetter: (vm) => DateFormatter.withCurrentLocal().format(vm.transactionInfo.date)),
-
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_details_height_key",
         title: S.current.transaction_details_height,
         valueGetter: (vm) => vm.transactionInfo.height?.toString() ?? "",
         applicable: (vm) => !isLightning(vm.transactionInfo)),
-
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_details_fee_key",
         title: S.current.transaction_details_fee,
@@ -78,8 +74,6 @@ class TxDetailRowDefinition {
         applicable: (vm) =>
             vm.wallet.type != WalletType.nano &&
             (vm.transactionInfo.feeFormatted() ?? "").isNotEmpty),
-
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_confirmations_key",
         title: S.current.confirmations,
@@ -89,8 +83,6 @@ class TxDetailRowDefinition {
                 .contains(vm.wallet.type) &&
             !isLightning(vm.transactionInfo),
         listItemBuilder: ConfirmationsListItem.new),
-
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_details_recipient_address_key",
         title: S.current.transaction_details_recipient_address,
@@ -112,7 +104,7 @@ class TxDetailRowDefinition {
             default:
               break;
           }
-          if(ret == null) {
+          if (ret == null) {
             ret = vm.transactionInfo.to ?? "";
           }
           vm.isRecipientAddressShown = ret.isNotEmpty;
@@ -125,15 +117,12 @@ class TxDetailRowDefinition {
                 vm.wallet.type == WalletType.bitcoin &&
                     vm.transactionInfo.direction == TransactionDirection.incoming),
         listItemBuilder: AddressListItem.new),
-
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_details_source_address_key",
         title: S.current.transaction_details_source_address,
         valueGetter: (vm) => vm.transactionInfo.from!,
         applicable: (vm) => vm.transactionInfo.from != null,
         listItemBuilder: AddressListItem.new),
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_address_label_key",
         title: S.current.address_label,
@@ -142,8 +131,6 @@ class TxDetailRowDefinition {
             vm.transactionInfo.additionalInfo['accountIndex'] as int,
             vm.transactionInfo.additionalInfo['addressIndex'] as int),
         applicable: (vm) => vm.wallet.type == WalletType.monero),
-
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_key",
         title: S.current.transaction_key,
@@ -159,15 +146,11 @@ class TxDetailRowDefinition {
               "";
         },
         applicable: (vm) => vm.wallet.type == WalletType.monero),
-
-
     TxDetailRowDefinition(
         keyString: "standard_list_item_transaction_confirmed_key",
         title: S.current.confirmed_tx,
         valueGetter: (vm) => (vm.transactionInfo.confirmations > 0).toString(),
         applicable: (vm) => vm.wallet.type == WalletType.nano),
-
-
     TxDetailRowDefinition(
       keyString: "standard_list_item_transaction_details_id_key",
       title: S.current.transaction_details_transaction_id,
@@ -229,7 +212,7 @@ abstract class TransactionDetailsViewModelBase with Store {
   void updateNote(String note) {
     final descriptionKey = '${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}';
     final description = transactionDescriptionBox.values.firstWhere(
-            (val) => val.id == descriptionKey || val.id == transactionInfo.txHash,
+        (val) => val.id == descriptionKey || val.id == transactionInfo.txHash,
         orElse: () => TransactionDescription(id: descriptionKey));
 
     description.transactionNote = note;
@@ -243,9 +226,9 @@ abstract class TransactionDetailsViewModelBase with Store {
 
   String get note {
     final descriptionKey = '${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}';
-    final description = transactionDescriptionBox.values.firstWhereOrNull(
-            (val) => val.id == descriptionKey || val.id == transactionInfo.txHash);
-    return description?.transactionNote??"";
+    final description = transactionDescriptionBox.values
+        .firstWhereOrNull((val) => val.id == descriptionKey || val.id == transactionInfo.txHash);
+    return description?.transactionNote ?? "";
   }
 
   final TransactionInfo transactionInfo;
@@ -269,7 +252,6 @@ abstract class TransactionDetailsViewModelBase with Store {
 
     return walletTypeToCryptoCurrency(wallet.type);
   }
-
 
   // TODO integrate these getters with the TransactionInfo object
   String get formattedPendingStatus {
@@ -332,15 +314,12 @@ abstract class TransactionDetailsViewModelBase with Store {
       case WalletType.litecoin:
         bool isPegOut = (transactionInfo.additionalInfo["isPegOut"] as bool?) ?? false;
         bool fromPegOut = (transactionInfo.additionalInfo["fromPegOut"] as bool?) ?? false;
-        if(isPegOut || fromPegOut)
-          return 6;
+        if (isPegOut || fromPegOut) return 6;
       default:
         return 0;
     }
     return 0;
   }
-
-
 
   String get formattedTitle {
     if (transactionInfo.additionalInfo['autoShield'] == true) {
@@ -357,7 +336,6 @@ abstract class TransactionDetailsViewModelBase with Store {
   bool canReplaceByFee;
 
   String get _explorerUrl {
-
     final txId = transactionInfo.txHash;
     if (wallet.chainId != null) {
       final explorerUrl = evm!.getExplorerUrlForChainId(wallet.chainId!);
@@ -488,9 +466,6 @@ abstract class TransactionDetailsViewModelBase with Store {
     }
   }
 
-
-
-
   @action
   Future<void> _checkForRBF(TransactionInfo tx) async {
     if (wallet.type == WalletType.bitcoin &&
@@ -553,6 +528,4 @@ abstract class TransactionDetailsViewModelBase with Store {
   String get pendingTransactionFeeFiatAmountFormatted => sendViewModel.isFiatDisabled
       ? ''
       : sendViewModel.pendingTransactionFeeFiatAmount + ' ' + sendViewModel.fiat.title;
-
-
 }

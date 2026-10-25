@@ -56,12 +56,12 @@ class BalanceRecord {
 
   String get combinedAvailableBalance =>
       ((double.tryParse(availableBalance) ?? 0) + (double.tryParse(secondAvailableBalance) ?? 0))
-          .toString().withMaxDecimals(8);
+          .toString()
+          .withMaxDecimals(8);
 
-  String get combinedFiatAvailableBalance =>
-      ((double.tryParse(fiatAvailableBalanceRaw) ?? 0) +
-              (double.tryParse(fiatSecondAvailableBalanceRaw) ?? 0))
-          .toStringAsFixed(2);
+  String get combinedFiatAvailableBalance => ((double.tryParse(fiatAvailableBalanceRaw) ?? 0) +
+          (double.tryParse(fiatSecondAvailableBalanceRaw) ?? 0))
+      .toStringAsFixed(2);
 
   String get fiatAvailableBalanceRaw => fiatAvailableBalance.split(" ").last;
   String get fiatSecondAvailableBalanceRaw => fiatSecondAvailableBalance.split(" ").last;
@@ -211,7 +211,8 @@ abstract class BalanceViewModelBase with Store {
   String additionalBalance(CryptoCurrency cryptoCurrency) {
     final balance = _currencyBalance(cryptoCurrency);
 
-    if (displayMode == BalanceDisplayMode.hiddenBalance || balance.additional == BigInt.zero) return '0.0';
+    if (displayMode == BalanceDisplayMode.hiddenBalance || balance.additional == BigInt.zero)
+      return '0.0';
 
     return cryptoCurrency.formatAmount(balance.additional);
   }
@@ -234,8 +235,7 @@ abstract class BalanceViewModelBase with Store {
                 fiatAdditionalBalance: isFiatDisabled ? '' : '${fiatCurrency.toString()} ●●●●●',
                 fiatAvailableBalance: isFiatDisabled ? '' : '${fiatCurrency.toString()} ●●●●●',
                 fiatFrozenBalance: isFiatDisabled ? '' : '',
-                fiatSecondAvailableBalance:
-                    isFiatDisabled ? '' : '${fiatCurrency.toString()}',
+                fiatSecondAvailableBalance: isFiatDisabled ? '' : '${fiatCurrency.toString()}',
                 fiatSecondAdditionalBalance:
                     isFiatDisabled ? '' : '${fiatCurrency.toString()} ●●●●●',
                 asset: key,
@@ -283,12 +283,15 @@ abstract class BalanceViewModelBase with Store {
           fiatAvailableBalance: availableFiatBalance,
           additionalBalance: _getFormattedCryptoAmount(key, additional),
           fiatAdditionalBalance: additionalFiatBalance,
-          frozenBalance:
-              (value.frozen ?? BigInt.zero) > BigInt.zero ? _getFormattedCryptoAmount(key, value.frozen??BigInt.zero) : '',
+          frozenBalance: (value.frozen ?? BigInt.zero) > BigInt.zero
+              ? _getFormattedCryptoAmount(key, value.frozen ?? BigInt.zero)
+              : '',
           fiatFrozenBalance: frozenFiatBalance,
-          secondAvailableBalance: _getFormattedCryptoAmount(secondAsset, value.secondAvailable??BigInt.zero),
+          secondAvailableBalance:
+              _getFormattedCryptoAmount(secondAsset, value.secondAvailable ?? BigInt.zero),
           fiatSecondAvailableBalance: secondAvailableFiatBalance,
-          secondAdditionalBalance: _getFormattedCryptoAmount(secondAsset, value.secondAdditional??BigInt.zero),
+          secondAdditionalBalance:
+              _getFormattedCryptoAmount(secondAsset, value.secondAdditional ?? BigInt.zero),
           fiatSecondAdditionalBalance: secondAdditionalFiatBalance,
           asset: key,
           secondAsset: secondAsset,
@@ -340,7 +343,8 @@ abstract class BalanceViewModelBase with Store {
 
     return appStore.amountParsingProxy
         .getDisplayCryptoStringFromBigInt(amount, cryptoCurrency)
-        .withMaxDecimals(8).withLocalSeperator(settingsStore.languageCode);
+        .withMaxDecimals(8)
+        .withLocalSeperator(settingsStore.languageCode);
   }
 
   @computed
@@ -409,7 +413,8 @@ abstract class BalanceViewModelBase with Store {
     }
 
     if (wallet.walletInfo.favoriteTokenAddress != null) {
-      return formattedBalances.firstWhereOrNull((item) => (getTokenAddressBasedOnWallet(item.asset) ==
+      return formattedBalances.firstWhereOrNull((item) =>
+              (getTokenAddressBasedOnWallet(item.asset) ==
                   wallet.walletInfo.favoriteTokenAddress)) ??
           formattedBalances.elementAt(0);
     }
@@ -427,8 +432,8 @@ abstract class BalanceViewModelBase with Store {
 
   @computed
   bool get showCombinedBalance {
-    if(wallet.type == WalletType.bitcoin) return false;
-    if(balances.values.length == 1) return false;
+    if (wallet.type == WalletType.bitcoin) return false;
+    if (balances.values.length == 1) return false;
 
     return wallet.walletInfo.showCombinedBalance;
   }

@@ -18,15 +18,13 @@ class FloatingIconButton extends StatelessWidget {
           onTap: onPressed,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: HashImageWidget(imageUrl:iconPath,
-              width: 22, height: 22,
-              colorFilter: ColorFilter.mode(Theme
-                  .of(context)
-                  .colorScheme
-                  .primary, BlendMode.srcIn),
+            child: HashImageWidget(
+              imageUrl: iconPath,
+              width: 22,
+              height: 22,
+              colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),
             ),
-          )
-      ),
+          )),
     );
   }
 }

@@ -44,8 +44,8 @@ class QrImage extends StatelessWidget {
             backgroundColor: backgroundColor,
             padding: const EdgeInsets.all(12.0),
           ),
-          HashImageWidget(imageUrl:
-            imagePath,
+          HashImageWidget(
+            imageUrl: imagePath,
             width: logoSize * 0.8,
             height: logoSize * 0.8,
           ),

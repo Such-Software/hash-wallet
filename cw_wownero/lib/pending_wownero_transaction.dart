@@ -1,6 +1,5 @@
 import 'package:cw_wownero/api/structs/pending_transaction.dart';
-import 'package:cw_wownero/api/transaction_history.dart'
-    as wownero_transaction_history;
+import 'package:cw_wownero/api/transaction_history.dart' as wownero_transaction_history;
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/amount_converter.dart';
 
@@ -53,7 +52,7 @@ class PendingWowneroTransaction with PendingTransaction {
       rethrow;
     }
   }
-  
+
   @override
   Future<Map<String, String>> commitUR() {
     throw UnimplementedError();

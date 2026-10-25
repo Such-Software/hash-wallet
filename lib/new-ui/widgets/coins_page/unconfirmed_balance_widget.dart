@@ -30,75 +30,75 @@ class UnconfirmedBalanceWidget extends StatelessWidget {
               ? Column(
                   children: [
                     const SizedBox(height: 12, width: double.infinity),
-                    Observer(
-                      builder: (context) {
-                        final balance = dashboardViewModel.balanceViewModel.additionalBalance(currency);
+                    Observer(builder: (context) {
+                      final balance =
+                          dashboardViewModel.balanceViewModel.additionalBalance(currency);
 
-                        return Container(
-                          width: MediaQuery.of(context).size.width * 0.87,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceContainer,
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                showMaterialModalBottomSheet(
-                                    backgroundColor: Colors.transparent,
-                                    context: context,
-                                    builder: (context) {
-                                      return UnconfirmedBalanceModal(
-                                        balance: "${balance} ${currency.title}",
-                                        currencyIconPath: currency.iconPath ?? "",
-                                      );
-                                    });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      spacing: 12,
-                                      children: [
-                                        SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            backgroundColor: Theme.of(context).colorScheme.primary.withAlpha(50),
-                                            color: Theme.of(context).colorScheme.primary,
-                                            value: dashboardViewModel.confirmationProgress,
-                                          ),
+                      return Container(
+                        width: MediaQuery.of(context).size.width * 0.87,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) {
+                                    return UnconfirmedBalanceModal(
+                                      balance: "${balance} ${currency.title}",
+                                      currencyIconPath: currency.iconPath ?? "",
+                                    );
+                                  });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    spacing: 12,
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          backgroundColor:
+                                              Theme.of(context).colorScheme.primary.withAlpha(50),
+                                          color: Theme.of(context).colorScheme.primary,
+                                          value: dashboardViewModel.confirmationProgress,
                                         ),
-                                        Row(
-                                          spacing: 4,
-                                          children: [
-                                            Text(
-                                              "$balance ${currency.title}",
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.primary,
-                                              ),
+                                      ),
+                                      Row(
+                                        spacing: 4,
+                                        children: [
+                                          Text(
+                                            "$balance ${currency.title}",
+                                            style: TextStyle(
+                                              color: Theme.of(context).colorScheme.primary,
                                             ),
-                                            Text(S.of(context).confirming),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    Icon(
-                                      Icons.chevron_right,
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                    )
-                                  ],
-                                ),
+                                          ),
+                                          Text(S.of(context).confirming),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right,
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  )
+                                ],
                               ),
                             ),
                           ),
-                        );
-                      }
-                    ),
+                        ),
+                      );
+                    }),
                   ],
                 )
               : const SizedBox(

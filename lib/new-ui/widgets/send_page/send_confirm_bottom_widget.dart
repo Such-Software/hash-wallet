@@ -122,8 +122,8 @@ class TransactionErrorActions extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 8,
                   children: [
-                    HashImageWidget(imageUrl:
-                      "assets/new-ui/warning.svg",
+                    HashImageWidget(
+                      imageUrl: "assets/new-ui/warning.svg",
                       height: 24,
                       width: 24,
                       colorFilter:
@@ -193,8 +193,8 @@ class HardwareWalletConfirmationMessage extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: Column(spacing: 8, children: [
           if (hardwareWalletIcon != null)
-            HashImageWidget(imageUrl:
-              hardwareWalletIcon!,
+            HashImageWidget(
+              imageUrl: hardwareWalletIcon!,
               width: 36,
               height: 36,
               colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary, BlendMode.srcIn),

@@ -28,7 +28,7 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
   @override
   void initState() {
     super.initState();
-    if(widget.walletAddressListViewModel.selectedCurrency is FiatCurrency) {
+    if (widget.walletAddressListViewModel.selectedCurrency is FiatCurrency) {
       _amountController.text = widget.walletAddressListViewModel.fiatAmount;
     } else {
       _amountController.text = widget.walletAddressListViewModel.displayAmount;
@@ -101,7 +101,8 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
                                     ),
                                     RotatedBox(
                                         quarterTurns: 2,
-                                        child: HashImageWidget(imageUrl:"assets/new-ui/dropdown_arrow.svg"))
+                                        child: HashImageWidget(
+                                            imageUrl: "assets/new-ui/dropdown_arrow.svg"))
                                   ],
                                 ),
                               ),
@@ -133,8 +134,9 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
                               textAlign: TextAlign.left,
                               textAlignVertical: TextAlignVertical.center,
                               controller: _amountController,
-                              keyboardType:
-                                  TextInputType.numberWithOptions(signed: false, decimal: !widget.walletAddressListViewModel.useSatoshi),
+                              keyboardType: TextInputType.numberWithOptions(
+                                  signed: false,
+                                  decimal: !widget.walletAddressListViewModel.useSatoshi),
                               decoration: InputDecoration(
                                 hint: Text(
                                   widget.walletAddressListViewModel.useSatoshi ? "0" : "0.00000000",
@@ -198,7 +200,7 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
                     NewPrimaryButton(
                       text: S.of(context).continue_text,
                       onPressed: () {
-                        if(double.tryParse(_amountController.text) != null) {
+                        if (double.tryParse(_amountController.text) != null) {
                           widget.walletAddressListViewModel.changeAmount(_amountController.text);
                         }
                         Navigator.of(context).pop();
@@ -232,8 +234,8 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
     final currs = widget.walletAddressListViewModel.currencies.toList();
     // the first options should be the crypto and the default fiat currency
     currs.sort((a, b) {
-      if(a == widget.walletAddressListViewModel.fiatCurrency || a is CryptoCurrency) return -1;
-      if(b == widget.walletAddressListViewModel.fiatCurrency || a is CryptoCurrency) return 1;
+      if (a == widget.walletAddressListViewModel.fiatCurrency || a is CryptoCurrency) return -1;
+      if (b == widget.walletAddressListViewModel.fiatCurrency || a is CryptoCurrency) return 1;
       return 0;
     });
 

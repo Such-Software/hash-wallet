@@ -25,8 +25,7 @@ class HeaderRow extends StatelessWidget {
           Text(
             S.of(context).history,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.onSurface),
+                fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface),
           ),
           Semantics(
             container: true,

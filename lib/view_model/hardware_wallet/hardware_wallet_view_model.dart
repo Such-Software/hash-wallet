@@ -26,4 +26,3 @@ abstract class HardwareWalletViewModel {
 
   String? interpretErrorCode(String error) => null;
 }
-

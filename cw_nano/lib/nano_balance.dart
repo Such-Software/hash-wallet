@@ -10,16 +10,17 @@ class NanoBalance extends Balance {
   final BigInt currentBalance;
   final BigInt receivableBalance;
 
-  NanoBalance({required this.currentBalance, required this.receivableBalance}) : super(currentBalance, receivableBalance);
+  NanoBalance({required this.currentBalance, required this.receivableBalance})
+      : super(currentBalance, receivableBalance);
 
   NanoBalance.fromFormattedString(
       {required String formattedCurrentBalance, required String formattedReceivableBalance})
       : currentBalance = stringAmountToBigIntNano(formattedCurrentBalance),
         receivableBalance = stringAmountToBigIntNano(formattedReceivableBalance),
-        super(stringAmountToBigIntNano(formattedCurrentBalance), stringAmountToBigIntNano(formattedReceivableBalance));
+        super(stringAmountToBigIntNano(formattedCurrentBalance),
+            stringAmountToBigIntNano(formattedReceivableBalance));
 
-  NanoBalance.fromRawString(
-      {required String currentBalance, required String receivableBalance})
+  NanoBalance.fromRawString({required String currentBalance, required String receivableBalance})
       : currentBalance = BigInt.parse(currentBalance),
         receivableBalance = BigInt.parse(receivableBalance),
         super(BigInt.parse(currentBalance), BigInt.parse(receivableBalance));

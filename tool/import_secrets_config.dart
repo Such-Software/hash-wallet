@@ -38,8 +38,8 @@ Future<void> importSecretsConfig() async {
   final bitcoinOutputFile = File(bitcoinOutputPath);
   final bitcoinInput =
       json.decode(File(bitcoinConfigPath).readAsStringSync()) as Map<String, dynamic>;
-  final bitcoinOutput =
-      bitcoinInput.keys.fold('', (String acc, String val) => acc + generateConst(val, bitcoinInput));
+  final bitcoinOutput = bitcoinInput.keys
+      .fold('', (String acc, String val) => acc + generateConst(val, bitcoinInput));
 
   if (outputFile.existsSync()) {
     await outputFile.delete();

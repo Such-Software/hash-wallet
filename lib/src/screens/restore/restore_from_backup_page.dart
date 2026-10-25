@@ -177,14 +177,14 @@ class RestoreFromBackupPage extends BasePage {
       await restoreFromBackupViewModel.import(textEditingController.text);
     } catch (e) {
       await showPopUp<void>(
-        context: context,
-        builder: (_) {
-          return AlertWithOneAction(
-              alertTitle: S.current.error,
-              alertContent: e.toString(),
-              buttonText: S.of(context).ok,
-              buttonAction: () => Navigator.of(context).pop());
-        });
+          context: context,
+          builder: (_) {
+            return AlertWithOneAction(
+                alertTitle: S.current.error,
+                alertContent: e.toString(),
+                buttonText: S.of(context).ok,
+                buttonAction: () => Navigator.of(context).pop());
+          });
     }
     textEditingController.text = '';
   }

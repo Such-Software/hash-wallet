@@ -20,19 +20,19 @@ class AmountParsingProxy {
 
   /// [getCryptoOutputAmount] turns the input [amount] into the preferred representation of [cryptoCurrency]
   String getDisplayCryptoAmount(String amount, CryptoCurrency cryptoCurrency) {
-
     try {
       if (useSatoshi(cryptoCurrency) && amount.isNotEmpty) {
-        return cryptoCurrency.parseAmount(amount.withMaxDecimals(cryptoCurrency.decimals)).toString();
+        return cryptoCurrency
+            .parseAmount(amount.withMaxDecimals(cryptoCurrency.decimals))
+            .toString();
       }
 
       return amount.withMaxDecimals(cryptoCurrency.decimals);
-
-    } catch(_) {
-      printV("failed to parse amount $amount for currency ${cryptoCurrency.title}, falling back to showing unparsed");
+    } catch (_) {
+      printV(
+          "failed to parse amount $amount for currency ${cryptoCurrency.title}, falling back to showing unparsed");
       return amount;
     }
-
   }
 
   /// [getCryptoStringRepresentation] turns the input [amount] into the preferred representation of [cryptoCurrency]

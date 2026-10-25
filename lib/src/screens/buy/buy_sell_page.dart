@@ -269,8 +269,7 @@ class BuySellPage extends BasePage {
         (_) => _onWalletNameChange(
             buySellViewModel, buySellViewModel.cryptoCurrency, cryptoCurrencyKey));
 
-    reaction(
-        (_) => buySellViewModel.cryptoCurrency,
+    reaction((_) => buySellViewModel.cryptoCurrency,
         (currency) => _onCurrencyChange(currency, buySellViewModel, cryptoCurrencyKey));
 
     reaction((_) => buySellViewModel.fiatCurrency,
@@ -317,8 +316,8 @@ class BuySellPage extends BasePage {
     _cryptoAddressFocus.addListener(() async {
       if (!_cryptoAddressFocus.hasFocus && cryptoAddressController.text.isNotEmpty) {
         final domain = cryptoAddressController.text;
-        buySellViewModel.cryptoCurrencyAddress = await fetchParsedAddress(
-            context, domain, buySellViewModel.cryptoCurrency);
+        buySellViewModel.cryptoCurrencyAddress =
+            await fetchParsedAddress(context, domain, buySellViewModel.cryptoCurrency);
       }
     });
 
@@ -509,8 +508,7 @@ class BuySellPage extends BasePage {
     String domain,
     CryptoCurrency currency,
   ) async {
-    final parsedAddress =
-        await getIt.get<AddressResolver>().resolve(context, domain, currency);
+    final parsedAddress = await getIt.get<AddressResolver>().resolve(context, domain, currency);
     final address = await extractAddressFromParsed(context, parsedAddress);
     return address;
   }

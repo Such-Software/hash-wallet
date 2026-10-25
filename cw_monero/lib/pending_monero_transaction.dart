@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:cw_monero/api/account_list.dart';
 import 'package:cw_monero/api/structs/pending_transaction.dart';
-import 'package:cw_monero/api/transaction_history.dart'
-    as monero_transaction_history;
+import 'package:cw_monero/api/transaction_history.dart' as monero_transaction_history;
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/amount_converter.dart';
 
@@ -32,15 +31,15 @@ class PendingMoneroTransaction with PendingTransaction {
   String get hex => pendingTransactionDescription.hex;
 
   @override
-  String get amountFormatted => AmountConverter.amountIntToString(
-      CryptoCurrency.xmr, pendingTransactionDescription.amount);
+  String get amountFormatted =>
+      AmountConverter.amountIntToString(CryptoCurrency.xmr, pendingTransactionDescription.amount);
 
   @override
   String get feeFormatted => "$feeFormattedValue XMR";
 
   @override
-  String get feeFormattedValue => AmountConverter.amountIntToString(
-      CryptoCurrency.xmr, pendingTransactionDescription.fee);
+  String get feeFormattedValue =>
+      AmountConverter.amountIntToString(CryptoCurrency.xmr, pendingTransactionDescription.fee);
 
   @override
   bool shouldCommitUR() => isViewOnly;
@@ -49,8 +48,7 @@ class PendingMoneroTransaction with PendingTransaction {
   Future<void> commit() async {
     try {
       await monero_transaction_history.commitTransactionFromPointerAddress(
-          address: pendingTransactionDescription.pointerAddress,
-          useUR: false);
+          address: pendingTransactionDescription.pointerAddress, useUR: false);
     } catch (e) {
       final message = e.toString();
 
@@ -71,8 +69,7 @@ class PendingMoneroTransaction with PendingTransaction {
   Future<Map<String, String>> commitUR() async {
     try {
       final ret = await monero_transaction_history.commitTransactionFromPointerAddress(
-          address: pendingTransactionDescription.pointerAddress,
-          useUR: true);
+          address: pendingTransactionDescription.pointerAddress, useUR: true);
       storeSync(force: true);
       unawaited(() async {
         await Future.delayed(const Duration(milliseconds: 250));

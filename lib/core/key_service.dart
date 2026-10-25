@@ -27,8 +27,7 @@ class KeyService {
     // persist (see WalletLoadingService.updateMoneroWalletPassword).
     if (encodedPassword == null) {
       final bakKey = generateStoreKeyFor(
-          key: SecretStoreKey.moneroWalletPassword,
-          walletName: '#__${walletName}_bak__#');
+          key: SecretStoreKey.moneroWalletPassword, walletName: '#__${walletName}_bak__#');
       encodedPassword = await _secureStorage.read(key: bakKey) ??
           await _secureStorage.readNoIOptions(key: bakKey);
     }
@@ -37,8 +36,7 @@ class KeyService {
     // loader can surface the seed/restore recovery path rather than the app
     // hard-crashing ("crashed and wouldn't let me in").
     if (encodedPassword == null) {
-      throw Exception(
-          'Wallet password not found in secure storage for "$walletName". '
+      throw Exception('Wallet password not found in secure storage for "$walletName". '
           'The keychain entry may have been lost across an app update; '
           'restore this wallet from its seed.');
     }

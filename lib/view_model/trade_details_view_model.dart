@@ -71,11 +71,11 @@ abstract class TradeDetailsViewModelBase with Store {
       case ExchangeProviderDescription.chainflip:
         return 'https://scan.chainflip.io/channels/${trade.id}';
       case ExchangeProviderDescription.xoSwap:
-        return  'https://orders.xoswap.com/${trade.id}';
+        return 'https://orders.xoswap.com/${trade.id}';
       case ExchangeProviderDescription.swapsXyz:
-        return  'https://scan.swaps.xyz/transactions/${trade.id}';
+        return 'https://scan.swaps.xyz/transactions/${trade.id}';
       case ExchangeProviderDescription.nearIntents:
-        return  'https://explorer.near-intents.org/transactions/${trade.id}';
+        return 'https://explorer.near-intents.org/transactions/${trade.id}';
     }
     return null;
   }
@@ -119,7 +119,7 @@ abstract class TradeDetailsViewModelBase with Store {
         DetailsListStatusItem(title: S.current.trade_details_state, value: trade.state.toString()));
 
     final tradeFrom = trade.from;
-    final tradeTo   = trade.to;
+    final tradeTo = trade.to;
 
     if (tradeFrom != null && tradeTo != null) {
       items.add(TradeDetailsListCardItem.tradeDetails(
@@ -145,8 +145,7 @@ abstract class TradeDetailsViewModelBase with Store {
     }
 
     if (trade.isRefund == true) {
-      items.add(StandartListItem(
-          title: 'Refund', value: trade.refundAddress ?? ''));
+      items.add(StandartListItem(title: 'Refund', value: trade.refundAddress ?? ''));
     }
 
     if (trade.provider == ExchangeProviderDescription.trocador) {
@@ -160,9 +159,10 @@ abstract class TradeDetailsViewModelBase with Store {
       }
     }
 
-    if (trade.provider == ExchangeProviderDescription.swapsXyz && trade.txId != null && trade.txId!.isNotEmpty) {
-      items.add(StandartListItem(
-          title: 'Transaction ID', value: trade.txId!));
+    if (trade.provider == ExchangeProviderDescription.swapsXyz &&
+        trade.txId != null &&
+        trade.txId!.isNotEmpty) {
+      items.add(StandartListItem(title: 'Transaction ID', value: trade.txId!));
     }
   }
 
@@ -172,6 +172,4 @@ abstract class TradeDetailsViewModelBase with Store {
       launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {}
   }
-
-
 }

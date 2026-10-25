@@ -18,14 +18,13 @@ class CardCustomizerBloc extends Bloc<CardCustomizerEvent, CardCustomizerState> 
   final bool displaySats;
 
   CardCustomizerBloc(this._wallet, {this.lightningMode = false, this.displaySats = false})
-      : super(CardCustomizerNotLoaded(0, 0, [CardDesign.genericDefault], [], "", -1, displaySats, 0)) {
-
+      : super(CardCustomizerNotLoaded(
+            0, 0, [CardDesign.genericDefault], [], "", -1, displaySats, 0)) {
     on<_Init>(_init);
     on<CardDesignSelected>(_onDesignSelected);
     on<ColorSelected>(_onColorSelected);
     on<DesignSaved>(_onDesignSaved);
     on<AccountNameChanged>(_onAccountNameChanged);
-
 
     add(_Init());
   }
@@ -65,7 +64,7 @@ class CardCustomizerBloc extends Bloc<CardCustomizerEvent, CardCustomizerState> 
 
   int _initSelectedColor(CardDesign currentDesign) {
     int ret = CardDesign.allGradients.indexOf(currentDesign.gradient);
-    if(ret == -1) {
+    if (ret == -1) {
       // special design with its own color. select last color in list.
       return CardDesign.allGradients.length;
     } else if (ret == -1) {
@@ -88,15 +87,16 @@ class CardCustomizerBloc extends Bloc<CardCustomizerEvent, CardCustomizerState> 
     }
     final accountName = (account?.label ?? "") as String;
     late final int accountIndex;
-    if(account != null) {
+    if (account != null) {
       accountIndex = account.id as int;
-    } else if(lightningMode) {
+    } else if (lightningMode) {
       accountIndex = 0;
     } else {
       accountIndex = -1;
     }
     final currentDesignSettings = await _loadCurrentDesignSettings(accountIndex);
-    final currentDesign = CardDesign.fromStyleSettings(currentDesignSettings, lightningMode ? CryptoCurrency.btcln : _wallet.currency);
+    final currentDesign = CardDesign.fromStyleSettings(
+        currentDesignSettings, lightningMode ? CryptoCurrency.btcln : _wallet.currency);
     final availableDesigns = _initAvailableDesigns(lightningMode: lightningMode);
     final availableColors = _updateAvailableColors(currentDesign);
     final selectedDesign = _initSelectedDesign(currentDesign);
@@ -130,12 +130,19 @@ class CardCustomizerBloc extends Bloc<CardCustomizerEvent, CardCustomizerState> 
   }
 
   void _onDesignSaved(DesignSaved event, Emitter<CardCustomizerState> emit) {
-    BalanceCardStyleSettings.fromCardDesign(
-            _wallet.walletInfo.internalId, state.accountIndex, state.cardOrder, state.selectedDesign)
+    BalanceCardStyleSettings.fromCardDesign(_wallet.walletInfo.internalId, state.accountIndex,
+            state.cardOrder, state.selectedDesign)
         .insert()
         .then((value) {
-      emit(CardCustomizerSaved(state.selectedDesignIndex, state.selectedColorIndex,
-          state.availableDesigns, state.availableColors, state.accountName, state.accountIndex, state.displaySats, state.cardOrder));
+      emit(CardCustomizerSaved(
+          state.selectedDesignIndex,
+          state.selectedColorIndex,
+          state.availableDesigns,
+          state.availableColors,
+          state.accountName,
+          state.accountIndex,
+          state.displaySats,
+          state.cardOrder));
     });
     saveAccountName();
   }

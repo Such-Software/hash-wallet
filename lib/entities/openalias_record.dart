@@ -37,7 +37,7 @@ class OpenaliasRecord {
     required String formattedName,
     required String ticker,
     required List<RRecord> txtRecord,
-  })  {
+  }) {
     String address = '';
     String name = formattedName;
     String note = '';
@@ -82,8 +82,7 @@ class OpenaliasRecord {
 
         break;
       }
-
-  }
+    }
     return OpenaliasRecord(address: address, name: name, description: note);
-}
+  }
 }

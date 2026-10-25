@@ -44,9 +44,9 @@ class WCConnectionRequestWidget extends StatelessWidget {
           Text(
             '${requester!.metadata.name} ${S.current.wouoldLikeToConnect}',
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-            ),
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
@@ -97,4 +97,3 @@ class WCConnectionRequestWidget extends StatelessWidget {
     return Column(children: views);
   }
 }
-

@@ -24,7 +24,6 @@ class RescanPage extends StatefulWidget {
 class _RescanPageState extends State<RescanPage> {
   final TextEditingController _heightController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     Widget child = Padding(
@@ -60,8 +59,8 @@ class _RescanPageState extends State<RescanPage> {
                   return _toggleSilentPaymentsScanning(context);
                 }
 
-                widget._rescanViewModel.rescanCurrentWallet(
-                    restoreHeight: int.tryParse(_heightController.text) ?? 0);
+                widget._rescanViewModel
+                    .rescanCurrentWallet(restoreHeight: int.tryParse(_heightController.text) ?? 0);
 
                 Navigator.of(context).pop();
               },

@@ -45,7 +45,8 @@ void main() {
     // A silent zero would make this test vacuous, which is how the last two
     // branding regressions reached users.
     expect(compared, greaterThan(0), reason: 'compared no SVG pairs at all');
-    expect(drifted, isEmpty, reason: 'generated brand assets drifted from source:\n${drifted.join('\n')}');
+    expect(drifted, isEmpty,
+        reason: 'generated brand assets drifted from source:\n${drifted.join('\n')}');
   });
 }
 

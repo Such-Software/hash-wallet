@@ -25,10 +25,9 @@ class ReceiveQrCode extends StatelessWidget {
   static const Duration animDuration = Duration(milliseconds: 500);
   final bool isLightMode = !(getIt.get<ThemeStore>().currentTheme.isDark);
 
-
   @override
   Widget build(BuildContext context) {
-    final double targetY = largeQrMode ? largeQrModeBottomPadding+50 : 0;
+    final double targetY = largeQrMode ? largeQrModeBottomPadding + 50 : 0;
     final double resolvedSize = MediaQuery.of(context).size.width * 0.5;
     final double resolvedScale = largeQrMode ? 1.7 : 1;
 
@@ -42,8 +41,8 @@ class ReceiveQrCode extends StatelessWidget {
           child: AnimatedOpacity(
               duration: animDuration,
               opacity: largeQrMode ? 1 : 0,
-              child: HashImageWidget(imageUrl:
-                isLightMode
+              child: HashImageWidget(
+                imageUrl: isLightMode
                     ? "assets/new-ui/hash-wordmark-light.svg"
                     : "assets/new-ui/hash-wordmark.svg",
                 height: 45,
@@ -116,7 +115,7 @@ class ReceiveQrCode extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   spacing: 4,
                                   children: [
-                                    HashImageWidget(imageUrl:"assets/new-ui/payjoin.svg"),
+                                    HashImageWidget(imageUrl: "assets/new-ui/payjoin.svg"),
                                     Text(S.of(context).payjoin_enabled)
                                   ],
                                 ),
@@ -124,7 +123,7 @@ class ReceiveQrCode extends StatelessWidget {
                     AnimatedSize(
                         duration: animDuration,
                         curve: Curves.easeOutCubic,
-                        child: SizedBox(height: largeQrMode ? largeQrModeBottomPadding+40 : 0))
+                        child: SizedBox(height: largeQrMode ? largeQrModeBottomPadding + 40 : 0))
                   ],
                 ),
               )),

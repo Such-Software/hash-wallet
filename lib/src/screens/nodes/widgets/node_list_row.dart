@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class NodeListRow extends StandardListRow {
   NodeListRow(
       {required String title,
-        String? subtitle,
+      String? subtitle,
       required this.node,
       required void Function(BuildContext context) onTap,
       required bool isSelected,
@@ -121,8 +121,7 @@ class NodeHeaderListRow extends StandardListRow {
   Widget buildTrailing(BuildContext context) {
     return SizedBox(
       width: 20,
-      child: Icon(Icons.add,
-          color: Theme.of(context).colorScheme.onSurfaceVariant, size: 24.0),
+      child: Icon(Icons.add, color: Theme.of(context).colorScheme.onSurfaceVariant, size: 24.0),
     );
   }
 }

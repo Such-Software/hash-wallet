@@ -23,8 +23,7 @@ import 'bip_353_record.dart';
 /// were removed deliberately — do not reintroduce one without updating
 /// PRIVACY.md and gating it behind an off-by-default setting.
 class AddressResolver {
-  AddressResolver({required this.wallet, required this.settingsStore})
-      : walletType = wallet.type;
+  AddressResolver({required this.wallet, required this.settingsStore}) : walletType = wallet.type;
 
   final WalletType walletType;
   final WalletBase wallet;
@@ -40,8 +39,7 @@ class AddressResolver {
       return null;
     }
 
-    if (requireSurroundingWhitespaces)
-      addressPattern = "$BEFORE_REGEX$addressPattern$AFTER_REGEX";
+    if (requireSurroundingWhitespaces) addressPattern = "$BEFORE_REGEX$addressPattern$AFTER_REGEX";
 
     final match = RegExp(addressPattern, multiLine: true).firstMatch(raw);
     return match?.group(0)?.replaceAllMapped(RegExp('[^0-9a-zA-Z]|bitcoincash:|nano_|ban_'),
@@ -97,11 +95,13 @@ class AddressResolver {
       final bip353AddressMap = await Bip353Record.fetchUriByCryptoCurrency(text, ticker);
 
       if (bip353AddressMap != null && bip353AddressMap.isNotEmpty) {
-        final chosenAddress = await Bip353Record.pickBip353AddressChoice(context, text, bip353AddressMap);
+        final chosenAddress =
+            await Bip353Record.pickBip353AddressChoice(context, text, bip353AddressMap);
         if (chosenAddress != null) {
           try {
             final dnsProof = await Bip353Record.fetchDnsProof(text);
-            return ParsedAddress.fetchBip353AddressAddress(address: chosenAddress, name: text, dnsProof: dnsProof);
+            return ParsedAddress.fetchBip353AddressAddress(
+                address: chosenAddress, name: text, dnsProof: dnsProof);
           } catch (e) {
             printV('Bip353Record.fetchBip353AddressAddress error: $e');
             return ParsedAddress.fetchBip353AddressAddress(address: chosenAddress, name: text);

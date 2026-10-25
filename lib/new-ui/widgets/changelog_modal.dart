@@ -107,7 +107,7 @@ class _ChangelogModalState extends State<ChangelogModal> {
                   NewPrimaryButton(
                       onPressed: () {
                         try {
-                            launchUrl(Uri.https("hash.boats"));
+                          launchUrl(Uri.https("hash.boats"));
                         } catch (_) {}
                       },
                       text: S.of(context).view_more_info,

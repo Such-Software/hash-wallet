@@ -137,7 +137,8 @@ abstract class BitcoinWalletAddressesBase extends ElectrumWalletAddresses with S
   }
 
   @override
-  bool containsAddress(String address) => super.containsAddress(address) || address == lightningAddress;
+  bool containsAddress(String address) =>
+      super.containsAddress(address) || address == lightningAddress;
 
   @override
   String get addressForBuy {

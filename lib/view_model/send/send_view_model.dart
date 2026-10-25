@@ -404,7 +404,7 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
   FiatCurrency get fiatCurrency => _settingsStore.fiatCurrency;
 
   set fiatCurrency(FiatCurrency value) {
-      _settingsStore.fiatCurrency = value;
+    _settingsStore.fiatCurrency = value;
   }
 
   List<FiatCurrency> fiatCurrencies;
@@ -606,14 +606,12 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
 
       // Regular flow
 
-
       final isSendAll = outputs.any((output) => output.sendAll);
-      
+
       if (!isSendAll) {
-        final estimateTxAmountDouble = outputs.fold<double>(0, (acc, output) =>
-        acc + (double.tryParse(output.cryptoAmount) ?? 0));
-        if (estimateTxAmountDouble <= 0) throw Exception(
-            'Amount must be greater than 0');
+        final estimateTxAmountDouble = outputs.fold<double>(
+            0, (acc, output) => acc + (double.tryParse(output.cryptoAmount) ?? 0));
+        if (estimateTxAmountDouble <= 0) throw Exception('Amount must be greater than 0');
       }
 
       pendingTransaction = await wallet.createTransaction(_credentials(provider));
@@ -633,9 +631,7 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
             }
           }
         }
-
       }
-
 
       if (wallet.type == WalletType.bitcoin) {
         final updatedOutputs = bitcoin!.updateOutputs(pendingTransaction!, outputs);
@@ -889,7 +885,6 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
   @computed
   int get maxMemoLength => _maxMemoLengths[wallet.type] ?? 9999999;
 
-
   ContactRecord? newContactAddress() {
     final Set<String> contactAddresses =
         Set.from(contactListViewModel.contacts.map((contact) => contact.address))
@@ -1014,9 +1009,9 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
       return S.current.tx_invalid_input;
     }
 
-    if(wallet.type == WalletType.bitcoin) {
+    if (wallet.type == WalletType.bitcoin) {
       final lnError = getLightningErrorMessage(error);
-      if(lnError != null) return lnError;
+      if (lnError != null) return lnError;
     }
 
     return errorMessage;
@@ -1024,16 +1019,15 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
 
   String? getLightningErrorMessage(Object error) {
     // TODO add more patterns
-    Map<String, String> errorPatterns = {
-      "insufficient funds": S.current.insufficient_funds_for_tx
-    };
+    Map<String, String> errorPatterns = {"insufficient funds": S.current.insufficient_funds_for_tx};
 
-    for(final pattern in errorPatterns.keys) {
-      if(error.toString().contains(pattern)) return errorPatterns[pattern]!;
+    for (final pattern in errorPatterns.keys) {
+      if (error.toString().contains(pattern)) return errorPatterns[pattern]!;
     }
 
     return null;
   }
+
   @computed
   bool get usePayjoin => _settingsStore.usePayjoin;
 
@@ -1051,5 +1045,4 @@ abstract class SendViewModelBase extends WalletChangeListenerViewModel with Stor
       selectedCryptoCurrency = token;
     }
   }
-
 }

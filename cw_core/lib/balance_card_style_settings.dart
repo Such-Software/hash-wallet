@@ -12,11 +12,11 @@ class BalanceCardStyleSettings {
 
   BalanceCardStyleSettings(
       {required this.walletInfoId,
-        required this.accountIndex,
-        required this.gradientIndex,
-        required this.useSpecialDesign,
-        required this.backgroundImagePath,
-        required this.cardOrder});
+      required this.accountIndex,
+      required this.gradientIndex,
+      required this.useSpecialDesign,
+      required this.backgroundImagePath,
+      required this.cardOrder});
 
   static const tableName = "BalanceCardStyleSettings";
 
@@ -51,7 +51,7 @@ class BalanceCardStyleSettings {
       gradientIndex: CardDesign.allGradients.indexOf(design.gradient),
       useSpecialDesign: design.backgroundType == CardDesignBackgroundTypes.svgFull,
       backgroundImagePath:
-      design.backgroundType == CardDesignBackgroundTypes.image ? design.imagePath : "",
+          design.backgroundType == CardDesignBackgroundTypes.image ? design.imagePath : "",
       cardOrder: cardOrder,
     );
   }

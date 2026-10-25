@@ -43,7 +43,7 @@ class _AboutPageState extends State<AboutPage> {
 
   void _easterEgg() {
     _easterEggCounter++;
-    if(_easterEggCounter == easterEggTreshold) {
+    if (_easterEggCounter == easterEggTreshold) {
       setState(() {
         _bottomText = aboutPageEasterEggs.elementAt(Random().nextInt(aboutPageEasterEggs.length));
       });
@@ -110,7 +110,8 @@ class _AboutPageState extends State<AboutPage> {
                     ListItemRegularRow(
                         keyValue: "gh",
                         label: "GitHub",
-                        onTap: () => launchUrl(Uri.https("github.com", "Such-Software/hash-wallet")),
+                        onTap: () =>
+                            launchUrl(Uri.https("github.com", "Such-Software/hash-wallet")),
                         trailingIconPath: "assets/new-ui/link_arrow.svg",
                         foregroundColor: Theme.of(context).colorScheme.primary,
                         trailingIconSize: 10),

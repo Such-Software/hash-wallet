@@ -36,19 +36,19 @@ class NewWalletTypePage extends BasePage {
 
   @override
   Function(BuildContext)? get pushToNextWidget => (context) {
-    FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus) {
-      currentFocus.focusedChild?.unfocus();
-    }
-  };
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.focusedChild?.unfocus();
+        }
+      };
 
   @override
   Widget body(BuildContext context) => WalletTypeForm(
-    walletImage: currentTheme.isDark ? walletTypeImage : walletTypeLightImage,
-    isCreate: newWalletTypeArguments.isCreate,
-    onTypeSelected: newWalletTypeArguments.onTypeSelected,
-    hardwareWalletType: newWalletTypeArguments.hardwareWalletType,
-  );
+        walletImage: currentTheme.isDark ? walletTypeImage : walletTypeLightImage,
+        isCreate: newWalletTypeArguments.isCreate,
+        onTypeSelected: newWalletTypeArguments.onTypeSelected,
+        hardwareWalletType: newWalletTypeArguments.hardwareWalletType,
+      );
 }
 
 class WalletTypeForm extends StatefulWidget {
@@ -85,10 +85,10 @@ class WalletTypeFormState extends State<WalletTypeForm> {
   void initState() {
     types = filteredTypes = availableWalletTypes
         .where((element) =>
-    !widget.isHardwareWallet ||
-        DeviceConnectionType.supportedConnectionTypes(
-            element, widget.hardwareWalletType!, Platform.isIOS)
-            .isNotEmpty)
+            !widget.isHardwareWallet ||
+            DeviceConnectionType.supportedConnectionTypes(
+                    element, widget.hardwareWalletType!, Platform.isIOS)
+                .isNotEmpty)
         .toList();
     super.initState();
 
@@ -115,8 +115,8 @@ class WalletTypeFormState extends State<WalletTypeForm> {
                 S.of(context).choose_wallet_currency,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ),
             Padding(
@@ -131,7 +131,7 @@ class WalletTypeFormState extends State<WalletTypeForm> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     ...filteredTypes.map(
-                          (type) => Padding(
+                      (type) => Padding(
                         padding: EdgeInsets.only(top: 12),
                         child: SelectButton(
                           key: ValueKey('new_wallet_type_${type.name}_button_key'),
@@ -147,7 +147,7 @@ class WalletTypeFormState extends State<WalletTypeForm> {
                           onTap: () => setState(() => selected = type),
                           deviceConnectionTypes: widget.isHardwareWallet
                               ? DeviceConnectionType.supportedConnectionTypes(
-                              type, widget.hardwareWalletType!, Platform.isIOS)
+                                  type, widget.hardwareWalletType!, Platform.isIOS)
                               : [],
                         ),
                       ),

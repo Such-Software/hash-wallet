@@ -6,10 +6,9 @@ import 'package:cw_core/format_amount.dart';
 import 'package:cw_wownero/api/transaction_history.dart';
 
 class WowneroTransactionInfo extends TransactionInfo {
-  WowneroTransactionInfo(this.txHash, this.height, this.direction, this.date,
-      this.isPending, this.amount, this.accountIndex, this.addressIndex, this.fee,
-      this.confirmations) :
-      id = "${txHash}_${amount}_${accountIndex}_${addressIndex}";
+  WowneroTransactionInfo(this.txHash, this.height, this.direction, this.date, this.isPending,
+      this.amount, this.accountIndex, this.addressIndex, this.fee, this.confirmations)
+      : id = "${txHash}_${amount}_${accountIndex}_${addressIndex}";
 
   WowneroTransactionInfo.fromMap(Map<String, Object?> map)
       : id = "${map['hash']}_${map['amount']}_${map['accountIndex']}_${map['addressIndex']}",
@@ -27,12 +26,12 @@ class WowneroTransactionInfo extends TransactionInfo {
         confirmations = map['confirmations'] as int,
         key = getTxKey((map['hash'] ?? '') as String),
         fee = map['fee'] as int? ?? 0 {
-          additionalInfo = <String, dynamic>{
-            'key': key,
-            'accountIndex': accountIndex,
-            'addressIndex': addressIndex
-          };
-        }
+    additionalInfo = <String, dynamic>{
+      'key': key,
+      'accountIndex': accountIndex,
+      'addressIndex': addressIndex
+    };
+  }
 
   final String id;
   final String txHash;

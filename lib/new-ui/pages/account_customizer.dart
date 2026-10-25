@@ -71,8 +71,8 @@ class _AccountCustomizerState extends State<AccountCustomizer> {
               ? wownero?.getCurrentAccount(wallet).id
               : null;
       if (activeId == null) return;
-      for (int i = 0; i < _items.length-1; i++) {
-        if(_items[i].accountListItem.id == activeId) {
+      for (int i = 0; i < _items.length - 1; i++) {
+        if (_items[i].accountListItem.id == activeId) {
           final lastIndex = _items.length - 1;
           final temp = _items[i];
           _items[i] = _items[lastIndex];
@@ -82,10 +82,7 @@ class _AccountCustomizerState extends State<AccountCustomizer> {
           break;
         }
       }
-
     });
-
-
   }
 
   @override
@@ -101,7 +98,7 @@ class _AccountCustomizerState extends State<AccountCustomizer> {
     for (int i = 0; i < accounts.length; i++) {
       final index = widget.dashboardViewModel.cardOrder[i];
 
-      if(index == null || index >= accounts.length) {
+      if (index == null || index >= accounts.length) {
         // db order broken.
         reset();
         break;
@@ -369,7 +366,7 @@ class _AccountCustomizerState extends State<AccountCustomizer> {
               },
               actionRightButton: Navigator.of(context).pop);
         });
-    if(res != null && res is bool && res) {
+    if (res != null && res is bool && res) {
       reset();
     }
   }
@@ -379,7 +376,6 @@ class _AccountCustomizerState extends State<AccountCustomizer> {
 
     final accounts = widget.accountListViewModel.accounts;
     for (int i = 0; i < widget.accountListViewModel.accounts.length; i++) {
-
       _items.add(AccountCustomizerListItem(
           card: BalanceCard(
             accountName: accounts[i].label,

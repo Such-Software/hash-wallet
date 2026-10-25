@@ -37,7 +37,8 @@ class _DesktopWalletSelectionDropDownState extends State<DesktopWalletSelectionD
   final litecoinIcon = Image.asset('assets/images/crypto/litecoin.webp', height: 24, width: 24);
   final ethereumIcon = Image.asset('assets/images/crypto/ethereum.webp', height: 24, width: 24);
   final polygonIcon = Image.asset('assets/images/crypto/polygon.webp', height: 24, width: 24);
-  final bitcoinCashIcon = Image.asset('assets/images/crypto/bitcoin-cash.webp', height: 24, width: 24);
+  final bitcoinCashIcon =
+      Image.asset('assets/images/crypto/bitcoin-cash.webp', height: 24, width: 24);
   final baseIcon = Image.asset('assets/images/crypto/base_icon.webp', height: 24, width: 24);
   final arbitrumIcon = Image.asset('assets/images/crypto/arbitrum.webp', height: 24, width: 24);
   final bscIcon = Image.asset('assets/images/crypto/BNB.webp', height: 24, width: 24);
@@ -246,7 +247,7 @@ class _DesktopWalletSelectionDropDownState extends State<DesktopWalletSelectionD
   }
 
   void changeProcessText(String text) {
-    _progressBar = createBar<void>(text,context, duration: null)..show(context);
+    _progressBar = createBar<void>(text, context, duration: null)..show(context);
   }
 
   void hideProgressText() {

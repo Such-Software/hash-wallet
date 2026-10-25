@@ -6,25 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ListItemRegularRowWidget extends StatelessWidget {
-  const ListItemRegularRowWidget({
-    super.key,
-    required this.keyValue,
-    required this.label,
-    this.subtitle,
-    this.trailingText,
-    this.iconPath,
-    this.onTap,
-    this.isFirstInSection = false,
-    this.isLastInSection = false,
-    this.showArrow = true,
-    this.trailingIconPath,
-    this.truncateTrailingText = false,
-    this.foregroundColor,
-    this.trailingIconSize,
-    this.bottomWidget,
-    this.trailingWidget,
-    this.copyableText
-  });
+  const ListItemRegularRowWidget(
+      {super.key,
+      required this.keyValue,
+      required this.label,
+      this.subtitle,
+      this.trailingText,
+      this.iconPath,
+      this.onTap,
+      this.isFirstInSection = false,
+      this.isLastInSection = false,
+      this.showArrow = true,
+      this.trailingIconPath,
+      this.truncateTrailingText = false,
+      this.foregroundColor,
+      this.trailingIconSize,
+      this.bottomWidget,
+      this.trailingWidget,
+      this.copyableText});
 
   final String keyValue;
   final String label;
@@ -130,14 +129,13 @@ class ListItemRegularRowWidget extends StatelessWidget {
                                   BlendMode.srcIn),
                             )
                           else if (showArrow)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 7.0),
-                                child: HashImageWidget(imageUrl:
-                                "assets/new-ui/arrow_forward.svg",
-                                    height: 14,
-                                    color: theme.colorScheme.onSurfaceVariant
-                                ),
-                              )
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 7.0),
+                              child: HashImageWidget(
+                                  imageUrl: "assets/new-ui/arrow_forward.svg",
+                                  height: 14,
+                                  color: theme.colorScheme.onSurfaceVariant),
+                            )
                         ],
                       ),
                     ],

@@ -48,8 +48,7 @@ abstract class PrivacySettingsViewModelBase with Store {
       ].contains(_wallet.type);
 
   @computed
-  bool get hasCoinControl =>
-      [
+  bool get hasCoinControl => [
         WalletType.bitcoin,
         WalletType.litecoin,
         WalletType.monero,
@@ -107,7 +106,8 @@ abstract class PrivacySettingsViewModelBase with Store {
   bool get canUsePayjoin => _wallet.type == WalletType.bitcoin && DeviceInfo.instance.isMobile;
 
   @computed
-  bool get canUseLightning => _wallet.type == WalletType.bitcoin && !Platform.isWindows && !Platform.isLinux;
+  bool get canUseLightning =>
+      _wallet.type == WalletType.bitcoin && !Platform.isWindows && !Platform.isLinux;
 
   @computed
   bool get useLightning => _wallet.type == WalletType.bitcoin && bitcoin!.useLightning(_wallet);

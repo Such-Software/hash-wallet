@@ -17,27 +17,27 @@ class CakeFeaturesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientBackground(
       scaffold: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                        child: IntrinsicHeight(
-                          child: !FeatureFlag.hasNewUi ? _buildOldUi(context) : _buildNewUi(context),
-                        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: !FeatureFlag.hasNewUi ? _buildOldUi(context) : _buildNewUi(context),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
     );
   }
 
@@ -48,9 +48,9 @@ class CakeFeaturesPage extends StatelessWidget {
         child: Text(
           S.of(context).apps,
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
         ),
       );
     }
@@ -62,10 +62,10 @@ class CakeFeaturesPage extends StatelessWidget {
         child: Text(
           S.of(context).apps,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontSize: 18.0,
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
         ),
       ),
     );
@@ -94,5 +94,4 @@ class CakeFeaturesPage extends StatelessWidget {
       ),
     );
   }
-
 }

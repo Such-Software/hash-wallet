@@ -140,7 +140,8 @@ class HistoryTradeTile extends StatelessWidget {
   String _getChainIcon(CryptoCurrency currency) {
     try {
       if (currency.title.isNotEmpty) {
-        final parsedCurrency = CryptoCurrency.safeParseCurrencyFromString(currency.title, tag: currency.tag);
+        final parsedCurrency =
+            CryptoCurrency.safeParseCurrencyFromString(currency.title, tag: currency.tag);
         if (parsedCurrency?.chainIconPath != null) return parsedCurrency!.chainIconPath!;
       }
 

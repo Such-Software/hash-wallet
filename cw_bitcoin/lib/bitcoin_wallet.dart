@@ -140,7 +140,7 @@ abstract class BitcoinWalletBase extends ElectrumWallet with Store {
     autorun((_) {
       this.walletAddresses.isEnabledAutoGenerateSubaddress = this.isEnabledAutoGenerateSubaddress;
     });
-    
+
     reaction((_) => this.useLightning, (bool useLightning) {
       if (useLightning && LightningWallet.isAvailable) {
         if (mnemonic != null) {
@@ -306,28 +306,28 @@ abstract class BitcoinWalletBase extends ElectrumWallet with Store {
     }
 
     return BitcoinWallet(
-        mnemonic: mnemonic,
-        xpub: keysData.xPub != null ? convertZpubToXpub(keysData.xPub!) : null,
-        password: password,
-        passphrase: passphrase,
-        walletInfo: walletInfo,
-        derivationInfo: derivationInfo,
-        unspentCoinsInfo: unspentCoinsInfo,
-        initialAddresses: snp?.addresses,
-        initialSilentAddresses: snp?.silentAddresses,
-        initialSilentAddressIndex: snp?.silentAddressIndex ?? 0,
-        initialBalance: snp?.balance,
-        initialLightningBalance: snp?.lightningBalance,
-        encryptionFileUtils: encryptionFileUtils,
-        seedBytes: seedBytes,
-        initialRegularAddressIndex: snp?.regularAddressIndex,
-        initialChangeAddressIndex: snp?.changeAddressIndex,
-        addressPageType: snp?.addressPageType,
-        networkParam: network,
-        alwaysScan: snp?.alwaysScan,
-        useLightning: snp?.useLightning,
-        cachedLightningAddress: snp?.cachedLightningAddress,
-        payjoinBox: payjoinBox,
+      mnemonic: mnemonic,
+      xpub: keysData.xPub != null ? convertZpubToXpub(keysData.xPub!) : null,
+      password: password,
+      passphrase: passphrase,
+      walletInfo: walletInfo,
+      derivationInfo: derivationInfo,
+      unspentCoinsInfo: unspentCoinsInfo,
+      initialAddresses: snp?.addresses,
+      initialSilentAddresses: snp?.silentAddresses,
+      initialSilentAddressIndex: snp?.silentAddressIndex ?? 0,
+      initialBalance: snp?.balance,
+      initialLightningBalance: snp?.lightningBalance,
+      encryptionFileUtils: encryptionFileUtils,
+      seedBytes: seedBytes,
+      initialRegularAddressIndex: snp?.regularAddressIndex,
+      initialChangeAddressIndex: snp?.changeAddressIndex,
+      addressPageType: snp?.addressPageType,
+      networkParam: network,
+      alwaysScan: snp?.alwaysScan,
+      useLightning: snp?.useLightning,
+      cachedLightningAddress: snp?.cachedLightningAddress,
+      payjoinBox: payjoinBox,
     );
   }
 
@@ -488,7 +488,9 @@ abstract class BitcoinWalletBase extends ElectrumWallet with Store {
   @override
   Future<PendingTransaction> createTransaction(Object credentials) async {
     credentials = credentials as BitcoinTransactionCredentials;
-    final lnAddr = credentials.outputs.first.isParsedAddress ? credentials.outputs.first.extractedAddress! : credentials.outputs.first.address;
+    final lnAddr = credentials.outputs.first.isParsedAddress
+        ? credentials.outputs.first.extractedAddress!
+        : credentials.outputs.first.address;
 
     final isLNCompatible = await lightningWallet?.isCompatible(lnAddr);
     if ((credentials.coinTypeToSpendFrom == UnspentCoinType.lightning && lightningWallet != null) ||

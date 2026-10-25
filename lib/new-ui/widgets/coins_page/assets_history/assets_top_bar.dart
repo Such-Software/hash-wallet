@@ -12,7 +12,8 @@ class AssetsTopBar extends StatelessWidget {
     super.key,
     required this.onTabChange,
     required this.selectedTab,
-    required this.tabs, required this.dashboardViewModel,
+    required this.tabs,
+    required this.dashboardViewModel,
   });
 
   final void Function(int) onTabChange;
@@ -29,58 +30,60 @@ class AssetsTopBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 32.0, bottom: 0.0, left: 12.0, right: 18.0),
         child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          if(tabs.length > 1)
-          LineTabSwitcher(
-            tabs: tabs,
-            onTabChange: onTabChange,
-            selectedTab: selectedTab,
-          )
-      else SizedBox.shrink(),
-      Opacity(
-        opacity: hasTokenSettingsButton ? 1 : 0,
-            child: ElevatedButton(
-              onPressed: () {
-                if (tabs[selectedTab] == S.of(context).assets) {
-                  Navigator.of(context).pushNamed(
-                    Routes.homeSettings,
-                    arguments: dashboardViewModel.balanceViewModel,
-                  );
-                } else if(tabs[selectedTab] == S.of(context).history) {
-                  showPopUp<void>(
-                    context: context,
-                    builder: (context) => FilterWidget(filterItems: dashboardViewModel.filterItems),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(999999),
-                    ),
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainer,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (tabs.length > 1)
+              LineTabSwitcher(
+                tabs: tabs,
+                onTabChange: onTabChange,
+                selectedTab: selectedTab,
+              )
+            else
+              SizedBox.shrink(),
+            Opacity(
+              opacity: hasTokenSettingsButton ? 1 : 0,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (tabs[selectedTab] == S.of(context).assets) {
+                    Navigator.of(context).pushNamed(
+                      Routes.homeSettings,
+                      arguments: dashboardViewModel.balanceViewModel,
+                    );
+                  } else if (tabs[selectedTab] == S.of(context).history) {
+                    showPopUp<void>(
+                      context: context,
+                      builder: (context) =>
+                          FilterWidget(filterItems: dashboardViewModel.filterItems),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999999),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Row(
-                      spacing: 6,
-                      children: [
-                    HashImageWidget(
-                        imageUrl: "assets/new-ui/options_slider.svg",
-                        colorFilter: ColorFilter.mode(
-                            Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
-                    Text(
-                          settingsButtonText??"",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                        )
-                      ],
-                    ),
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainer,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    spacing: 6,
+                    children: [
+                      HashImageWidget(
+                          imageUrl: "assets/new-ui/options_slider.svg",
+                          colorFilter: ColorFilter.mode(
+                              Theme.of(context).colorScheme.primary, BlendMode.srcIn)),
+                      Text(
+                        settingsButtonText ?? "",
+                        style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                      )
+                    ],
                   ),
                 ),
+              ),
             ),
           ],
         ),

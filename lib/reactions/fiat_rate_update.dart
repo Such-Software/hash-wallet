@@ -33,8 +33,7 @@ Future<void> startFiatRateUpdate(
 
       Iterable<CryptoCurrency>? currencies;
       if (isEVMCompatibleChain(appStore.wallet!.type)) {
-        currencies =
-            evm!.getERC20Currencies(appStore.wallet!).where((element) => element.enabled);
+        currencies = evm!.getERC20Currencies(appStore.wallet!).where((element) => element.enabled);
       }
 
       if (currencies != null) {

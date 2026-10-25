@@ -17,8 +17,7 @@ class ReleaseNotesScreen extends StatelessWidget {
     // any build where isMoneroOnly went true would have thrown here rather than
     // shown release notes. Hash Bags ships many chains and that flag is always
     // false, which is the only reason it never fired.
-    String notesContent =
-        await rootBundle.loadString('assets/text/Release_Notes.txt');
+    String notesContent = await rootBundle.loadString('assets/text/Release_Notes.txt');
     return LineSplitter().convert(notesContent);
   }
 
@@ -51,12 +50,11 @@ class ReleaseNotesScreen extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           child: DefaultTextStyle(
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              decoration: TextDecoration.none,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                        
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
+                                  decoration: TextDecoration.none,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
                             child: Text(title),
                           ),
                         ),
@@ -119,11 +117,10 @@ class ReleaseNotesScreen extends StatelessWidget {
       children: [
         DefaultTextStyle(
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              decoration: TextDecoration.none,
-              fontSize: 16.0,
-               
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  decoration: TextDecoration.none,
+                  fontSize: 16.0,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

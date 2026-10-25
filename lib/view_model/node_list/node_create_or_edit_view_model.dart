@@ -14,8 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 part 'node_create_or_edit_view_model.g.dart';
 
-class NodeCreateOrEditViewModel = NodeCreateOrEditViewModelBase
-    with _$NodeCreateOrEditViewModel;
+class NodeCreateOrEditViewModel = NodeCreateOrEditViewModelBase with _$NodeCreateOrEditViewModel;
 
 abstract class NodeCreateOrEditViewModelBase with Store {
   NodeCreateOrEditViewModelBase(
@@ -25,19 +24,16 @@ abstract class NodeCreateOrEditViewModelBase with Store {
         label = editingNode?.label ?? '',
         address = editingNode?.uri.host.toString() ?? '',
         path = editingNode?.path.toString() ?? '',
-        port = (editingNode != null && editingNode.uri.hasPort)
-            ? editingNode.uri.port.toString()
-            : '',
+        port =
+            (editingNode != null && editingNode.uri.hasPort) ? editingNode.uri.port.toString() : '',
         login = editingNode?.login ?? '',
         password = editingNode?.password ?? '',
         socksProxyAddress = editingNode?.socksProxyAddress ?? '',
         trusted = editingNode?.trusted ?? false,
-        isEnabledForAutoSwitching =
-            editingNode?.isEnabledForAutoSwitching ?? false,
-        useSocksProxy = editingNode?.socksProxyAddress != null &&
-            editingNode!.socksProxyAddress!.isNotEmpty,
-        useSSL = editingNode?.useSSL ?? false {
-  }
+        isEnabledForAutoSwitching = editingNode?.isEnabledForAutoSwitching ?? false,
+        useSocksProxy =
+            editingNode?.socksProxyAddress != null && editingNode!.socksProxyAddress!.isNotEmpty,
+        useSSL = editingNode?.useSSL ?? false {}
 
   final nodeLabelUIKey = 'node_label_row_key';
   final nodeAddressUIKey = 'node_address_row_key';
@@ -114,8 +110,7 @@ abstract class NodeCreateOrEditViewModelBase with Store {
   bool get isReady => address.isNotEmpty;
 
   bool get hasAuthCredentials =>
-      walletType == WalletType.monero ||
-      walletType == WalletType.wownero;
+      walletType == WalletType.monero || walletType == WalletType.wownero;
 
   bool get hasPathSupport {
     switch (walletType) {
@@ -229,8 +224,7 @@ abstract class NodeCreateOrEditViewModelBase with Store {
   void setTrusted(bool val) => trusted = val;
 
   @action
-  void setIsEnabledForAutoSwitching(bool val) =>
-      isEnabledForAutoSwitching = val;
+  void setIsEnabledForAutoSwitching(bool val) => isEnabledForAutoSwitching = val;
 
   @action
   void setSocksProxy(bool val) => useSocksProxy = val;
@@ -318,8 +312,7 @@ abstract class NodeCreateOrEditViewModelBase with Store {
         throw Exception('Unexpected scan QR code value: value is empty');
       }
 
-      if (code.startsWith("monero_node:"))
-        code = code.replaceFirst("monero_node:", "tcp://");
+      if (code.startsWith("monero_node:")) code = code.replaceFirst("monero_node:", "tcp://");
       if (!code.contains('://')) code = 'tcp://$code';
 
       final uri = Uri.tryParse(code);

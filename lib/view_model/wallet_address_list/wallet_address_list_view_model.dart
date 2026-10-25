@@ -65,8 +65,7 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
 
   double? _fiatRate;
 
-  List<Currency> get currencies =>
-      [tokenCurrency ?? wallet.currency, ...FiatCurrency.all];
+  List<Currency> get currencies => [tokenCurrency ?? wallet.currency, ...FiatCurrency.all];
 
   List<Currency> get tokenCurrencies => wallet.balance.keys.toList();
 
@@ -78,7 +77,7 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
       _appStore.amountParsingProxy.getCryptoSymbol(tokenCurrency ?? wallet.currency);
 
   void setTokenCurrency(Currency curr) {
-    if(curr == wallet.currency || curr == CryptoCurrency.btcln) {
+    if (curr == wallet.currency || curr == CryptoCurrency.btcln) {
       tokenCurrency = null;
       selectedCurrency = wallet.currency;
       return;
@@ -136,7 +135,7 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
     if (_amount.isEmpty) return "";
     var cryptoCurrency = tokenCurrency ?? wallet.currency;
     if (cryptoCurrency == CryptoCurrency.btcln) cryptoCurrency = CryptoCurrency.btc;
-    if(selectedCurrency is FiatCurrency && _fiatRate != null) {
+    if (selectedCurrency is FiatCurrency && _fiatRate != null) {
       return selectedCurrencyFiatAmount;
     }
 
@@ -160,7 +159,10 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
 
   // payjoinEndpoint getter is broken, but uri works
   bool get hasPayjoin =>
-      wallet.type == WalletType.bitcoin && !isLightning && !isSilentPayments && uri.toString().contains("payjo.in");
+      wallet.type == WalletType.bitcoin &&
+      !isLightning &&
+      !isSilentPayments &&
+      uri.toString().contains("payjo.in");
 
   @computed
   FiatCurrency get fiatCurrency => _appStore.settingsStore.fiatCurrency;
@@ -403,14 +405,16 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
   String get walletTypeName => walletTypeToString(type);
 
   @computed
-  bool get hasAddressList => [
+  bool get hasAddressList =>
+      [
         WalletType.monero,
         WalletType.wownero,
         WalletType.bitcoinCash,
         WalletType.bitcoin,
         WalletType.litecoin,
         WalletType.dogecoin,
-      ].contains(wallet.type) && !isLightning;
+      ].contains(wallet.type) &&
+      !isLightning;
 
   @computed
   bool get hasAddressRotation => hasAddressList;
@@ -496,7 +500,9 @@ abstract class WalletAddressListViewModelBase extends WalletChangeListenerViewMo
       wallet.type == WalletType.bitcoin && bitcoin!.hasSelectedSilentPayments(wallet);
 
   @computed
-  bool get isLightning => wallet.type == WalletType.bitcoin && (wallet.walletAddresses.getPaymentUri(_amount) is LightningPaymentRequest);
+  bool get isLightning =>
+      wallet.type == WalletType.bitcoin &&
+      (wallet.walletAddresses.getPaymentUri(_amount) is LightningPaymentRequest);
 
   @observable
   String receivePageOption;

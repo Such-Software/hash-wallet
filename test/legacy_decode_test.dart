@@ -9,7 +9,9 @@ String dec(String s, String key) =>
     Encrypter(AES(Key.fromUtf8(key))).decrypt64(s, iv: IV.allZerosOfLength(16));
 String generateKey() => Key.fromSecureRandom(512).base64 + IV.fromSecureRandom(8).base64;
 String rnd(int nHexChars) => Key.fromSecureRandom(nHexChars ~/ 2)
-    .bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    .bytes
+    .map((b) => b.toRadixString(16).padLeft(2, '0'))
+    .join();
 
 // Logic under test (identical to lib/entities/encrypt.dart 1.0.2)
 bool looksLikeWalletPassword(String s) {
@@ -17,14 +19,20 @@ bool looksLikeWalletPassword(String s) {
   try {
     return base64.decode(s.substring(0, s.length - 12)).length == 512 &&
         base64.decode(s.substring(s.length - 12)).length == 8;
-  } catch (_) { return false; }
+  } catch (_) {
+    return false;
+  }
 }
+
 String? tryDecrypt(String source, String key) {
   try {
     final d = dec(source, key);
     return (d.isNotEmpty && d.codeUnits.every((c) => c >= 0x20 && c < 0x7f)) ? d : null;
-  } catch (_) { return null; }
+  } catch (_) {
+    return null;
+  }
 }
+
 String? decodePinLegacy(String pin, List<String> keys) {
   for (final key in keys) {
     final d = tryDecrypt(pin, key);
@@ -34,6 +42,7 @@ String? decodePinLegacy(String pin, List<String> keys) {
   }
   return null;
 }
+
 String? decodeWalletLegacy(String pw, List<String> keys) {
   for (final key in keys) {
     final d = tryDecrypt(pw, key);

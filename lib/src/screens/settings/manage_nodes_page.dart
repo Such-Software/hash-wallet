@@ -18,7 +18,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ManageNodesPage extends BasePage {
-  ManageNodesPage(this.isPow, {this.nodeListViewModel, this.powNodeListViewModel, this.dashboardViewModel})
+  ManageNodesPage(this.isPow,
+      {this.nodeListViewModel, this.powNodeListViewModel, this.dashboardViewModel})
       : assert((isPow && powNodeListViewModel != null) || (!isPow && nodeListViewModel != null)),
         assert(powNodeListViewModel == null || nodeListViewModel == null);
 
@@ -52,7 +53,8 @@ class ManageNodesPage extends BasePage {
             ModernButton(
                 size: 36,
                 icon: Icon(Icons.add),
-                onPressed: () => Navigator.of(context).pushNamed(isPow ? Routes.newPowNode : Routes.newNode))
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(isPow ? Routes.newPowNode : Routes.newNode))
           ],
         ),
       ),
@@ -109,29 +111,29 @@ class ManageNodesPage extends BasePage {
                             return;
                           }
 
-                            await showPopUp<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertWithTwoActions(
-                                  alertTitle: S.of(context).change_current_node_title,
-                                  alertContent: nodeListViewModel?.getAlertContent(node.uriRaw) ??
-                                      powNodeListViewModel!.getAlertContent(node.uriRaw),
-                                  leftButtonText: S.of(context).cancel,
-                                  rightButtonText: S.of(context).change,
-                                  actionLeftButton: () => Navigator.of(context).pop(),
-                                  actionRightButton: () async {
-                                    if (isPow) {
-                                      await powNodeListViewModel!.setAsCurrent(node);
-                                    } else {
-                                      await nodeListViewModel!.setAsCurrent(node);
-                                    }
-                                    Navigator.of(context).pop();
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        );
+                          await showPopUp<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertWithTwoActions(
+                                alertTitle: S.of(context).change_current_node_title,
+                                alertContent: nodeListViewModel?.getAlertContent(node.uriRaw) ??
+                                    powNodeListViewModel!.getAlertContent(node.uriRaw),
+                                leftButtonText: S.of(context).cancel,
+                                rightButtonText: S.of(context).change,
+                                actionLeftButton: () => Navigator.of(context).pop(),
+                                actionRightButton: () async {
+                                  if (isPow) {
+                                    await powNodeListViewModel!.setAsCurrent(node);
+                                  } else {
+                                    await nodeListViewModel!.setAsCurrent(node);
+                                  }
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            },
+                          );
+                        },
+                      );
                       return nodeListRow;
                     },
                   );
@@ -143,6 +145,7 @@ class ManageNodesPage extends BasePage {
       ),
     );
   }
+
   Future<void> _presentReconnectAlert(BuildContext context) async {
     await showPopUp<void>(
       context: context,

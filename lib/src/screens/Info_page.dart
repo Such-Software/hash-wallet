@@ -24,15 +24,14 @@ abstract class InfoPage extends BasePage {
   /// The illustration shown at the top of the page. Defaults to the static
   /// image at [imageLightPath]/[imageDarkPath]; subclasses can override to
   /// supply an animated widget instead.
-  Widget buildIllustration(BuildContext context, String image) =>
-      HashImageWidget(imageUrl: image);
+  Widget buildIllustration(BuildContext context, String image) => HashImageWidget(imageUrl: image);
 
   @override
   bool get gradientBackground => true;
 
   @override
   Widget Function(BuildContext, Widget) get rootWrapper =>
-          (BuildContext context, Widget scaffold) => GradientBackground(scaffold: scaffold);
+      (BuildContext context, Widget scaffold) => GradientBackground(scaffold: scaffold);
 
   @override
   Widget? leading(BuildContext context) => null;

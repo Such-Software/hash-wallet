@@ -34,8 +34,7 @@ abstract class WalletKeysViewModelBase with Store {
       _populateKeysItems();
     });
 
-    if (_wallet.type == WalletType.monero ||
-        _wallet.type == WalletType.wownero) {
+    if (_wallet.type == WalletType.monero || _wallet.type == WalletType.wownero) {
       final accountTransactions = _getWalletTransactions(_wallet);
       if (accountTransactions.isNotEmpty) {
         final incomingAccountTransactions =
