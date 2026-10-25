@@ -6,11 +6,7 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/reactions/wallet_utils.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
-import 'package:hash_wallet/src/screens/new_wallet/widgets/select_button.dart';
 import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
-import 'package:hash_wallet/src/widgets/primary_button.dart';
-import 'package:hash_wallet/src/widgets/scrollable_with_bottom_section.dart';
-import 'package:hash_wallet/src/widgets/search_bar_widget.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:hash_wallet/wallet_types.g.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
@@ -19,10 +15,38 @@ import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 
+class NewWalletTypePageHeader extends StatelessWidget {
+  const NewWalletTypePageHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) => const SizedBox(
+        width: 138,
+        height: 75,
+        child: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              child: HashImageWidget(
+                imageUrl: "assets/new-ui/hardware_wallet.svg",
+                width: 75,
+                height: 75,
+              ),
+            ),
+            Positioned(
+              left: 63,
+              child: HashImageWidget(
+                imageUrl: "assets/new-ui/hash_squircle_icon.svg",
+                width: 75,
+                height: 75,
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
 class NewWalletTypePage extends BasePage {
-  NewWalletTypePage({
-    required this.newWalletTypeArguments,
-  });
+  NewWalletTypePage({required this.newWalletTypeArguments});
 
   final NewWalletTypeArguments newWalletTypeArguments;
 
@@ -36,10 +60,8 @@ class NewWalletTypePage extends BasePage {
 
   @override
   Function(BuildContext)? get pushToNextWidget => (context) {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.focusedChild?.unfocus();
-        }
+        final currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) currentFocus.focusedChild?.unfocus();
       };
 
   @override
@@ -52,7 +74,7 @@ class NewWalletTypePage extends BasePage {
 }
 
 class WalletTypeForm extends StatefulWidget {
-  WalletTypeForm({
+  const WalletTypeForm({
     required this.walletImage,
     required this.isCreate,
     this.onTypeSelected,
@@ -75,9 +97,6 @@ class WalletTypeFormState extends State<WalletTypeForm> {
 
   static const aspectRatioImage = 1.22;
 
-  final TextEditingController searchController = TextEditingController();
-
-  WalletType? selected;
   List<WalletType> types;
   List<WalletType> filteredTypes = [];
 
@@ -91,15 +110,6 @@ class WalletTypeFormState extends State<WalletTypeForm> {
                 .isNotEmpty)
         .toList();
     super.initState();
-
-    searchController.addListener(() {
-      setState(() {
-        filteredTypes = List.from(types.where((type) => walletTypeToDisplayName(type)
-            .toLowerCase()
-            .contains(searchController.text.toLowerCase())));
-        return;
-      });
-    });
   }
 
   @override
@@ -108,85 +118,118 @@ class WalletTypeFormState extends State<WalletTypeForm> {
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: ResponsiveLayoutUtilBase.kDesktopMaxWidthConstraint),
         child: Column(
+          spacing: 24,
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: Text(
-                S.of(context).choose_wallet_currency,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+            widget.hardwareWalletType != null
+                ? const NewWalletTypePageHeader()
+                : const HashImageWidget(
+                    imageUrl: "assets/new-ui/wallet.svg",
+                    width: 100,
+                    height: 100,
+                  ),
+            Text(
+              S.of(context).choose_wallet_currency,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 14,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(24, 24, 24, 12),
-              child: SearchBarWidget(searchController: searchController),
-            ),
             Expanded(
-              child: ScrollableWithBottomSection(
-                contentPadding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
-                scrollableKey: ValueKey('new_wallet_type_scrollable_key'),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ...filteredTypes.map(
-                      (type) => Padding(
-                        padding: EdgeInsets.only(top: 12),
-                        child: SelectButton(
-                          key: ValueKey('new_wallet_type_${type.name}_button_key'),
-                          image: HashImageWidget(
-                            imageUrl: getCryptoCurrencyIconForWalletListItem(type),
-                            height: 24,
-                            width: 24,
-                          ),
-                          text: walletTypeToDisplayName(type),
-                          showTrailingIcon: false,
-                          height: 54,
-                          isSelected: selected == type,
-                          onTap: () => setState(() => selected = type),
-                          deviceConnectionTypes: widget.isHardwareWallet
-                              ? DeviceConnectionType.supportedConnectionTypes(
-                                  type, widget.hardwareWalletType!, Platform.isIOS)
-                              : [],
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18, right: 18, bottom: 12),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: ListView.separated(
+                        key: const ValueKey('new_wallet_type_scrollable_key'),
+                        itemCount: filteredTypes.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          final item = filteredTypes[index];
+
+                          return GestureDetector(
+                            key: ValueKey('new_wallet_type_${item.name}_button_key'),
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              onTypeSelected(item);
+                            },
+                            child: SizedBox(
+                              height: 50,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        HashImageWidget(
+                                          height: 24,
+                                          width: 24,
+                                          imageUrl: getCryptoCurrencyIconForWalletListItem(item),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Text(walletTypeToDisplayName(item)),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          walletTypeToDisplayTicker(item),
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    HashImageWidget(
+                                      imageUrl: "assets/new-ui/arrow_forward.svg",
+                                      height: 16,
+                                      colorFilter: ColorFilter.mode(
+                                        Theme.of(context).colorScheme.onSurfaceVariant,
+                                        BlendMode.srcIn,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => Container(
+                          height: 1,
+                          color: Theme.of(context).colorScheme.surfaceContainerHigh,
                         ),
                       ),
                     ),
-                  ],
-                ),
-                bottomSectionPadding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
-                bottomSection: PrimaryButton(
-                  key: ValueKey('new_wallet_type_next_button_key'),
-                  onPressed: () => onTypeSelected(),
-                  text: S.of(context).seed_language_next,
-                  color: Theme.of(context).colorScheme.primary,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
-                  isDisabled: selected == null,
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Future<void> onTypeSelected() async {
-    if (selected == null) throw Exception('Wallet Type is not selected yet.');
-
+  Future<void> onTypeSelected(WalletType selected) async {
     // If it's a restore flow, trigger the external callback
     // If it's not a BIP39 Wallet or if there are no other wallets, route to the newWallet page
     // Any other scenario, route to pre-existing seed page
     final walletList = await WalletInfo.getAll();
     if (!widget.isCreate) {
-      widget.onTypeSelected!(context, selected!);
-    } else if (!isBIP39Wallet(selected!) || walletList.isEmpty) {
+      widget.onTypeSelected!(context, selected);
+    } else if (!isBIP39Wallet(selected) || walletList.isEmpty) {
       Navigator.of(context).pushNamed(
         Routes.newWallet,
-        arguments: NewWalletArguments(type: selected!),
+        arguments: NewWalletArguments(type: selected),
       );
     } else {
-      Navigator.of(context).pushNamed(Routes.walletGroupDescription, arguments: selected!);
+      Navigator.of(context).pushNamed(Routes.walletGroupDescription, arguments: selected);
     }
   }
 }

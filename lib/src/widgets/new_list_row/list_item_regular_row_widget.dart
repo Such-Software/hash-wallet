@@ -13,6 +13,7 @@ class ListItemRegularRowWidget extends StatelessWidget {
       this.subtitle,
       this.trailingText,
       this.iconPath,
+      this.badgeIconPath,
       this.onTap,
       this.isFirstInSection = false,
       this.isLastInSection = false,
@@ -22,17 +23,26 @@ class ListItemRegularRowWidget extends StatelessWidget {
       this.foregroundColor,
       this.trailingIconSize,
       this.bottomWidget,
+      this.subtitleColor,
       this.trailingWidget,
-      this.copyableText});
+      this.copyableText,
+      this.leadingIconErrorWidget,
+      this.leadingIconSize,
+      this.badgeIconSize,
+      this.iconColor,
+      this.secondaryLabel});
 
   final String keyValue;
   final String label;
   final String? subtitle;
   final String? trailingText;
+  final String? secondaryLabel;
   final String? iconPath;
+  final String? badgeIconPath;
   final VoidCallback? onTap;
   final bool isFirstInSection;
   final bool isLastInSection;
+  final Color? subtitleColor;
   final bool showArrow;
   final String? trailingIconPath;
   final Widget? bottomWidget;
@@ -41,6 +51,10 @@ class ListItemRegularRowWidget extends StatelessWidget {
   final Color? foregroundColor;
   final double? trailingIconSize;
   final String? copyableText;
+  final Widget? leadingIconErrorWidget;
+  final double? leadingIconSize;
+  final double? badgeIconSize;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +76,50 @@ class ListItemRegularRowWidget extends StatelessWidget {
             isFirstInSection: isFirstInSection,
             isLastInSection: isLastInSection,
             builder: (context, textStyle, labelStyle) {
+              final leadingIcon = iconPath != null
+                  ? HashImageWidget(
+                      imageUrl: iconPath!,
+                      width: leadingIconSize ?? 24,
+                      height: leadingIconSize ?? 24,
+                      errorWidget: leadingIconErrorWidget,
+                      colorFilter:
+                          iconColor == null ? null : ColorFilter.mode(iconColor!, BlendMode.srcIn),
+                    )
+                  : null;
+
+              final imageWidget = badgeIconPath != null
+                  ? Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        leadingIcon!,
+                        Positioned(
+                          right: -2,
+                          bottom: -2,
+                          child: Container(
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: theme.colorScheme.surfaceContainerHigh,
+                                width: 2,
+                              ),
+                              color: theme.colorScheme.onSurface,
+                            ),
+                            padding: const EdgeInsets.all(2),
+                            child: HashImageWidget(
+                              imageUrl: badgeIconPath!,
+                              width: badgeIconSize ?? 12,
+                              height: badgeIconSize ?? 12,
+                              fit: BoxFit.cover,
+                              color: theme.colorScheme.surface,
+                              errorWidget: leadingIconErrorWidget,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : leadingIcon;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -74,12 +132,9 @@ class ListItemRegularRowWidget extends StatelessWidget {
                           children: [
                             if (iconPath != null)
                               Padding(
-                                  padding: const EdgeInsets.only(right: 12.0),
-                                  child: HashImageWidget(
-                                    imageUrl: iconPath!,
-                                    width: 24,
-                                    height: 24,
-                                  )),
+                                padding: const EdgeInsets.only(right: 12.0),
+                                child: imageWidget ?? SizedBox(),
+                              ),
                             Flexible(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -92,14 +147,28 @@ class ListItemRegularRowWidget extends StatelessWidget {
                                           color: Theme.of(context).colorScheme.primary),
                                     )
                                   else
-                                    Text(label,
-                                        style: foregroundColor == null
-                                            ? textStyle
-                                            : textStyle.copyWith(color: foregroundColor)),
+                                    Row(
+                                      spacing: 4,
+                                      children: [
+                                        Text(label,
+                                            style: foregroundColor == null
+                                                ? textStyle
+                                                : textStyle.copyWith(color: foregroundColor)),
+                                        if (secondaryLabel != null)
+                                          Text(
+                                            secondaryLabel!,
+                                            style: textStyle.copyWith(
+                                                color:
+                                                    Theme.of(context).colorScheme.onSurfaceVariant),
+                                          )
+                                      ],
+                                    ),
                                   if (subtitle != null)
                                     Text(
                                       subtitle!,
-                                      style: labelStyle.copyWith(fontSize: 12),
+                                      style: subtitleColor == null
+                                          ? labelStyle.copyWith(fontSize: 12)
+                                          : labelStyle.copyWith(fontSize: 12, color: subtitleColor),
                                     ),
                                 ],
                               ),

@@ -1,11 +1,14 @@
 -
+  label: "LlamaNodes"
   uri: base.llamarpc.com
   useSSL: true
 -
+  label: "PublicNode"
   uri: base-rpc.publicnode.com
-  is_default: true
+  isDefault: true
   useSSL: true
   isEnabledForAutoSwitching: true
 -
+  label: "1RPC"
   uri: 1rpc.io/base
   useSSL: true

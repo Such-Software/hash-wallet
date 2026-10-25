@@ -8,11 +8,15 @@ class NewSendMemoInput extends StatelessWidget {
       {super.key,
       required this.memoController,
       required this.maxMemoLength,
-      required this.memoLength});
+      required this.memoLength,
+      this.hintText,
+      this.disclaimerText});
 
   final TextEditingController memoController;
   final int maxMemoLength;
   final int memoLength;
+  final String? hintText;
+  final String? disclaimerText;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +31,22 @@ class NewSendMemoInput extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  maxLength: maxMemoLength,
-                  controller: memoController,
-                  decoration:
-                      InputDecoration(hintText: S.of(context).memo_optional, counterText: ""),
+                child: MergeSemantics(
+                  child: Semantics(
+                    label: hintText ?? S.of(context).memo_optional,
+                    child: TextField(
+                      maxLength: maxMemoLength,
+                      controller: memoController,
+                      decoration: InputDecoration(
+                          hintText: hintText ?? S.of(context).memo_optional, counterText: ""),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(width: 12),
               FloatingIconButton(
                   iconPath: "assets/new-ui/paste.svg",
+                  semanticLabel: S.of(context).paste,
                   onPressed: () async {
                     final data = await Clipboard.getData(Clipboard.kTextPlain);
                     if (data != null && data.text != null) {
@@ -52,11 +62,17 @@ class NewSendMemoInput extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(S.of(context).memo_disclaimer,
-                  style: TextStyle(
-                      fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
-              Text("${memoController.text.length} / ${maxMemoLength}",
-                  style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary))
+              Expanded(
+                child: Text(disclaimerText ?? S.of(context).memo_disclaimer,
+                    style: TextStyle(
+                        fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
+              ),
+              // The field itself already reports the character count through
+              // maxValueLength/currentValueLength, so this visual counter stays silent.
+              ExcludeSemantics(
+                child: Text("${memoController.text.length} / ${maxMemoLength}",
+                    style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary)),
+              )
             ],
           ),
         )

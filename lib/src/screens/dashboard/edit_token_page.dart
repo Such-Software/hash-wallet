@@ -1,5 +1,6 @@
 import 'package:hash_wallet/core/address_validator.dart';
 import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/token_image_widget.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/widgets/address_text_field.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
@@ -38,13 +39,11 @@ class EditTokenPage extends BasePage {
       : S.current.add_token;
 
   @override
-  Widget body(BuildContext context) {
-    return EditTokenPageBody(
+  Widget body(BuildContext context) => EditTokenPageBody(
       homeSettingsViewModel: homeSettingsViewModel,
       token: token,
       initialContractAddress: initialContractAddress,
     );
-  }
 }
 
 class EditTokenPageBody extends StatefulWidget {
@@ -127,14 +126,14 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
     final isVerified = widget.homeSettingsViewModel.checkIfTokenIsWhitelisted(contractAddress);
 
     if (!mounted) return;
+
     setState(() {
       _isTokenVerified = isVerified;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: ScrollableWithBottomSection(
         contentPadding: EdgeInsets.zero,
@@ -172,8 +171,7 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
               SizedBox(height: 20),
             ],
             Observer(
-              builder: (context) {
-                return Row(
+              builder: (context) => Row(
                   children: <Widget>[
                     Expanded(
                       child: LoadingPrimaryButton(
@@ -208,14 +206,12 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                             if (isTokenAlreadyAdded) {
                               showPopUp<void>(
                                 context: context,
-                                builder: (dialogContext) {
-                                  return AlertWithOneAction(
+                                builder: (dialogContext) => AlertWithOneAction(
                                     alertTitle: S.current.warning,
                                     alertContent: S.of(context).token_already_exists,
                                     buttonText: S.of(context).ok,
                                     buttonAction: () => Navigator.of(dialogContext).pop(),
-                                  );
-                                },
+                                  ),
                               );
                               return;
                             }
@@ -275,14 +271,12 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                               } catch (e) {
                                 showPopUp<void>(
                                   context: context,
-                                  builder: (dialogContext) {
-                                    return AlertWithOneAction(
+                                  builder: (dialogContext) => AlertWithOneAction(
                                       alertTitle: S.current.warning,
                                       alertContent: e.toString(),
                                       buttonText: S.of(context).ok,
                                       buttonAction: () => Navigator.of(dialogContext).pop(),
-                                    );
-                                  },
+                                    ),
                                 );
                               }
                             };
@@ -290,8 +284,7 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                             if (hasPotentialError && !isWhitelisted) {
                               showPopUp<void>(
                                 context: context,
-                                builder: (dialogContext) {
-                                  return AlertWithTwoActions(
+                                builder: (dialogContext) => AlertWithTwoActions(
                                     alertTitle: S.current.warning,
                                     alertContent: S.current.contract_warning,
                                     rightButtonText: S.of(context).continue_text,
@@ -301,8 +294,7 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                                       await actionCall();
                                     },
                                     actionLeftButton: () => Navigator.of(dialogContext).pop(),
-                                  );
-                                },
+                                  ),
                               );
                             } else {
                               try {
@@ -310,14 +302,12 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                               } catch (e) {
                                 showPopUp<void>(
                                   context: context,
-                                  builder: (dialogContext) {
-                                    return AlertWithOneAction(
+                                  builder: (dialogContext) => AlertWithOneAction(
                                       alertTitle: "Unable to add token",
                                       alertContent: "$e",
                                       buttonText: S.of(context).ok,
                                       buttonAction: () => Navigator.of(context).pop(),
-                                    );
-                                  },
+                                    ),
                                 );
                               }
                               if (mounted) {
@@ -332,14 +322,12 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                       ),
                     ),
                   ],
-                );
-              },
+                ),
             ),
           ],
         ),
       ),
     );
-  }
 
   void _getTokenInfo() async {
     if (_contractAddressController.text.isNotEmpty) {
@@ -373,8 +361,7 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
     }
   }
 
-  Widget _tokenForm() {
-    return Form(
+  Widget _tokenForm() => Form(
       key: _formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -393,10 +380,9 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
                   alignment: Alignment.center,
                   children: [
                     ClipOval(
-                      child: HashImageWidget(
+                      child: TokenImageWidget(
                         imageUrl: _tokenIconPathController.text,
-                        width: 75,
-                        height: 75,
+                        size: 75,
                       ),
                     ),
                     if (_isTokenVerified)
@@ -512,5 +498,4 @@ class _EditTokenPageBodyState extends State<EditTokenPageBody> {
         ],
       ),
     );
-  }
 }

@@ -28,7 +28,7 @@ class CakeFeaturesPage extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(minHeight: constraints.maxHeight),
                       child: IntrinsicHeight(
-                        child: !FeatureFlag.hasNewUi ? _buildOldUi(context) : _buildNewUi(context),
+                        child: _buildNewUi(context),
                       ),
                     ),
                   );
@@ -42,19 +42,6 @@ class CakeFeaturesPage extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    if (!FeatureFlag.hasNewUi) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 24, top: 16, bottom: 16),
-        child: Text(
-          S.of(context).apps,
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-        ),
-      );
-    }
-
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -76,8 +63,6 @@ class CakeFeaturesPage extends StatelessWidget {
   // consistency (also has affiliate revenue, not our relationship).
   // Re-populate this page when we have Hash Bags / Such Software apps
   // to feature here.
-  Widget _buildOldUi(BuildContext context) => _emptyState(context);
-
   Widget _buildNewUi(BuildContext context) => _emptyState(context);
 
   Widget _emptyState(BuildContext context) {

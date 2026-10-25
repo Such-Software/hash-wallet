@@ -82,6 +82,7 @@ class _SwapAddressSelectionModalState extends State<SwapAddressSelectionModal> {
                     ? "${S.of(context).receive_to}..."
                     : "${S.of(context).send_from}...",
                 leadingIcon: Icon(Icons.close),
+                leadingSemanticLabel: S.of(context).close,
                 onLeadingPressed: Navigator.of(context).pop,
               ),
               Flexible(
@@ -110,7 +111,7 @@ class _SwapAddressSelectionModalState extends State<SwapAddressSelectionModal> {
                             }
 
                             final String currencyIconPath =
-                                walletTypeToCryptoCurrency(item.type).iconPath ?? "";
+                                getCryptoCurrencyIconForWalletListItem(item.type);
 
                             final bool hasAccounts =
                                 item.type == WalletType.monero && widget.isSelectingReceiver;
@@ -272,7 +273,7 @@ class _SwapAddressSelectionModalRowState extends State<SwapAddressSelectionModal
                     Row(
                       spacing: 12,
                       children: [
-                        Image.asset(widget.iconPath, width: 24, height: 24),
+                        HashImageWidget(imageUrl: widget.iconPath, width: 24, height: 24),
                         Text(widget.wallet.name)
                       ],
                     ),

@@ -1,5 +1,5 @@
-Wownero and Monero now fly out of the bag when you send
-Fixed the app icon and logo showing the wrong artwork
-Fixed a crash when using Polygon wallets
-The Wownero logo no longer appears as a grey circle
-Error reports now identify the exact app build
+Caught up with Cake Wallet 6.5: fixes and improvements for Monero, Bitcoin and hardware wallets
+Monero wallets that sometimes failed to open silently now open reliably
+Monero support on Trezor, and steadier Ledger and Trezor Bluetooth connections
+Refreshed seed backup screens and transaction history
+Faster Bitcoin wallet sync

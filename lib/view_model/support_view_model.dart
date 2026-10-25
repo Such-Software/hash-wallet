@@ -50,11 +50,11 @@ abstract class SupportViewModelBase with Store {
               icon: 'assets/images/change_now.png',
               linkTitle: 'support@changenow.io',
               link: 'mailto:support@changenow.io'),
-          LinkListItem(
-              title: 'SideShift',
-              icon: 'assets/images/sideshift.png',
-              linkTitle: 'help.sideshift.ai',
-              link: 'https://help.sideshift.ai/en/'),
+          // LinkListItem(
+          //     title: 'SideShift',
+          //     icon: 'assets/images/sideshift.png',
+          //     linkTitle: 'help.sideshift.ai',
+          //     link: 'https://help.sideshift.ai/en/'),
           LinkListItem(
               title: 'SimpleSwap',
               icon: 'assets/images/simpleSwap.png',
@@ -69,7 +69,7 @@ abstract class SupportViewModelBase with Store {
               title: 'SwapTrade',
               icon: 'assets/images/swap_trade.png',
               linkTitle: 'help.swaptrade.io',
-              link: 'mailto:support@exolix.com'),
+              link: 'https://help.swaptrade.io/contact/'),
           LinkListItem(
               title: 'Trocador',
               icon: 'assets/images/trocador.png',

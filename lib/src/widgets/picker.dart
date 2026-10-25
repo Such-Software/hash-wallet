@@ -2,13 +2,11 @@
 
 import 'dart:math';
 
-import 'package:hash_wallet/entities/seed_type.dart';
-import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/token_image_widget.dart';
 import 'package:hash_wallet/src/widgets/search_bar_widget.dart';
 import 'package:hash_wallet/themes/core/theme_extension.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:cw_core/crypto_currency.dart';
-import 'package:cw_core/transaction_priority.dart';
 import 'package:flutter/material.dart';
 import 'package:cw_core/currency.dart';
 import 'package:hash_wallet/src/widgets/picker_wrapper_widget.dart';
@@ -304,20 +302,7 @@ class _PickerState<Item> extends State<Picker<Item>> {
     );
   }
 
-  String _getItemName(Item item) {
-    String itemName;
-    if (item is Currency) {
-      itemName = item.name;
-    } else if (item is TransactionPriority) {
-      itemName = item.title;
-    } else if (item is MoneroSeedType) {
-      itemName = item.title;
-    } else {
-      itemName = '';
-    }
-
-    return itemName;
-  }
+  String _getItemName(Item item) => item is Currency ? item.name : item.toString();
 
   Widget buildItem(int index) {
     final item = widget.headerEnabled ? filteredItems[index] : items[index];
@@ -499,10 +484,9 @@ class _PickerState<Item> extends State<Picker<Item>> {
   Widget? _getItemIcon(Item item) {
     if (item is Currency) {
       if (item.iconPath != null) {
-        return HashImageWidget(
+        return TokenImageWidget(
           imageUrl: item.iconPath!,
-          height: 20.0,
-          width: 20.0,
+          size: 20.0,
         );
       } else {
         return Container(

@@ -26,6 +26,7 @@ bool isElectrumWallet(WalletType walletType) {
     case WalletType.bitcoin:
     case WalletType.litecoin:
     case WalletType.bitcoinCash:
+    case WalletType.dogecoin:
       return true;
     default:
       return false;
@@ -42,5 +43,19 @@ bool hasTokens(WalletType walletType) {
       return true;
     default:
       return false;
+  }
+}
+
+String tokenStandardFor(WalletType walletType) {
+  switch (walletType) {
+    case WalletType.ethereum:
+    case WalletType.polygon:
+    case WalletType.arbitrum:
+    case WalletType.base:
+      return 'ERC-20';
+    case WalletType.bsc:
+      return 'BEP-20';
+    default:
+      return walletTypeToString(walletType);
   }
 }

@@ -1,23 +1,23 @@
-import 'package:hash_wallet/core/amount_parsing_proxy.dart';
-import 'package:hash_wallet/di.dart';
-import 'package:hash_wallet/entities/preferences_key.dart';
-import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/src/screens/wallet_connect/services/walletkit_service.dart';
-import 'package:hash_wallet/themes/core/theme_store.dart';
-import 'package:hash_wallet/utils/exception_handler.dart';
-import 'package:cw_core/transaction_info.dart';
-import 'package:cw_core/wallet_type.dart';
-import 'package:mobx/mobx.dart';
-import 'package:cw_core/balance.dart';
-import 'package:cw_core/wallet_base.dart';
-import 'package:cw_core/transaction_history.dart';
-import 'package:hash_wallet/store/wallet_list_store.dart';
-import 'package:hash_wallet/store/authentication_store.dart';
-import 'package:hash_wallet/store/settings_store.dart';
-import 'package:hash_wallet/store/node_list_store.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:hash_wallet/core/amount_parsing_proxy.dart";
+import "package:hash_wallet/di.dart";
+import "package:hash_wallet/entities/preferences_key.dart";
+import "package:hash_wallet/reactions/wallet_connect.dart";
+import "package:hash_wallet/src/screens/wallet_connect/services/walletkit_service.dart";
+import "package:hash_wallet/store/authentication_store.dart";
+import "package:hash_wallet/store/settings_store.dart";
+import "package:hash_wallet/store/wallet_list_store.dart";
+import "package:hash_wallet/themes/core/theme_store.dart";
+import "package:hash_wallet/utils/exception_handler.dart";
+import "package:cw_core/balance.dart";
+import "package:cw_core/transaction_history.dart";
+import "package:cw_core/transaction_info.dart";
+import "package:cw_core/utils/print_verbose.dart";
+import "package:cw_core/wallet_base.dart";
+import "package:cw_core/wallet_type.dart";
+import "package:mobx/mobx.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
-part 'app_store.g.dart';
+part "app_store.g.dart";
 
 class AppStore = AppStoreBase with _$AppStore;
 
@@ -26,7 +26,6 @@ abstract class AppStoreBase with Store {
     required this.authenticationStore,
     required this.walletList,
     required this.settingsStore,
-    required this.nodeListStore,
     required this.themeStore,
   }) : _amountParsingProxy = AmountParsingProxy(settingsStore.displayAmountsInSatoshi) {
     reaction(
@@ -47,8 +46,6 @@ abstract class AppStoreBase with Store {
 
   SettingsStore settingsStore;
 
-  NodeListStore nodeListStore;
-
   ThemeStore themeStore;
 
   @observable
@@ -60,19 +57,47 @@ abstract class AppStoreBase with Store {
   @action
   Future<void> changeCurrentWallet(
       WalletBase<Balance, TransactionHistoryBase<TransactionInfo>, TransactionInfo> wallet) async {
-    bool changingToSameWalletType = this.wallet?.type == wallet.type;
-    this.wallet?.close(shouldCleanup: !changingToSameWalletType);
+    final changingToSameWalletType = this.wallet?.type == wallet.type;
+    final previousWalletType = this.wallet?.type;
+
+    await this.wallet?.close(shouldCleanup: !changingToSameWalletType);
     this.wallet = wallet;
     this.wallet!.setExceptionHandler(ExceptionHandler.onError);
 
     if (isWalletConnectCompatibleChain(wallet.type)) {
-      await getIt.get<WalletKitService>().onDispose();
-      getIt.get<WalletKitService>().create();
-      await getIt.get<WalletKitService>().init();
+      getIt.get<WalletKitService>().resetConnectionsState();
+      _queueWalletConnectAction(_setupWalletConnect);
+    } else if (previousWalletType != null && isWalletConnectCompatibleChain(previousWalletType)) {
+      _queueWalletConnectAction(_disposeWalletConnect);
     }
     await getIt.get<SharedPreferences>().setString(PreferencesKey.currentWalletName, wallet.name);
     await getIt
         .get<SharedPreferences>()
         .setInt(PreferencesKey.currentWalletType, serializeToInt(wallet.type));
+  }
+
+  Future<void> _lastWalletConnectAction = Future.value();
+
+  void _queueWalletConnectAction(Future<void> Function() action) {
+    _lastWalletConnectAction = _lastWalletConnectAction.then((_) => action());
+  }
+
+  Future<void> _setupWalletConnect() async {
+    try {
+      final wcService = getIt.get<WalletKitService>();
+      await wcService.onDispose();
+      wcService.create();
+      await wcService.init();
+    } catch (e, s) {
+      printV("WalletConnect setup failed: $e\n$s");
+    }
+  }
+
+  Future<void> _disposeWalletConnect() async {
+    try {
+      await getIt.get<WalletKitService>().onDispose();
+    } catch (e) {
+      printV("WalletConnect teardown failed: $e");
+    }
   }
 }

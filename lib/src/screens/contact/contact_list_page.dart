@@ -1,8 +1,12 @@
+import "dart:async";
+
 import 'package:hash_wallet/core/auth_service.dart';
 import 'package:hash_wallet/entities/contact_base.dart';
 import 'package:hash_wallet/entities/contact_record.dart';
+import 'package:hash_wallet/entities/wallet_contact.dart';
 import 'package:hash_wallet/entities/wallet_list_order_types.dart';
 import 'package:hash_wallet/generated/i18n.dart';
+import "package:hash_wallet/new-ui/page_open_listener.dart";
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/dashboard/widgets/filter_list_widget.dart';
@@ -16,6 +20,8 @@ import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/utils/show_bar.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/view_model/contact_list/contact_list_view_model.dart';
+import 'package:cw_core/crypto_currency.dart';
+import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +29,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class ContactListPage extends BasePage {
+class ContactListPage extends BasePage implements PageOpenListener {
   ContactListPage(this.contactListViewModel, this.authService, {this.showAddButton = false});
 
   final ContactListViewModel contactListViewModel;
@@ -62,6 +68,7 @@ class ContactListPage extends BasePage {
                 minWidth: 32.0,
                 height: 32.0,
                 child: TextButton(
+                  key: ValueKey("contact_list_page_add_contact_button_key"),
                   // FIX-ME: Style
                   //shape: CircleBorder(),
                   onPressed: () async {
@@ -84,6 +91,11 @@ class ContactListPage extends BasePage {
         ),
       ),
     );
+  }
+
+  @override
+  void onPageOpen() {
+    unawaited(contactListViewModel.loadWalletContacts());
   }
 
   @override
@@ -281,8 +293,10 @@ class _ContactPageBodyState extends State<ContactPageBody> with SingleTickerProv
   }
 
   Widget _buildCurrencyIcon(ContactBase contact) {
-    final image = contact.type.iconPath;
-    return image != null
+    final image = (contact is WalletContact && contact.walletType != null)
+        ? getCryptoCurrencyIconForWalletListItem(contact.walletType!)
+        : contact.type.iconPath;
+    return (image != null && image.isNotEmpty)
         ? HashImageWidget(imageUrl: image, height: 24, width: 24)
         : const SizedBox(height: 24, width: 24);
   }
@@ -335,6 +349,7 @@ class _ContactListBodyState extends State<ContactListBody> {
           updateFunction: widget.contactListViewModel.reorderAccordingToContactList,
           canReorder: widget.contactListViewModel.isEditable,
           shrinkWrap: true,
+          padding: const EdgeInsets.only(bottom: 250),
           itemBuilder: (context, index) {
             final contact = contacts[index];
             final contactContent =
@@ -373,9 +388,13 @@ class _ContactListBodyState extends State<ContactListBody> {
   }
 
   Widget generateContactRaw(BuildContext context, ContactRecord contact, bool isLast) {
-    final image = contact.type.iconPath;
-    final currencyIcon = image != null
-        ? Image.asset(image, height: 24, width: 24)
+    const l2NativeChainIcons = {
+      CryptoCurrency.baseEth: "assets/new-ui/crypto_full_icons/base.svg",
+      CryptoCurrency.arbEth: "assets/new-ui/crypto_full_icons/arbitrum.svg",
+    };
+    final image = l2NativeChainIcons[contact.type] ?? contact.type.iconPath;
+    final currencyIcon = (image != null && image.isNotEmpty)
+        ? HashImageWidget(imageUrl: image, height: 24, width: 24)
         : const SizedBox(height: 24, width: 24);
     return Column(
       children: [
@@ -443,7 +462,7 @@ class _ContactListBodyState extends State<ContactListBody> {
       color: Theme.of(context).colorScheme.onSurface,
     );
     return Padding(
-      padding: const EdgeInsets.only(bottom: FeatureFlag.hasNewUi ? 48 : 0),
+      padding: const EdgeInsets.only(bottom: 48),
       child: MergeSemantics(
         child: SizedBox(
           height: 58,

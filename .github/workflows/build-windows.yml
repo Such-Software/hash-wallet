@@ -176,28 +176,28 @@ jobs:
           '
 
       # ---- Flutter, pinned -------------------------------------------------
-      # Every other platform builds on 3.32.0: Linux and Android inside the
-      # cake_wallet debian13-flutter3.32.0 image, iOS by installing it
+      # Every other platform builds on 3.41.9: Linux and Android inside the
+      # cake_wallet debian13-flutter3.41.9 image, iOS by installing it
       # explicitly. Windows was the one that took whatever the runner happened
       # to have, and on 2026-09-19 that was 3.38.5 / Dart 3.10.4. Dart 3.10
       # removed the _macros package, so `flutter pub get` could not solve
       # hive_generator against build_resolvers and the build died at exit 69
       # long before it compiled anything. A build machine's drifting toolchain
       # must not decide which dependencies resolve.
-      - name: Require Flutter 3.32.0
+      - name: Require Flutter 3.41.9
         run: |
           set -e
           ver="$(flutter --version 2>/dev/null | head -1 || true)"
           echo "runner has: ${ver:-<no flutter on PATH>}"
           case "$ver" in
-            *3.32.0*) exit 0 ;;
+            *3.41.9*) exit 0 ;;
           esac
           cat >&2 <<'MSG'
 
-          Refusing to build: this runner's Flutter is not the pinned 3.32.0.
+          Refusing to build: this runner's Flutter is not the pinned 3.41.9.
 
           Every other platform is pinned, Linux and Android by the
-          cake_wallet debian13-flutter3.32.0 image and iOS by installing it,
+          cake_wallet debian13-flutter3.41.9 image and iOS by installing it,
           so a drifted Windows SDK breaks this platform alone and does it
           during dependency resolution rather than at compile time.
 
@@ -289,8 +289,12 @@ jobs:
           echo "monero_c TAG: $MONERO_C_TAG"
           mkdir -p "scripts/monero_c/release/$MONERO_C_TAG"
           pushd "scripts/monero_c/release/$MONERO_C_TAG"
-            curl -fsSL -O https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC1/release-bundle.zip
+            curl -fsSL -O https://github.com/MrCyjaneK/monero_c/releases/download/v0.18.4.6-RC2/release-bundle.zip
             unzip -q release-bundle.zip
+            # RC2 nests everything under an inner v0.18.4.6-*/ dir; strip it.
+            shopt -s nullglob
+            for inner in v0.18.4.6-*/; do mv "$inner"* . && rmdir "$inner"; done
+            shopt -u nullglob
             rm release-bundle.zip
             echo "=== bundle contents (top level) ==="
             ls

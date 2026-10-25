@@ -26,9 +26,7 @@ class TransactionCommitFailed implements Exception {
   TransactionCommitFailed({this.errorMessage});
 
   @override
-  String toString() {
-    return errorMessage ?? "unknown error";
-  }
+  String toString() => errorMessage ?? "unknown error";
 }
 
 class TransactionCommitFailedDustChange implements Exception {}
@@ -57,11 +55,35 @@ class SignSPLTokenTransactionRentException implements Exception {}
 
 class NoAssociatedTokenAccountException implements Exception {}
 
-/// ==============================================================================
-/// ==============================================================================
+class NotAnNFTException implements Exception {}
+
+class AmbiguousTokenSymbolException implements Exception {
+  AmbiguousTokenSymbolException(this.symbol);
+
+  final String symbol;
+}
 
 class RestoreFromSeedException implements Exception {
   final String message;
 
   RestoreFromSeedException(this.message);
+}
+
+class WalletDeprecationException implements Exception {
+  final String seed;
+  final CryptoCurrency curr;
+
+  @override
+  String toString() => "Wallet type no longer supported";
+
+  WalletDeprecationException({required this.seed, required this.curr});
+}
+
+class WalletSwitchException implements Exception {
+  WalletSwitchException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
 }

@@ -1,0 +1,521 @@
+import "dart:async";
+import "dart:convert";
+import "dart:io";
+
+import "package:hash_wallet/bitcoin/bitcoin.dart";
+import "package:hash_wallet/core/secure_storage.dart";
+import "package:hash_wallet/entities/hardware_wallet/hardware_wallet_device.dart";
+import "package:hash_wallet/evm/evm.dart";
+import "package:hash_wallet/main.dart";
+import "package:hash_wallet/monero/monero.dart";
+import "package:hash_wallet/new-ui/widgets/hardware_wallet/proceed_on_device_sheet.dart";
+import "package:hash_wallet/view_model/hardware_wallet/hardware_wallet_view_model.dart";
+import "package:hash_wallet/wallet_type_utils.dart";
+import "package:cw_core/encryption_file_utils.dart";
+import "package:cw_core/hardware/device_connection_type.dart";
+import "package:cw_core/hardware/hardware_wallet_service.dart";
+import "package:cw_core/key.dart";
+import "package:cw_core/root_dir.dart";
+import "package:cw_core/utils/print_verbose.dart";
+import "package:cw_core/wallet_base.dart";
+import "package:cw_core/wallet_info.dart";
+import "package:cw_core/wallet_type.dart";
+import "package:device_info_plus/device_info_plus.dart";
+import "package:flutter/material.dart";
+import "package:mobx/mobx.dart";
+import "package:permission_handler/permission_handler.dart";
+import "package:trezor_connect/trezor_connect.dart" as connect_sdk;
+import "package:trezor_flutter/trezor_flutter.dart" as sdk;
+
+part "trezor_connect_view_model.g.dart";
+
+const trezorUseNative = [WalletType.bitcoin, WalletType.monero];
+
+class TrezorConnectViewModel = TrezorConnectViewModelBase with _$TrezorConnectViewModel;
+
+abstract class TrezorConnectViewModelBase extends HardwareWalletViewModel with Store {
+  TrezorConnectViewModelBase(this.trezorConnect, this._secureStorage) {
+    if (_doesSupportHardwareWallets) {
+      reaction((_) => isBleEnabled, (_) {
+        if (isBleEnabled) {
+          _initBLE();
+        }
+      });
+
+      if (!Platform.isIOS) {
+        trezorUSB = sdk.TrezorInterface.usb();
+      }
+    }
+  }
+
+  StreamSubscription<sdk.BleConnectionState>? _connectionChangeSubscription;
+  final connect_sdk.TrezorConnect trezorConnect;
+  final SecureStorage _secureStorage;
+
+  late final sdk.TrezorInterface trezorBLE;
+  late final sdk.TrezorInterface trezorUSB;
+
+  sdk.ThpState? _state;
+
+  bool get _doesSupportHardwareWallets {
+    if (isMoneroOnly) {
+      return DeviceConnectionType.supportedConnectionTypes(
+        WalletType.monero,
+        HardwareWalletType.trezor,
+        Platform.isIOS,
+      ).isNotEmpty;
+    }
+
+    return true;
+  }
+
+  bool _bleIsInitialized = false;
+
+  Future<void> _initBLE() async {
+    if (isBleEnabled && !_bleIsInitialized) {
+      trezorBLE = sdk.TrezorInterface.ble(
+        onPermissionRequest: (_) async {
+          if (Platform.isMacOS) {
+            return true;
+          }
+
+          final Map<Permission, PermissionStatus> statuses = await [
+            Permission.bluetoothScan,
+            Permission.bluetoothConnect,
+            Permission.bluetoothAdvertise,
+          ].request();
+
+          return statuses.values.where((status) => status.isDenied).isEmpty;
+        },
+        bleOptions: sdk.BluetoothOptions(maxScanDuration: const Duration(minutes: 5)),
+      );
+      _bleIsInitialized = true;
+    }
+  }
+
+  @override
+  HardwareWalletType get hardwareWalletType => HardwareWalletType.trezor;
+
+  @override
+  @observable
+  bool isConnecting = false;
+
+  @override
+  @observable
+  bool isBleEnabled = false;
+
+  @override
+  bool get hasBluetooth => true;
+
+  @override
+  Future<void> updateBleState() async {
+    final bleState = await sdk.UniversalBle.getBluetoothAvailabilityState();
+
+    final newState = bleState == sdk.AvailabilityState.poweredOn;
+
+    if (newState != isBleEnabled) {
+      isBleEnabled = newState;
+    }
+  }
+
+  @override
+  Stream<HardwareWalletDevice> scanForBleDevices() =>
+      trezorBLE.scan().map(TrezorHardwareWalletDevice.new);
+
+  @override
+  Future<List<HardwareWalletDevice>> getAllUsbDevices() =>
+      trezorUSB.devices.then((devices) => devices.map(TrezorHardwareWalletDevice.new).toList());
+
+  @override
+  Future<List<HardwareWalletDevice>> getConnectedBleDevices() async {
+    if (!_bleIsInitialized) {
+      return const [];
+    }
+    return (await trezorBLE.devices).map(TrezorHardwareWalletDevice.new).toList();
+  }
+
+  @override
+  Future<void> stopScanning() async {
+    if (_bleIsInitialized) {
+      await trezorBLE.stopScanning();
+    }
+    if (!Platform.isIOS) {
+      await trezorUSB.stopScanning();
+    }
+  }
+
+  sdk.TrezorClient? _client;
+
+  Completer<String?>? _pinCompleter;
+  Completer<TrezorDeviceSettings>? _settingsCompleter;
+
+  /// Settings that successfully opened a session, kept in memory (never persisted) per wallet id
+  /// so a reconnect during a send doesn't ask for the wallet options / passphrase again.
+  final Map<String, TrezorDeviceSettings> _sessionSettings = {};
+  TrezorDeviceSettings? _lastUsedSettings;
+  String? _reconnectWalletId;
+
+  /// The wallet the live session (and with it the passphrase) belongs to, null if unknown
+  String? _sessionWalletId;
+
+  /// Call right before opening the connect page to reconnect the device for [wallet].
+  /// Only then the settings of the previous session are reused; creating or restoring a wallet
+  /// always asks for them.
+  void prepareReconnect(WalletBase wallet) => _reconnectWalletId = wallet.id;
+
+  /// Call when the connect page opened after [prepareReconnect] is closed, so an attempt that was
+  /// backed out of can never leak its settings into a later, unrelated connect (e.g. a restore).
+  void cancelReconnect() => _reconnectWalletId = null;
+
+  /// Call once a wallet was created / restored with the live session
+  void bindSessionToWallet(WalletBase wallet) {
+    _sessionWalletId = wallet.id;
+    final settings = _lastUsedSettings;
+    if (settings != null) {
+      _sessionSettings[wallet.id] = settings;
+      _lastUsedSettings = null;
+    }
+  }
+
+  /// False if the live session is known to belong to another wallet, e.g. one with a different
+  /// passphrase. Using it would only fail when signing.
+  bool isSessionFor(WalletBase wallet) =>
+      _sessionWalletId == null || _sessionWalletId == wallet.id;
+
+  Future<void> dropSession() async {
+    final client = _client;
+    _client = null;
+    _sessionWalletId = null;
+    _lastUsedSettings = null;
+    try {
+      await client?.connection.disconnect();
+    } catch (_) {}
+  }
+
+  @observable
+  TrezorParingState paringState = TrezorParingState.initial;
+
+  void setParingPin(String pin) => _pinCompleter?.complete(pin);
+
+  void setDeviceSettings(TrezorDeviceSettings settings) => _settingsCompleter?.complete(settings);
+
+  @override
+  @action
+  Future<bool> connectDevice(
+    HardwareWalletDevice device,
+    WalletType type, [
+    bool isRetry = false,
+  ]) async {
+    if (device is! TrezorHardwareWalletDevice) {
+      return false;
+    }
+    if (isConnecting) {
+      return false;
+    }
+    isConnecting = true;
+    paringState = TrezorParingState.initial;
+
+    final reconnectWalletId = _reconnectWalletId;
+    _reconnectWalletId = null;
+    final reusedSettings = reconnectWalletId != null ? _sessionSettings[reconnectWalletId] : null;
+
+    try {
+      final trezorInterface =
+          device.connectionType == HardwareWalletConnectionType.ble ? trezorBLE : trezorUSB;
+      final connection = await trezorInterface.connect(device.device);
+
+      _connectionChangeSubscription ??=
+          trezorInterface.deviceStateChanges.listen(_connectionChangeListener);
+
+      if (!isRetry) {
+        unawaited(
+          showModalBottomSheet(
+            context: navigatorKey.currentContext!,
+            isScrollControlled: true,
+            isDismissible: false,
+            enableDrag: false,
+            useSafeArea: true,
+            builder: (_) => HardwareWalletProceedOnDeviceSheet(
+              hardwareWalletType: hardwareWalletType,
+              trezorConnectVM: this,
+              onRetry: () => connectDevice(device, type, true),
+            ),
+          ),
+        );
+      }
+
+      Future<String> onPinCode() async {
+        _pinCompleter = Completer<String?>();
+        paringState = TrezorParingState.enterPin;
+
+        final res = await _pinCompleter!.future;
+        paringState = TrezorParingState.verifyingPin;
+        if (res == null) {
+          throw Exception();
+        }
+        return res;
+      }
+
+      final deviceInfo = await _deviceName;
+
+      _state ??= await _getState();
+      _client = sdk.TrezorClient.getClientForConnection(
+        connection,
+        _state!,
+        "Cake Wallet",
+        deviceInfo,
+        onPinCode,
+      );
+
+      await _client!.createChannel();
+
+      final hasAutoPairingCredentials =
+          _state!.pairingCredentials.any((c) => c.autoconnect == true);
+      final isAutoPairingAvailable = _client is sdk.TrezorClientV2 && !hasAutoPairingCredentials;
+
+      final TrezorDeviceSettings settings;
+      if (reusedSettings != null) {
+        settings = reusedSettings;
+      } else {
+        paringState =
+            TrezorParingState.awaitingSettings(isAutoPairingAvailable: isAutoPairingAvailable);
+        _settingsCompleter = Completer<TrezorDeviceSettings>();
+        settings = await _settingsCompleter!.future;
+      }
+
+      paringState = TrezorParingState.awaitingPassphrase;
+      if (settings.enableAutoParing && isAutoPairingAvailable) {
+        if (_client case final sdk.TrezorClientV2 clientV2) {
+          try {
+            final auto = await clientV2.getAutoPairingCredentials();
+            _state!.setPairingCredentials([auto]);
+            await _saveState();
+          } catch (_) {}
+        }
+      }
+
+      if ((settings.passphrase ?? "").isNotEmpty || settings.passphraseOnDevice) {
+        final passphrase = settings.passphraseOnDevice
+            ? const sdk.TrezorPassphrase.onDevice()
+            : sdk.TrezorPassphrase.value(settings.passphrase ?? "");
+        await _client!.createSession(passphrase);
+      }
+
+      _lastUsedSettings = settings;
+      _sessionWalletId = reconnectWalletId;
+      paringState = TrezorParingState.success;
+      return true;
+    } catch (e) {
+      await _client?.connection.disconnect();
+      _client = null;
+      _sessionWalletId = null;
+      _lastUsedSettings = null;
+      // Drop the (possibly half way through a handshake) state, the next attempt reloads the
+      // saved pairing credentials instead of asking for the pairing code again.
+      _state = null;
+      if (reconnectWalletId != null) {
+        _sessionSettings.remove(reconnectWalletId);
+      }
+      // rethrow;
+      paringState = TrezorParingState.fail(e.toString());
+      printV(e);
+      return false;
+    } finally {
+      isConnecting = false;
+      _reconnectWalletId = null;
+    }
+  }
+
+  Future<String> get _deviceName async {
+    final deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      return (await deviceInfo.androidInfo).model;
+    }
+    if (Platform.isIOS) {
+      return (await deviceInfo.iosInfo).name;
+    }
+    return "Computer";
+  }
+
+  @override
+  bool isConnected(WalletType type) => trezorUseNative.contains(type)
+      ? _client != null && _client?.connection.isDisconnected == false
+      : true;
+
+  @override
+  HardwareWalletService getHardwareWalletService(WalletType type) {
+    switch (type) {
+      case WalletType.monero:
+        return monero!.getTrezorHardwareWalletService(_client!);
+      case WalletType.bitcoin:
+        return bitcoin!.getTrezorHardwareWalletService(null, _client!, true);
+      case WalletType.litecoin:
+        return bitcoin!.getTrezorHardwareWalletService(trezorConnect, null, false);
+      case WalletType.ethereum:
+      case WalletType.polygon:
+        return evm!.getTrezorHardwareWalletService(trezorConnect);
+      default:
+        throw UnimplementedError();
+    }
+  }
+
+  @override
+  Future<void> initWallet(WalletBase wallet) async {
+    // Only a session that was opened for this wallet may hand its settings to it
+    final lastUsedSettings = _lastUsedSettings;
+    if (lastUsedSettings != null && _sessionWalletId == wallet.id) {
+      _sessionSettings[wallet.id] = lastUsedSettings;
+      _lastUsedSettings = null;
+    }
+
+    switch (wallet.type) {
+      case WalletType.monero:
+        return monero!.setHardwareWalletService(wallet, getHardwareWalletService(wallet.type));
+      case WalletType.bitcoin:
+      case WalletType.litecoin:
+        return bitcoin!.setHardwareWalletService(wallet, getHardwareWalletService(wallet.type));
+      case WalletType.ethereum:
+      case WalletType.polygon:
+        return evm!.setHardwareWalletService(wallet, getHardwareWalletService(wallet.type));
+      default:
+        throw Exception("Unexpected wallet type: ${wallet.type} for trezor");
+    }
+  }
+
+  final EncryptionFileUtils _encryptionFileUtils = encryptionFileUtilsFor(true);
+  static const String _secureStorageKey = "com.cakewallet.trezor/thp_state";
+
+  Future<String> get _thpJsonFile async => "${(await getAppDir()).path}/thp_state.json.enc";
+
+  Future<sdk.ThpState> _getState() async {
+    final password = await _secureStorage.read(key: _secureStorageKey);
+    if (password == null) {
+      return _saveState();
+    }
+    try {
+      final state = await _encryptionFileUtils.read(path: await _thpJsonFile, password: password);
+      return sdk.ThpState.fromJson(state);
+    } catch (_) {
+      return _saveState();
+    }
+  }
+
+  Future<sdk.ThpState> _saveState() async {
+    try {
+      final password = generateKey();
+      await _secureStorage.write(key: _secureStorageKey, value: password);
+
+      final file = File(await _thpJsonFile);
+      if (!file.existsSync()) {
+        file.createSync();
+      }
+
+      final state = _state ?? sdk.ThpState();
+      await _encryptionFileUtils.write(
+        path: file.path,
+        password: password,
+        data: jsonEncode(state.toMap()),
+      );
+      _state = state;
+      return state;
+    } catch (_) {
+      throw Exception("Unable to save Trezor State");
+    }
+  }
+
+  Future<void> _connectionChangeListener(sdk.BleConnectionState event) async {
+    printV("Trezor Device State Changed: $event");
+    if (event != sdk.BleConnectionState.disconnected || isConnecting) {
+      return;
+    }
+
+    final client = _client;
+    if (client == null) {
+      return;
+    }
+
+    // The events aren't device specific, so check if it's actually our Trezor that is gone
+    if (client.connection.connectionType == sdk.ConnectionType.ble) {
+      try {
+        final state = await sdk.UniversalBle.getConnectionState(client.connection.device.id);
+        if (state == sdk.BleConnectionState.connected) {
+          return;
+        }
+      } catch (_) {}
+    }
+
+    if (identical(_client, client)) {
+      _client = null;
+      _sessionWalletId = null;
+    }
+  }
+
+  Future<bool> syncKeyImages(WalletBase wallet) async {
+    if (wallet.type == WalletType.monero) {
+      try {
+        await monero!.syncTrezor(wallet);
+      } catch (_) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @override
+  Future<void> close() async {
+    try {
+      await _connectionChangeSubscription?.cancel();
+
+      _connectionChangeSubscription = null;
+      isConnecting = false;
+      await stopScanning();
+    } catch (_) {}
+  }
+}
+
+abstract class TrezorParingState {
+  static TrezorParingState initial = InitialTrezorParingState();
+  static TrezorParingState enterPin = EnterPinTrezorParingState();
+  static TrezorParingState success = SuccessTrezorParingState();
+  static TrezorParingState verifyingPin = VerifyingPinTrezorParingState();
+  static TrezorParingState awaitingPassphrase = AwaitingPassphraseTrezorParingState();
+
+  static TrezorParingState awaitingSettings({required bool isAutoPairingAvailable}) =>
+      AwaitingSettingsTrezorParingState(isAutoPairingAvailable: isAutoPairingAvailable);
+
+  static TrezorParingState fail(String message) => FailTrezorParingState(message);
+}
+
+class InitialTrezorParingState extends TrezorParingState {}
+
+class EnterPinTrezorParingState extends TrezorParingState {}
+
+class VerifyingPinTrezorParingState extends TrezorParingState {}
+
+class AwaitingSettingsTrezorParingState extends TrezorParingState {
+  AwaitingSettingsTrezorParingState({required this.isAutoPairingAvailable});
+
+  final bool isAutoPairingAvailable;
+}
+
+class AwaitingPassphraseTrezorParingState extends TrezorParingState {}
+
+class SuccessTrezorParingState extends TrezorParingState {}
+
+class FailTrezorParingState extends TrezorParingState {
+  FailTrezorParingState(this.message);
+
+  final String message;
+}
+
+class TrezorDeviceSettings {
+  const TrezorDeviceSettings({
+    required this.enableAutoParing,
+    required this.passphraseOnDevice,
+    this.passphrase,
+  });
+
+  final bool enableAutoParing;
+  final bool passphraseOnDevice;
+  final String? passphrase;
+}

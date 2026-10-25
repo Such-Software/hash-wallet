@@ -33,8 +33,12 @@ abstract class WalletCreationVMBase with Store {
   @observable
   bool _useTestnet = false;
 
+  int _zcashNetwork = 0; // Hash Bags: Zcash removed; kept for the shared credentials signature
+
   @computed
   bool get useTestnet => _useTestnet;
+
+  int get zcashNetwork => _zcashNetwork;
 
   @observable
   String name;
@@ -250,5 +254,9 @@ abstract class WalletCreationVMBase with Store {
   @action
   void toggleUseTestnet(bool? value) {
     _useTestnet = value ?? !_useTestnet;
+  }
+
+  void setZcashNetwork(int network) {
+    _zcashNetwork = network;
   }
 }

@@ -1,17 +1,24 @@
 import 'dart:io';
 
 import 'package:hash_wallet/anonpay/anonpay_invoice_info.dart';
+import "package:hash_wallet/core/auth_service.dart";
 import 'package:hash_wallet/core/new_wallet_arguments.dart';
 import 'package:hash_wallet/new-ui/new_dashboard.dart';
 import 'package:hash_wallet/new-ui/pages/about_page.dart';
-import 'package:hash_wallet/new-ui/pages/bridge/bridge_confirm_sheet.dart';
 import 'package:hash_wallet/new-ui/pages/bridge/bridge_history_page.dart';
 import 'package:hash_wallet/new-ui/pages/bridge/bridge_network_page.dart';
 import 'package:hash_wallet/new-ui/pages/bridge/bridge_receiving_wallet_page.dart';
+import "package:hash_wallet/new-ui/pages/buy_sell/buy_sell_amount_page.dart";
 import 'package:hash_wallet/new-ui/pages/coin_control_page.dart';
 import 'package:hash_wallet/new-ui/pages/addresses_page.dart';
 import 'package:hash_wallet/new-ui/pages/lightning_username_page.dart';
+import "package:hash_wallet/new-ui/pages/seed/pre_seed_page.dart";
+import "package:hash_wallet/new-ui/pages/seed/show_keys_disclaimer_page.dart";
+import "package:hash_wallet/new-ui/pages/receive_page.dart";
 import 'package:hash_wallet/new-ui/pages/send_page.dart';
+import "package:hash_wallet/new-ui/pages/swap_page.dart";
+import "package:hash_wallet/new-ui/widgets/buy_sell/buy_sell_selector_modal.dart";
+import 'package:hash_wallet/new-ui/widgets/hardware_wallet/sync_key_images_sheet.dart';
 import 'package:hash_wallet/order/order.dart';
 import 'package:hash_wallet/core/new_wallet_type_arguments.dart';
 import 'package:hash_wallet/core/totp_request_details.dart';
@@ -26,29 +33,24 @@ import 'package:hash_wallet/src/screens/anonpay_details/anonpay_details_page.dar
 import 'package:hash_wallet/src/screens/auth/auth_page.dart';
 import 'package:hash_wallet/src/screens/backup/backup_page.dart';
 import 'package:hash_wallet/src/screens/backup/edit_backup_password_page.dart';
-import 'package:hash_wallet/src/screens/buy/buy_sell_options_page.dart';
-import 'package:hash_wallet/src/screens/buy/buy_webview_page.dart';
-import 'package:hash_wallet/src/screens/buy/payment_method_options_page.dart';
-import 'package:hash_wallet/src/screens/buy/webview_page.dart';
 import 'package:hash_wallet/src/screens/connect_device/connect_device_page.dart';
-import 'package:hash_wallet/src/screens/connect_device/monero_hardware_wallet_options_page.dart';
+import "package:hash_wallet/src/screens/connect_device/monero_hardware_wallet_options_page.dart";
 import 'package:hash_wallet/src/screens/connect_device/select_device_manufacturer_page.dart';
-import 'package:hash_wallet/src/screens/connect_device/select_hardware_wallet_account_page.dart';
+import "package:hash_wallet/src/screens/connect_device/select_hardware_wallet_account_page.dart";
 import 'package:hash_wallet/src/screens/contact/contact_list_page.dart';
 import 'package:hash_wallet/src/screens/contact/contact_page.dart';
-import 'package:hash_wallet/src/screens/dashboard/dashboard_page.dart';
-import 'package:hash_wallet/src/screens/dashboard/desktop_widgets/desktop_dashboard_actions.dart';
 import 'package:hash_wallet/src/screens/dashboard/edit_token_page.dart';
 import 'package:hash_wallet/src/screens/dashboard/home_settings_page.dart';
-import 'package:hash_wallet/src/screens/dashboard/pages/address_page.dart';
 import 'package:hash_wallet/src/screens/dashboard/pages/nft_details_page.dart';
-import 'package:hash_wallet/src/screens/dashboard/pages/transactions_page.dart';
+import "package:hash_wallet/src/screens/dashboard/pages/nft_send_page.dart";
 import 'package:hash_wallet/src/screens/dashboard/sign_page.dart';
 import 'package:hash_wallet/src/screens/dev/exchange_provider_logs_page.dart';
 import 'package:hash_wallet/src/screens/dev/monero_background_sync.dart';
 import 'package:hash_wallet/src/screens/dev/moneroc_cache_debug.dart';
 import 'package:hash_wallet/src/screens/dev/moneroc_call_profiler.dart';
 import 'package:hash_wallet/src/screens/dev/network_requests.dart';
+import 'package:hash_wallet/new-ui/pages/wallet_accounts_page.dart';
+import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/src/screens/dev/qr_tools_page.dart';
 import 'package:hash_wallet/src/screens/dev/secure_preferences_page.dart';
@@ -57,16 +59,8 @@ import 'package:hash_wallet/src/screens/dev/background_sync_logs_page.dart';
 import 'package:hash_wallet/src/screens/dev/socket_health_logs_page.dart';
 import 'package:hash_wallet/src/screens/disclaimer/disclaimer_page.dart';
 import 'package:hash_wallet/src/screens/disclaimer/third_party_disclaimer_page.dart';
-import 'package:hash_wallet/src/screens/exchange/exchange_page.dart';
-import 'package:hash_wallet/src/screens/exchange/exchange_template_page.dart';
-import 'package:hash_wallet/src/screens/exchange_trade/exchange_confirm_page.dart';
-import 'package:hash_wallet/src/screens/exchange_trade/exchange_trade_external_send_page.dart';
-import 'package:hash_wallet/src/screens/exchange_trade/exchange_trade_page.dart';
-import 'package:hash_wallet/src/screens/faq/faq_page.dart';
 import 'package:hash_wallet/src/screens/integrations/deuro/savings_page.dart';
-import 'package:hash_wallet/src/screens/monero_accounts/monero_account_edit_or_create_page.dart';
 import 'package:hash_wallet/src/screens/nano/nano_change_rep_page.dart';
-import 'package:hash_wallet/src/screens/nano_accounts/nano_account_edit_or_create_page.dart';
 import 'package:hash_wallet/src/screens/new_wallet/wallet_group_display_page.dart';
 import 'package:hash_wallet/src/screens/new_wallet/advanced_privacy_settings_page.dart';
 import 'package:hash_wallet/src/screens/new_wallet/new_wallet_page.dart';
@@ -78,25 +72,16 @@ import 'package:hash_wallet/src/screens/nodes/pow_node_create_or_edit_page.dart'
 import 'package:hash_wallet/src/screens/order_details/order_details_page.dart';
 import 'package:hash_wallet/src/screens/payjoin_details/payjoin_details_page.dart';
 import 'package:hash_wallet/src/screens/pin_code/pin_code_widget.dart';
-import 'package:hash_wallet/src/screens/receive/address_list_page.dart';
-import 'package:hash_wallet/src/screens/receive/anonpay_invoice_page.dart';
-import 'package:hash_wallet/src/screens/receive/anonpay_receive_page.dart';
 import 'package:hash_wallet/src/screens/receive/fullscreen_qr_page.dart';
-import 'package:hash_wallet/src/screens/receive/receive_page.dart';
 import 'package:hash_wallet/src/screens/rescan/rescan_page.dart';
 import 'package:hash_wallet/src/screens/restore/restore_from_backup_page.dart';
 import 'package:hash_wallet/src/screens/restore/restore_options_page.dart';
-import 'package:hash_wallet/src/screens/restore/sweeping_wallet_page.dart';
 import 'package:hash_wallet/src/screens/restore/wallet_restore_choose_derivation.dart';
 import 'package:hash_wallet/src/screens/restore/wallet_restore_page.dart';
-import 'package:hash_wallet/src/screens/seed/pre_seed_page.dart';
 import 'package:hash_wallet/src/screens/seed/seed_verification/seed_verification_page.dart';
 import 'package:hash_wallet/src/screens/seed/wallet_seed_page.dart';
-import 'package:hash_wallet/src/screens/send/send_template_page.dart';
-import 'package:hash_wallet/src/screens/send/transaction_success_info_page.dart';
 import 'package:hash_wallet/src/screens/settings/background_sync_page.dart';
 import 'package:hash_wallet/src/screens/settings/connection_sync_page.dart';
-import 'package:hash_wallet/src/screens/settings/desktop_settings/desktop_settings_page.dart';
 import 'package:hash_wallet/src/screens/settings/display_settings_page.dart';
 import 'package:hash_wallet/src/screens/settings/domain_lookups_page.dart';
 import 'package:hash_wallet/src/screens/settings/manage_nodes_page.dart';
@@ -108,7 +93,6 @@ import 'package:hash_wallet/src/screens/settings/privacy_page.dart';
 import 'package:hash_wallet/src/screens/settings/security_backup_page.dart';
 import 'package:hash_wallet/src/screens/settings/silent_payments_settings.dart';
 import 'package:hash_wallet/src/screens/settings/silent_payments_logs_page.dart';
-import 'package:hash_wallet/src/screens/settings/trocador_providers_page.dart';
 import 'package:hash_wallet/src/screens/setup_2fa/modify_2fa_page.dart';
 import 'package:hash_wallet/src/screens/setup_2fa/setup_2fa.dart';
 import 'package:hash_wallet/src/screens/setup_2fa/setup_2fa_enter_code_page.dart';
@@ -116,7 +100,6 @@ import 'package:hash_wallet/src/screens/setup_2fa/setup_2fa_info_page.dart';
 import 'package:hash_wallet/src/screens/setup_2fa/setup_2fa_qr_page.dart';
 import 'package:hash_wallet/src/screens/setup_pin_code/setup_pin_code.dart';
 import 'package:hash_wallet/src/screens/start_tor/start_tor_page.dart';
-import 'package:hash_wallet/src/screens/subaddress/address_edit_or_create_page.dart';
 import 'package:hash_wallet/src/screens/support/support_page.dart';
 import 'package:hash_wallet/src/screens/support_chat/support_chat_page.dart';
 import 'package:hash_wallet/src/screens/support_other_links/support_other_links_page.dart';
@@ -124,7 +107,6 @@ import 'package:hash_wallet/src/screens/trade_details/trade_details_page.dart';
 import 'package:hash_wallet/src/screens/transaction_details/rbf_details_page.dart';
 import 'package:hash_wallet/src/screens/transaction_details/transaction_details_page.dart';
 import 'package:hash_wallet/src/screens/unspent_coins/unspent_coins_details_page.dart';
-import 'package:hash_wallet/src/screens/unspent_coins/unspent_coins_list_page.dart';
 import 'package:hash_wallet/src/screens/ur/animated_ur_page.dart';
 import 'package:hash_wallet/src/screens/wallet/wallet_edit_page.dart';
 import 'package:hash_wallet/src/screens/wallet_connect/services/walletkit_service.dart';
@@ -140,21 +122,20 @@ import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:hash_wallet/view_model/advanced_privacy_settings_view_model.dart';
 import 'package:hash_wallet/view_model/bridge/bridge_view_model.dart';
 import 'package:hash_wallet/view_model/bridge/bridge_history_view_model.dart';
+import "package:hash_wallet/view_model/buy/buy_sell_view_model.dart";
 import 'package:hash_wallet/view_model/dashboard/dashboard_view_model.dart';
+import "package:hash_wallet/view_model/dashboard/nft_send_view_model.dart";
 import 'package:hash_wallet/view_model/dashboard/nft_view_model.dart';
 import 'package:hash_wallet/view_model/dashboard/sign_view_model.dart';
 import 'package:hash_wallet/view_model/hardware_wallet/hardware_wallet_view_model.dart';
-import 'package:hash_wallet/view_model/hardware_wallet/ledger_view_model.dart';
-import 'package:hash_wallet/view_model/monero_account_list/account_list_item.dart';
+import 'package:hash_wallet/view_model/hardware_wallet/trezor_connect_view_model.dart';
 import 'package:hash_wallet/view_model/node_list/node_create_or_edit_view_model.dart';
-import 'package:hash_wallet/view_model/restore/restore_wallet.dart';
 import 'package:hash_wallet/view_model/wallet_groups_display_view_model.dart';
 import 'package:hash_wallet/view_model/seed_settings_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_hardware_restore_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_new_vm.dart';
 import 'package:hash_wallet/wallet_type_utils.dart';
 import 'package:hash_wallet/wallet_types.g.dart';
-import 'package:cw_core/nano_account.dart';
 import 'package:cw_core/node.dart';
 import 'package:cw_core/transaction_info.dart';
 import 'package:cw_core/unspent_coin_type.dart';
@@ -164,7 +145,6 @@ import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'src/screens/buy/buy_sell_page.dart';
 import 'src/screens/dashboard/pages/nft_import_page.dart';
 
 late RouteSettings currentRouteSettings;
@@ -359,31 +339,36 @@ Route<dynamic> createRoute(RouteSettings settings) {
             ConnectDevicePageParams(
               walletType: availableWalletTypes.first,
               hardwareWalletType: hardwareWalletType,
-              onConnectDevice: (BuildContext context, _) => Navigator.of(context).pushNamed(
-                  Routes.chooseHardwareWalletAccount,
-                  arguments: [availableWalletTypes.first, hardwareWalletType]),
+              onConnectDevice: (context, _) => Navigator.of(context).pushNamed(
+                Routes.chooseHardwareWalletAccount,
+                arguments: [availableWalletTypes.first, hardwareWalletType],
+              ),
               isReconnect: false,
             ),
-            getIt.get<LedgerViewModel>(),
+            getIt.get<HardwareWalletViewModel>(param1: hardwareWalletType),
           ),
         );
       }
       return handleRouteWithPlatformAwareness(
         (_) => getIt.get<NewWalletTypePage>(
           param1: NewWalletTypeArguments(
-            onTypeSelected: (BuildContext context, WalletType type) {
-              if (hardwareWalletType == HardwareWalletType.trezor) {
-                Navigator.of(context).pushNamed(Routes.chooseHardwareWalletAccount,
-                    arguments: [type, hardwareWalletType]);
+            onTypeSelected: (context, type) {
+              if (hardwareWalletType == HardwareWalletType.trezor &&
+                  !trezorUseNative.contains(type)) {
+                Navigator.of(context).pushNamed(
+                  Routes.chooseHardwareWalletAccount,
+                  arguments: [type, hardwareWalletType],
+                );
                 return;
               }
 
               final arguments = ConnectDevicePageParams(
                 walletType: type,
                 hardwareWalletType: hardwareWalletType,
-                onConnectDevice: (BuildContext context, _) => Navigator.of(context).pushNamed(
-                    Routes.chooseHardwareWalletAccount,
-                    arguments: [type, hardwareWalletType]),
+                onConnectDevice: (context, _) => Navigator.of(context).pushNamed(
+                  Routes.chooseHardwareWalletAccount,
+                  arguments: [type, hardwareWalletType],
+                ),
                 isReconnect: false,
               );
 
@@ -412,7 +397,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.receiveAddresses:
       return handleRouteWithPlatformAwareness(
-          (context) => getIt.get<NewAddressesPage>(param1: settings.arguments as bool));
+          (context) => getIt.get<NewAddressesPage>(param1: AddressesPageArgs(showHidden:settings.arguments as bool)));
 
     case Routes.seed:
       return handleRouteWithPlatformAwareness(
@@ -430,18 +415,16 @@ Route<dynamic> createRoute(RouteSettings settings) {
           builder: (_) => getIt.get<WalletRestoreChooseDerivationPage>(
               param1: settings.arguments as List<DerivationInfo>));
 
-    case Routes.sweepingWalletPage:
-      return CupertinoPageRoute<void>(builder: (_) => getIt.get<SweepingWalletPage>());
 
     case Routes.dashboard:
       return CupertinoPageRoute<void>(
           settings: settings,
-          builder: (_) =>
-              FeatureFlag.hasNewUi ? getIt.get<NewDashboard>() : getIt.get<DashboardPage>());
+          builder: (_) => getIt.get<NewDashboard>());
 
     case Routes.send:
       final args = settings.arguments as Map<String, dynamic>?;
       final initialPaymentRequest = args?['paymentRequest'] as PaymentRequest?;
+      final initialRawInput = args?["rawLink"] as String?;
       final coinTypeToSpendFrom = args?['coinTypeToSpendFrom'] as UnspentCoinType?;
 
       return handleRouteWithPlatformAwareness(
@@ -449,23 +432,19 @@ Route<dynamic> createRoute(RouteSettings settings) {
           child: getIt.get<NewSendPage>(
             param1: SendPageParams(
                 initialPaymentRequest: initialPaymentRequest,
+                initialRawInput: initialRawInput,
                 unspentCoinType: coinTypeToSpendFrom ?? UnspentCoinType.any),
           ),
         ),
         settings: settings,
       );
 
-    case Routes.sendTemplate:
-      return CupertinoPageRoute<void>(
-          fullscreenDialog: true, builder: (_) => getIt.get<SendTemplatePage>());
 
-    case Routes.receive:
-      return CupertinoPageRoute<void>(
-          builder: (context) => getIt.get<ReceivePage>(), settings: settings);
-
-    case Routes.addressPage:
-      return handleRouteWithPlatformAwareness((context) => getIt.get<AddressPage>(),
-          settings: settings);
+    case Routes.newReceivePage:
+        return handleRouteWithPlatformAwareness(
+          (context) => Material(child: getIt.get<NewReceivePage>(param1: false, param2: null)),
+          settings: settings,
+        );
 
     case Routes.transactionDetails:
       return CupertinoPageRoute<void>(
@@ -478,9 +457,6 @@ Route<dynamic> createRoute(RouteSettings settings) {
           fullscreenDialog: true,
           builder: (_) => getIt.get<RBFDetailsPage>(param1: settings.arguments as List<dynamic>));
 
-    case Routes.newSubaddress:
-      return CupertinoPageRoute<void>(
-          builder: (_) => getIt.get<AddressEditOrCreatePage>(param1: settings.arguments));
 
     case Routes.disclaimer:
       return CupertinoPageRoute<void>(builder: (_) => DisclaimerPage());
@@ -598,9 +574,6 @@ Route<dynamic> createRoute(RouteSettings settings) {
         (context) => getIt.get<PrivacyPage>(),
       );
 
-    case Routes.trocadorProvidersPage:
-      return CupertinoPageRoute<void>(
-          fullscreenDialog: true, builder: (_) => getIt.get<TrocadorProvidersPage>());
 
     case Routes.domainLookupsPage:
       return CupertinoPageRoute<void>(
@@ -640,16 +613,6 @@ Route<dynamic> createRoute(RouteSettings settings) {
           param1: args?['editingNode'] as Node?, param2: args?['isSelected'] as bool?);
       return CupertinoPageRoute<void>(builder: (_) => page);
 
-    case Routes.accountCreation:
-      return CupertinoPageRoute<String>(
-          builder: (_) => getIt.get<MoneroAccountEditOrCreatePage>(
-              param1: settings.arguments as AccountListItem?));
-
-    case Routes.nanoAccountCreation:
-      return CupertinoPageRoute<String>(
-          builder: (_) =>
-              getIt.get<NanoAccountEditOrCreatePage>(param1: settings.arguments as NanoAccount?));
-
     case Routes.addressBook:
       return handleRouteWithPlatformAwareness(
         (context) => getIt.get<ContactListPage>(),
@@ -661,7 +624,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
           builder: (_) => getIt.get<ContactListPage>(param1: args[0], param2: args[1]));
 
     case Routes.pickerWalletAddress:
-      return MaterialPageRoute<void>(builder: (_) => getIt.get<AddressListPage>());
+      return MaterialPageRoute<void>(builder: (_) => getIt.get<NewAddressesPage>(param1: AddressesPageArgs(showHidden: false, popOnSelection: true)));
 
     case Routes.addressBookAddContact:
       return handleRouteWithPlatformAwareness(
@@ -673,14 +636,13 @@ Route<dynamic> createRoute(RouteSettings settings) {
         (context) => getIt.get<WalletKeysPage>(),
       );
 
-    case Routes.exchangeTrade:
-      return CupertinoPageRoute<void>(builder: (_) => getIt.get<ExchangeTradePage>());
-
-    case Routes.exchangeConfirm:
-      return MaterialPageRoute<void>(builder: (_) => getIt.get<ExchangeConfirmPage>());
+    case Routes.showKeysDisclaimer:
+      return handleRouteWithPlatformAwareness(
+        (context) => getIt.get<ShowKeysDisclaimerPage>(),
+      );
 
     case Routes.tradeDetails:
-      return MaterialPageRoute<void>(
+      return CupertinoPageRoute<void>(
           fullscreenDialog: true,
           builder: (_) => getIt.get<TradeDetailsPage>(param1: settings.arguments as Trade));
 
@@ -689,50 +651,29 @@ Route<dynamic> createRoute(RouteSettings settings) {
           builder: (_) => getIt.get<OrderDetailsPage>(param1: settings.arguments as Order));
 
     case Routes.buySellPage:
-      final args = settings.arguments as bool?;
       return handleRouteWithPlatformAwareness(
-        (context) => getIt.get<BuySellPage>(param1: args),
+        (context) => Material(child: getIt.get<NewBuySellAmountPage>(param1: NewBuySellParams(mode: BuySellPageMode.buy))),
       );
 
-    case Routes.buyOptionsPage:
-      final args = settings.arguments as List;
-      return MaterialPageRoute<void>(builder: (_) => getIt.get<BuyOptionsPage>(param1: args));
 
-    case Routes.paymentMethodOptionsPage:
-      final args = settings.arguments as List;
-      return MaterialPageRoute<void>(
-          builder: (_) => getIt.get<PaymentMethodOptionsPage>(param1: args));
-
-    case Routes.buyWebView:
-      final args = settings.arguments as List;
-
-      return MaterialPageRoute<void>(
-          fullscreenDialog: true, builder: (_) => getIt.get<BuyWebViewPage>(param1: args));
 
     case Routes.exchange:
       return handleRouteWithPlatformAwareness(
-        (context) => getIt.get<ExchangePage>(param1: settings.arguments as PaymentRequest?),
+            (context) => Material(
+            child: getIt.get<NewSwapPage>(param1: settings.arguments as PaymentRequest?)),
+        settings: settings,
       );
-
-    case Routes.exchangeTemplate:
-      return CupertinoPageRoute<void>(builder: (_) => getIt.get<ExchangeTemplatePage>());
 
     case Routes.rescan:
       final page = getIt.get<RescanPage>();
       return MaterialPageRoute<void>(builder: (_) => page);
 
-    case Routes.faq:
-      return MaterialPageRoute<void>(builder: (_) => getIt.get<FaqPage>());
 
     case Routes.preSeedPage:
       return MaterialPageRoute<void>(builder: (_) => getIt.get<PreSeedPage>());
 
     case Routes.walletGroupExistingSeedDescriptionPage:
       return MaterialPageRoute<void>(builder: (_) => WalletGroupExistingSeedDescriptionPage());
-
-    case Routes.transactionSuccessPage:
-      return MaterialPageRoute<void>(
-          builder: (_) => getIt.get<TransactionSuccessPage>(param1: settings.arguments as String));
 
     case Routes.backup:
       return handleRouteWithPlatformAwareness(
@@ -760,12 +701,9 @@ Route<dynamic> createRoute(RouteSettings settings) {
       );
 
     case Routes.unspentCoinsList:
-      final coinTypeToSpendFrom = settings.arguments as UnspentCoinType?;
-      return handleRouteWithPlatformAwareness(
-        (context) => FeatureFlag.hasNewUi
-            ? getIt.get<NewCoinControlPage>(param1: coinTypeToSpendFrom)
-            : getIt.get<UnspentCoinsListPage>(param1: coinTypeToSpendFrom),
-      );
+      final args = settings.arguments as CoinControlPageArgs?;
+      return handleRouteWithPlatformAwareness((context) =>
+          getIt.get<NewCoinControlPage>(param1: args?.coinTypeToSpendFrom, param2: args?.canEdit));
 
     case Routes.unspentCoinsDetails:
       final args = settings.arguments as List;
@@ -783,12 +721,6 @@ Route<dynamic> createRoute(RouteSettings settings) {
       final page = getIt.get<AboutPage>();
       return handleRouteWithPlatformAwareness((context) => page);
 
-    case Routes.webViewPage:
-      final args = settings.arguments as List;
-      final title = args.first as String;
-      final url = args[1] as Uri;
-      return CupertinoPageRoute<void>(
-          builder: (_) => getIt.get<WebViewPage>(param1: title, param2: url));
 
     case Routes.advancedPrivacySettings:
       final args = settings.arguments as Map<String, dynamic>;
@@ -797,7 +729,6 @@ Route<dynamic> createRoute(RouteSettings settings) {
       final isChildWallet = args['isChildWallet'] as bool? ?? false;
       final useTestnet = args['useTestnet'] as bool;
       final toggleTestnet = args['toggleTestnet'] as Function(bool? val);
-      final restoredWallet = args['restoredWallet'] as RestoredWallet?;
 
       final viewModelParam = {'type': type, 'isPow': false};
 
@@ -814,15 +745,6 @@ Route<dynamic> createRoute(RouteSettings settings) {
         ),
       );
 
-    case Routes.anonPayInvoicePage:
-      final args = settings.arguments as List;
-      return CupertinoPageRoute<void>(builder: (_) => getIt.get<AnonPayInvoicePage>(param1: args));
-
-    case Routes.anonPayReceivePage:
-      final anonReceivePageArgs = settings.arguments as AnonPayReceivePageArgs;
-      return CupertinoPageRoute<void>(
-          builder: (_) => getIt.get<AnonPayReceivePage>(param1: anonReceivePageArgs));
-
     case Routes.anonPayDetailsPage:
       final anonInvoiceViewData = settings.arguments as AnonpayInvoiceInfo;
       return CupertinoPageRoute<void>(
@@ -836,23 +758,8 @@ Route<dynamic> createRoute(RouteSettings settings) {
           builder: (_) =>
               getIt.get<PayjoinDetailsPage>(param1: sessionId, param2: transactionInfo));
 
-    case Routes.desktop_actions:
-      return PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (_, __, ___) => DesktopDashboardActions(getIt<DashboardViewModel>()),
-      );
-
-    case Routes.desktop_settings_page:
-      return CupertinoPageRoute<void>(builder: (_) => getIt.get<DesktopSettingsPage>());
-
     case Routes.empty_no_route:
       return MaterialPageRoute<void>(builder: (_) => SizedBox.shrink());
-
-    case Routes.transactionsPage:
-      return CupertinoPageRoute<void>(
-          settings: settings,
-          fullscreenDialog: true,
-          builder: (_) => getIt.get<TransactionsPage>());
 
     case Routes.setup_2faPage:
       return MaterialPageRoute<void>(builder: (_) => getIt.get<Setup2FAPage>());
@@ -865,6 +772,19 @@ Route<dynamic> createRoute(RouteSettings settings) {
 
     case Routes.setup2faInfoPage:
       return MaterialPageRoute<void>(builder: (_) => getIt.get<Setup2FAInfoPage>());
+
+    case Routes.syncKeyImagesDevices:
+      final hardwareWalletType = getIt<AppStore>().wallet!.hardwareWalletType;
+      if (hardwareWalletType == HardwareWalletType.trezor) {
+        return MaterialPageRoute<void>(
+          builder: (_) => SyncKeyImagesSheet(
+            appStore: getIt<AppStore>(),
+            trezorConnectVM: getIt<TrezorConnectViewModel>(),
+          ),
+        );
+      }
+      return MaterialPageRoute<void>(
+          builder: (_) => getIt.get<AnimatedURPage>(param1: settings.arguments));
 
     case Routes.urqrAnimatedPage:
       return MaterialPageRoute<void>(
@@ -892,6 +812,11 @@ Route<dynamic> createRoute(RouteSettings settings) {
     case Routes.manageNodes:
       return MaterialPageRoute<void>(builder: (_) => getIt.get<ManageNodesPage>(param1: false));
 
+    case Routes.walletAccountsPage:
+      final dashboardViewModel = settings.arguments as DashboardViewModel;
+      final page = getIt.get<WalletAccountsPage>(param1: dashboardViewModel);
+      return handleRouteWithPlatformAwareness((_) => page);
+
     case Routes.managePowNodes:
       return MaterialPageRoute<void>(builder: (_) => getIt.get<ManageNodesPage>(param1: true));
 
@@ -903,7 +828,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
               ));
 
     case Routes.nftDetailsPage:
-      return MaterialPageRoute<void>(
+      return MaterialPageRoute<bool>(
         builder: (_) => NFTDetailsPage(
           arguments: settings.arguments as NFTDetailsPageArguments,
           dashboardViewModel: getIt.get<DashboardViewModel>(),
@@ -914,6 +839,15 @@ Route<dynamic> createRoute(RouteSettings settings) {
       return MaterialPageRoute<void>(
         builder: (_) => ImportNFTPage(
           nftViewModel: settings.arguments as NFTViewModel,
+        ),
+      );
+
+    case Routes.nftSendPage:
+      return MaterialPageRoute<bool>(
+        builder: (_) => NFTSendPage(
+          nftSendViewModel: getIt.get<NFTSendViewModel>(),
+          authService: getIt.get<AuthService>(),
+          arguments: settings.arguments as NFTSendPageArguments,
         ),
       );
 
@@ -942,12 +876,7 @@ Route<dynamic> createRoute(RouteSettings settings) {
     case Routes.walletSeedVerificationPage:
       return MaterialPageRoute<void>(
         fullscreenDialog: true,
-        builder: (_) => getIt.get<SeedVerificationPage>(),
-      );
-
-    case Routes.exchangeTradeExternalSendPage:
-      return MaterialPageRoute<void>(
-        builder: (_) => getIt.get<ExchangeTradeExternalSendPage>(),
+        builder: (_) => getIt.get<SeedVerificationPage>(param1: settings.arguments as bool),
       );
 
     case Routes.backgroundSync:

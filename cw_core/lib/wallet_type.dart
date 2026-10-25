@@ -1,8 +1,9 @@
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/hive_type_ids.dart';
+import 'package:cw_core/utils/print_verbose.dart';
 import 'package:hive/hive.dart';
 
-part 'wallet_type.g.dart';
+part 'wallet_type.part.dart';
 
 const walletTypes = [
   WalletType.monero,
@@ -35,52 +36,56 @@ const evmWalletTypes = [
   WalletType.bsc
 ];
 
-// HiveField IDs are pinned — never renumber. Existing user wallets persist
-// type via the int ID, so changing assignments here would re-interpret saved
-// wallet types on next launch. To remove a type, drop its enum entry; do not
-// re-use its old ID.
-@HiveType(typeId: WALLET_TYPE_TYPE_ID)
+// Two encodings are persisted; never change either.
+// - The HiveField IDs are the bytes WalletTypeAdapter (wallet_type.part.dart) reads when legacy
+//   Hive data is migrated. To remove a type, drop it; never reuse its ID.
+// - WalletType.index is what the SQLite wallet table stores (wallet_info.dart), so the enum
+//   ORDER is persisted as well: only ever append. Our order differs from upstream's, so a merge
+//   must never take upstream's enum.
+// hive_generator no longer runs (upstream froze the adapters into *.part.dart); the annotations
+// below are kept as the record of the IDs.
+// @HiveType(typeId: WALLET_TYPE_TYPE_ID)
 enum WalletType {
-  @HiveField(0)
+  // @HiveField(0)
   monero,
 
-  @HiveField(1)
+  // @HiveField(1)
   none,
 
-  @HiveField(2)
+  // @HiveField(2)
   bitcoin,
 
-  @HiveField(3)
+  // @HiveField(3)
   litecoin,
 
-  @HiveField(5)
+  // @HiveField(5)
   ethereum,
 
-  @HiveField(6)
+  // @HiveField(6)
   nano,
 
-  @HiveField(7)
+  // @HiveField(7)
   banano,
 
-  @HiveField(8)
+  // @HiveField(8)
   bitcoinCash,
 
-  @HiveField(9)
+  // @HiveField(9)
   polygon,
 
-  @HiveField(12)
+  // @HiveField(12)
   wownero,
 
-  @HiveField(15)
+  // @HiveField(15)
   dogecoin,
 
-  @HiveField(16)
+  // @HiveField(16)
   base,
 
-  @HiveField(17)
+  // @HiveField(17)
   arbitrum,
 
-  @HiveField(19)
+  // @HiveField(19)
   bsc,
 }
 
@@ -183,38 +188,39 @@ String walletTypeToString(WalletType type) {
   }
 }
 
-String walletTypeToDisplayName(WalletType type) {
-  switch (type) {
-    case WalletType.monero:
-      return 'Monero (XMR)';
-    case WalletType.bitcoin:
-      return 'Bitcoin (BTC)';
-    case WalletType.litecoin:
-      return 'Litecoin (LTC)';
-    case WalletType.ethereum:
-      return 'Ethereum (ETH)';
-    case WalletType.bitcoinCash:
-      return 'Bitcoin Cash (BCH)';
-    case WalletType.nano:
-      return 'Nano (XNO)';
-    case WalletType.banano:
-      return 'Banano (BAN)';
-    case WalletType.polygon:
-      return 'Polygon (POL)';
-    case WalletType.wownero:
-      return 'Wownero (WOW)';
-    case WalletType.dogecoin:
-      return 'Dogecoin (DOGE)';
-    case WalletType.base:
-      return 'Base';
-    case WalletType.arbitrum:
-      return 'Arbitrum (ARB)';
-    case WalletType.bsc:
-      return 'BNB Smart Chain (BNB)';
-    case WalletType.none:
-      return '';
-  }
-}
+String walletTypeToDisplayName(WalletType type) => switch (type) {
+      WalletType.monero => 'Monero',
+      WalletType.bitcoin => 'Bitcoin',
+      WalletType.litecoin => 'Litecoin',
+      WalletType.ethereum => 'Ethereum',
+      WalletType.bitcoinCash => 'Bitcoin Cash',
+      WalletType.nano => 'Nano',
+      WalletType.banano => 'Banano',
+      WalletType.polygon => 'Polygon',
+      WalletType.wownero => 'Wownero',
+      WalletType.dogecoin => 'Dogecoin',
+      WalletType.base => 'Base',
+      WalletType.arbitrum => 'Arbitrum',
+      WalletType.bsc => 'BNB Smart Chain',
+      WalletType.none => ''
+    };
+
+String walletTypeToDisplayTicker(WalletType type) => switch (type) {
+      WalletType.monero => 'XMR',
+      WalletType.bitcoin => 'BTC',
+      WalletType.litecoin => 'LTC',
+      WalletType.ethereum => 'ETH',
+      WalletType.bitcoinCash => 'BCH',
+      WalletType.nano => 'XNO',
+      WalletType.banano => 'BAN',
+      WalletType.polygon => 'POL',
+      WalletType.wownero => 'WOW',
+      WalletType.dogecoin => 'DOGE',
+      WalletType.base => '',
+      WalletType.arbitrum => 'ARB',
+      WalletType.bsc => 'BNB',
+      WalletType.none => ''
+    };
 
 WalletType? _cryptoCurrencyToWalletType(CryptoCurrency type) {
   switch (type) {

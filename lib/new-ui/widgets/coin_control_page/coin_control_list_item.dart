@@ -18,6 +18,7 @@ class CoinControlListItem extends StatelessWidget {
     required this.isLast,
     required this.isLoading,
     this.onCheckBoxTap,
+    required this.hasCheckbox,
   });
 
   final String note;
@@ -31,6 +32,7 @@ class CoinControlListItem extends StatelessWidget {
   final bool isFirst;
   final bool isLast;
   final bool isLoading;
+  final bool hasCheckbox;
   final Function()? onCheckBoxTap;
 
   @override
@@ -131,6 +133,10 @@ class CoinControlListItem extends StatelessWidget {
 
     if (isFrozen) {
       return HashImageWidget(imageUrl: "assets/new-ui/frozen.svg");
+    }
+
+    if (!hasCheckbox) {
+      return SizedBox.shrink();
     }
 
     return NewSimpleCheckbox(

@@ -1,8 +1,9 @@
+import 'package:cw_core/amount/money.dart';
 import 'package:cw_core/currency.dart';
+import 'package:cw_core/currency_groups.dart';
 import 'package:cw_core/enumerable_item.dart';
 import 'package:collection/collection.dart';
 import 'package:cw_core/format_fixed.dart';
-import 'package:cw_core/parse_fixed.dart';
 
 class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implements Currency {
   const CryptoCurrency({
@@ -17,18 +18,34 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
     this.chainIconPath,
     this.enabled = false,
     this.isPotentialScam = false,
+    this.groups = const {},
   }) : super(title: title, raw: raw);
 
-  final String name;
-  final String? tag;
-  final String? fullName;
-  final String? iconPath;
   final String? flatIconPath;
   final String? chainIconPath;
-  @override
-  final int decimals;
   final bool enabled;
   final bool isPotentialScam;
+  final Set<String> groups;
+
+  @override
+  final String name;
+
+  @override
+  final String? fullName;
+
+  @override
+  final String? tag;
+
+  @override
+  final String? iconPath;
+
+  @override
+  final int decimals;
+
+  @override
+  String get symbol => title;
+  @override
+  String get apiString => "crypto.$title";
 
   set enabled(bool value) => this.enabled = value;
 
@@ -126,6 +143,7 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
     CryptoCurrency.arbEth,
     CryptoCurrency.usdcArb,
     CryptoCurrency.usdtArb,
+    CryptoCurrency.robEth,
   ];
 
   static const havenCurrencies = [
@@ -197,7 +215,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 5,
       name: 'dai',
       iconPath: 'assets/new-ui/crypto_full_icons/dai.svg',
-      decimals: 18);
+      decimals: 18,
+      groups: const {CurrencyGroups.stablecoin});
   static const dash = CryptoCurrency(
       title: 'DASH',
       fullName: 'Dash',
@@ -254,7 +273,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 12,
       name: 'usdt',
       iconPath: 'assets/new-ui/crypto_full_icons/usdt.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const usdterc20 = CryptoCurrency(
       title: 'USDT',
       tag: 'ETH',
@@ -262,7 +282,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 13,
       name: 'usdterc20',
       iconPath: 'assets/new-ui/crypto_full_icons/usdt.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const xlm = CryptoCurrency(
       title: 'XLM',
       fullName: 'Stellar',
@@ -359,7 +380,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 36,
       name: 'usdttrc20',
       iconPath: 'assets/new-ui/crypto_full_icons/usdt.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const hbar = CryptoCurrency(
       title: 'HBAR',
       fullName: 'Hedera',
@@ -390,7 +412,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 40,
       name: 'usdc',
       iconPath: 'assets/new-ui/crypto_full_icons/usdc.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const usdcsol = CryptoCurrency(
       title: 'USDC',
       tag: 'SOL',
@@ -398,7 +421,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 41,
       name: 'usdcsol',
       iconPath: 'assets/new-ui/crypto_full_icons/usdc.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const zaddr = CryptoCurrency(
       title: 'ZZEC',
       tag: 'ZEC',
@@ -437,7 +461,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 46,
       name: 'usdcpoly',
       iconPath: 'assets/new-ui/crypto_full_icons/usdc.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const dcr = CryptoCurrency(
       title: 'DCR',
       fullName: 'Decred',
@@ -758,7 +783,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 87,
       name: 'usdtpoly',
       iconPath: 'assets/new-ui/crypto_full_icons/usdt.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const usdcEPoly = CryptoCurrency(
       title: 'USDC.E',
       tag: 'POL',
@@ -788,7 +814,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 91,
       name: 'usdtsol',
       iconPath: 'assets/new-ui/crypto_full_icons/usdt.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const usdcTrc20 = CryptoCurrency(
       title: 'USDC',
       tag: 'TRX',
@@ -796,7 +823,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 92,
       name: 'usdctrc20',
       iconPath: 'assets/new-ui/crypto_full_icons/usdc.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const tbtc = CryptoCurrency(
       title: 'tBTC',
       fullName: 'Testnet Bitcoin',
@@ -844,7 +872,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 98,
       name: 'deuro',
       iconPath: 'assets/images/deuro_icon.png',
-      decimals: 18);
+      decimals: 18,
+      groups: const {CurrencyGroups.stablecoin});
   static const usdtbsc = CryptoCurrency(
       title: 'USDT',
       tag: 'BSC',
@@ -852,7 +881,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 99,
       name: 'usdtbsc',
       iconPath: 'assets/new-ui/crypto_full_icons/usdt.svg',
-      decimals: 18);
+      decimals: 18,
+      groups: const {CurrencyGroups.stablecoin});
   static const ndeps = CryptoCurrency(
       title: 'NDEPS',
       tag: 'ETH',
@@ -891,7 +921,7 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       fullName: 'Ethereum',
       raw: 104,
       name: 'baseth',
-      iconPath: 'assets/new-ui/crypto_full_icons/base.svg',
+      iconPath: 'assets/new-ui/crypto_full_icons/ethereum.svg',
       decimals: 18,
       flatIconPath: "assets/new-ui/balance_card_icons/base.svg",
       chainIconPath: "assets/new-ui/chain_badges/base.svg");
@@ -911,7 +941,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       name: 'arbeth',
       iconPath: 'assets/new-ui/crypto_full_icons/ethereum.svg',
       decimals: 18,
-      flatIconPath: "assets/new-ui/balance_card_icons/arbitrum.svg");
+      flatIconPath: "assets/new-ui/balance_card_icons/arbitrum.svg",
+      chainIconPath: "assets/new-ui/chain_badges/arbitrum.svg");
   static const zec = CryptoCurrency(
       title: 'ZEC',
       fullName: 'Zcash',
@@ -927,7 +958,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 108,
       name: 'usdcarb',
       iconPath: 'assets/new-ui/crypto_full_icons/usdc.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const usdtArb = CryptoCurrency(
       title: 'USDT',
       tag: 'ARB',
@@ -935,7 +967,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       raw: 109,
       name: 'usdtarb',
       iconPath: 'assets/new-ui/crypto_full_icons/usdt.svg',
-      decimals: 6);
+      decimals: 6,
+      groups: const {CurrencyGroups.stablecoin});
   static const ltcmweb = CryptoCurrency(
       title: 'LTC',
       fullName: 'Litecoin MWeb',
@@ -943,6 +976,16 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
       name: 'ltcmweb',
       iconPath: 'assets/new-ui/crypto_full_icons/litecoin.svg',
       decimals: 8);
+  static const robEth = CryptoCurrency(
+      title: "ETH",
+      tag: "ROB",
+      fullName: "Ethereum",
+      raw: 111,
+      name: "robeth",
+      iconPath: "assets/new-ui/crypto_full_icons/ethereum.svg",
+      decimals: 18,
+      flatIconPath: "assets/new-ui/balance_card_icons/robinhood.svg",
+      chainIconPath: "assets/new-ui/chain_badges/robinhood.svg");
 
   static final Map<int, CryptoCurrency> _rawCurrencyMap = [
     ...all,
@@ -968,7 +1011,14 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
     ...zcashCurrencies
   ].fold<Map<String, CryptoCurrency>>(<String, CryptoCurrency>{}, (acc, item) {
     if (item.fullName != null) {
-      acc.addAll({item.fullName!.toLowerCase(): item});
+      final fullName = item.fullName!.toLowerCase();
+      final existing = acc[fullName];
+
+      // Mainnet ETH and the L2 ETHs share the "Ethereum" full name, 
+      // so we make the untagged coin keeps the name
+      if (existing == null || existing.tag != null) {
+        acc[fullName] = item;
+      }
     }
     return acc;
   });
@@ -978,6 +1028,7 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
     'bitcoin': btc,
     'bitcoincash': bch,
     'polygon': maticpoly,
+    'solana': sol,
     'nano-gpt': nano,
     'secret': scrt,
     'stellar': xlm,
@@ -993,6 +1044,8 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
     'base': baseEth,
     'arbitrum': arbEth,
     'bsc': bnb,
+    "rob": robEth,
+    "robinhood": robEth,
   };
 
   static CryptoCurrency deserialize({required int raw}) {
@@ -1094,6 +1147,7 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
     int? decimals,
     bool? enabled,
     bool? isPotentialScam,
+    Set<String>? groups,
   }) =>
       CryptoCurrency(
         title: title ?? this.title,
@@ -1105,6 +1159,7 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
         decimals: decimals ?? this.decimals,
         enabled: enabled ?? this.enabled,
         isPotentialScam: isPotentialScam ?? this.isPotentialScam,
+        groups: groups ?? this.groups,
       );
 
   @override
@@ -1112,13 +1167,13 @@ class CryptoCurrency extends EnumerableItem<int> with Serializable<int> implemen
 
   bool titleAndTagEqual(CryptoCurrency other) => title == other.title && tag == other.tag;
 
+  @override
+  Money parseAmount(String value) => Money.parse(value, this);
+
+  @override
+  Money? tryParseAmount(String value) => Money.tryParse(value, this);
+
   /// Format the raw amount into its decimal representation eg. turn Sats into Bitcoin
   String formatAmount(BigInt amount, {int? fractionalDigits, bool trimZeros = true}) =>
       formatFixed(amount, decimals, fractionalDigits: fractionalDigits, trimZeros: trimZeros);
-
-  /// Parse the [value] and turn it into the smallest denomination eg. turn Bitcoin into Sats
-  BigInt parseAmount(String value) => parseFixed(value, decimals);
-
-  /// Try parsing the [value] and turn it into the smallest denomination eg. turn Bitcoin into Sats
-  BigInt? tryParseAmount(String value) => tryParseFixed(value, decimals);
 }

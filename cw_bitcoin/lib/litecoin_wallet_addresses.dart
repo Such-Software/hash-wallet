@@ -25,8 +25,10 @@ class LitecoinWalletAddresses = LitecoinWalletAddressesBase with _$LitecoinWalle
 abstract class LitecoinWalletAddressesBase extends ElectrumWalletAddresses with Store {
   LitecoinWalletAddressesBase(
     WalletInfo walletInfo, {
-    required super.mainHdByType,
-    required super.sideHdByType,
+    required super.mainHdByTypeAndAccount,
+    required super.sideHdByTypeAndAccount,
+    required super.accountIndexes,
+    required super.currentAccountIndex,
     required super.legacyMainHd,
     required super.legacySideHd,
     required super.network,
@@ -66,9 +68,9 @@ abstract class LitecoinWalletAddressesBase extends ElectrumWalletAddresses with 
               List.filled(32, 0);
 
   @override
-  Future<void> init() async {
+  Future<void> init({List<int> accountIndexes = const []}) async {
     if (!isHardwareWallet) await initMwebAddresses();
-    await super.init();
+    await super.init(accountIndexes: accountIndexes);
   }
 
   @computed
@@ -230,13 +232,25 @@ abstract class LitecoinWalletAddressesBase extends ElectrumWalletAddresses with 
   @override
   String get addressForExchange {
     // don't use mweb addresses for exchange refund address:
-    try {
-      final addresses = receiveAddresses
-          .where((element) => element.type == SegwitAddresType.p2wpkh && !element.isUsed);
-      return addresses.first.address;
-    } catch (_) {
-      return receiveAddresses.first.address;
+
+    final current = getFreshAddress();
+    final bool isMweb =
+        receiveAddresses.any((e) => e.address == current && e.type == SegwitAddresType.mweb);
+
+    if (isMweb) {
+      final segwit = receiveAddresses
+          .where((e) =>
+              e.type == SegwitAddresType.p2wpkh &&
+              !e.isUsed &&
+              !e.isHidden &&
+              !hiddenAddresses.contains(e.address))
+          .map((e) => e.address)
+          .toList();
+
+      return segwit.isNotEmpty ? segwit.first : current;
     }
+
+    return current;
   }
 
   @override

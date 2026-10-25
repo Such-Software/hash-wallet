@@ -1,9 +1,14 @@
+import 'package:hash_wallet/utils/feature_flag.dart';
 import 'dart:io';
 
 import 'package:hash_wallet/di.dart';
 import 'package:hash_wallet/entities/preferences_key.dart';
+import "package:hash_wallet/new-ui/page_open_listener.dart";
+import "package:hash_wallet/new-ui/page_open_listener.dart";
+import 'package:hash_wallet/new-ui/pages/charts_page.dart';
 import 'package:hash_wallet/new-ui/pages/home_page.dart';
 import 'package:hash_wallet/new-ui/widgets/changelog_modal.dart';
+import "package:hash_wallet/new-ui/widgets/wallet_removal_popup.dart";
 import 'package:hash_wallet/src/screens/contact/contact_list_page.dart';
 import 'package:hash_wallet/src/screens/dashboard/pages/cake_features_page.dart';
 import 'package:hash_wallet/src/screens/dashboard/widgets/new_main_navbar_widget.dart';
@@ -17,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../view_model/dashboard/dashboard_view_model.dart';
 
 class NewDashboard extends StatefulWidget {
@@ -34,7 +40,7 @@ class NewDashboard extends StatefulWidget {
     getIt.get<WalletListPage>(),
     getIt.get<ContactListPage>(),
     getIt.get<CakeFeaturesPage>(),
-    Placeholder(),
+    if (FeatureFlag.isChartsEnabled) getIt.get<ChartsPage>(),
   ];
 
   @override
@@ -51,6 +57,7 @@ class _NewDashboardState extends State<NewDashboard> {
       setState(() {
         _selectedPage = 0;
       });
+      _showWalletRemovalPopup(context);
     });
 
     // Hash Bags: changelog modal disabled. The Cake-supplied changelog
@@ -60,6 +67,7 @@ class _NewDashboardState extends State<NewDashboard> {
     // own changelog content + versioning under our control.
     // Future.delayed(Duration(milliseconds: 300)).then((_) => _showChangelog(context));
     _showVulnerableSeedsPopup(context);
+    _showWalletRemovalPopup(context);
   }
 
   @override
@@ -68,6 +76,7 @@ class _NewDashboardState extends State<NewDashboard> {
       bottomSheetService: widget.bottomSheetService,
       child: CupertinoScaffold(
         body: Material(
+          key: ValueKey("new_dashboard_page_key"),
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
@@ -95,14 +104,18 @@ class _NewDashboardState extends State<NewDashboard> {
                   ),
                 ),
               ),
-              SafeArea(
-                bottom: !(Platform.isIOS),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: NewMainNavBar.barHeight + NewMainNavBar.barBottomPadding,
-                  child: AbsorbPointer(
-                    absorbing: true,
-                    child: Container(color: Colors.transparent),
+              // Invisible pointer-absorbing strip behind the nav bar: it must not
+              // be reachable by screen-reader traversal either.
+              ExcludeSemantics(
+                child: SafeArea(
+                  bottom: !(Platform.isIOS),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: NewMainNavBar.barHeight + NewMainNavBar.barBottomPadding,
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: Container(color: Colors.transparent),
+                    ),
                   ),
                 ),
               ),
@@ -113,6 +126,9 @@ class _NewDashboardState extends State<NewDashboard> {
                   setState(() {
                     _selectedPage = index;
                   });
+                  if (widget.dashboardPageWidgets[_selectedPage] case PageOpenListener page) {
+                    page.onPageOpen();
+                  }
                 },
               )
             ],
@@ -169,6 +185,16 @@ class _NewDashboardState extends State<NewDashboard> {
           }
         },
       );
+    }
+  }
+
+  Future<void> _showWalletRemovalPopup(BuildContext context) async {
+    if(await widget.dashboardViewModel.shouldShowRemovalPopup()) {
+      await Future.delayed(const Duration(seconds: 1));
+      final toBeRemoved = await widget.dashboardViewModel.walletsToBeRemoved;
+      if(context.mounted) {
+        await showPopUp<void>(context: context, builder: (context)=>WalletRemovalPopup(affectedWallets: toBeRemoved,));
+      }
     }
   }
 }

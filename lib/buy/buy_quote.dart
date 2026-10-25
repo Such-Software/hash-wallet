@@ -5,6 +5,7 @@ import 'package:hash_wallet/entities/calculate_fiat_amount.dart';
 import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:hash_wallet/entities/provider_types.dart';
 import 'package:hash_wallet/exchange/limits.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:cw_core/crypto_currency.dart';
 
 enum ProviderRecommendation { bestRate, lowKyc, successRate }
@@ -13,11 +14,11 @@ extension RecommendationTitle on ProviderRecommendation {
   String get title {
     switch (this) {
       case ProviderRecommendation.bestRate:
-        return 'BEST RATE';
+        return S.current.best_rate;
       case ProviderRecommendation.lowKyc:
-        return 'LOW KYC';
+        return S.current.low_kyc;
       case ProviderRecommendation.successRate:
-        return 'HIGHEST SUCCESS RATE';
+        return S.current.highest_success_rate;
     }
   }
 }
@@ -123,7 +124,8 @@ class Quote extends SelectableOption {
   set setLimits(Limits limits) => this.limits = limits;
 
   factory Quote.fromMoonPayJson(
-      Map<String, dynamic> json, bool isBuyAction, PaymentType paymentType) {
+      Map<String, dynamic> json, bool isBuyAction, PaymentType paymentType,
+      {String? customPaymentMethodType}) {
     final rate = isBuyAction
         ? json['quoteCurrencyPrice'] as double? ?? 0.0
         : json['baseCurrencyPrice'] as double? ?? 0.0;
@@ -149,6 +151,7 @@ class Quote extends SelectableOption {
       transactionFee: transactionFee,
       payout: _toDouble(json['quoteCurrencyAmount']) ?? 0.0,
       paymentType: paymentType,
+      customPaymentMethodType: customPaymentMethodType,
       recommendations: [],
       quoteId: json['signature'] as String? ?? '',
       provider: ProvidersHelper.getProviderByType(ProviderType.moonpay),

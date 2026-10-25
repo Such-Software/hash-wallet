@@ -1,11 +1,11 @@
 import 'package:hash_wallet/entities/bitcoin_amount_display_mode.dart';
-import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:hash_wallet/entities/language_service.dart';
 import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_regular_row.dart';
 import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_selector.dart';
 import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_toggle.dart';
 import 'package:hash_wallet/entities/sync_status_display_mode.dart';
 import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/currency_picker/fiat_currency_picker_sheet.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/src/screens/settings/widgets/settings_choices_cell.dart';
 import 'package:hash_wallet/src/screens/settings/widgets/settings_theme_choice.dart';
@@ -35,6 +35,7 @@ class DisplaySettingsPage extends StatelessWidget {
       topBar: ModalTopBar(
         title: S.of(context).display,
         leadingIcon: Icon(Icons.arrow_back_ios_new),
+        leadingSemanticLabel: S.of(context).seed_alert_back,
         onLeadingPressed: () => Navigator.of(context).pop(),
       ),
       content: Column(
@@ -115,21 +116,12 @@ class DisplaySettingsPage extends StatelessWidget {
                       onChanged: (val) {
                         _displaySettingsViewModel.setDisableTradeOption(val);
                       }),
-                  if (_displaySettingsViewModel.showZcashCardSetting)
-                    ListItemToggle(
-                        keyValue: "display_settings_show_zcashcard",
-                        label: S.of(context).show_zcash_card,
-                        value: _displaySettingsViewModel.showZcashCard,
-                        onChanged: (val) {
-                          _displaySettingsViewModel.setShowZcashCard(val);
-                        }),
                   ListItemSelector(
                       keyValue: "display_settings_sync_status_display",
                       label: S.of(context).sync_status_display_mode,
                       options: [_displaySettingsViewModel.syncStatusDisplayMode.title],
                       onTap: () async {
                         final items = SyncStatusDisplayMode.values.toList();
-
                         final selectedAtIndex =
                             items.indexOf(_displaySettingsViewModel.syncStatusDisplayMode);
 
@@ -175,35 +167,11 @@ class DisplaySettingsPage extends StatelessWidget {
                         keyValue: "display_settings_fiat_currency",
                         label: S.of(context).settings_currency,
                         options: [_displaySettingsViewModel.fiatCurrency.title],
-                        onTap: () async {
-                          final items = FiatCurrency.all;
-
-                          final selectedAtIndex =
-                              items.indexOf(_displaySettingsViewModel.fiatCurrency);
-
-                          await showPopUp<void>(
-                            context: context,
-                            builder: (_) => Picker(
-                              items: items,
-                              selectedAtIndex: selectedAtIndex,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              onItemSelected: (FiatCurrency currency) {
-                                _displaySettingsViewModel.setFiatCurrency(currency);
-                              },
-                              images: FiatCurrency.all
-                                  .map((e) =>
-                                      Image.asset("assets/images/flags/${e.countryCode}.png"))
-                                  .toList(),
-                              hintText: S.of(context).search_currency,
-                              isGridView: true,
-                              matchingCriteria: (FiatCurrency currency, String searchText) {
-                                return currency.title.toLowerCase().contains(searchText) ||
-                                    currency.fullName.toLowerCase().contains(searchText);
-                              },
-                              isSeparated: false,
-                            ),
-                          );
-                        }),
+                        onTap: () => FiatCurrencyPickerSheet.show(
+                              context: context,
+                              selected: _displaySettingsViewModel.fiatCurrency,
+                              onSelected: _displaySettingsViewModel.setFiatCurrency,
+                            )),
                   ListItemSelector(
                       keyValue: "display_settings_language",
                       label: S.of(context).settings_change_language,

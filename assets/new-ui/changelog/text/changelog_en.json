@@ -1,18 +1,18 @@
 [
   {
-    "title": "Performance enhancements",
-    "description": "Improve app performance and speed"
+    "title": "Robinhood Chain",
+    "description": "Create Robinhood Chain wallets to send, receive and swap, with USDG and more tokens built in"
   },
   {
-    "title": "Add USDT bridging",
-    "description": "Bridge your USDT from one chain to another"
+    "title": "Price Charts",
+    "description": "A new Charts tab to keep an eye on the prices of your assets"
   },
   {
-    "title": "Wallets improvements",
-    "description": "Improve wallets UI and functionality"
+    "title": "Bitcoin Accounts & Faster Sync",
+    "description": "Split your Bitcoin wallet into multiple accounts, and get up to date faster while history loads in the background"
   },
   {
-    "title": "Bug fixes",
-    "description": "Squash more bugs, to make your experience smooth"
+    "title": "Bug fixes & improvements",
+    "description": "Lightning amounts in sats, more Tor nodes, Monero core update, smoother Bitcoin wallets and more"
   }
 ]

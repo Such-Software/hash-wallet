@@ -16,8 +16,8 @@ if [ -n "$1" ]; then
 fi
 
 MONERO_COM_NAME="Monero.com"
-MONERO_COM_VERSION="6.1.0"
-MONERO_COM_BUILD_NUMBER=79
+MONERO_COM_VERSION="6.5.0"
+MONERO_COM_BUILD_NUMBER=87
 MONERO_COM_BUNDLE_ID="com.cakewallet.monero"
 
 # Version and build come from pubspec_description.yaml, the one file every

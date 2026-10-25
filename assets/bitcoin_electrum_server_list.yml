@@ -1,21 +1,27 @@
 -
   uri: electrum.blockstream.info:50002
-  useSSL: true
   isDefault: true
-  isEnabledForAutoSwitching: true
--
-  uri: btc-electrum.cakewallet.com:50002
   useSSL: true
-  isDefault: false
   isEnabledForAutoSwitching: true
 -
-  uri: electrs.cakewallet.com:50001
+  label: "Cake Wallet Electrum"
+  uri: btc-electrum.cakewallet.com:50002
+  isOfficial: true
+  useSSL: true
+  isEnabledForAutoSwitching: true
 -
+  label: "Cake Wallet Electrs"
+  uri: electrs.cakewallet.com:50001
+  isOfficial: true
+-
+  label: "Seth For Privacy"
   uri: fulcrum.sethforprivacy.com:50002
   useSSL: true
   isEnabledForAutoSwitching: true
 -
+  label: "Cake Wallet (Legacy)"
   uri: electrum.cakewallet.com:50002
+  isOfficial: true
   useSSL: true
   isEnabledForAutoSwitching: true
 -
@@ -30,3 +36,8 @@
   uri: fortress.qtornado.com:443
   useSSL: true
   isEnabledForAutoSwitching: true
+-
+  label: "Cake Wallet (Tor)"
+  uri: cakebtc5pihzt3byjclxfumiwvtxj72auarshrsvmaatmwmr7dj6zyid.onion:50001
+  isOfficial: true
+  useSSL: false

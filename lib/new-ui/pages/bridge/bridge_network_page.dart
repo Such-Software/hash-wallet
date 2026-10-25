@@ -1,4 +1,5 @@
 import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_regular_row.dart';
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/keyboard_hide_overlay.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/routes.dart';
@@ -30,6 +31,7 @@ class BridgeNetworkPage extends StatelessWidget {
             ModalTopBar(
               title: 'Destination Network',
               leadingIcon: const Icon(Icons.arrow_back_ios_new, size: 18),
+              leadingSemanticLabel: S.of(context).seed_alert_back,
               onLeadingPressed: () => Navigator.of(context).pop(),
             ),
             SizedBox(height: 48),
@@ -57,7 +59,8 @@ class BridgeNetworkPage extends StatelessWidget {
                               (chain) {
                                 final chainName = chain.name;
                                 return ListItemRegularRow(
-                                  iconPath: 'assets/images/crypto/${chainName.toLowerCase()}.webp',
+                                  iconPath:
+                                      'assets/new-ui/crypto_full_icons/${chainName.toLowerCase()}.svg',
                                   keyValue: chain.chainId.toString(),
                                   label: chainName,
                                   onTap: () {

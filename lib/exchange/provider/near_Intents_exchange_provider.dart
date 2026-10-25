@@ -39,7 +39,7 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
   static const Map<String, String> kNearDummyAddresses = {
     // UTXO
     'LTC': 'ltc1qhdwz74m3wuuhppv2mckagqk9e2e49z5j4kucnv',
-    'BTC': 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kygt080',
+    'BTC': 'bc1qzwdt09dgr5nle2fkv7h5s6axgjqpdyp5g5tumz',
     'DOGE': 'D9t7rGQ9mE3hJ2z1w8pGQxkGmKjYwYc8pQ',
     'BCH': 'qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a',
 
@@ -50,6 +50,7 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
     'AVAXC': '0x1111111111111111111111111111111111111111',
     'ARB': '0x1111111111111111111111111111111111111111',
     'BASE': '0x1111111111111111111111111111111111111111',
+    "ROB": "0x1111111111111111111111111111111111111111",
 
     // Others
     'SOL': '11111111111111111111111111111111',
@@ -87,6 +88,9 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
 
   @override
   bool get supportsFixedRate => true;
+
+  @override
+  bool get supportsMemoOrDestinationTag => false;
 
   @override
   ExchangeProviderDescription get description => ExchangeProviderDescription.nearIntents;
@@ -242,6 +246,11 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
       final quoteObj = quote['quote'] as Map<String, dynamic>;
       final depositAddress = quoteObj['depositAddress'] as String;
       final depositMemo = quoteObj['depositMemo'] as String?;
+      final depositAmount = quoteObj['amountInFormatted'] as String?;
+
+      if (depositAmount == null) {
+        throw Exception('Deposit amount is null in quote response');
+      }
 
       final quoteRequest = quote['quoteRequest'] as Map<String, dynamic>;
       final fromAssetId = quoteRequest['originAsset'] as String;
@@ -264,8 +273,8 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
       final trade = Trade(
         id: depositAddress,
         // Using deposit address as trade ID
-        from: from,
-        to: to,
+        from: request.fromCurrency,
+        to: request.toCurrency,
         provider: description,
         providerName: title,
         state: TradeState.created,
@@ -273,7 +282,7 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
         inputAddress: depositAddress,
         payoutAddress: request.toAddress,
         refundAddress: request.refundAddress,
-        amount: request.fromAmount,
+        amount: depositAmount,
         receiveAmount: quoteObj['amountOutFormatted']?.toString(),
         memo: depositMemo,
         isSendAll: isSendAll,
@@ -508,6 +517,7 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
     return switch (tag) {
       'TRX' => 'tron',
       'AVAXC' => 'avax',
+      "ROB" => "hood",
       _ => tag?.toLowerCase(),
     };
   }
@@ -516,6 +526,7 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
     return switch (blockchain) {
       'tron' => 'TRX',
       'avax' => 'AVAXC',
+      "hood" => "ROB",
       _ => blockchain?.toUpperCase(),
     };
   }
@@ -525,6 +536,13 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
 
     final symbol = currency.title.toUpperCase();
     final blockchain = _normalizeTagToNearBlockchain(currency.tag);
+
+// Use the native Bitcoin asset routed through Omni Bridge.
+    if (currency == CryptoCurrency.btc) {
+      return supported.firstWhereOrNull(
+            (t) => t.assetId == '1cs_v1:btc:native:coin',
+      );
+    }
 
     // Native asset (no contract)
     final native = supported.firstWhereOrNull((t) =>
@@ -549,9 +567,14 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
     final token = supported.firstWhereOrNull((t) => t.assetId == assetId);
 
     if (token == null) return null;
-    final title = token.symbol;
+
+    final title = token.symbol.toUpperCase().replaceAll(RegExp(r'\s*\([^)]*\)'), '');
+
     final normalizedNetwork = _normalizeNearBlockchainToTag(token.blockchain);
-    final tag = normalizedNetwork == title.toUpperCase() ? null : normalizedNetwork;
+
+    final isNativeAsset = assetId.contains(':native:coin');
+
+    final tag = isNativeAsset || normalizedNetwork == title ? null : normalizedNetwork;
 
     return (title, tag);
   }
@@ -559,7 +582,7 @@ class NearIntentsExchangeProvider extends ExchangeProvider {
   String _buildDeadline() {
     return DateTime.now()
         .toUtc()
-        .add(const Duration(hours: 2))
+        .add(const Duration(hours: 1))
         .toIso8601String()
         .replaceFirst(RegExp(r'\.\d+Z$'), 'Z');
   }

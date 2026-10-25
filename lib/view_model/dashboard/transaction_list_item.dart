@@ -2,17 +2,13 @@ import 'package:hash_wallet/entities/balance_display_mode.dart';
 import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:hash_wallet/evm/evm.dart';
 import 'package:hash_wallet/generated/i18n.dart';
-import 'package:hash_wallet/nano/nano.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/store/app_store.dart';
-import 'package:hash_wallet/wownero/wownero.dart';
 import 'package:cw_core/crypto_amount_format.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/transaction_direction.dart';
 import 'package:cw_core/transaction_info.dart';
 import 'package:hash_wallet/view_model/dashboard/action_list_item.dart';
-import 'package:hash_wallet/monero/monero.dart';
-import 'package:hash_wallet/bitcoin/bitcoin.dart';
 import 'package:hash_wallet/entities/calculate_fiat_amount_raw.dart';
 import 'package:hash_wallet/view_model/dashboard/balance_view_model.dart';
 import 'package:cw_core/keyable.dart';
@@ -44,22 +40,26 @@ class TransactionListItem extends ActionListItem with Keyable {
   String get formattedCryptoAmount {
     if (displayMode == BalanceDisplayMode.hiddenBalance) return '---';
     if (balanceViewModel.wallet.type == WalletType.bitcoin) {
-      final isLightning = (transaction.additionalInfo["isLightning"] as bool?) ?? false;
-      final crypto = isLightning ? CryptoCurrency.btcln : CryptoCurrency.btc;
-      final amount = _appStore.amountParsingProxy
-          .getDisplayCryptoString(transaction.amount, crypto)
-          .withMaxDecimals(8)
+      return _appStore.amountParsingProxy
+          .asDisplayStringWithSymbol(transaction.amount)
           .withLocalSeperator(_appStore.settingsStore.languageCode);
-
-      return '$amount ${_appStore.amountParsingProxy.getCryptoSymbol(crypto)}';
     }
 
-    return transaction.amountFormatted();
+    return transaction.amount.toStringWithSymbol(fractionalDigits: 8);
   }
 
   String get formattedTitle {
-    if (transaction.additionalInfo['autoShield'] == true) {
-      return "Autoshield";
+
+    if (transaction.additionalInfo['isIronwoodMigration'] == true) {
+      return 'Migration';
+    }
+    if (transaction.additionalInfo['isAutoShield'] == true) {
+      if (transaction.isPending) {
+        final status = formattedStatus;
+        final baseString = S.current.shielding;
+        return status.isNotEmpty ? "$baseString $status" : "$baseString...";
+      }
+      return S.current.shielding;
     }
     if (transaction.isPending) {
       final status = formattedStatus;
@@ -168,42 +168,25 @@ class TransactionListItem extends ActionListItem with Keyable {
 
     switch (balanceViewModel.wallet.type) {
       case WalletType.monero:
-        amount = calculateFiatAmountRaw(
-          cryptoAmount: monero!.formatterMoneroAmountToDouble(amount: transaction.amount),
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
       case WalletType.wownero:
-        amount = calculateFiatAmountRaw(
-          cryptoAmount: wownero!.formatterWowneroAmountToDouble(amount: transaction.amount),
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
       case WalletType.bitcoin:
       case WalletType.litecoin:
       case WalletType.bitcoinCash:
       case WalletType.dogecoin:
+      case WalletType.nano:
         amount = calculateFiatAmountRaw(
-          cryptoAmount: bitcoin!.formatterBitcoinAmountToDouble(amount: transaction.amount),
+          cryptoAmount: double.parse(transaction.amount.toString()),
           price: price,
         ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
       case WalletType.ethereum:
       case WalletType.polygon:
       case WalletType.base:
       case WalletType.arbitrum:
       case WalletType.bsc:
-        final asset = evm!.assetOfTransaction(balanceViewModel.wallet, transaction);
+        final asset = assetOfTransaction;
         final price = balanceViewModel.fiatConversionStore.prices[asset];
         amount = calculateFiatAmountRaw(
-          cryptoAmount: evm!.formatterEVMAmountToDouble(transaction: transaction),
-          price: price,
-        ).withLocalSeperator(_appStore.settingsStore.languageCode);
-        break;
-      case WalletType.nano:
-        amount = calculateFiatAmountRaw(
-          cryptoAmount: double.parse(nanoUtil!.getRawAsUsableString(
-              nano!.getTransactionAmountRaw(transaction).toString(), nanoUtil!.rawPerNano)),
+          cryptoAmount: double.parse(transaction.amount.toString()),
           price: price,
         ).withLocalSeperator(_appStore.settingsStore.languageCode);
         break;

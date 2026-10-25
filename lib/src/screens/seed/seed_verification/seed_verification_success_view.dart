@@ -1,17 +1,22 @@
 import 'package:hash_wallet/generated/i18n.dart';
-import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/themes/core/material_base_theme.dart';
+import "package:hash_wallet/view_model/wallet_seed_view_model.dart";
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
 
 class SeedVerificationSuccessView extends StatelessWidget {
-  const SeedVerificationSuccessView(
-      {required this.currentTheme, super.key, required this.walletType});
+  const SeedVerificationSuccessView({
+    required this.walletSeedViewModel,
+    required this.isNewWalletCreated,
+    required this.currentTheme,
+    super.key,
+  });
 
+  final WalletSeedViewModel walletSeedViewModel;
+  final bool isNewWalletCreated;
   final MaterialThemeBase currentTheme;
-  final WalletType walletType;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +70,13 @@ class SeedVerificationSuccessView extends StatelessWidget {
           Spacer(),
           PrimaryButton(
             key: ValueKey('wallet_seed_page_open_wallet_button_key'),
-            onPressed: () {
+            onPressed: () async {
+              await walletSeedViewModel.markSeedVerified();
+
+              if (!context.mounted) {
+                return;
+              }
+
               // Hash Bags: Lightning Username onboarding skipped. The original
               // Cake flow pushed BTC wallets to the lightning_username_page,
               // which suggests an @cake.cash address. We disabled Lightning

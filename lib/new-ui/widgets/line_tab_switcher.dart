@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -29,7 +30,7 @@ class _LineTabSwitcherState extends State<LineTabSwitcher> {
   void didUpdateWidget(covariant LineTabSwitcher oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.tabs.length != widget.tabs.length) {
+    if (!listEquals(oldWidget.tabs, widget.tabs)) {
       textWidgetKeys = List.generate(widget.tabs.length, (_) => GlobalKey());
       textWidgetSizes = [];
       totalWidth = 0;
@@ -92,58 +93,70 @@ class _LineTabSwitcherState extends State<LineTabSwitcher> {
                 children: widget.tabs.map((item) {
               final index = widget.tabs.indexOf(item);
 
-              return GestureDetector(
-                onTap: () {
-                  widget.onTabChange(index);
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AnimatedDefaultTextStyle(
-                      duration: Duration(milliseconds: 150),
-                      style: DefaultTextStyle.of(context).style.copyWith(
-                            inherit: true,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: widget.selectedTab == index
-                                ? Theme.of(context).colorScheme.onSurface
-                                : Theme.of(context).colorScheme.onSurfaceVariant,
+              // One tab = one node: the visible label merges into a button node
+              // that also carries the selected state of this tab.
+              return MergeSemantics(
+                child: Semantics(
+                  button: true,
+                  selected: widget.selectedTab == index,
+                  inMutuallyExclusiveGroup: true,
+                  child: GestureDetector(
+                    key: ValueKey("line_tab_switcher_${index}_key"),
+                    onTap: () {
+                      widget.onTabChange(index);
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedDefaultTextStyle(
+                          duration: Duration(milliseconds: 150),
+                          style: DefaultTextStyle.of(context).style.copyWith(
+                                inherit: true,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: widget.selectedTab == index
+                                    ? Theme.of(context).colorScheme.onSurface
+                                    : Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: itemPadding / 2),
+                            child: Text(
+                              item,
+                              key: textWidgetKeys[index],
+                            ),
                           ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: itemPadding / 2),
-                        child: Text(
-                          item,
-                          key: textWidgetKeys[index],
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             }).toList())),
-        Container(
-          width: totalWidth,
-          height: 2,
-          child: Stack(
-            children: [
-              AnimatedPositioned(
-                curve: Curves.easeOut,
-                left: _calcBarLeft(),
-                bottom: 0,
-                duration: Duration(milliseconds: 150),
-                child: AnimatedSize(
+        if (widget.tabs.length > 1)
+          Container(
+            width: totalWidth,
+            height: 2,
+            child: Stack(
+              children: [
+                AnimatedPositioned(
+                  curve: Curves.easeOut,
+                  left: _calcBarLeft(),
+                  bottom: 0,
                   duration: Duration(milliseconds: 150),
-                  child: Container(
-                    height: 2,
-                    width: textWidgetSizes.isEmpty ? 0 : textWidgetSizes[widget.selectedTab].width,
-                    color: Theme.of(context).colorScheme.onSurface,
+                  child: AnimatedSize(
+                    duration: Duration(milliseconds: 150),
+                    child: Container(
+                      height: 2,
+                      width:
+                          textWidgetSizes.isEmpty ? 0 : textWidgetSizes[widget.selectedTab].width,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

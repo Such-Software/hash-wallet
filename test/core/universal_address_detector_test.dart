@@ -210,5 +210,52 @@ void main() {
         expect(result.errorMessage, 'Unable to detect valid cryptocurrency address');
       });
     });
+
+    group("EVM chainId URI Detection", () {
+      const recipient = "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6";
+      const contract = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+
+      test("detects the polygon network from an ERC-681 chainId", () {
+        const uri = "ethereum:$recipient@137?value=1.0e18";
+        final result = UniversalAddressDetector.detectAddress(uri);
+
+        expect(result.isValid, true);
+        expect(result.detectedWalletType, WalletType.polygon);
+        expect(result.chainId, 137);
+        expect(result.address, recipient);
+        expect(result.amount, "1");
+      });
+
+      test("detects the base network from an ERC-681 chainId", () {
+        const uri = "ethereum:$recipient@8453";
+        final result = UniversalAddressDetector.detectAddress(uri);
+
+        expect(result.isValid, true);
+        expect(result.detectedWalletType, WalletType.base);
+        expect(result.chainId, 8453);
+        expect(result.address, recipient);
+      });
+
+      test("extracts the recipient from an ERC-681 token transfer URI", () {
+        const uri = "ethereum:$contract@1/transfer?address=$recipient&uint256=1000000";
+        final result = UniversalAddressDetector.detectAddress(uri);
+
+        expect(result.isValid, true);
+        expect(result.detectedWalletType, WalletType.ethereum);
+        expect(result.chainId, 1);
+        expect(result.address, recipient);
+      });
+
+      test("preserves an unsupported chainId so routing can reject it", () {
+        const uri = "ethereum:$recipient@999999";
+        final result = UniversalAddressDetector.detectAddress(uri);
+
+        expect(result.isValid, true);
+        expect(result.detectedWalletType, WalletType.ethereum);
+        expect(result.chainId, 999999);
+        expect(result.address, recipient);
+      });
+    });
+
   });
 }

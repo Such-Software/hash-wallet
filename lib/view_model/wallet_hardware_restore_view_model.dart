@@ -6,13 +6,14 @@ import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/monero/monero.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/view_model/hardware_wallet/hardware_wallet_view_model.dart';
-import 'package:hash_wallet/view_model/hardware_wallet/ledger_view_model.dart';
+import 'package:hash_wallet/view_model/hardware_wallet/trezor_connect_view_model.dart';
 import 'package:hash_wallet/view_model/seed_settings_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_creation_vm.dart';
 import 'package:cw_core/hardware/hardware_account_data.dart';
 import 'package:cw_core/utils/print_verbose.dart';
 import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_credentials.dart';
+import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:mobx/mobx.dart';
 
@@ -43,6 +44,8 @@ abstract class WalletHardwareRestoreViewModelBase extends WalletCreationVM with 
   @observable
   String? error = null;
 
+  bool get passphraseAvailable => hardwareWalletVM.hardwareWalletType == HardwareWalletType.trezor;
+
   // @observable
   ObservableList<HardwareAccountData> availableAccounts = ObservableList();
 
@@ -54,7 +57,7 @@ abstract class WalletHardwareRestoreViewModelBase extends WalletCreationVM with 
 
       availableAccounts.addAll(accounts);
       _nextIndex += limit;
-    } catch (e) {
+    } on Exception catch (e) {
       printV(e);
       error =
           hardwareWalletVM.interpretErrorCode(e.toString()) ?? S.current.ledger_connection_error;
@@ -84,9 +87,10 @@ abstract class WalletHardwareRestoreViewModelBase extends WalletCreationVM with 
 
         credentials = monero!.createMoneroRestoreWalletFromHardwareCredentials(
           name: name,
-          ledgerConnection: (hardwareWalletVM as LedgerViewModel).connection,
+          hardwareWalletService: hardwareWalletVM.getHardwareWalletService(type),
           password: password,
           height: _options['height'] as int? ?? 0,
+          passphrase: _options['passphrase'] as String?,
         );
       default:
         throw Exception('Unexpected type: ${type.toString()}');
@@ -100,6 +104,12 @@ abstract class WalletHardwareRestoreViewModelBase extends WalletCreationVM with 
   @override
   Future<WalletBase> process(WalletCredentials credentials) async {
     walletCreationService.changeWalletType(type: type);
-    return walletCreationService.restoreFromHardwareWallet(credentials);
+    final wallet = await walletCreationService.restoreFromHardwareWallet(credentials);
+
+    final hardwareWalletVM = this.hardwareWalletVM;
+    if (hardwareWalletVM is TrezorConnectViewModel && type == WalletType.bitcoin) {
+      hardwareWalletVM.bindSessionToWallet(wallet);
+    }
+    return wallet;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/view_model/dashboard/action_list_item.dart';
 
 class DateSectionItem extends ActionListItem {
@@ -5,4 +6,31 @@ class DateSectionItem extends ActionListItem {
 
   @override
   final DateTime date;
+}
+
+abstract class SpecificDateSectionItem extends DateSectionItem {
+  SpecificDateSectionItem(super.date, {required super.key});
+
+  String get text;
+}
+
+class Last30daysTransactionItem extends SpecificDateSectionItem {
+  Last30daysTransactionItem(super.date, {required super.key});
+
+  @override
+  String get text => S.current.last_30_days;
+}
+
+class Last7daysTransactionItem extends SpecificDateSectionItem {
+  Last7daysTransactionItem(super.date, {required super.key});
+
+  @override
+  String get text => S.current.last_7_days;
+}
+
+class TodayTransactionItem extends SpecificDateSectionItem {
+  TodayTransactionItem(super.date, {required super.key});
+
+  @override
+  String get text => S.current.today;
 }

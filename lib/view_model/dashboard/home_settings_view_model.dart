@@ -151,10 +151,10 @@ abstract class HomeSettingsViewModelBase with Store {
         return false;
       }
 
-      bool isPotentialScamViaMoralis = await _isPotentialScamTokenViaMoralis(
-        contractAddress,
-        getChainNameBasedOnWalletType(_balanceViewModel.wallet.type),
-      );
+      final moralisChainName = evm!.getMoralisChainName(_balanceViewModel.wallet);
+
+      final isPotentialScamViaMoralis = moralisChainName != null &&
+          await _isPotentialScamTokenViaMoralis(contractAddress, moralisChainName);
 
       bool isUnverifiedContract = await _isContractUnverified(
         contractAddress,
@@ -331,6 +331,10 @@ abstract class HomeSettingsViewModelBase with Store {
     }
 
     return null;
+  }
+
+  Future<bool?> checkIfTokenIsVerifiedOnJupiter(String mintAddress) async {
+    return null; // Hash Bags: Solana removed
   }
 
   CryptoCurrency get nativeToken => _balanceViewModel.wallet.currency;

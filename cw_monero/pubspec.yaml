@@ -16,8 +16,8 @@ dependencies:
   ffi: ^2.0.1
   http: ^1.1.0
   path_provider: ^2.0.11
-  mobx: ^2.0.7+4
-  flutter_mobx: ^2.0.6+1
+  mobx: ^2.6.0
+  flutter_mobx: ^2.3.0
   intl: any
   encrypt: ^5.0.1
   polyseed: ^0.0.7
@@ -25,20 +25,25 @@ dependencies:
     path: ../cw_core
   monero:
     git:
-      url: https://github.com/mrcyjanek/monero_c
-      ref: bc8d1a0b75b97156d71579581b4cdfe58c777ed2
+      url: https://github.com/mrcyjanek/monero_c.git
+      ref: 33671871de3d51696b66ffb3bd94f744e26974f6
       path: impls/monero.dart
   mutex: ^3.1.0
   ledger_flutter_plus: ^1.4.1
+  trezor_flutter:
+    git:
+      url: https://github.com/cake-tech/trezor-flutter.git
+      ref: 591d4b8c821b9c10561f848b866324a9a8dcb489
+      path: trezor-flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.4.15
-  build_resolvers: ^2.4.4
-  mobx_codegen: ^2.0.7
+  build_runner: ^2.15.0
+  mobx_codegen: ^2.7.7
   mockito: ^5.4.5
-  hive_generator: ^2.0.1
+#  hive_generator: ^2.0.1
+  hive: 2.0.1
   sqflite_common_ffi: ^2.3.4+4
 
 dependency_overrides:

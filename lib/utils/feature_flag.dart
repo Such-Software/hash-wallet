@@ -6,6 +6,9 @@ class FeatureFlag {
   // Hash Bags: Lightning disabled — running Greenlight/LSP infra is out of
   // scope for now. Re-enable once we have an LSP relationship lined up.
   static const bool isLightningEnabled = false;
+  // Hash Bags: the charts tab reads Cake's prices.cakewallet.com history API. Off until
+  // prices.neroswap.com serves history; PriceApiClient makes no requests while it is false.
+  static const bool isChartsEnabled = false;
   static const bool isBackgroundSyncEnabled = true;
   static bool get isInAppTorEnabled => CakeTor.instance is! CakeTorDisabled;
   static const int verificationWordsCount = kDebugMode || kProfileMode ? 0 : 2;
@@ -16,6 +19,4 @@ class FeatureFlag {
   static const bool duressPinEnabled = true;
   static const bool isEVMChainSwitcherEnabled = false;
   static const bool isAutomaticNodeSwitchingEnabled = false;
-  static const bool hasNewUi = true;
-  static const bool hasNewUiExtraPages = true;
 }

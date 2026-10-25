@@ -8,8 +8,11 @@ const BEFORE_REGEX = '(^|\\s)';
 const AFTER_REGEX = '(\$|\\s)';
 
 class AddressValidator extends TextValidator {
-  AddressValidator({required CryptoCurrency type, bool isTestnet = false})
-      : super(
+  AddressValidator({
+    required CryptoCurrency type,
+    bool isTestnet = false,
+    String? network,
+  }) : super(
           errorMessage: S.current.error_text_address,
           useAdditionalValidation: [CryptoCurrency.btc, CryptoCurrency.ltc].contains(type)
               ? (String txt) {
@@ -28,11 +31,36 @@ class AddressValidator extends TextValidator {
                   );
                 }
               : null,
-          pattern: getPattern(type, isTestnet: isTestnet),
+          pattern: getPattern(type, isTestnet: isTestnet, network: network),
           length: getLength(type),
         );
 
-  static String getPattern(CryptoCurrency type, {bool isTestnet = false}) {
+  static const List<CryptoCurrency> reliableValidateCurrencies = [
+    CryptoCurrency.xmr,
+    CryptoCurrency.btc,
+    CryptoCurrency.ltc,
+    CryptoCurrency.bch,
+    CryptoCurrency.trx,
+    CryptoCurrency.nano,
+    CryptoCurrency.sol,
+    CryptoCurrency.zano,
+    CryptoCurrency.ada,
+    CryptoCurrency.xrp,
+    CryptoCurrency.xhv,
+    CryptoCurrency.zaddr,
+    CryptoCurrency.zec,
+    CryptoCurrency.dcr,
+    CryptoCurrency.rvn,
+    CryptoCurrency.near,
+    CryptoCurrency.rune,
+    CryptoCurrency.scrt,
+    CryptoCurrency.stx,
+    CryptoCurrency.kmd,
+    CryptoCurrency.doge,
+    CryptoCurrency.btcln,
+  ];
+
+  static String? getPattern(CryptoCurrency type, {bool isTestnet = false, String? network}) {
     var pattern = "";
     if (type is Erc20Token) {
       pattern = '0x[0-9a-zA-Z]+';
@@ -80,6 +108,7 @@ class AddressValidator extends TextValidator {
       case CryptoCurrency.eth:
       case CryptoCurrency.baseEth:
       case CryptoCurrency.arbEth:
+      case CryptoCurrency.robEth:
       case CryptoCurrency.mana:
       case CryptoCurrency.matic:
       case CryptoCurrency.maticpoly:
@@ -141,13 +170,7 @@ class AddressValidator extends TextValidator {
       case CryptoCurrency.hbar:
         pattern = '[0-9a-zA-Z.]+';
       case CryptoCurrency.zec:
-        pattern = '(?:'
-            't1[0-9A-Za-z]{33}'
-            '|t3[0-9A-Za-z]{33}'
-            '|zs[a-z0-9]{76}'
-            '|zxviews[a-z0-9]{278}'
-            '|u1[a-z0-9]{1,300}'
-            ')';
+        pattern = "(?:$zcashAddressPattern|zxviews[a-z0-9]{278})";
       case CryptoCurrency.dcr:
         pattern = '(D|T|S)[ksecS]([0-9a-zA-Z])+';
       case CryptoCurrency.rvn:
@@ -236,6 +259,7 @@ class AddressValidator extends TextValidator {
       case CryptoCurrency.avaxc:
       case CryptoCurrency.baseEth:
       case CryptoCurrency.arbEth:
+      case CryptoCurrency.robEth:
         return [42];
       case CryptoCurrency.bch:
         return [42, 54, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35];
@@ -314,6 +338,8 @@ class AddressValidator extends TextValidator {
   static String get silentPaymentAddressPatternMainnet => 'sp1[0-9a-zA-Z]{113}';
   static String get silentPaymentAddressPatternTestnet => '(tsp|sprt)1[0-9a-zA-Z]{113}';
   static String get mWebAddressPattern => MwebAddress.regex.pattern;
+  static String get zcashAddressPattern =>
+      "t1[0-9A-Za-z]{33}|t3[0-9A-Za-z]{33}|zs[a-z0-9]{76}|u1[a-z0-9]{1,300}";
 
   static const String bolt11InvoiceMatcher = r'^(lightning:)?(lnbc|lntb|lnbs|lnbcrt)[a-z0-9]+$';
   static const String bolt12OfferMatcher = r'^(lightning:)?(lno1)[a-z0-9]+$';
@@ -345,6 +371,7 @@ class AddressValidator extends TextValidator {
       case CryptoCurrency.maticpoly:
       case CryptoCurrency.baseEth:
       case CryptoCurrency.arbEth:
+      case CryptoCurrency.robEth:
       case CryptoCurrency.arb:
         pattern = '0x[0-9a-zA-Z]+';
       case CryptoCurrency.nano:
@@ -360,13 +387,7 @@ class AddressValidator extends TextValidator {
       case CryptoCurrency.zano:
         pattern = '([1-9A-HJ-NP-Za-km-z]{90,200})|(@[\w\d.-]+)';
       case CryptoCurrency.zec:
-        pattern = '(?:'
-            't1[0-9A-Za-z]{33}'
-            '|t3[0-9A-Za-z]{33}'
-            '|zs[a-z0-9]{76}'
-            '|zxviews[a-z0-9]{278}'
-            '|u1[a-z0-9]{1,300}'
-            ')';
+        pattern = "(?:$zcashAddressPattern|zxviews[a-z0-9]{278})";
       default:
         if (type.tag == CryptoCurrency.eth.title) {
           pattern = '0x[0-9a-zA-Z]+';

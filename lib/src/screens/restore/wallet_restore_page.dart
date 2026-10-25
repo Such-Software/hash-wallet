@@ -99,8 +99,9 @@ class WalletRestorePage extends BasePage {
                   children: [
                     Observer(
                       builder: (context) {
-                        return walletRestoreViewModel.mode == WalletRestoreMode.seed
+                        return walletRestoreViewModel.passphraseAvailable
                             ? StandardCheckbox(
+                                key: const ValueKey("wallet_restore_has_passphrase_checkbox_key"),
                                 captionColor: Theme.of(context).colorScheme.onSecondaryContainer,
                                 value: walletRestoreViewModel.hasPassphrase,
                                 caption: S.of(context).wallet_has_passphrase,
@@ -121,7 +122,7 @@ class WalletRestorePage extends BasePage {
                             'isFromRestore': true,
                             'type': walletRestoreViewModel.type,
                             'useTestnet': walletRestoreViewModel.useTestnet,
-                            'toggleTestnet': walletRestoreViewModel.toggleUseTestnet
+                            'toggleTestnet': walletRestoreViewModel.toggleUseTestnet,
                           },
                         );
                       },
@@ -213,6 +214,10 @@ class WalletRestorePage extends BasePage {
             walletRestoreFromKeysFormKey.currentState!.privateKeyController.text;
         credentials['name'] =
             walletRestoreFromKeysFormKey.currentState!.nameTextEditingController.text;
+        if (walletRestoreViewModel.hasBlockchainHeightSelector) {
+          credentials['height'] =
+              walletRestoreFromKeysFormKey.currentState!.blockchainHeightKey.currentState?.height;
+        }
       } else {
         credentials['name'] =
             walletRestoreFromKeysFormKey.currentState!.nameTextEditingController.text;

@@ -1,6 +1,8 @@
+import 'package:hash_wallet/core/backup_service_v3.dart';
 import 'package:hash_wallet/core/execution_state.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/src/widgets/alert_with_one_action.dart';
+import 'package:hash_wallet/src/widgets/alert_with_two_actions.dart';
 import 'package:hash_wallet/src/widgets/base_text_form_field.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
@@ -9,6 +11,7 @@ import 'package:hash_wallet/src/widgets/primary_button.dart';
 import 'package:hash_wallet/view_model/restore_from_backup_view_model.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:file_picker/file_picker.dart';
+import "package:flutter/services.dart";
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 
@@ -18,6 +21,7 @@ class RestoreFromBackupPage extends BasePage {
 
   final RestoreFromBackupViewModel restoreFromBackupViewModel;
   final TextEditingController textEditingController;
+  bool _isStateReactionSet = false;
 
   @override
   String get title => S.current.restore_title_from_backup;
@@ -32,22 +36,26 @@ class RestoreFromBackupPage extends BasePage {
 
   @override
   Widget body(BuildContext context) {
-    reaction((_) => restoreFromBackupViewModel.state, (ExecutionState state) {
-      if (state is FailureState) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showPopUp<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertWithOneAction(
-                  alertTitle: S.of(context).error,
-                  alertContent: state.error,
-                  buttonText: S.of(context).ok,
-                  buttonAction: () => Navigator.of(context).pop(),
-                );
-              });
-        });
-      }
-    });
+    if (!_isStateReactionSet) {
+      _isStateReactionSet = true;
+
+      reaction((_) => restoreFromBackupViewModel.state, (ExecutionState state) {
+        if (state is FailureState) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showPopUp<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertWithOneAction(
+                    alertTitle: S.of(context).error,
+                    alertContent: state.error,
+                    buttonText: S.of(context).ok,
+                    buttonAction: () => Navigator.of(context).pop(),
+                  );
+                });
+          });
+        }
+      });
+    }
 
     return Center(
       child: ConstrainedBox(
@@ -173,8 +181,34 @@ class RestoreFromBackupPage extends BasePage {
 
       return;
     }
+
+    FocusManager.instance.primaryFocus?.unfocus();
     try {
       await restoreFromBackupViewModel.import(textEditingController.text);
+      await SystemChannels.textInput.invokeMethod<void>("TextInput.hide");
+    } on IncompatibleBackupAppException catch (e) {
+      final isConfirmed = await showPopUp<bool>(
+        context: context,
+        builder: (_) {
+          return AlertWithTwoActions(
+            alertTitle: S.current.warning,
+            alertContent:
+                'This backup was created in ${e.sourceAppName}, but you are restoring it in ${e.currentAppName}. '
+                'Please make sure this is the correct backup file before continuing.',
+            leftButtonText: S.of(context).cancel,
+            rightButtonText: S.of(context).ok,
+            actionLeftButton: () => Navigator.of(context).pop(false),
+            actionRightButton: () => Navigator.of(context).pop(true),
+          );
+        },
+      );
+
+      if (isConfirmed ?? false) {
+        await restoreFromBackupViewModel.import(
+          textEditingController.text,
+          checkBackupApp: false,
+        );
+      }
     } catch (e) {
       await showPopUp<void>(
           context: context,

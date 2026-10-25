@@ -186,6 +186,7 @@ class EvmChainRegistry {
       WalletType.bsc,
       'BSC',
     );
+
   }
 
   void _registerChain(

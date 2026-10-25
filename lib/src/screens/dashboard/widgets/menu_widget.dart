@@ -24,19 +24,19 @@ class MenuWidgetState extends State<MenuWidget> {
         this.tileHeight = 60,
         this.fromTopEdge = 50,
         this.fromBottomEdge = 25,
-        this.moneroIcon = Image.asset('assets/images/crypto/monero.webp'),
-        this.bitcoinIcon = Image.asset('assets/images/crypto/bitcoin.webp'),
-        this.litecoinIcon = Image.asset('assets/images/crypto/litecoin.webp'),
-        this.ethereumIcon = Image.asset('assets/images/crypto/ethereum.webp'),
-        this.nanoIcon = Image.asset('assets/images/crypto/nano.webp'),
-        this.bananoIcon = Image.asset('assets/images/crypto/nano.webp'),
-        this.bitcoinCashIcon = Image.asset('assets/images/crypto/bitcoin-cash.webp'),
-        this.polygonIcon = Image.asset('assets/images/crypto/polygon.webp'),
-        this.baseIcon = Image.asset('assets/images/crypto/base_icon.webp'),
-        this.arbitrumIcon = Image.asset('assets/images/crypto/arbitrum.webp'),
-        this.bscIcon = Image.asset('assets/images/crypto/BNB.webp'),
-        this.wowneroIcon = Image.asset('assets/images/crypto/wownero.webp'),
-        this.dogecoinIcon = Image.asset('assets/images/crypto/dogecoin.webp');
+        this.moneroIcon = Image.asset('assets/new-ui/crypto_full_icons/monero.svg'),
+        this.bitcoinIcon = Image.asset('assets/new-ui/crypto_full_icons/bitcoin.svg'),
+        this.litecoinIcon = Image.asset('assets/new-ui/crypto_full_icons/litecoin.svg'),
+        this.ethereumIcon = Image.asset('assets/new-ui/crypto_full_icons/ethereum.svg'),
+        this.nanoIcon = Image.asset('assets/new-ui/crypto_full_icons/nano.svg'),
+        this.bananoIcon = Image.asset('assets/new-ui/crypto_full_icons/nano.svg'),
+        this.bitcoinCashIcon = Image.asset('assets/new-ui/crypto_full_icons/bitcoin-cash.svg'),
+        this.polygonIcon = Image.asset('assets/new-ui/crypto_full_icons/polygon.svg'),
+        this.baseIcon = Image.asset('assets/new-ui/crypto_full_icons/base.svg'),
+        this.arbitrumIcon = Image.asset('assets/new-ui/crypto_full_icons/arbitrum.svg'),
+        this.bscIcon = Image.asset('assets/new-ui/crypto_full_icons/bnb.svg'),
+        this.wowneroIcon = Image.asset('assets/new-ui/crypto_full_icons/wownero.svg'),
+        this.dogecoinIcon = Image.asset('assets/new-ui/crypto_full_icons/dogecoin.svg');
 
   final largeScreen = 731;
 
@@ -110,8 +110,8 @@ class MenuWidgetState extends State<MenuWidget> {
     }
     int itemCount = items.length;
 
-    moneroIcon = Image.asset('assets/images/crypto/monero.webp');
-    bitcoinIcon = Image.asset('assets/images/crypto/bitcoin.webp');
+    moneroIcon = Image.asset('assets/new-ui/crypto_full_icons/monero.svg');
+    bitcoinIcon = Image.asset('assets/new-ui/crypto_full_icons/bitcoin.svg');
 
     return Row(
       mainAxisSize: MainAxisSize.max,

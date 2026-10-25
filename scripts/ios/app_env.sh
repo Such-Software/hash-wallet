@@ -12,8 +12,8 @@ TYPES=($MONERO_COM $CAKEWALLET)
 APP_IOS_TYPE=$1
 
 MONERO_COM_NAME="Monero.com"
-MONERO_COM_VERSION="6.1.2"
-MONERO_COM_BUILD_NUMBER=163
+MONERO_COM_VERSION="6.5.0"
+MONERO_COM_BUILD_NUMBER=178
 MONERO_COM_BUNDLE_ID="com.cakewallet.monero"
 
 # Source CAKEWALLET version + build number from pubspec_description.yaml

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:hash_wallet/bitcoin/bitcoin.dart';
+import "package:hash_wallet/ci_build_overlay.dart";
 import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_regular_row.dart';
 import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item_selector.dart';
+import "package:hash_wallet/entities/new_ui_entities/list_item/list_item_toggle.dart";
 import 'package:hash_wallet/entities/priority_for_wallet_type.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/widgets/modal_page_wrapper.dart';
@@ -8,17 +12,21 @@ import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/src/screens/base_page.dart';
 import 'package:hash_wallet/src/screens/dev/moneroc_cache_debug.dart';
+import "package:hash_wallet/src/widgets/alert_with_one_action.dart";
 import 'package:hash_wallet/src/widgets/new_list_row/new_list_section.dart';
 import 'package:hash_wallet/src/widgets/picker.dart';
 import 'package:hash_wallet/utils/feature_flag.dart';
 import 'package:hash_wallet/utils/share_util.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
 import 'package:hash_wallet/view_model/settings/other_settings_view_model.dart';
+import 'package:cw_core/root_dir.dart';
 import 'package:cw_core/wallet_info.dart';
 import 'package:cw_core/transaction_priority.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:cw_core/db/sqlite.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_mobx/flutter_mobx.dart";
+import 'package:path/path.dart' as p;
 
 class OtherSettingsPage extends BasePage {
   OtherSettingsPage(this._otherSettingsViewModel) {
@@ -38,13 +46,14 @@ class OtherSettingsPage extends BasePage {
       topBar: ModalTopBar(
         title: S.of(context).other,
         leadingIcon: Icon(Icons.arrow_back_ios_new),
+        leadingSemanticLabel: S.of(context).seed_alert_back,
         onLeadingPressed: () => Navigator.of(context).pop(),
       ),
       // header: ModalHeader(
       //     iconPath: "assets/new-ui/settings_row_icons/other.svg",
       //     message: "Other settings",
       //     title: S.of(context).other_settings),
-      content: NewListSections(sections: {
+      content: Observer(builder: (_) => NewListSections(sections: {
         "": [
           if (_otherSettingsViewModel.displayTransactionPriority)
             _otherSettingsViewModel.walletType == WalletType.bitcoin
@@ -138,6 +147,7 @@ class OtherSettingsPage extends BasePage {
                 },
               }),
             ),
+          if(_otherSettingsViewModel.hasSignVerify)
           ListItemRegularRow(
               keyValue: "security_backup_page_sign_and_verify",
               label: S.of(context).sign_verify_title,
@@ -147,10 +157,12 @@ class OtherSettingsPage extends BasePage {
         ],
         if (_otherSettingsViewModel.walletType == WalletType.bitcoin)
           "btc_logging": [
+            if(_otherSettingsViewModel.hasLightning)
             ListItemRegularRow(
                 keyValue: "export_lightning_logs",
                 label: S.of(context).export_lightning_logs,
                 onTap: () => onExportLNLog(context)),
+            if(_otherSettingsViewModel.hasPayjoin)
             ListItemRegularRow(
                 keyValue: "export_payjoin_logs",
                 label: S.of(context).export_payjoin_logs,
@@ -159,6 +171,24 @@ class OtherSettingsPage extends BasePage {
         "dev": FeatureFlag.hasDevOptions == false
             ? []
             : [
+                if (CiBuildOverlay.isCiBuild)
+                  ListItemToggle(
+                      keyValue: "[dev] show commit/branch overlay",
+                      label: "[dev] show commit/branch overlay",
+                      value: _otherSettingsViewModel.showCiBuildOverlay,
+                      onChanged: (val){
+                        if(!val) {
+                          showPopUp(
+                                      context: context,
+                                      builder: (context) => AlertWithOneAction(
+                                            alertTitle: "overlay disabled",
+                                            alertContent:
+                                                "don't send issue reports without the overlay, pretty please",
+                                            buttonText: "okay",
+                                            buttonAction: Navigator.of(context).pop,
+                                          ));
+                                }
+                        _otherSettingsViewModel.setShowCiBuildOverlay(val);}),
                 if (_otherSettingsViewModel.walletType == WalletType.monero)
                   ListItemRegularRow(
                       keyValue: "[dev] monero background sync",
@@ -215,8 +245,15 @@ class OtherSettingsPage extends BasePage {
                         ),
                       );
                     }),
+                ListItemRegularRow(
+                    keyValue: '[dev] fake corrupt sqlite db',
+                    label: '[dev] fake corrupt sqlite db',
+                    onTap: () async {
+                      final dbDebugMarker = await sqliteDebugMarkerFile();
+                      dbDebugMarker.create();
+                    }),
               ]
-      }),
+      })),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:flutter/material.dart';
 
 class SwapModalHeader extends StatelessWidget {
@@ -17,8 +18,12 @@ class SwapModalHeader extends StatelessWidget {
           width: 36,
           child: Stack(
             children: [
-              Image.asset(fromIconPath, width: 24, height: 24),
-              Positioned(top: 12, left: 12, child: Image.asset(toIconPath, width: 24, height: 24)),
+              HashImageWidget(imageUrl: fromIconPath, width: 24, height: 24),
+              Positioned(
+                top: 12,
+                left: 12,
+                child: HashImageWidget(imageUrl: toIconPath, width: 24, height: 24),
+              ),
             ],
           ),
         ),

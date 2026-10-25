@@ -6,6 +6,7 @@ import 'package:hash_wallet/new-ui/pages/bridge/bridge_amount_page.dart';
 import 'package:hash_wallet/new-ui/pages/receive_page.dart';
 import 'package:hash_wallet/new-ui/pages/send_page.dart';
 import 'package:hash_wallet/new-ui/pages/swap_page.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/token_image_widget.dart';
 import 'package:hash_wallet/new-ui/widgets/modern_button.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
@@ -61,6 +62,7 @@ class AssetDetailsModal extends StatelessWidget {
           ModalTopBar(
             title: "",
             trailingIcon: Icon(Icons.close),
+            trailingSemanticLabel: S.of(context).close,
             onTrailingPressed: Navigator.of(context).pop,
             padding: EdgeInsets.only(top: 12, right: 18),
           ),
@@ -77,7 +79,10 @@ class AssetDetailsModal extends StatelessWidget {
                       child: Stack(
                         children: [
                           if (iconPath.isNotEmpty)
-                            HashImageWidget(imageUrl: iconPath, width: 75, height: 75)
+                            TokenImageWidget(
+                              imageUrl: iconPath,
+                              size: 75,
+                            )
                           else
                             Container(
                               width: 75,
@@ -352,17 +357,22 @@ class AssetDetailsModalBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 8,
-      children: [
-        ModernButton.svg(
-          onPressed: onPressed,
-          svgPath: iconPath,
-          size: 60,
-          iconSize: 32,
-        ),
-        Text(title)
-      ],
+    // The caption is the button's accessible name, so it is excluded from the
+    // semantics tree to keep the whole control a single button node.
+    return MergeSemantics(
+      child: Column(
+        spacing: 8,
+        children: [
+          ModernButton.svg(
+            onPressed: onPressed,
+            svgPath: iconPath,
+            size: 60,
+            iconSize: 32,
+            semanticLabel: title,
+          ),
+          ExcludeSemantics(child: Text(title))
+        ],
+      ),
     );
   }
 }

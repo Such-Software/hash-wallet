@@ -122,6 +122,7 @@ abstract class WalletNewVMBase extends WalletCreationVM with Store {
   @override
   Future<WalletBase> process(WalletCredentials credentials) async {
     walletCreationService.changeWalletType(type: type);
+    credentials.walletInfo!.showSeedBackupReminder = newWalletArguments!.mnemonic == null;
     return walletCreationService.create(credentials, isTestnet: useTestnet);
   }
 }

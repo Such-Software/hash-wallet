@@ -17,14 +17,13 @@ import 'package:hash_wallet/view_model/send/send_view_model.dart';
 import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/lnurl.dart';
+import 'package:cw_core/node.dart';
 import 'package:cw_core/unspent_coin_type.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../pages/receive_page.dart';
-import '../../../pages/scan_page.dart';
 import 'coin_action_button.dart';
 
 class CoinActionRow extends StatelessWidget {
@@ -45,6 +44,7 @@ class CoinActionRow extends StatelessWidget {
         spacing: MediaQuery.of(context).size.width * 0.05,
         children: [
           CoinActionButton(
+            key: ValueKey("home_page_send_button_key"),
             icon: HashImageWidget(
               imageUrl: "assets/new-ui/send.svg",
               colorFilter: ColorFilter.mode(
@@ -54,7 +54,6 @@ class CoinActionRow extends StatelessWidget {
             ),
             label: S.of(context).send,
             action: () {
-              if (FeatureFlag.hasNewUiExtraPages) {
                 final sendPage = getIt.get<NewSendPage>(
                   param1: SendPageParams(
                     unspentCoinType:
@@ -75,14 +74,10 @@ class CoinActionRow extends StatelessWidget {
                     );
                   },
                 );
-              } else {
-                Map<String, dynamic>? args;
-                if (lightningMode) args = {'coinTypeToSpendFrom': UnspentCoinType.lightning};
-                Navigator.of(context).pushNamed(Routes.send, arguments: args);
-              }
             },
           ),
           CoinActionButton(
+            key: ValueKey("home_page_receive_button_key"),
             icon: HashImageWidget(
               imageUrl: "assets/new-ui/receive.svg",
               colorFilter: ColorFilter.mode(
@@ -92,7 +87,6 @@ class CoinActionRow extends StatelessWidget {
             ),
             label: S.of(context).receive,
             action: () async {
-              if (FeatureFlag.hasNewUiExtraPages) {
                 final page = getIt.get<NewReceivePage>(param1: lightningMode);
                 CupertinoScaffold.showCupertinoModalBottomSheet(
                   context: context,
@@ -101,21 +95,11 @@ class CoinActionRow extends StatelessWidget {
                     return Material(child: ModalNavigator(parentContext: context, rootPage: page));
                   },
                 );
-              } else {
-                // ToDo: (Konsti) refactor as part of the derivation PR (I hate myself for it)
-                if (lightningMode) {
-                  await getIt<WalletAddressListViewModel>().setAddressType(
-                      bitcoin!.getOptionToType(bitcoin!.getBitcoinLightningReceivePageOption()));
-                } else {
-                  await getIt<WalletAddressListViewModel>().setAddressType(
-                      bitcoin!.getOptionToType(bitcoin!.getBitcoinSegwitPageOption()));
-                }
-                Navigator.of(context).pushNamed(Routes.addressPage);
-              }
             },
           ),
           if (showSwap)
             CoinActionButton(
+              key: ValueKey("home_page_swap_button_key"),
               icon: HashImageWidget(
                 imageUrl: "assets/new-ui/exchange.svg",
                 colorFilter: ColorFilter.mode(
@@ -127,7 +111,6 @@ class CoinActionRow extends StatelessWidget {
               action: () {
                 final page =
                     getIt.get<NewSwapPage>(param2: lightningMode ? CryptoCurrency.btcln : null);
-                if (FeatureFlag.hasNewUiExtraPages) {
                   CupertinoScaffold.showCupertinoModalBottomSheet(
                     context: context,
                     barrierColor: Colors.black.withAlpha(85),
@@ -137,12 +120,10 @@ class CoinActionRow extends StatelessWidget {
                       parentContext: context,
                     )),
                   );
-                } else {
-                  Navigator.of(context).pushNamed(Routes.exchange);
-                }
               },
             ),
           CoinActionButton(
+            key: ValueKey("home_page_scan_button_key"),
             icon: HashImageWidget(
               imageUrl: "assets/new-ui/scan.svg",
               colorFilter: ColorFilter.mode(
@@ -159,71 +140,63 @@ class CoinActionRow extends StatelessWidget {
   }
 
   Future<void> _onPressedScan(BuildContext context) async {
-    if (false && FeatureFlag.hasNewUiExtraPages) {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) => FractionallySizedBox(
-          heightFactor: 0.9,
-          child: ScanPage(),
-        ),
-      );
-    } else {
-      final code = await presentQRScanner(context);
+    final code = await presentQRScanner(context, showHelp: true);
 
-      if (code == null || code.isEmpty) return;
+    if (code == null || code.isEmpty) return;
 
-      late final PaymentRequest req;
-      var unspentCoinType = UnspentCoinType.any;
-      if (SendViewModelBase.isNonZeroAmountLightningInvoice(code)) {
-        unspentCoinType = UnspentCoinType.lightning;
-        final amount = CryptoCurrency.btcln.formatAmount(BigInt.from(getBolt11Amount(code) ?? 0));
-        req = PaymentRequest(code, amount, "", "", "");
-      } else if (SendViewModelBase.isLnurlInvoice(code)) {
-        unspentCoinType = UnspentCoinType.lightning;
-        final amount = CryptoCurrency.btcln
-            .formatAmount(BigInt.from(await LNURL.getPayRequestAmount(code) ?? 0));
-        req = PaymentRequest(code, amount, "", "", "");
-      } else if (OpenCryptoPayService.isOpenCryptoPayQR(code)) {
-        req = PaymentRequest(code, "", "", "", "");
-      } else if (Uri.tryParse(code)?.scheme == "wc") {
-        if (!isEVMCompatibleChain(walletType)) {
-          showPopUp<void>(
-              context: context,
-              builder: (context) => AlertWithOneAction(
-                  alertTitle: "WalletConnect",
-                  alertContent: S.of(context).switchToEVMCompatibleWallet,
-                  buttonText: "OK",
-                  buttonAction: Navigator.of(context).pop));
-          return;
-        }
-
-        Navigator.of(context)
-            .pushNamed(Routes.walletConnectConnectionsListing, arguments: Uri.parse(code));
+    PaymentRequest? req;
+    String? rawInput;
+    var unspentCoinType = UnspentCoinType.any;
+    if (SendViewModelBase.isNonZeroAmountLightningInvoice(code)) {
+      unspentCoinType = UnspentCoinType.lightning;
+      final amount = getBolt11Amount(code)?.toString() ?? "0";
+      req = PaymentRequest(code, amount, "", "", "");
+    } else if (SendViewModelBase.isLnurlInvoice(code)) {
+      unspentCoinType = UnspentCoinType.lightning;
+      final amount = (await LNURL.getPayRequestAmount(code))?.toString() ?? "0";
+      req = PaymentRequest(code, amount, "", "", "");
+    } else if (Uri.tryParse(code)?.scheme == "wc") {
+      if (!isWalletConnectCompatibleChain(walletType)) {
+        showPopUp<void>(
+            context: context,
+            builder: (context) => AlertWithOneAction(
+                alertTitle: "WalletConnect",
+                alertContent:
+                    S.of(context).switchToWCCompatibleWallet(walletConnectCompatibleChainsLabel()),
+                buttonText: "OK",
+                buttonAction: Navigator.of(context).pop));
         return;
-      } else {
-        final uri = Uri.tryParse(code);
-        if (uri == null) return;
-        req = PaymentRequest.fromUri(uri);
       }
 
-      final sendPage = getIt.get<NewSendPage>(
-        param1: SendPageParams(
-          initialPaymentRequest: req,
-          unspentCoinType: unspentCoinType,
-        ),
-      );
-
-      CupertinoScaffold.showCupertinoModalBottomSheet(
-        context: context,
-        barrierColor: Colors.black.withAlpha(60),
-        builder: (context) => Material(
-          child: ModalNavigator(
-            rootPage: sendPage,
-            parentContext: context,
-          ),
-        ),
-      );
+      Navigator.of(context)
+          .pushNamed(Routes.walletConnectConnectionsListing, arguments: Uri.parse(code));
+      return;
+    } else if (!OpenCryptoPayService.isOpenCryptoPayQR(code) &&
+        ["http", "https", "tcp"].contains(Uri.tryParse(code)?.scheme)) {
+      Navigator.of(context).pushNamed(Routes.newNode,
+          arguments: {"editingNode": Node.fromUri(Uri.parse(code), walletType)});
+      return;
+    } else {
+      rawInput = code;
     }
+
+    final sendPage = getIt.get<NewSendPage>(
+      param1: SendPageParams(
+        initialPaymentRequest: req,
+        initialRawInput: rawInput,
+        unspentCoinType: unspentCoinType,
+      ),
+    );
+
+    CupertinoScaffold.showCupertinoModalBottomSheet(
+      context: context,
+      barrierColor: Colors.black.withAlpha(60),
+      builder: (context) => Material(
+        child: ModalNavigator(
+          rootPage: sendPage,
+          parentContext: context,
+        ),
+      ),
+    );
   }
 }

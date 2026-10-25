@@ -5,12 +5,7 @@ import 'package:cw_core/wallet_base.dart';
 import 'package:cw_core/wallet_type.dart';
 
 abstract class WalletConnectKeyService {
-  /// Returns a list of all the keys.
   List<ChainKeyModel> getKeys(WalletBase wallet);
-
-  /// Returns a list of all the keys for a given chain id.
-  /// If the chain is not found, returns an empty list.
-  ///  - [chain]: The chain to get the keys for.
   List<ChainKeyModel> getKeysForChain(WalletBase wallet);
 }
 
@@ -43,30 +38,24 @@ class KeyServiceImpl implements WalletConnectKeyService {
 
   @override
   List<ChainKeyModel> getKeys(WalletBase wallet) {
-    final keys = [
-      ChainKeyModel(
-        chains: [
-          'eip155:1',
-          'eip155:5',
-          'eip155:56',
-          'eip155:137',
-          'eip155:8453',
-          'eip155:42161',
-          'eip155:80001',
-        ],
-        privateKey: _getPrivateKeyForWallet(wallet),
-        publicKey: _getPublicKeyForWallet(wallet),
-      ),
-      ChainKeyModel(
-        chains: [
-          'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ', // main-net
-          'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K', // test-net
-        ],
-        privateKey: _getPrivateKeyForWallet(wallet),
-        publicKey: _getPublicKeyForWallet(wallet),
-      ),
-    ];
-    return keys;
+    if (isEVMCompatibleChain(wallet.type)) {
+      return [
+        ChainKeyModel(
+          chains: [
+            'eip155:1',
+            'eip155:56',
+            'eip155:137',
+            'eip155:8453',
+            'eip155:42161',
+            "eip155:4663",
+          ],
+          privateKey: _getPrivateKeyForWallet(wallet),
+          publicKey: _getPublicKeyForWallet(wallet),
+        ),
+      ];
+    }
+
+    return [];
   }
 
   @override

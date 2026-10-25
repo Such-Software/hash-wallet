@@ -128,8 +128,11 @@ abstract class WalletGroupsDisplayViewModelBase with Store {
 
         bool isNonSeedWallet = wallet.isNonSeedWallet;
 
-        bool isNotMoneroBip39Wallet =
-            wallet.type == WalletType.monero && di.derivationType != DerivationType.bip39;
+        bool isNotBip39CoinWallet =
+            wallet.type == WalletType.monero &&
+                di.derivationType != DerivationType.bip39;
+
+        bool isNotDecredBip39Wallet = false;
 
         // Exclude if any of these conditions are true
         shouldExcludeGroup = shouldExcludeGroup ||
@@ -138,7 +141,8 @@ abstract class WalletGroupsDisplayViewModelBase with Store {
             isElectrumDerivationType ||
             isSameTypeAsSelectedWallet ||
             isNonSeedWallet ||
-            isNotMoneroBip39Wallet;
+            isNotBip39CoinWallet ||
+            isNotDecredBip39Wallet;
       }
 
       if (shouldExcludeGroup) continue;

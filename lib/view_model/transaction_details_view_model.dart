@@ -1,45 +1,65 @@
-import 'package:hash_wallet/reactions/wallet_connect.dart';
-import 'package:hash_wallet/src/screens/transaction_details/address_list_item.dart';
-import 'package:hash_wallet/src/screens/transaction_details/confirmations_list_item.dart';
-import 'package:hash_wallet/store/app_store.dart';
-import 'package:hash_wallet/core/address_validator.dart';
-import 'package:cw_core/crypto_amount_format.dart';
-import 'package:cw_core/crypto_currency.dart';
-import 'package:cw_core/currency_for_wallet_type.dart';
-import 'package:cw_core/utils/print_verbose.dart';
-import 'package:cw_core/wallet_base.dart';
-import 'package:cw_core/transaction_info.dart';
-import 'package:cw_core/wallet_type.dart';
-import 'package:hash_wallet/evm/evm.dart';
-import 'package:hash_wallet/bitcoin/bitcoin.dart';
-import 'package:hash_wallet/entities/priority_for_wallet_type.dart';
-import 'package:hash_wallet/entities/transaction_description.dart';
-import 'package:hash_wallet/generated/i18n.dart';
-import 'package:hash_wallet/monero/monero.dart';
-import 'package:hash_wallet/src/screens/transaction_details/rbf_details_list_fee_picker_item.dart';
-import 'package:hash_wallet/src/screens/transaction_details/standart_list_item.dart';
-import 'package:hash_wallet/src/screens/transaction_details/transaction_details_list_item.dart';
-import 'package:hash_wallet/src/screens/transaction_details/transaction_expandable_list_item.dart';
-import 'package:hash_wallet/utils/date_formatter.dart';
-import 'package:hash_wallet/view_model/send/send_view_model.dart';
-import 'package:collection/collection.dart';
-import 'package:cw_core/transaction_direction.dart';
-import 'package:cw_core/transaction_priority.dart';
-import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
-import 'package:mobx/mobx.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:hash_wallet/bitcoin/bitcoin.dart";
+import "package:hash_wallet/core/address_validator.dart";
+import "package:hash_wallet/entities/priority_for_wallet_type.dart";
+import "package:hash_wallet/entities/transaction_description.dart";
+import "package:hash_wallet/evm/evm.dart";
+import "package:hash_wallet/generated/i18n.dart";
+import "package:hash_wallet/monero/monero.dart";
+import "package:hash_wallet/reactions/wallet_connect.dart";
+import "package:hash_wallet/src/screens/transaction_details/address_list_item.dart";
+import "package:hash_wallet/src/screens/transaction_details/confirmations_list_item.dart";
+import "package:hash_wallet/src/screens/transaction_details/rbf_details_list_fee_picker_item.dart";
+import "package:hash_wallet/src/screens/transaction_details/standart_list_item.dart";
+import "package:hash_wallet/src/screens/transaction_details/transaction_details_list_item.dart";
+import "package:hash_wallet/src/screens/transaction_details/transaction_expandable_list_item.dart";
+import "package:hash_wallet/store/app_store.dart";
+import "package:hash_wallet/view_model/send/send_view_model.dart";
+import "package:collection/collection.dart";
+import "package:cw_core/crypto_currency.dart";
+import "package:cw_core/currency_for_wallet_type.dart";
+import "package:cw_core/transaction_direction.dart";
+import "package:cw_core/transaction_info.dart";
+import "package:cw_core/transaction_priority.dart";
+import "package:cw_core/wallet_base.dart";
+import "package:cw_core/wallet_type.dart";
+import "package:flutter/foundation.dart";
+import "package:hive/hive.dart";
+import "package:intl/intl.dart";
+import "package:mobx/mobx.dart";
+import "package:url_launcher/url_launcher.dart";
 
-part 'transaction_details_view_model.g.dart';
+part "transaction_details_view_model.g.dart";
 
 bool _trueFunc(_) => true;
 
-bool isLightning(TransactionInfo tx) {
-  printV(tx.additionalInfo);
-  return (tx.additionalInfo["isLightning"] as bool?) ?? false;
+/// We're adding a regex here so we can remove any already saved address that has the account in it.
+/// In the refactor, we will make another separate variable for accounts and the UI would handle it as needed.
+String _moneroRecipientAddressForDisplay(String raw, WalletType walletType) {
+  if (walletType != WalletType.monero || raw.isEmpty) {
+    return raw;
+  }
+
+  final compact = raw.replaceAll(RegExp(r"\s"), "");
+  final match = RegExp(
+    r"4[0-9a-zA-Z]{94}|8[0-9a-zA-Z]{94}|[0-9a-zA-Z]{106}",
+    caseSensitive: false,
+  ).firstMatch(compact);
+  return match?.group(0) ?? raw.trim();
 }
 
+bool isLightning(TransactionInfo tx) => (tx.additionalInfo["isLightning"] as bool?) ?? false;
+
+bool hasLightningPreimage(TransactionInfo tx) => (tx.additionalInfo["preimage"] as String?) != null;
+
 class TxDetailRowDefinition {
+  TxDetailRowDefinition({
+    required this.keyString,
+    required this.title,
+    required this.valueGetter,
+    this.applicable = _trueFunc,
+    this.listItemBuilder = StandartListItem.new,
+  });
+
   final String keyString;
   final String title;
   final String Function(TransactionDetailsViewModelBase) valueGetter;
@@ -50,107 +70,120 @@ class TxDetailRowDefinition {
     required Key key,
   }) listItemBuilder;
 
-  TxDetailRowDefinition(
-      {required this.keyString,
-      required this.title,
-      required this.valueGetter,
-      this.applicable = _trueFunc,
-      this.listItemBuilder = StandartListItem.new});
-
   static final List<TxDetailRowDefinition> defs = [
     TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_date_key",
-        title: S.current.transaction_details_date,
-        valueGetter: (vm) => DateFormatter.withCurrentLocal().format(vm.transactionInfo.date)),
+      keyString: "standard_list_item_transaction_details_date_key",
+      title: S.current.transaction_details_date,
+      valueGetter: (vm) => DateFormat("d MMMM yyyy, HH:mm", vm._appStore.settingsStore.languageCode)
+          .format(vm.transactionInfo.date),
+    ),
     TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_height_key",
-        title: S.current.transaction_details_height,
-        valueGetter: (vm) => vm.transactionInfo.height?.toString() ?? "",
-        applicable: (vm) => !isLightning(vm.transactionInfo)),
+      keyString: "standard_list_item_transaction_details_height_key",
+      title: S.current.transaction_details_height,
+      valueGetter: (vm) => vm.transactionInfo.height?.toString() ?? "",
+      applicable: (vm) => !isLightning(vm.transactionInfo),
+    ),
     TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_fee_key",
-        title: S.current.transaction_details_fee,
-        valueGetter: (vm) => vm.transactionInfo.feeFormatted()!,
-        applicable: (vm) =>
-            vm.wallet.type != WalletType.nano &&
-            (vm.transactionInfo.feeFormatted() ?? "").isNotEmpty),
+      keyString: "standard_list_item_transaction_details_fee_key",
+      title: S.current.transaction_details_fee,
+      valueGetter: (vm) => vm.feeAmount,
+      applicable: (vm) =>
+          vm.wallet.type != WalletType.nano &&
+          (vm.transactionInfo.fee?.toStringWithSymbol() ?? "").isNotEmpty,
+    ),
     TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_confirmations_key",
-        title: S.current.confirmations,
-        valueGetter: (vm) => "${vm.transactionInfo.confirmations}/${vm.neededConfirmations}",
-        applicable: (vm) =>
-            [...electrumWalletTypes, ...evmWalletTypes, WalletType.monero]
-                .contains(vm.wallet.type) &&
-            !isLightning(vm.transactionInfo),
-        listItemBuilder: ConfirmationsListItem.new),
+      keyString: "standard_list_item_transaction_confirmations_key",
+      title: S.current.confirmations,
+      valueGetter: (vm) => "${vm.transactionInfo.confirmations}/${vm.neededConfirmations}",
+      applicable: (vm) =>
+          [...electrumWalletTypes, ...evmWalletTypes, WalletType.monero]
+              .contains(vm.wallet.type) &&
+          !isLightning(vm.transactionInfo),
+      listItemBuilder: ConfirmationsListItem.new,
+    ),
     TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_recipient_address_key",
-        title: S.current.transaction_details_recipient_address,
-        valueGetter: (vm) {
-          String? ret = null;
+      keyString: "standard_list_item_transaction_details_recipient_address_key",
+      title: S.current.transaction_details_recipient_address,
+      valueGetter: (vm) {
+        String? ret;
 
-          switch (vm.wallet.type) {
-            case WalletType.monero:
-              if (vm.transactionInfo.direction == TransactionDirection.incoming) {
-                ret = monero!.getTransactionAddress(
-                    vm.wallet,
-                    vm.transactionInfo.additionalInfo['accountIndex'] as int,
-                    vm.transactionInfo.additionalInfo['addressIndex'] as int);
-              }
-            case WalletType.bitcoin:
-              ret = (bitcoin!.getTransactionAddresses(vm.wallet, vm.transactionInfo) ?? [])
-                      .firstOrNull ??
-                  "";
-            default:
-              break;
-          }
-          if (ret == null) {
-            ret = vm.transactionInfo.to ?? "";
-          }
-          vm.isRecipientAddressShown = ret.isNotEmpty;
-          return ret;
-        },
-        applicable: (vm) =>
-            vm.showRecipientAddress &&
-            (vm.transactionInfo.to != null ||
-                [WalletType.monero].contains(vm.wallet.type) ||
-                vm.wallet.type == WalletType.bitcoin &&
-                    vm.transactionInfo.direction == TransactionDirection.incoming),
-        listItemBuilder: AddressListItem.new),
-    TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_details_source_address_key",
-        title: S.current.transaction_details_source_address,
-        valueGetter: (vm) => vm.transactionInfo.from!,
-        applicable: (vm) => vm.transactionInfo.from != null,
-        listItemBuilder: AddressListItem.new),
-    TxDetailRowDefinition(
-        keyString: "standard_list_item_address_label_key",
-        title: S.current.address_label,
-        valueGetter: (vm) => monero!.getSubaddressLabel(
-            vm.wallet,
-            vm.transactionInfo.additionalInfo['accountIndex'] as int,
-            vm.transactionInfo.additionalInfo['addressIndex'] as int),
-        applicable: (vm) => vm.wallet.type == WalletType.monero),
-    TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_key",
-        title: S.current.transaction_key,
-        valueGetter: (vm) {
-          final descriptionKey =
-              '${vm.transactionInfo.txHash}_${vm.wallet.walletAddresses.primaryAddress}';
+        switch (vm.wallet.type) {
+          case WalletType.monero:
+            if (vm.transactionInfo.direction == TransactionDirection.incoming) {
+              ret = monero!.getTransactionAddress(
+                vm.wallet,
+                vm.transactionInfo.additionalInfo["accountIndex"] as int,
+                vm.transactionInfo.additionalInfo["addressIndex"] as int,
+              );
+            }
+          case WalletType.bitcoin:
+            ret = (bitcoin!.getTransactionAddresses(vm.wallet, vm.transactionInfo) ?? [])
+                    .firstOrNull ??
+                "";
+          default:
+            break;
+        }
+        ret ??= vm.transactionInfo.to ?? "";
 
-          final description = vm.transactionDescriptionBox.values.firstWhere(
-              (val) => val.id == descriptionKey || val.id == vm.transactionInfo.txHash,
-              orElse: () => TransactionDescription(id: descriptionKey));
-          return vm.transactionInfo.additionalInfo['key'] as String? ??
-              description.transactionKey ??
-              "";
-        },
-        applicable: (vm) => vm.wallet.type == WalletType.monero),
+        final resolvedAddress = _moneroRecipientAddressForDisplay(ret, vm.wallet.type);
+        vm.isRecipientAddressShown = resolvedAddress.isNotEmpty;
+        return resolvedAddress;
+      },
+      applicable: (vm) =>
+          vm.showRecipientAddress &&
+          (vm.transactionInfo.to != null ||
+              [WalletType.monero].contains(vm.wallet.type) ||
+              vm.wallet.type == WalletType.bitcoin &&
+                  vm.transactionInfo.direction == TransactionDirection.incoming),
+      listItemBuilder: AddressListItem.new,
+    ),
     TxDetailRowDefinition(
-        keyString: "standard_list_item_transaction_confirmed_key",
-        title: S.current.confirmed_tx,
-        valueGetter: (vm) => (vm.transactionInfo.confirmations > 0).toString(),
-        applicable: (vm) => vm.wallet.type == WalletType.nano),
+      keyString: "standard_list_item_transaction_details_source_address_key",
+      title: S.current.transaction_details_source_address,
+      valueGetter: (vm) => vm.transactionInfo.from!,
+      applicable: (vm) => vm.transactionInfo.from != null,
+      listItemBuilder: AddressListItem.new,
+    ),
+    TxDetailRowDefinition(
+      keyString: "standard_list_item_address_label_key",
+      title: S.current.address_label,
+      valueGetter: (vm) => monero!.getSubaddressLabel(
+        vm.wallet,
+        vm.transactionInfo.additionalInfo["accountIndex"] as int,
+        vm.transactionInfo.additionalInfo["addressIndex"] as int,
+      ),
+      applicable: (vm) => vm.wallet.type == WalletType.monero,
+    ),
+    TxDetailRowDefinition(
+      keyString: "standard_list_item_transaction_key",
+      title: S.current.transaction_key,
+      valueGetter: (vm) {
+        final descriptionKey =
+            "${vm.transactionInfo.txHash}_${vm.wallet.walletAddresses.primaryAddress}";
+
+        final description = vm.transactionDescriptionBox.values.firstWhere(
+          (val) => val.id == descriptionKey || val.id == vm.transactionInfo.txHash,
+          orElse: () => TransactionDescription(id: descriptionKey),
+        );
+        return vm.transactionInfo.additionalInfo["key"] as String? ??
+            description.transactionKey ??
+            "";
+      },
+      applicable: (vm) => vm.wallet.type == WalletType.monero,
+    ),
+    TxDetailRowDefinition(
+      keyString: "standard_list_item_lightning_preimage",
+      title: S.current.transaction_preimage,
+      valueGetter: (vm) => vm.transactionInfo.additionalInfo["preimage"] as String? ?? "",
+      applicable: (vm) =>
+          hasLightningPreimage(vm.transactionInfo) && isLightning(vm.transactionInfo),
+    ),
+    TxDetailRowDefinition(
+      keyString: "standard_list_item_transaction_confirmed_key",
+      title: S.current.confirmed_tx,
+      valueGetter: (vm) => (vm.transactionInfo.confirmations > 0).toString(),
+      applicable: (vm) => vm.wallet.type == WalletType.nano,
+    ),
     TxDetailRowDefinition(
       keyString: "standard_list_item_transaction_details_id_key",
       title: S.current.transaction_details_transaction_id,
@@ -171,7 +204,7 @@ abstract class TransactionDetailsViewModelBase with Store {
     required this.sendViewModel,
     this.canReplaceByFee = false,
   })  : items = [],
-        RBFListItems = [],
+        rbfListItems = [],
         newFee = 0,
         isRecipientAddressShown = false,
         _appStore = appStore,
@@ -180,29 +213,35 @@ abstract class TransactionDetailsViewModelBase with Store {
 
     for (final def in TxDetailRowDefinition.defs) {
       if (def.applicable(this)) {
-        items.add(def.listItemBuilder(
+        items.add(
+          def.listItemBuilder(
             title: def.title,
             value: def.valueGetter(this),
-            key: ValueKey(def.keyString)) as TransactionDetailsListItem);
+            key: ValueKey(def.keyString),
+          ) as TransactionDetailsListItem,
+        );
       }
     }
 
     _checkForRBF(tx);
 
-    final descriptionKey = '${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}';
+    final descriptionKey = "${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}";
     final description = transactionDescriptionBox.values.firstWhere(
-        (val) => val.id == descriptionKey || val.id == transactionInfo.txHash,
-        orElse: () => TransactionDescription(id: descriptionKey));
+      (val) => val.id == descriptionKey || val.id == transactionInfo.txHash,
+      orElse: () => TransactionDescription(id: descriptionKey),
+    );
 
     if (showRecipientAddress && !isRecipientAddressShown) {
       final recipientAddress = description.recipientAddress;
 
       if (recipientAddress?.isNotEmpty ?? false) {
+        final recipientAddressForDisplay =
+            _moneroRecipientAddressForDisplay(recipientAddress!, wallet.type);
         items.add(
           AddressListItem(
             title: S.current.transaction_details_recipient_address,
-            value: recipientAddress!,
-            key: ValueKey('standard_list_item_${recipientAddress}_key'),
+            value: recipientAddressForDisplay,
+            key: ValueKey("standard_list_item_${recipientAddressForDisplay}_key"),
           ),
         );
       }
@@ -210,10 +249,11 @@ abstract class TransactionDetailsViewModelBase with Store {
   }
 
   void updateNote(String note) {
-    final descriptionKey = '${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}';
+    final descriptionKey = "${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}";
     final description = transactionDescriptionBox.values.firstWhere(
-        (val) => val.id == descriptionKey || val.id == transactionInfo.txHash,
-        orElse: () => TransactionDescription(id: descriptionKey));
+      (val) => val.id == descriptionKey || val.id == transactionInfo.txHash,
+      orElse: () => TransactionDescription(id: descriptionKey),
+    );
 
     description.transactionNote = note;
 
@@ -225,9 +265,10 @@ abstract class TransactionDetailsViewModelBase with Store {
   }
 
   String get note {
-    final descriptionKey = '${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}';
+    final descriptionKey = "${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}";
     final description = transactionDescriptionBox.values
-        .firstWhereOrNull((val) => val.id == descriptionKey || val.id == transactionInfo.txHash);
+      .firstWhereOrNull((val) => val.id == descriptionKey || val.id == transactionInfo.txHash,
+    );
     return description?.transactionNote ?? "";
   }
 
@@ -238,7 +279,7 @@ abstract class TransactionDetailsViewModelBase with Store {
   final AppStore _appStore;
 
   final List<TransactionDetailsListItem> items;
-  final List<TransactionDetailsListItem> RBFListItems;
+  final List<TransactionDetailsListItem> rbfListItems;
   bool showRecipientAddress;
   bool isRecipientAddressShown;
   int newFee;
@@ -250,27 +291,43 @@ abstract class TransactionDetailsViewModelBase with Store {
       return evm!.assetOfTransaction(wallet, transactionInfo);
     }
 
+    if (isLightning(transactionInfo)) {
+      return CryptoCurrency.btcln;
+    }
+
     return walletTypeToCryptoCurrency(wallet.type);
   }
 
-  // TODO integrate these getters with the TransactionInfo object
+  @computed
+  String get transactionAmount =>
+      _appStore.amountParsingProxy.asDisplayStringWithSymbol(transactionInfo.amount);
+
+  @computed
+  String get feeAmount =>
+      _appStore.amountParsingProxy.asDisplayStringWithSymbol(transactionInfo.fee!);
+
+  @computed
+  String get transactionCopyAmount =>
+      _appStore.amountParsingProxy.asDisplayString(transactionInfo.amount);
+
+  // TODO(malik1004x): integrate these getters with the TransactionInfo object
   String get formattedPendingStatus {
     switch (wallet.type) {
       case WalletType.monero:
         if (transactionInfo.confirmations >= 0 && transactionInfo.confirmations < 10) {
-          return ' (${transactionInfo.confirmations}/10)';
+          return " (${transactionInfo.confirmations}/10)";
         }
         break;
       case WalletType.wownero:
         if (transactionInfo.confirmations >= 0 && transactionInfo.confirmations < 3) {
-          return ' (${transactionInfo.confirmations}/3)';
+          return " (${transactionInfo.confirmations}/3)";
         }
         break;
       case WalletType.litecoin:
-        bool isPegIn = (transactionInfo.additionalInfo["isPegIn"] as bool?) ?? false;
-        bool isPegOut = (transactionInfo.additionalInfo["isPegOut"] as bool?) ?? false;
-        bool fromPegOut = (transactionInfo.additionalInfo["fromPegOut"] as bool?) ?? false;
-        String str = '';
+        final isPegIn = (transactionInfo.additionalInfo["isPegIn"] as bool?) ?? false;
+        final isPegOut = (transactionInfo.additionalInfo["isPegOut"] as bool?) ?? false;
+        final fromPegOut = (transactionInfo.additionalInfo["fromPegOut"] as bool?) ?? false;
+        String str = "";
         if (transactionInfo.confirmations <= 0) {
           str = S.current.pending;
         }
@@ -287,10 +344,10 @@ abstract class TransactionDetailsViewModelBase with Store {
         }
         return str;
       default:
-        return '';
+        return "";
     }
 
-    return '';
+    return "";
   }
 
   String get formattedStatus {
@@ -302,7 +359,7 @@ abstract class TransactionDetailsViewModelBase with Store {
       return formattedPendingStatus;
     }
 
-    return transactionInfo.isPending ? S.current.pending : '';
+    return transactionInfo.isPending ? S.current.pending : "";
   }
 
   int get neededConfirmations {
@@ -312,9 +369,11 @@ abstract class TransactionDetailsViewModelBase with Store {
       case WalletType.wownero:
         return 3;
       case WalletType.litecoin:
-        bool isPegOut = (transactionInfo.additionalInfo["isPegOut"] as bool?) ?? false;
-        bool fromPegOut = (transactionInfo.additionalInfo["fromPegOut"] as bool?) ?? false;
-        if (isPegOut || fromPegOut) return 6;
+        final isPegOut = (transactionInfo.additionalInfo["isPegOut"] as bool?) ?? false;
+        final fromPegOut = (transactionInfo.additionalInfo["fromPegOut"] as bool?) ?? false;
+        if (isPegOut || fromPegOut) {
+          return 6;
+        }
       default:
         return 0;
     }
@@ -322,8 +381,11 @@ abstract class TransactionDetailsViewModelBase with Store {
   }
 
   String get formattedTitle {
-    if (transactionInfo.additionalInfo['autoShield'] == true) {
-      return "Autoshield";
+    if (transactionInfo.additionalInfo['isIronwoodMigration'] == true) {
+      return 'Migration';
+    }
+    if (transactionInfo.additionalInfo['isAutoShield'] == true) {
+      return S.current.shielding;
     }
     if (transactionInfo.direction == TransactionDirection.incoming) {
       return S.current.received;
@@ -339,40 +401,44 @@ abstract class TransactionDetailsViewModelBase with Store {
     final txId = transactionInfo.txHash;
     if (wallet.chainId != null) {
       final explorerUrl = evm!.getExplorerUrlForChainId(wallet.chainId!);
-      if (explorerUrl != null) return '$explorerUrl/tx/${txId}';
+      if (explorerUrl != null) {
+        return "$explorerUrl/tx/${txId}";
+      }
     }
 
     switch (wallet.type) {
       case WalletType.monero:
-        return 'https://monero.com/tx/${txId}';
+        return "https://monero.com/tx/${txId}";
       case WalletType.bitcoin:
-        return 'https://mempool.space/${wallet.isTestnet ? "testnet/" : ""}tx/${txId}';
+        return isLightning(transactionInfo)
+            ? "https://sparkscan.io/tx/${txId}"
+            : 'https://mempool.space/${wallet.isTestnet ? "testnet/" : ""}tx/${txId}';
       case WalletType.litecoin:
         return bitcoin!.txIsMweb(transactionInfo)
             ? "https://www.mwebexplorer.com/blocks/block/${transactionInfo.height}"
-            : 'https://blockchair.com/litecoin/transaction/${txId}';
+            : "https://blockchair.com/litecoin/transaction/${txId}";
       case WalletType.bitcoinCash:
-        return 'https://blockchair.com/bitcoin-cash/transaction/${txId}';
+        return "https://blockchair.com/bitcoin-cash/transaction/${txId}";
       case WalletType.ethereum:
-        return 'https://etherscan.io/tx/${txId}';
+        return "https://etherscan.io/tx/${txId}";
       case WalletType.base:
-        return 'https://basescan.org/tx/${txId}';
+        return "https://basescan.org/tx/${txId}";
       case WalletType.arbitrum:
-        return 'https://arbiscan.io/tx/${txId}';
+        return "https://arbiscan.io/tx/${txId}";
       case WalletType.bsc:
-        return 'https://bscscan.com/tx/${txId}';
+        return "https://bscscan.com/tx/${txId}";
       case WalletType.polygon:
-        return 'https://polygonscan.com/tx/${txId}';
+        return "https://polygonscan.com/tx/${txId}";
       case WalletType.nano:
-        return 'https://nanexplorer.com/nano/block/${txId}';
+        return "https://nanexplorer.com/nano/block/${txId}";
       case WalletType.banano:
-        return 'https://nanexplorer.com/banano/block/${txId}';
+        return "https://nanexplorer.com/banano/block/${txId}";
       case WalletType.wownero:
-        return 'https://explore.wownero.com/tx/${txId}';
+        return "https://explore.wownero.com/tx/${txId}";
       case WalletType.dogecoin:
-        return 'https://blockchair.com/dogecoin/transaction/${txId}';
+        return "https://blockchair.com/dogecoin/transaction/${txId}";
       case WalletType.none:
-        return '';
+        return "";
     }
   }
 
@@ -392,46 +458,52 @@ abstract class TransactionDetailsViewModelBase with Store {
         : transactionInfo.outputAddresses!.length;
 
     newFee = bitcoin!.getFeeAmountForPriority(
-        wallet, bitcoin!.getBitcoinTransactionPriorityMedium(), inputsCount, outputsCount);
+      wallet,
+      bitcoin!.getBitcoinTransactionPriorityMedium(),
+      inputsCount,
+      outputsCount,
+    );
 
-    RBFListItems.add(
+    rbfListItems.add(
       StandartListItem(
         title: S.current.old_fee,
-        value: tx.feeFormatted() ?? '0.0',
-        key: ValueKey('standard_list_item_rbf_old_fee_key'),
+        value: tx.fee?.toStringWithSymbol() ?? "0.0",
+        key: const ValueKey("standard_list_item_rbf_old_fee_key"),
       ),
     );
 
     if (transactionInfo.fee != null && rawTransaction.isNotEmpty) {
       final size = bitcoin!.getTransactionVSize(wallet, rawTransaction);
-      final recommendedRate = (transactionInfo.fee! / size).round() + 1;
+      final recommendedRate = (transactionInfo.fee! / BigInt.from(size)) +
+          transactionInfo.fee!.copyWith(amount: BigInt.one);
 
-      RBFListItems.add(
-          StandartListItem(title: 'New recommended fee rate', value: '$recommendedRate sat/byte'));
+      rbfListItems.add(
+        StandartListItem(title: "New recommended fee rate", value: "$recommendedRate sat/byte"),
+      );
     }
 
     final priorities = priorityForWalletType(wallet.type);
     final selectedItem = priorities.indexOf(sendViewModel.feesViewModel.transactionPriority);
     final customItem = priorities.firstWhereOrNull(
-        (element) => element == sendViewModel.feesViewModel.bitcoinTransactionPriorityCustom);
+      (element) => element == sendViewModel.feesViewModel.bitcoinTransactionPriorityCustom,
+    );
     final customItemIndex = customItem != null ? priorities.indexOf(customItem) : null;
     final maxCustomFeeRate = sendViewModel.feesViewModel.maxCustomFeeRate?.toDouble();
 
-    RBFListItems.add(
+    rbfListItems.add(
       StandardPickerListItem(
-        key: ValueKey('standard_picker_list_item_transaction_priorities_key'),
+        key: const ValueKey("standard_picker_list_item_transaction_priorities_key"),
         title: S.current.estimated_new_fee,
-        value: bitcoin!.formatterBitcoinAmountToString(amount: newFee) + ' ${wallet.currency}',
+        value: "${bitcoin!.formatterBitcoinAmountToString(amount: newFee)} ${wallet.currency}",
         items: priorityForWalletType(wallet.type),
         customValue: _appStore.settingsStore.customBitcoinFeeRate.toDouble(),
         maxValue: maxCustomFeeRate,
         selectedIdx: selectedItem,
         customItemIndex: customItemIndex ?? 0,
-        displayItem: (dynamic priority, double sliderValue) =>
+        displayItem: (dynamic priority, sliderValue) =>
             sendViewModel.feesViewModel.displayFeeRate(priority, sliderValue.round()),
-        onSliderChanged: (double newValue) =>
-            setNewFee(value: newValue, priority: transactionPriority!),
-        onItemSelected: (dynamic item, double sliderValue) {
+        onSliderChanged: (newValue) => setNewFee(value: newValue, priority: transactionPriority!),
+        onItemSelected: (dynamic item, sliderValue) {
           transactionPriority = item as TransactionPriority;
           return setNewFee(value: sliderValue, priority: transactionPriority!);
         },
@@ -439,9 +511,9 @@ abstract class TransactionDetailsViewModelBase with Store {
     );
 
     if (transactionInfo.inputAddresses != null && transactionInfo.inputAddresses!.isNotEmpty) {
-      RBFListItems.add(
+      rbfListItems.add(
         StandardExpandableListItem(
-          key: ValueKey('standard_expandable_list_item_transaction_input_addresses_key'),
+          key: const ValueKey("standard_expandable_list_item_transaction_input_addresses_key"),
           title: S.current.inputs,
           expandableItems: transactionInfo.inputAddresses!,
         ),
@@ -450,17 +522,17 @@ abstract class TransactionDetailsViewModelBase with Store {
 
     if (transactionInfo.outputAddresses != null && transactionInfo.outputAddresses!.isNotEmpty) {
       final outputAddresses = transactionInfo.outputAddresses!.map((element) {
-        if (element.contains('OP_RETURN:') && element.length > 40) {
-          return element.substring(0, 40) + '...';
+        if (element.contains("OP_RETURN:") && element.length > 40) {
+          return "${element.substring(0, 40)}...";
         }
         return element;
       }).toList();
 
-      RBFListItems.add(
+      rbfListItems.add(
         StandardExpandableListItem(
           title: S.current.outputs,
           expandableItems: outputAddresses,
-          key: ValueKey('standard_expandable_list_item_transaction_output_addresses_key'),
+          key: const ValueKey("standard_expandable_list_item_transaction_output_addresses_key"),
         ),
       );
     }
@@ -470,7 +542,7 @@ abstract class TransactionDetailsViewModelBase with Store {
   Future<void> _checkForRBF(TransactionInfo tx) async {
     if (wallet.type == WalletType.bitcoin &&
         transactionInfo.direction == TransactionDirection.outgoing) {
-      final descriptionKey = '${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}';
+      final descriptionKey = "${transactionInfo.txHash}_${wallet.walletAddresses.primaryAddress}";
       final description = transactionDescriptionBox.values
           .firstWhereOrNull((val) => val.id == descriptionKey || val.id == transactionInfo.txHash);
 
@@ -487,45 +559,23 @@ abstract class TransactionDetailsViewModelBase with Store {
     }
   }
 
-  String setNewFee({double? value, required TransactionPriority priority}) {
+  String setNewFee({required TransactionPriority priority, double? value}) {
     newFee = priority == bitcoin!.getBitcoinTransactionPriorityCustom() && value != null
         ? bitcoin!.feeAmountWithFeeRate(
             wallet,
             value.round(),
             transactionInfo.inputAddresses?.length ?? 1,
-            transactionInfo.outputAddresses?.length ?? 1)
+            transactionInfo.outputAddresses?.length ?? 1,
+          )
         : bitcoin!.getFeeAmountForPriority(
             wallet,
             priority,
             transactionInfo.inputAddresses?.length ?? 1,
-            transactionInfo.outputAddresses?.length ?? 1);
+            transactionInfo.outputAddresses?.length ?? 1,
+          );
 
     return bitcoin!.formatterBitcoinAmountToString(amount: newFee);
   }
 
-  String get formattedCryptoAmount {
-    if (wallet.type == WalletType.bitcoin) {
-      final crypto = isLightning(transactionInfo) ? CryptoCurrency.btcln : CryptoCurrency.btc;
-      final amount = _appStore.amountParsingProxy
-          .getDisplayCryptoString(transactionInfo.amount, crypto)
-          .withMaxDecimals(8)
-          .withLocalSeperator(_appStore.settingsStore.languageCode);
-
-      return '$amount ${_appStore.amountParsingProxy.getCryptoSymbol(crypto)}';
-    }
-
-    return transactionInfo.amountFormatted();
-  }
-
   void replaceByFee(String newFee) => sendViewModel.replaceByFee(transactionInfo, newFee);
-
-  @computed
-  String get pendingTransactionFiatAmountValueFormatted => sendViewModel.isFiatDisabled
-      ? ''
-      : sendViewModel.pendingTransactionFiatAmount + ' ' + sendViewModel.fiat.title;
-
-  @computed
-  String get pendingTransactionFeeFiatAmountFormatted => sendViewModel.isFiatDisabled
-      ? ''
-      : sendViewModel.pendingTransactionFeeFiatAmount + ' ' + sendViewModel.fiat.title;
 }

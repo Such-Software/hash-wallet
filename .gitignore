@@ -157,6 +157,7 @@ lib/zcash/zcash.dart
 # scaffold first. PNGs remain build artifacts.
 # ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
 ios/Runner/Assets.xcassets/AppIcon.appiconset/*.png
+ios/AppIcon.icon/*
 
 ios/Runner/Info.plist
 android/app/src/main/res/mipmap-*
@@ -170,7 +171,6 @@ android/app/src/main/res/drawable/ic_launcher.png
 assets/new-ui/**/*.svg.vec
 
 /pubspec.yaml
-/pubspec.lock
 /android/app.properties
 /android/app/src/main/AndroidManifest.xml
 
@@ -192,6 +192,7 @@ macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png
 macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png
 macos/Runner/Configs/AppInfo.xcconfig
 macos/Runner.xcodeproj/project.pbxproj
+macos/AppIcon.icon/*
 
 
 integration_test/playground.dart
@@ -247,3 +248,7 @@ __pycache__/
 
 # Internal engineering notes (not for the public repo)
 docs/internal-notes.md
+*.salive
+android/.kotlin
+scripts/.cache
+pubspec.lock

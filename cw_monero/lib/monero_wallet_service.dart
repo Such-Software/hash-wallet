@@ -3,8 +3,8 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:collection/collection.dart';
 import 'package:cw_core/get_height_by_date.dart';
+import 'package:cw_core/hardware/hardware_wallet_service.dart';
 import 'package:cw_core/monero_wallet_utils.dart';
 import 'package:cw_core/pathForWallet.dart';
 import 'package:cw_core/unspent_coins_info.dart';
@@ -20,8 +20,8 @@ import 'package:cw_monero/api/wallet_manager.dart';
 import 'package:cw_monero/bip39_seed.dart';
 import 'package:cw_monero/ledger.dart';
 import 'package:cw_monero/monero_wallet.dart';
+import 'package:cw_monero/trezor.dart';
 import 'package:hive/hive.dart';
-import 'package:ledger_flutter_plus/ledger_flutter_plus.dart';
 import 'package:monero/monero.dart' as monero;
 import 'package:polyseed/polyseed.dart';
 
@@ -44,10 +44,15 @@ class MoneroNewWalletCredentials extends WalletCredentials {
 }
 
 class MoneroRestoreWalletFromHardwareCredentials extends WalletCredentials {
-  MoneroRestoreWalletFromHardwareCredentials(
-      {required String name, required this.ledgerConnection, int height = 0, String? password})
-      : super(name: name, password: password, height: height);
-  LedgerConnection ledgerConnection;
+  MoneroRestoreWalletFromHardwareCredentials({
+    required String name,
+    required this.hardwareWalletService,
+    int height = 0,
+    String? password,
+    String? passphrase,
+  }) : super(name: name, password: password, height: height, passphrase: passphrase);
+
+  final HardwareWalletService hardwareWalletService;
 }
 
 class MoneroRestoreWalletFromSeedCredentials extends WalletCredentials {
@@ -187,7 +192,7 @@ class MoneroWalletService extends WalletService<
           unspentCoinsInfo: unspentCoinsInfoSource,
           password: password);
 
-      if (wallet.isHardwareWallet) {
+      if (wallet.hardwareWalletType == HardwareWalletType.ledger) {
         wallet.setLedgerConnection(gLedger!);
         gLedger = null;
       }
@@ -295,12 +300,35 @@ class MoneroWalletService extends WalletService<
     try {
       final path = await pathForWallet(name: credentials.name, type: getType());
       final password = credentials.password;
-      final height = credentials.height;
 
-      enableLedgerExchange(credentials.ledgerConnection);
+      if (credentials.hardwareWalletService case MoneroLedgerService service) {
+        enableLedgerExchange(service.connection);
 
-      await monero_wallet_manager.restoreWalletFromHardwareWallet(
-          path: path, password: password!, restoreHeight: height!, deviceName: 'Ledger');
+        await monero_wallet_manager.restoreWalletFromHardwareWallet(
+          path: path,
+          password: password!,
+          restoreHeight: credentials.height!,
+          deviceName: 'Ledger',
+        );
+      } else if (credentials.hardwareWalletService case final MoneroTrezorService service) {
+        final trezor = Trezor(service);
+
+        final watchCredentials = await trezor.getWatchCredentials();
+
+        monero_wallet_manager.restoreWalletFromKeys(
+          path: path,
+          password: credentials.password!,
+          language: "English",
+          restoreHeight: credentials.height!,
+          address: watchCredentials.address,
+          viewKey: watchCredentials.watchKey,
+          spendKey: "",
+        );
+
+        if (credentials.passphrase != null) {
+          monero_wallet_manager.storePassphrase(path: path, passphrase: credentials.passphrase!);
+        }
+      }
 
       final wallet = MoneroWallet(
           walletInfo: credentials.walletInfo!,
@@ -549,7 +577,7 @@ class MoneroWalletService extends WalletService<
     if (walletInfo == null) {
       return false;
     }
-    return walletInfo.isHardwareWallet;
+    return walletInfo.hardwareWalletType == HardwareWalletType.ledger;
   }
 }
 

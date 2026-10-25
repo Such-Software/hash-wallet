@@ -1,9 +1,11 @@
 -
+  label: "Ankr"
   uri: polygon-rpc.com
 -
+  label: "polygon-bor-rpc.publicnode.com"
   uri: polygon-bor-rpc.publicnode.com
-  useSSL: true
   isDefault: true
+  useSSL: true
   isEnabledForAutoSwitching: true
 -
   uri: polygon.llamarpc.com

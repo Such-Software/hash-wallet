@@ -16,6 +16,19 @@ import 'package:monero/src/wallet2.dart';
 import 'package:monero/src/generated_bindings_monero.g.dart' as monero_gen;
 import 'package:mutex/mutex.dart';
 
+String _formatTransactionError(String error) {
+  final message = error.replaceAll(
+    RegExp(
+      r'(?:[A-Za-z]:)?[\\/][^\s:]*\.(?:c|cc|cpp|cxx|h|hpp|hxx):\d+:(?:[A-Za-z0-9_]+:)?\s*',
+    ),
+    '',
+  );
+  if (message.contains("RPC error")) {
+    return "Invalid node response, please try again or switch node\n\ntrace: $message";
+  }
+  return message;
+}
+
 Map<int, Map<String, String>> txKeys = {};
 String getTxKey(String txId) {
   txKeys[currentWallet!.ffiAddress()] ??= {};
@@ -119,12 +132,15 @@ Future<Transaction> getTransaction(String txId) async {
     return txCache[currentWallet!.ffiAddress()]![txId]!;
   }
   await txHistoryMutex.acquire();
-  final tx = txhistory!.transactionById(txId);
-  final txDart = Transaction(txInfo: tx);
-  txCache[currentWallet!.ffiAddress()] ??= {};
-  txCache[currentWallet!.ffiAddress()]![txId] = txDart;
-  txHistoryMutex.release();
-  return txDart;
+  try {
+    final tx = txhistory!.transactionById(txId);
+    final txDart = Transaction(txInfo: tx);
+    txCache[currentWallet!.ffiAddress()] ??= {};
+    txCache[currentWallet!.ffiAddress()]![txId] = txDart;
+    return txDart;
+  } finally {
+    txHistoryMutex.release();
+  }
 }
 
 Future<PendingTransactionDescription> createTransactionSync(
@@ -135,6 +151,11 @@ Future<PendingTransactionDescription> createTransactionSync(
     int accountIndex = 0,
     List<String> preferredInputs = const []}) async {
   final amt = amount == null ? 0 : currentWallet!.amountFromString(amount);
+
+  if (amount != null && amt == 0) {
+    throw MoneroTransactionCreationException(
+        'Refusing to create a transaction with a zero amount: 0 is the sweep-all ');
+  }
 
   final waddr = currentWallet!.ffiAddress();
 
@@ -185,11 +206,7 @@ Future<PendingTransactionDescription> createTransactionSync(
   })();
 
   if (error != null) {
-    String message = error;
-    if (message.contains("RPC error")) {
-      message = "Invalid node response, please try again or switch node\n\ntrace: $message";
-    }
-    throw CreationTransactionException(message: message);
+    throw CreationTransactionException(message: _formatTransactionError(error));
   }
 
   final rAmt = pendingTx.amount();
@@ -202,6 +219,7 @@ Future<PendingTransactionDescription> createTransactionSync(
     fee: rFee,
     hash: rHash,
     hex: rHex,
+    txCount: pendingTx.txCount(),
     pointerAddress: pendingTx.ffiAddress(),
   );
 }
@@ -237,7 +255,7 @@ Future<PendingTransactionDescription> createTransactionMultDest(
   final Wallet2PendingTransaction tx = MoneroPendingTransaction(txptr);
 
   if (tx.status() != 0) {
-    throw CreationTransactionException(message: tx.errorString());
+    throw CreationTransactionException(message: _formatTransactionError(tx.errorString()));
   }
 
   return PendingTransactionDescription(
@@ -246,6 +264,7 @@ Future<PendingTransactionDescription> createTransactionMultDest(
     hash: tx.txid(''),
     hex: tx.hex(''),
     pointerAddress: tx.ffiAddress(),
+    txCount: tx.txCount(),
   );
 }
 
@@ -282,7 +301,7 @@ Future<String?> commitTransaction(
     })();
   }
   if (error != null && error != "no tx keys found for this txid") {
-    throw CreationTransactionException(message: error);
+    throw CreationTransactionException(message: _formatTransactionError(error));
   }
   unawaited(() async {
     storeSync(force: true);

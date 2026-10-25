@@ -1,15 +1,17 @@
 import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/currency_picker/currency_picker_args.dart';
+import 'package:hash_wallet/new-ui/widgets/currency_picker/currency_picker_sheet.dart';
+import 'package:hash_wallet/new-ui/widgets/currency_picker/fiat_currency_picker_sheet.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/token_image_widget.dart';
 import 'package:hash_wallet/new-ui/widgets/new_primary_button.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
-import 'package:hash_wallet/src/screens/exchange/widgets/currency_picker.dart';
 import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
-import 'package:hash_wallet/utils/show_pop_up.dart';
+import 'package:hash_wallet/utils/decimal_input_formatter.dart';
 import 'package:hash_wallet/view_model/wallet_address_list/wallet_address_list_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 
 class ReceiveAmountModal extends StatefulWidget {
   const ReceiveAmountModal(
@@ -54,6 +56,7 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
                 onLeadingPressed: Navigator.of(context).pop,
                 onTrailingPressed: () {},
                 leadingIcon: Icon(Icons.close),
+                leadingSemanticLabel: S.of(context).close,
               ),
               Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -63,54 +66,68 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
                   spacing: 12,
                   children: [
                     if (widget.walletAddressListViewModel.hasTokensList) ...[
-                      Text("Token"),
-                      GestureDetector(
-                          onTap: () {
-                            _presentTokenCurrencyPicker(context);
-                          },
-                          child: Observer(
-                            builder: (_) => Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      spacing: 8,
-                                      children: [
-                                        Image.asset(
-                                            widget.walletAddressListViewModel.tokenCurrency
-                                                    ?.iconPath ??
-                                                widget.walletAddressListViewModel.currencies.first
-                                                    .iconPath ??
-                                                "",
-                                            width: 32,
-                                            height: 32),
-                                        Text((widget.walletAddressListViewModel.tokenCurrency ??
-                                                widget.walletAddressListViewModel.currencies.first
-                                                    as CryptoCurrency)
-                                            .title
-                                            .toUpperCase())
-                                      ],
-                                    ),
-                                    RotatedBox(
-                                        quarterTurns: 2,
-                                        child: HashImageWidget(
-                                            imageUrl: "assets/new-ui/dropdown_arrow.svg"))
-                                  ],
+                      // The caption is reused as the picker's semantics label,
+                      // so it must not be announced as a separate node.
+                      ExcludeSemantics(child: Text(S.of(context).token)),
+                      MergeSemantics(
+                        child: Semantics(
+                          button: true,
+                          label: S.of(context).select_token,
+                          child: GestureDetector(
+                            onTap: () {
+                              _presentTokenCurrencyPicker(context);
+                            },
+                            child: Observer(
+                              builder: (_) => Container(
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        spacing: 8,
+                                        children: [
+                                          ExcludeSemantics(
+                                            child: TokenImageWidget(
+                                              imageUrl: widget.walletAddressListViewModel
+                                                      .tokenCurrency?.iconPath ??
+                                                  widget.walletAddressListViewModel.currencies.first
+                                                      .iconPath ??
+                                                  "",
+                                              size: 32,
+                                            ),
+                                          ),
+                                          Text((widget.walletAddressListViewModel.tokenCurrency ??
+                                                  widget.walletAddressListViewModel.currencies.first
+                                                      as CryptoCurrency)
+                                              .title
+                                              .toUpperCase())
+                                        ],
+                                      ),
+                                      ExcludeSemantics(
+                                        child: RotatedBox(
+                                            quarterTurns: 2,
+                                            child: HashImageWidget(
+                                                imageUrl: "assets/new-ui/dropdown_arrow.svg")),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          )),
+                          ),
+                        ),
+                      ),
                     ],
                     SizedBox(),
-                    Text(S.of(context).amount),
+                    // The caption is reused as the field's semantics label.
+                    ExcludeSemantics(child: Text(S.of(context).amount)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -130,66 +147,91 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
                                 width: 2,
                               ),
                             ),
-                            child: TextField(
-                              textAlign: TextAlign.left,
-                              textAlignVertical: TextAlignVertical.center,
-                              controller: _amountController,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  signed: false,
-                                  decimal: !widget.walletAddressListViewModel.useSatoshi),
-                              decoration: InputDecoration(
-                                hint: Text(
-                                  widget.walletAddressListViewModel.useSatoshi ? "0" : "0.00000000",
+                            child: MergeSemantics(
+                              child: Semantics(
+                                label: S.of(context).amount,
+                                child: TextField(
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface.withValues(alpha: 0.5),
+                                  textAlignVertical: TextAlignVertical.center,
+                                  controller: _amountController,
+                                  keyboardType: TextInputType.numberWithOptions(
+                                    signed: false,
+                                    decimal:
+                                        widget.walletAddressListViewModel.selectedCurrencyDecimals >
+                                            0,
                                   ),
+                                  inputFormatters: [
+                                    DecimalInputFormatter(
+                                      maxDecimals:
+                                          widget.walletAddressListViewModel.selectedCurrencyDecimals,
+                                    ),
+                                  ],
+                                  decoration: InputDecoration(
+                                    hint: Text(
+                                      widget.walletAddressListViewModel.useSatoshi
+                                          ? "0"
+                                          : "0.00000000",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface.withValues(alpha: 0.5),
+                                      ),
+                                    ),
+                                    border: InputBorder.none,
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                  ),
+                                  style:
+                                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
                                 ),
-                                border: InputBorder.none,
-                                filled: true,
-                                fillColor: Colors.transparent,
                               ),
-                              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 25,
-                          child: GestureDetector(
-                            onTap: () {
-                              _presentFiatCurrencyPicker(context);
-                            },
-                            child: Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  topRight: Radius.circular(18),
-                                  bottomRight: Radius.circular(18),
-                                ),
-                                color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 4.0,
-                                children: [
-                                  Observer(
-                                    builder: (_) => Text(
-                                      widget.walletAddressListViewModel.selectedCurrencySymbol,
-                                      style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface,
-                                      ),
+                          child: MergeSemantics(
+                            child: Semantics(
+                              button: true,
+                              label: S.of(context).select_fiat_currency_title,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _presentFiatCurrencyPicker(context);
+                                },
+                                child: Container(
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(0),
+                                      bottomLeft: Radius.circular(0),
+                                      topRight: Radius.circular(18),
+                                      bottomRight: Radius.circular(18),
                                     ),
+                                    color: Theme.of(context).colorScheme.surfaceContainerHigh,
                                   ),
-                                  Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Theme.of(context).colorScheme.primary,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    spacing: 4.0,
+                                    children: [
+                                      Observer(
+                                        builder: (_) => Text(
+                                          widget.walletAddressListViewModel.selectedCurrencySymbol,
+                                          style: TextStyle(
+                                            color: Theme.of(context).colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                      ExcludeSemantics(
+                                        child: Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
@@ -218,35 +260,30 @@ class _ReceiveAmountModalState extends State<ReceiveAmountModal> {
     );
   }
 
-  void _presentTokenCurrencyPicker(BuildContext context) async {
-    await showPopUp(
-      builder: (_) => CurrencyPicker(
-        selectedAtIndex: widget.walletAddressListViewModel.tokenCurrencyIndex,
-        items: widget.walletAddressListViewModel.tokenCurrencies,
-        hintText: S.of(context).search_currency,
-        onItemSelected: widget.walletAddressListViewModel.setTokenCurrency,
-      ),
+  void _presentTokenCurrencyPicker(BuildContext context) {
+    final items =
+        widget.walletAddressListViewModel.tokenCurrencies.whereType<CryptoCurrency>().toList();
+    CurrencyPickerSheet.show(
       context: context,
+      args: CurrencyPickerArgs(
+        items: items,
+        selected: widget.walletAddressListViewModel.tokenCurrency,
+        onSelected: widget.walletAddressListViewModel.setTokenCurrency,
+        symbolResolver: widget.walletAddressListViewModel.amountParsingProxy.getCryptoSymbol,
+      ),
     );
   }
 
-  void _presentFiatCurrencyPicker(BuildContext context) async {
-    final currs = widget.walletAddressListViewModel.currencies.toList();
-    // the first options should be the crypto and the default fiat currency
-    currs.sort((a, b) {
-      if (a == widget.walletAddressListViewModel.fiatCurrency || a is CryptoCurrency) return -1;
-      if (b == widget.walletAddressListViewModel.fiatCurrency || a is CryptoCurrency) return 1;
-      return 0;
-    });
-
-    await showPopUp(
-      builder: (_) => CurrencyPicker(
-        selectedAtIndex: currs.indexOf(widget.walletAddressListViewModel.selectedCurrency),
-        items: currs,
-        hintText: S.of(context).search_currency,
-        onItemSelected: widget.walletAddressListViewModel.selectCurrency,
-      ),
+  void _presentFiatCurrencyPicker(BuildContext context) {
+    final selected = widget.walletAddressListViewModel.selectedCurrency;
+    final cryptoOption =
+        widget.walletAddressListViewModel.currencies.whereType<CryptoCurrency>().firstOrNull;
+    FiatCurrencyPickerSheet.show(
       context: context,
+      selected: selected,
+      cryptoOption: cryptoOption,
+      onSelected: widget.walletAddressListViewModel.selectCurrency,
+      onCryptoSelected: widget.walletAddressListViewModel.selectCurrency,
     );
   }
 }

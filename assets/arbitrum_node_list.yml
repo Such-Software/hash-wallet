@@ -1,8 +1,10 @@
 -
+  label: "PublicNode"
   uri: arbitrum-one-rpc.publicnode.com
-  is_default: true
+  isDefault: true
   useSSL: true
   isEnabledForAutoSwitching: true
 -
+  label: "dRPC"
   uri: arbitrum.drpc.org
   useSSL: true

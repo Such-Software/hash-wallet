@@ -8,8 +8,7 @@ dependencies:
   qr_flutter:
     git:
       url: https://github.com/cake-tech/qr.flutter.git
-      ref: cake-4.0.2
-      version: 4.0.2
+      ref: dced28909a82e1906e7c510ae8ca807a1658c898
   shared_preferences: 2.5.3
   # provider: ^6.0.3
   rxdart: ^0.28.0
@@ -25,8 +24,8 @@ dependencies:
       url: https://github.com/cake-tech/modal_bottom_sheet
       ref: b1cca111c53d41b9f07123a8c67cfe06fb1b69bf
       path: modal_bottom_sheet
-  mobx: ^2.1.4
-  flutter_mobx: 2.0.6+5
+  mobx: ^2.6.0
+  flutter_mobx: 2.3.0
   flutter_slidable: ^3.0.1
   share_plus: ^10.0.0
   # date_range_picker: ^1.0.6
@@ -79,12 +78,11 @@ dependencies:
   device_info_plus: ^9.1.0
   base32: 2.1.3
   in_app_review: ^2.0.6
-  image_picker: ^1.1.2
+  image_picker: ^1.2.2
   cake_backup:
     git:
       url: https://github.com/cake-tech/cake_backup.git
-      ref: 3aba867dcab6737f6707782f5db15d71f303db38
-      version: 1.0.0
+      ref: b5d86a2a21e1c186cd0baa4df1f3a4f3f9413056
   flutter_plugin_android_lifecycle: 2.0.23
   path_provider_android: ^2.2.1
   shared_preferences_android: ^2.4.8
@@ -122,11 +120,16 @@ dependencies:
   ledger_flutter_plus:
     git:
       url: https://github.com/vespr-wallet/ledger-flutter-plus
-      ref: 60817d4b20144f9da9029f5034790272795b9d38
+      ref: eaf49764ad0863e8dec97ad30ff6aea0a1d1bd28
   trezor_connect:
     git:
       url: https://github.com/cake-tech/trezor_connect
       ref: d1242cea90f84b00200e7bcab914a5af750e23fb
+  trezor_flutter:
+    git:
+      url: https://github.com/cake-tech/trezor-flutter.git
+      ref: 591d4b8c821b9c10561f848b866324a9a8dcb489
+      path: trezor-flutter
   bitbox_flutter:
     path: ./scripts/bitbox_flutter
   hashlib: 1.19.2
@@ -139,7 +142,7 @@ dependencies:
   blockchain_utils:
     git:
       url: https://github.com/cake-tech/blockchain_utils
-      ref: cake-update-v2
+      ref: 59fdf29d72068e0522a96a8953ed7272833a9f57
   flutter_daemon:
     git:
       url: https://github.com/MrCyjaneK/flutter_daemon
@@ -160,7 +163,7 @@ dependencies:
   torch_dart:
     path: ./scripts/torch_dart
   quick_actions: ^1.1.0
-  fl_chart: ^0.70.2
+  fl_chart: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -168,68 +171,83 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   mocktail: ^1.0.4
-  build_runner: ^2.4.15
+  build_runner: ^2.15.0
   logging: ^1.2.0
-  mobx_codegen: ^2.1.1
-  build_resolvers: ^2.4.4
-  hive_generator: ^2.0.1
-  flutter_launcher_icons: ^0.13.1
-  # Cake's compile_graphics.sh runs `dart run vector_graphics_compiler` to
-  # precompile res/pictures/*.svg → assets/new-ui/*.svg.vec. Without this
-  # dep, the CI build doesn't generate the icon assets and CakeImageWidget
-  # silently fails to load them (icons render as empty placeholders).
+  mobx_codegen: ^2.7.7
+  # compile_graphics.sh runs `dart run vector_graphics_compiler` to precompile
+  # res/pictures/*.svg into assets/new-ui/*.svg.vec; without it the icons render empty.
   vector_graphics_compiler: ^1.1.16
+#  hive_generator: ^2.0.1
+  # flutter_launcher_icons: ^0.11.0
+  # check flutter_launcher_icons for usage
   pedantic: ^1.8.0
   # replace https://github.com/dart-lang/lints#migrating-from-packagepedantic
   translator:
     git:
       url: https://github.com/cake-tech/google-translator.git
-      version: 1.0.0
+      ref: b36571ec11efd838afda010adcc21a4e95302745
   msix: ^3.16.9
 
-dependency_overrides:
-  bech32:
-    git:
-      url: https://github.com/cake-tech/bech32.git
-      ref: 05755063b593aa6cca0a4820a318e0ce17de6192
-  web3dart:
-    git:
-      url: https://github.com/cake-tech/web3dart.git
-      ref: cake
-  protobuf: ^3.1.0
-  bitcoin_base:
-    git:
-      url: https://github.com/cake-tech/bitcoin_base
-      ref: cake-update-v11
-  ffi: 2.1.0
-  ledger_flutter_plus:
-    git:
-      url: https://github.com/cake-tech/ledger-flutter-plus
-      ref: 5237e5b3d5f07696eefd0aaee9c32478ed399d20
-  # Hash Bags: the old git pin (konstantinullrich/ledger-usb-plus@dad482c) was
-  # force-pushed away — the commit no longer exists, breaking `flutter pub get`
-  # on any cold runner (Android/Linux containers). cake-tech's ledger-flutter-plus
-  # fork depends on the published `ledger_usb_plus: ^1.0.4`, so pin to that.
-  ledger_usb_plus: ^1.0.4
-  socks5_proxy:
-    git:
-      url: https://github.com/LacticWhale/socks_dart.git
-      ref: 27ad7c2efae8d7460325c74b90f660085cbd0685
-  web_socket_channel: ^3.0.2
-  freezed_annotation: 2.4.4
-  intl: 0.20.2
-  qr_flutter:
-    git:
-      url: https://github.com/cake-tech/qr.flutter.git
-      ref: cake-4.0.2
-      version: 4.0.2
-  file_picker:
-    git:
-      url: https://github.com/cake-tech/flutter_file_picker.git
-      ref: c414574bc5ac349450f601e7f72c7b9f31b4d087
-  decimal: ^2.3.3
-  flutter_rust_bridge: 2.11.1
-  flutter_secure_storage_windows: 3.1.2
+# These are required for the app to build.
+# Note that this comment is parsed by scripts/create_overrides.sh, so plz don't break/remove it.
+# dependency_overrides:
+#   bech32:
+#     git:
+#       url: https://github.com/cake-tech/bech32.git
+#       ref: 05755063b593aa6cca0a4820a318e0ce17de6192
+#   web3dart:
+#     git:
+#       url: https://github.com/cake-tech/web3dart.git
+#       ref: aa3f932dbf54eda651b7bd01ad00204acf998bd0
+#   protobuf: ^3.1.0
+#   bitcoin_base:
+#     git:
+#       url: https://github.com/cake-tech/bitcoin_base
+#       ref: 4e41f96f4838139895c65c3f49109d05af5d46aa
+#   ffi: 2.1.0
+#   ledger_flutter_plus:
+#     git:
+#       url: https://github.com/cake-tech/ledger-flutter-plus
+#       ref: eaf49764ad0863e8dec97ad30ff6aea0a1d1bd28
+#   ledger_usb_plus:
+#     git:
+#       url: https://github.com/cake-tech/ledger-usb-plus
+#       ref: 40af7c48cf34211ba3cc9e87dd05ed1af8a429a2
+#   socks5_proxy:
+#     git:
+#       url: https://github.com/LacticWhale/socks_dart.git
+#       ref: 27ad7c2efae8d7460325c74b90f660085cbd0685
+#   web_socket_channel: ^3.0.2
+#   freezed_annotation: 2.4.4
+#   intl: 0.20.2
+#   qr_flutter:
+#     git:
+#       url: https://github.com/cake-tech/qr.flutter.git
+#       ref: dced28909a82e1906e7c510ae8ca807a1658c898
+#   file_picker:
+#     git:
+#       url: https://github.com/cake-tech/flutter_file_picker.git
+#       ref: c414574bc5ac349450f601e7f72c7b9f31b4d087
+#   decimal: ^2.3.3
+#   flutter_rust_bridge: 2.11.1
+#   flutter_secure_storage_windows: 3.1.2
+#   universal_ble:
+#     git:
+#       url: https://github.com/cake-tech/universal_ble.git
+#       ref: 9952fc72ded48891844d7786c0fa14c4cae1ce0b
+#   flutter_secure_storage:
+#     git:
+#       url: https://github.com/cake-tech/flutter_secure_storage.git
+#       path: flutter_secure_storage
+#       ref: ca897a08677edb443b366352dd7412735e098e7b
+#   blockchain_utils:
+#     git:
+#       url: https://github.com/cake-tech/blockchain_utils
+#       ref: 59fdf29d72068e0522a96a8953ed7272833a9f57
+#   cake_backup:
+#     git:
+#       url: https://github.com/cake-tech/cake_backup.git
+#       ref: b5d86a2a21e1c186cd0baa4df1f3a4f3f9413056
 
 flutter_launcher_icons:
   image_path: "assets/images/app_logo.png"
@@ -275,12 +293,15 @@ flutter:
     - assets/base_node_list.yml
     - assets/arbitrum_node_list.yml
     - assets/bsc_node_list.yml
+    - assets/robinhood_node_list.yml
     - assets/text/
     - assets/faq/
     - assets/animation/
     - assets/new-ui/
+    - assets/new-ui/account_education/
     - assets/new-ui/icons/
     - assets/new-ui/hero/
+    - assets/new-ui/network_icons/
     - assets/new-ui/balance_card_icons/
     - assets/new-ui/balance_card_backgrounds/
     - assets/new-ui/settings_row_icons/
@@ -291,16 +312,19 @@ flutter:
     - assets/new-ui/navbar/
     - assets/new-ui/changelog/icons/
     - assets/new-ui/changelog/text/
+    - assets/new-ui/card_icons/
+    - assets/new-ui/card_icons/chain_icons/
+    - assets/new-ui/card_icons/og_icons/
+    - assets/new-ui/card_icons/outline_icons/
+    - assets/new-ui/card_icons/symbol_icons/
     - assets/new-ui/crypto_full_icons/
+    - assets/new-ui/hardware_wallets/
+    - assets/new-ui/node_speed_badges/
+    - assets/new-ui/address_sources/
+    - assets/new-ui/buy_payment_methods/
+    - assets/new-ui/charts_sort_criteria/
 
   fonts:
-    - family: Lato
-      fonts:
-        - asset: assets/fonts/Lato-Regular.ttf
-        - asset: assets/fonts/Lato-Medium.ttf
-        - asset: assets/fonts/Lato-Semibold.ttf
-        - asset: assets/fonts/Lato-Bold.ttf
-
     - family: Wix Madefor Text
       fonts:
         - asset: assets/fonts/WixMadeforText-Regular.ttf

@@ -44,8 +44,8 @@ class OrderDetailsPageBodyState extends State<OrderDetailsPageBody> {
 
   @override
   void dispose() {
-    super.dispose();
     orderDetailsViewModel.timer?.cancel();
+    super.dispose();
   }
 
   @override

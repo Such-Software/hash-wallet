@@ -1,9 +1,11 @@
 import 'package:hash_wallet/generated/i18n.dart';
+import 'package:hash_wallet/new-ui/widgets/copy_wrapper.dart';
 import 'package:hash_wallet/new-ui/widgets/new_primary_button.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_top_bar.dart';
 import 'package:hash_wallet/new-ui/widgets/swap_page/swap_modal_header.dart';
 import 'package:hash_wallet/src/screens/receive/widgets/qr_image.dart';
 import 'package:hash_wallet/utils/address_formatter.dart';
+import 'package:hash_wallet/utils/clipboard_util.dart';
 import 'package:hash_wallet/view_model/exchange/exchange_trade_view_model.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/payment_uris.dart';
@@ -46,7 +48,7 @@ class _SwapSendExternalModalState extends State<SwapSendExternalModal> {
 
   @override
   Widget build(BuildContext context) {
-    if (uri == null) return SizedBox.shrink();
+    if (widget.address.isEmpty) return SizedBox.shrink();
     final resolvedSize = MediaQuery.of(context).size.width * (largeQrMode ? 0.8 : 0.54);
 
     return PopScope(
@@ -67,6 +69,7 @@ class _SwapSendExternalModalState extends State<SwapSendExternalModal> {
                 leadingWidget: SwapModalHeader(
                     fromIconPath: widget.from.iconPath ?? "", toIconPath: widget.to.iconPath ?? ""),
                 trailingIcon: Icon(Icons.close),
+                trailingSemanticLabel: S.of(context).close,
                 onTrailingPressed: Navigator.of(context).pop,
               ),
               Padding(
@@ -124,18 +127,27 @@ class _SwapSendExternalModalState extends State<SwapSendExternalModal> {
                           largeQrMode = !largeQrMode;
                         });
                       },
-                      child: AnimatedContainer(
+                      child: TweenAnimationBuilder<double>(
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeOutCubic,
-                        width: resolvedSize,
-                        height: resolvedSize,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: QrImage(
-                            embeddedImagePath: widget.from.iconPath,
-                            data: uri.toString(),
-                          ),
+                        tween: Tween<double>(
+                          begin: resolvedSize,
+                          end: resolvedSize,
                         ),
+                        builder: (context, animatedSize, child) {
+                          return SizedBox(
+                            width: animatedSize,
+                            height: animatedSize,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: QrImage(
+                                size: animatedSize,
+                                embeddedImagePath: widget.from.iconPath,
+                                data: uri?.toString() ?? widget.address,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     AddressFormatter.buildSegmentedAddress(
@@ -157,10 +169,63 @@ class _SwapSendExternalModalState extends State<SwapSendExternalModal> {
                           ),
                         )),
                     if (widget.exchangeTradeViewModel.trade.extraId != null)
-                      Text(
-                        "${S.of(context).destination_tag} ${widget.exchangeTradeViewModel.trade.extraId}",
-                        style: TextStyle(
-                            fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      CopyWrapper(
+                        data: ClipboardData(
+                            text: widget.exchangeTradeViewModel.trade.extraId!),
+                        builder: (context, copied) => Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surfaceContainer,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 8,
+                              children: [
+                                Text(
+                                  S.of(context).destination_tag,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  spacing: 8,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        widget.exchangeTradeViewModel.trade.extraId!,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                            color: Theme.of(context).colorScheme.primary),
+                                      ),
+                                    ),
+                                    AnimatedSwitcher(
+                                      duration: const Duration(milliseconds: 200),
+                                      child: Icon(
+                                        copied ? Icons.check : Icons.copy,
+                                        key: ValueKey(copied),
+                                        // Only the icon changes here, so label
+                                        // the copied state for CopyWrapper's
+                                        // live region to announce.
+                                        semanticLabel: copied ? S.of(context).copied : null,
+                                        size: 18,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     Row(
                       spacing: 8,
@@ -168,7 +233,7 @@ class _SwapSendExternalModalState extends State<SwapSendExternalModal> {
                         Flexible(
                           child: NewPrimaryButton(
                               onPressed: () =>
-                                  Clipboard.setData(ClipboardData(text: widget.address)),
+                                  ClipboardUtil.copyToClipboard(context, widget.address),
                               text: S.of(context).copy,
                               color: Theme.of(context).colorScheme.primary,
                               textColor: Theme.of(context).colorScheme.onPrimary),

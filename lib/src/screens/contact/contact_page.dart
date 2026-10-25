@@ -1,3 +1,4 @@
+import 'package:hash_wallet/core/address_resolver/parsed_address.dart';
 import 'package:hash_wallet/core/address_validator.dart';
 import 'package:hash_wallet/new-ui/widgets/send_page/send_address_input.dart';
 import 'package:hash_wallet/utils/show_pop_up.dart';
@@ -27,7 +28,15 @@ class ContactPage extends BasePage {
     _nameController.text = contactViewModel.name;
     _addressController.text = contactViewModel.address;
     _nameController.addListener(() => contactViewModel.name = _nameController.text);
-    _addressController.addListener(() => contactViewModel.address = _addressController.text);
+    _addressController.addListener(() {
+      final address = _addressController.text;
+
+      if (address != contactViewModel.address) {
+        contactViewModel.displayName = '';
+      }
+
+      contactViewModel.address = address;
+    });
 
     autorun((_) => _currencyTypeController.text =
         "${contactViewModel.currency?.toString() ?? ""} ${contactViewModel.currency?.tag != null ? "(${contactViewModel.currency?.tag})" : ""}");
@@ -64,6 +73,7 @@ class ContactPage extends BasePage {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 BaseTextFormField(
+                  key: ValueKey("contact_page_name_textfield_key"),
                   controller: _nameController,
                   hintText: S.of(context).contact_name,
                   validator: ContactNameValidator(),
@@ -72,6 +82,7 @@ class ContactPage extends BasePage {
                   padding: EdgeInsets.only(top: 20),
                   child: Container(
                     child: InkWell(
+                      key: ValueKey("contact_page_currency_picker_button_key"),
                       onTap: () => _presentCurrencyPicker(context),
                       child: IgnorePointer(
                         child: BaseTextFormField(
@@ -96,10 +107,12 @@ class ContactPage extends BasePage {
                     child: Observer(
                       builder: (_) {
                         return NewSendAddressInput(
+                          key: ValueKey("contact_page_address_input_key"),
                           focusNode: addressFocusNode,
                           displayName: contactViewModel.displayName,
                           addressController: _addressController,
-                          onEditingComplete: () => contactViewModel.extractParsedAddress(context),
+                          onEditingComplete: () {},
+                          onPushPasteButton: (context) => _extractParsedAddress(context),
                           validator: AddressValidator(type: contactViewModel.currency!),
                           selectedCurrency: contactViewModel.currency!,
                         );
@@ -128,10 +141,10 @@ class ContactPage extends BasePage {
               Expanded(
                 child: Observer(
                   builder: (_) => PrimaryButton(
+                    key: ValueKey("contact_page_save_button_key"),
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
-
-                      await contactViewModel.extractParsedAddress(context);
+                      _extractParsedAddress(context);
 
                       if (_formKey.currentState != null && !_formKey.currentState!.validate()) {
                         return;
@@ -149,6 +162,16 @@ class ContactPage extends BasePage {
             ],
           )),
     );
+  }
+
+  Future<void> _extractParsedAddress(BuildContext context) async {
+    final parsedAddress = await contactViewModel.extractParsedAddress(context);
+    if (parsedAddress == null) return;
+
+    final confirmed = await showParsedAddressConfirmationAlert(context, parsedAddress);
+    if (!confirmed) return;
+
+    contactViewModel.applyParsedAddress(parsedAddress);
   }
 
   void _presentCurrencyPicker(BuildContext context) {
@@ -203,5 +226,30 @@ class ContactPage extends BasePage {
         _addressController.text = val;
       }
     });
+  }
+
+  Future<bool> showParsedAddressConfirmationAlert(
+    BuildContext context,
+    ParsedAddress parsedAddress,
+  ) async {
+    final confirmed = await showPopUp<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertWithOneAction(
+          alertTitle: S.of(context).address_detected,
+          headerTitleText: parsedAddress.profileName.isEmpty ? null : parsedAddress.profileName,
+          headerImageProfileUrl: parsedAddress.profileImageUrl.isEmpty
+              ? parsedAddress.addressSource.iconPath
+              : parsedAddress.profileImageUrl,
+          alertContent: S.of(context).extracted_address_content(
+                '${parsedAddress.handle} (${parsedAddress.addressSource.label})',
+              ),
+          buttonText: S.of(context).ok,
+          buttonAction: () => Navigator.of(context).pop(true),
+        );
+      },
+    );
+
+    return confirmed ?? false;
   }
 }

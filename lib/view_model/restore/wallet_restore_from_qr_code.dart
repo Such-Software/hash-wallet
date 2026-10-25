@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:hash_wallet/core/address_resolver/address_resolver_utils.dart';
 import 'package:hash_wallet/core/seed_validator.dart';
-import 'package:hash_wallet/entities/parse_address_from_domain.dart';
 import 'package:hash_wallet/entities/qr_scanner.dart';
 import 'package:hash_wallet/reactions/wallet_connect.dart';
 import 'package:hash_wallet/routes.dart';
@@ -11,6 +11,7 @@ import 'package:hash_wallet/view_model/restore/restore_mode.dart';
 import 'package:hash_wallet/view_model/restore/restore_wallet.dart';
 import 'package:cw_core/currency_for_wallet_type.dart';
 import 'package:cw_core/wallet_type.dart';
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:flutter/cupertino.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:collection/collection.dart';
@@ -74,11 +75,9 @@ class WalletRestoreFromQRCode {
 
   static String? _extractAddressFromUrl(String rawString, WalletType type) {
     try {
-      return AddressResolver.extractAddressByType(
+      return AddressResolverUtils.extractAddressByType(
         raw: rawString,
-        type: walletTypeToCryptoCurrency(
-          type,
-        ),
+        type: walletTypeToCryptoCurrency(type),
         requireSurroundingWhitespaces: false,
       );
     } catch (_) {
@@ -114,8 +113,8 @@ class WalletRestoreFromQRCode {
     final prefix = code.startsWith('xpub')
         ? 'xpub'
         : code.startsWith('zpub')
-            ? 'zpub'
-            : '????';
+        ? 'zpub'
+        : '????';
     if (walletType == null) {
       await _specifyWalletAssets(context, "Can't determine wallet type, please pick it manually");
       walletType =
@@ -127,8 +126,8 @@ class WalletRestoreFromQRCode {
       formattedUri = seedPhrase != null
           ? '$walletType:?seed=$seedPhrase'
           : code.startsWith(prefix)
-              ? '$walletType:?$prefix=$code'
-              : throw Exception('Failed to determine valid seed phrase');
+          ? '$walletType:?$prefix=$code'
+          : throw Exception('Failed to determine valid seed phrase');
     } else {
       final index = code.indexOf(':');
       final query = code.substring(index + 1).replaceAll('?', '&');
@@ -189,9 +188,15 @@ class WalletRestoreFromQRCode {
       seedValue.split(' ').forEach((element) {
         if (!words.contains(element)) {
           throw Exception(
-              "Unexpected restore mode: mnemonic_seed is invalid or doesn't match wallet type");
+            "Unexpected restore mode: mnemonic_seed is invalid or doesn't match wallet type",
+          );
         }
       });
+      if (isEVMCompatibleChain(type) && !bip39.validateMnemonic(seedValue)) {
+        throw Exception(
+          'EVM mnemonic has an invalid checksum. Please check the seed phrase for typos.',
+        );
+      }
       return WalletRestoreMode.seed;
     }
 
@@ -239,12 +244,14 @@ class WalletRestoreFromQRCode {
 
 Future<void> _specifyWalletAssets(BuildContext context, String error) async {
   await showPopUp<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertWithOneAction(
-            alertTitle: S.current.error,
-            alertContent: error,
-            buttonText: S.of(context).ok,
-            buttonAction: () => Navigator.of(context).pop());
-      });
+    context: context,
+    builder: (BuildContext context) {
+      return AlertWithOneAction(
+        alertTitle: S.current.error,
+        alertContent: error,
+        buttonText: S.of(context).ok,
+        buttonAction: () => Navigator.of(context).pop(),
+      );
+    },
+  );
 }

@@ -1,24 +1,30 @@
 -
+  label: "Bysh"
   uri: electrum-ltc.bysh.me:50002
-  useSSL: true
   isDefault: true
-  isEnabledForAutoSwitching: true
--
-  uri: ltc-electrum.cakewallet.com:50002
   useSSL: true
-  isDefault: false
   isEnabledForAutoSwitching: true
 -
+  label: "Cake Wallet"
+  uri: ltc-electrum.cakewallet.com:50002
+  isOfficial: true
+  useSSL: true
+  isEnabledForAutoSwitching: true
+-
+  label: "Stack Wallet"
   uri: litecoin.stackwallet.com:20063
   useSSL: true
   isEnabledForAutoSwitching: true
 -
+  label: "Fiat Faucet"
   uri: lightweight.fiatfaucet.com:50002
   useSSL: true
 -
+  label: "Xurious"
   uri: electrum.ltc.xurious.com:50002
   useSSL: true
 -
+  label: "Electrum-LTC"
   uri: backup.electrum-ltc.org:443
   useSSL: true
   isEnabledForAutoSwitching: true
@@ -26,3 +32,8 @@
   uri: ltc.rentonisk.com:50002
   useSSL: true
   isEnabledForAutoSwitching: true
+-
+  label: "Cake Wallet (Tor)"
+  uri: cakeltcnzbdxhk3dhlzxjnnylxbfhhbx2njegaluyh35t7dca35vcnqd.onion:50001
+  isOfficial: true
+  useSSL: false

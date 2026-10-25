@@ -1,4 +1,5 @@
 import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/history_tile_base.dart';
+import 'package:hash_wallet/new-ui/widgets/coins_page/token_image_widget.dart';
 import 'package:hash_wallet/src/widgets/hash_image_widget.dart';
 import 'package:cw_core/crypto_currency.dart';
 import 'package:cw_core/transaction_direction.dart';
@@ -80,13 +81,13 @@ class HistoryTile extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onInverseSurface, shape: BoxShape.circle),
               child: HashImageWidget(
                 imageUrl: _getDirectionIconToken(),
+                height: 14,
+                width: 14,
                 colorFilter: ColorFilter.mode(
                     direction == TransactionDirection.outgoing
                         ? Theme.of(context).colorScheme.inverseSurface.withAlpha(175)
                         : Colors.green,
                     BlendMode.srcIn),
-                width: 14,
-                height: 14,
               ),
             ),
           )
@@ -99,10 +100,9 @@ class HistoryTile extends StatelessWidget {
         children: [
           Opacity(
             opacity: pending ? 0.5 : 1,
-            child: HashImageWidget(
+            child: TokenImageWidget(
               imageUrl: asset?.iconPath ?? "",
-              width: 34,
-              height: 34,
+              size: 34,
             ),
           ),
           Align(
@@ -142,7 +142,8 @@ class HistoryTile extends StatelessWidget {
       date: date,
       amount: amount,
       amountFiat: amountFiat,
-      leadingIcon: _getLeadingIcon(context),
+      // Decorative: `title` already reads out sent/received/pending.
+      leadingIcon: ExcludeSemantics(child: _getLeadingIcon(context)),
       primaryTextColor: _getPrimaryTextColor(),
       roundedTop: roundedTop,
       roundedBottom: roundedBottom,

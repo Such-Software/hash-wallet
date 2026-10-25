@@ -3,12 +3,10 @@ import 'package:hash_wallet/entities/new_ui_entities/list_item/list_item.dart';
 import 'package:hash_wallet/entities/qr_scanner.dart';
 import 'package:hash_wallet/store/settings_store.dart';
 import 'package:hash_wallet/utils/permission_handler.dart';
-import 'package:collection/collection.dart';
 import 'package:cw_core/node.dart';
 import 'package:cw_core/utils/proxy_wrapper.dart';
 import 'package:cw_core/wallet_type.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -17,8 +15,8 @@ part 'node_create_or_edit_view_model.g.dart';
 class NodeCreateOrEditViewModel = NodeCreateOrEditViewModelBase with _$NodeCreateOrEditViewModel;
 
 abstract class NodeCreateOrEditViewModelBase with Store {
-  NodeCreateOrEditViewModelBase(
-      this._nodeSource, this.walletType, this.editingNode, this._settingsStore)
+  NodeCreateOrEditViewModelBase(this.isPow, this.walletType, this._settingsStore,
+      {this.editingNode})
       : state = InitialExecutionState(),
         connectionState = InitialExecutionState(),
         label = editingNode?.label ?? '',
@@ -106,6 +104,12 @@ abstract class NodeCreateOrEditViewModelBase with Store {
   @observable
   String socksProxyAddress;
 
+  @observable
+  Node? editingNode;
+
+  @observable
+  bool isPow;
+
   @computed
   bool get isReady => address.isNotEmpty;
 
@@ -144,8 +148,6 @@ abstract class NodeCreateOrEditViewModelBase with Store {
   }
 
   final WalletType walletType;
-  final Node? editingNode;
-  final Box<Node> _nodeSource;
   final SettingsStore _settingsStore;
 
   void updateViewModelFromText(String key, String value) {
@@ -233,30 +235,29 @@ abstract class NodeCreateOrEditViewModelBase with Store {
   void setSocksProxyAddress(String val) => socksProxyAddress = val;
 
   @action
-  Future<void> save({Node? editingNode, bool saveAsCurrent = false}) async {
-    final node = Node(
-        label: label,
-        uri: uri,
-        path: path,
-        type: walletType,
-        login: login,
-        password: password,
-        useSSL: useSSL,
-        trusted: trusted,
-        isEnabledForAutoSwitching: isEnabledForAutoSwitching,
-        socksProxyAddress: socksProxyAddress);
+  Future<void> delete({required Node editingNode}) async {
+    await editingNode.delete();
+  }
+
+  @action
+  Future<void> save({bool saveAsCurrent = false}) async {
+    editingNode ??= Node();
+    editingNode!.type = walletType;
+    editingNode!.label = label;
+    editingNode!.uriRaw = uri;
+    editingNode!.path = path;
+    editingNode!.login = login;
+    editingNode!.password = password;
+    editingNode!.isPow = isPow;
+    editingNode!.useSSL = useSSL;
+    editingNode!.trusted = trusted;
+    editingNode!.socksProxyAddress = socksProxyAddress;
+
     try {
       state = IsExecutingState();
-      if (editingNode != null) {
-        await _nodeSource.put(editingNode.key, node);
-      } else if (_existingNode(node) != null) {
-        setAsCurrent(_existingNode(node)!);
-      } else {
-        await _nodeSource.add(node);
-        setAsCurrent(_nodeSource.values.last);
-      }
+      await editingNode!.save();
       if (saveAsCurrent) {
-        setAsCurrent(node);
+        setAsCurrent(editingNode!);
       }
 
       state = ExecutedSuccessfullyState();
@@ -284,16 +285,6 @@ abstract class NodeCreateOrEditViewModelBase with Store {
     } catch (e) {
       connectionState = FailureState(e.toString());
     }
-  }
-
-  Node? _existingNode(Node node) {
-    final nodes = _nodeSource.values.toList();
-    nodes.forEach((item) {
-      item.login ??= '';
-      item.password ??= '';
-      item.useSSL ??= false;
-    });
-    return nodes.firstWhereOrNull((item) => item == node);
   }
 
   @action
