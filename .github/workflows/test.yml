@@ -88,6 +88,11 @@ jobs:
           bash model_generator.sh
           dart run tool/generate_localization.dart
 
+      # The .svg.vec icons are gitignored build output, as on every build
+      # workflow; widget tests load them through the asset bundle.
+      - name: Compile SVG assets (res/pictures/*.svg → assets/new-ui/*.svg.vec)
+        run: ./compile_graphics.sh
+
       - name: flutter analyze (errors are fatal, existing warnings are not)
         run: flutter analyze lib --no-fatal-infos --no-fatal-warnings
 
