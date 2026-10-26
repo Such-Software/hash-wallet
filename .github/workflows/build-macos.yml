@@ -1,28 +1,25 @@
-# Hash Bags macOS build: signed with Developer ID, notarized, stapled.
+# Hash Bags macOS builds, two lanes from one configured tree.
 #
-# This is DIRECT distribution, not the Mac App Store, so it needs a
-# "Developer ID Application" certificate. That is a different certificate from
-# the "Apple Distribution" one build-ios-testflight.yml uses, and the two are
-# not interchangeable: a build signed with the App Store cert is rejected by
-# Gatekeeper when a user downloads it from a web page. Notarization, on the
-# other hand, reuses the App Store Connect API key that repository already has.
+#   developer-id  Direct download: a zip of the .app signed with Developer ID
+#                 Application, notarized and stapled, published to the release.
+#   app-store     Mac App Store: a .pkg whose .app is signed with Apple
+#                 Distribution and whose installer is signed with 3rd Party Mac
+#                 Developer Installer, uploaded to App Store Connect.
 #
-# Secrets, all optional. Absent ones do not fail the build; they downgrade it,
-# loudly, and the preflight below prints exactly which stage you will lose.
-#   APPLE_CERTIFICATE            base64 of the Developer ID Application .p12
-#   APPLE_CERTIFICATE_PASSWORD   password set when the .p12 was exported
-#   APPLE_SIGNING_IDENTITY       "Developer ID Application: Such Software LLC (D8PL9F7X33)"
-#   APPLE_TEAM_ID                D8PL9F7X33
-#   APPLE_KEYCHAIN_PASSWORD      any value; scopes a throwaway keychain
-#   APPLE_API_KEY_P8_BASE64      base64 of AuthKey_<id>.p8   (notarization)
-#   APPLE_API_KEY                key id                      (notarization)
-#   APPLE_API_ISSUER             issuer UUID                 (notarization)
-#   GH_RELEASE_TOKEN             publishes the zip to the GitHub release
+# Each lane signs inside xcodebuild against its own provisioning profile
+# (scripts/macos/build_signed.sh). The approach and every failure it avoids are
+# in docs infra/macos-app-store-release.md, from Vegan IQ's first store build.
 #
-# The same names smirk-monorepo uses, deliberately: both repositories live under
-# the Builds owner, so an organisation-level secret serves both and a reader
-# comparing the two workflows is not left wondering whether the difference means
-# something.
+# Secrets. A selected lane with any of its own missing refuses in the first
+# step, naming each one, before forty minutes of prerequisites.
+#   both lanes   APPLE_KEYCHAIN_PASSWORD, APPLE_KEY_ID, APPLE_ISSUER_ID,
+#                APPLE_API_KEY_P8_BASE64 (notarytool and altool)
+#   developer-id MACOS_DEVELOPER_ID_CERT_P12_BASE64, MACOS_DEVELOPER_ID_CERT_P12_PASSWORD,
+#                MACOS_DEVELOPER_ID_PROFILE_BASE64 (a "Developer ID" profile)
+#   app-store    APPLE_DIST_CERT_P12_BASE64, APPLE_DIST_CERT_P12_PASSWORD (shared
+#                with iOS), MACOS_INSTALLER_CERT_P12_BASE64,
+#                MACOS_INSTALLER_CERT_P12_PASSWORD, MACOS_APP_STORE_PROFILE_BASE64
+#   optional     GH_RELEASE_TOKEN publishes the Developer ID zip to the release
 
 name: Hash Bags macOS build
 
@@ -32,6 +29,18 @@ on:
       - 'hash-bags-*'
   workflow_dispatch:
     inputs:
+      lanes:
+        description: Which macOS builds to produce
+        type: choice
+        options: [both, developer-id, app-store]
+        default: both
+      app_store_upload:
+        description: >-
+          Upload the App Store package to App Store Connect. A build number
+          already uploaded is refused by Apple, so a rebuild of the same
+          version sets this false.
+        type: boolean
+        default: true
       release_tag:
         description: >-
           Existing release tag to publish to (e.g. hash-bags-1.0.3). Leave empty
@@ -56,6 +65,10 @@ jobs:
     timeout-minutes: 90
     env:
       APP_MACOS_TYPE: cakewallet
+      # A tag push builds both lanes and uploads; a dispatch says what it wants.
+      LANES: ${{ github.event.inputs.lanes || 'both' }}
+      APP_STORE_UPLOAD: ${{ github.event.inputs.app_store_upload || 'true' }}
+      KEYCHAIN: ${{ github.workspace }}/../hashbags-macos.keychain-db
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8
 
@@ -64,40 +77,47 @@ jobs:
         with:
           fetch-depth: 1
 
-      # Cheap guards first: this reports what the run can actually produce
-      # before spending forty minutes finding out. Lengths only, never values.
-      - name: Preflight — which signing stages are available
+      # Cheap guards first: a selected lane without its signing material refuses
+      # here, in seconds, naming every missing secret. Presence only, never values.
+      - name: Require each selected lane's signing material
         env:
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
           APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
-          GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
+          MACOS_DEVELOPER_ID_CERT_P12_BASE64: ${{ secrets.MACOS_DEVELOPER_ID_CERT_P12_BASE64 }}
+          MACOS_DEVELOPER_ID_CERT_P12_PASSWORD: ${{ secrets.MACOS_DEVELOPER_ID_CERT_P12_PASSWORD }}
+          MACOS_DEVELOPER_ID_PROFILE_BASE64: ${{ secrets.MACOS_DEVELOPER_ID_PROFILE_BASE64 }}
+          APPLE_DIST_CERT_P12_BASE64: ${{ secrets.APPLE_DIST_CERT_P12_BASE64 }}
+          APPLE_DIST_CERT_P12_PASSWORD: ${{ secrets.APPLE_DIST_CERT_P12_PASSWORD }}
+          MACOS_INSTALLER_CERT_P12_BASE64: ${{ secrets.MACOS_INSTALLER_CERT_P12_BASE64 }}
+          MACOS_INSTALLER_CERT_P12_PASSWORD: ${{ secrets.MACOS_INSTALLER_CERT_P12_PASSWORD }}
+          MACOS_APP_STORE_PROFILE_BASE64: ${{ secrets.MACOS_APP_STORE_PROFILE_BASE64 }}
         run: |
           set -euo pipefail
-          have() { [ -n "${1:-}" ] && echo "present (${#1} chars)" || echo "ABSENT"; }
-          echo "APPLE_CERTIFICATE         : $(have "${APPLE_CERTIFICATE:-}")"
-          echo "APPLE_CERTIFICATE_PASSWORD: $(have "${APPLE_CERTIFICATE_PASSWORD:-}")"
-          echo "APPLE_SIGNING_IDENTITY    : $(have "${APPLE_SIGNING_IDENTITY:-}")"
-          echo "APPLE_API_KEY_P8_BASE64   : $(have "${APPLE_API_KEY_P8_BASE64:-}")"
-          echo "APPLE_API_KEY             : $(have "${APPLE_API_KEY:-}")"
-          echo "APPLE_API_ISSUER          : $(have "${APPLE_API_ISSUER:-}")"
-          echo "GH_RELEASE_TOKEN          : $(have "${GH_TOKEN:-}")"
-          echo
-          if [ -n "${APPLE_CERTIFICATE:-}" ] && [ -n "${APPLE_SIGNING_IDENTITY:-}" ]; then
-            echo "VERDICT: will code-sign with Developer ID"
-          else
-            echo "VERDICT: NO Developer ID cert — the .app will be ad-hoc signed and"
-            echo "         Gatekeeper will refuse it on any machine but this one."
+          case "$LANES" in both|developer-id|app-store) ;; *)
+            echo "FATAL: lanes must be both, developer-id or app-store, not '$LANES'"; exit 64 ;; esac
+          need="APPLE_KEYCHAIN_PASSWORD APPLE_KEY_ID APPLE_ISSUER_ID APPLE_API_KEY_P8_BASE64"
+          if [ "$LANES" != app-store ]; then
+            need="$need MACOS_DEVELOPER_ID_CERT_P12_BASE64 MACOS_DEVELOPER_ID_CERT_P12_PASSWORD MACOS_DEVELOPER_ID_PROFILE_BASE64"
           fi
-          if [ -n "${APPLE_API_KEY_P8_BASE64:-}" ] && [ -n "${APPLE_API_KEY:-}" ] && [ -n "${APPLE_API_ISSUER:-}" ]; then
-            echo "VERDICT: will notarize and staple"
-          else
-            echo "VERDICT: NO notarization credentials — users get the unidentified"
-            echo "         developer warning even with a valid Developer ID signature."
+          if [ "$LANES" != developer-id ]; then
+            need="$need APPLE_DIST_CERT_P12_BASE64 APPLE_DIST_CERT_P12_PASSWORD MACOS_INSTALLER_CERT_P12_BASE64 MACOS_INSTALLER_CERT_P12_PASSWORD MACOS_APP_STORE_PROFILE_BASE64"
           fi
+          missing=""
+          for v in $need; do
+            eval "val=\${$v:-}"
+            [ -n "$val" ] || missing="$missing $v"
+          done
+          if [ -n "$missing" ]; then
+            echo "FATAL: lanes=$LANES needs these repository secrets, which are not set:"
+            for v in $missing; do echo "  $v"; done
+            echo "The certificates and profiles they hold, and how to export them, are in"
+            echo "docs infra/apple-desktop-signing.md. Run one lane with the lanes input"
+            echo "while the other's material is still being gathered."
+            exit 1
+          fi
+          echo "lanes=$LANES: signing material present; App Store upload=$APP_STORE_UPLOAD"
 
       - name: Check Flutter 3.41.9
         id: flutter_check
@@ -306,124 +326,156 @@ jobs:
       - name: Compile SVG assets (res/pictures/*.svg → assets/new-ui/*.svg.vec)
         run: ./compile_graphics.sh
 
-      - name: Build macOS release
-        run: |
-          set -euo pipefail
-          flutter build macos --release
-          ls -la build/macos/Build/Products/Release/
+      # ---- Configure the Xcode project, then build each lane ----------------
+      - name: Configure the macOS project
+        run: flutter build macos --release --config-only
 
-      # ---- Developer ID signing ---------------------------------------------
-      - name: Import the Developer ID certificate
-        id: cert
+      # One throwaway keychain for both lanes, never the login keychain: this is
+      # a shared Mac. Each tool is granted only the keys it uses: codesign the
+      # application certificates, productbuild the installer one.
+      - name: Prepare the signing keychain, profiles and API key
         env:
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
-        run: |
-          set -euo pipefail
-          if [ -z "${APPLE_CERTIFICATE:-}" ]; then
-            echo "no Developer ID certificate; skipping import"
-            echo "imported=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          KEYCHAIN_PASSWORD="${APPLE_KEYCHAIN_PASSWORD:-hashbags-ci}"
-          KEYCHAIN_PATH="$RUNNER_TEMP/hashbags-macos.keychain-db"
-          # A dedicated throwaway keychain, never the login keychain: this runner
-          # is a shared Mac and a build should not be able to read, or leave
-          # anything in, the operator's own keys.
-          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | sed 's/"//g')
-          P12="$RUNNER_TEMP/developer_id.p12"
-          echo "$APPLE_CERTIFICATE" | openssl base64 -d -A > "$P12"
-          security import "$P12" -k "$KEYCHAIN_PATH" -P "${APPLE_CERTIFICATE_PASSWORD:-}" \
-            -T /usr/bin/codesign -T /usr/bin/security
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          rm -f "$P12"
-          security find-identity -v -p codesigning "$KEYCHAIN_PATH"
-          echo "keychain=$KEYCHAIN_PATH" >> "$GITHUB_OUTPUT"
-          echo "imported=true" >> "$GITHUB_OUTPUT"
-
-      - name: Codesign the app
-        if: steps.cert.outputs.imported == 'true'
-        env:
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
-        run: |
-          set -euo pipefail
-          APP=$(ls -d build/macos/Build/Products/Release/*.app | head -1)
-          echo "signing $APP"
-          # --deep is deliberately NOT used: Apple deprecated it and it skips
-          # nested code it does not recognise. Sign inside-out by hand so every
-          # dylib is covered and a failure names the file it could not sign.
-          find "$APP/Contents" -type f \( -name '*.dylib' -o -name '*.so' \) -print0 |
-            while IFS= read -r -d '' lib; do
-              codesign --force --timestamp --options runtime \
-                --sign "$APPLE_SIGNING_IDENTITY" "$lib"
-            done
-          find "$APP/Contents/Frameworks" -maxdepth 1 -name '*.framework' -print0 2>/dev/null |
-            while IFS= read -r -d '' fw; do
-              codesign --force --timestamp --options runtime \
-                --sign "$APPLE_SIGNING_IDENTITY" "$fw"
-            done
-          # Hardened runtime is what notarization requires; entitlements come
-          # from the templated Release.entitlements written by app_config.sh.
-          codesign --force --timestamp --options runtime \
-            --entitlements macos/Runner/Release.entitlements \
-            --sign "$APPLE_SIGNING_IDENTITY" "$APP"
-          codesign --verify --deep --strict --verbose=2 "$APP"
-
-      # ---- Notarization ------------------------------------------------------
-      - name: Notarize and staple
-        id: notarize
-        if: steps.cert.outputs.imported == 'true'
-        env:
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
           APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+          MACOS_DEVELOPER_ID_CERT_P12_BASE64: ${{ secrets.MACOS_DEVELOPER_ID_CERT_P12_BASE64 }}
+          MACOS_DEVELOPER_ID_CERT_P12_PASSWORD: ${{ secrets.MACOS_DEVELOPER_ID_CERT_P12_PASSWORD }}
+          MACOS_DEVELOPER_ID_PROFILE_BASE64: ${{ secrets.MACOS_DEVELOPER_ID_PROFILE_BASE64 }}
+          APPLE_DIST_CERT_P12_BASE64: ${{ secrets.APPLE_DIST_CERT_P12_BASE64 }}
+          APPLE_DIST_CERT_P12_PASSWORD: ${{ secrets.APPLE_DIST_CERT_P12_PASSWORD }}
+          MACOS_INSTALLER_CERT_P12_BASE64: ${{ secrets.MACOS_INSTALLER_CERT_P12_BASE64 }}
+          MACOS_INSTALLER_CERT_P12_PASSWORD: ${{ secrets.MACOS_INSTALLER_CERT_P12_PASSWORD }}
+          MACOS_APP_STORE_PROFILE_BASE64: ${{ secrets.MACOS_APP_STORE_PROFILE_BASE64 }}
         run: |
           set -euo pipefail
-          if [ -z "${APPLE_API_KEY_P8_BASE64:-}" ] || [ -z "${APPLE_API_KEY:-}" ] || [ -z "${APPLE_API_ISSUER:-}" ]; then
-            echo "no notarization credentials; the build stays signed but un-notarized"
-            echo "notarized=false" >> "$GITHUB_OUTPUT"
-            exit 0
+          umask 077
+          S="$RUNNER_TEMP/macos-signing"
+          rm -rf "$S"; mkdir -p "$S/private_keys"
+          # A job killed before cleanup leaves the keychain behind, and
+          # create-keychain then refuses every later run until someone deletes it.
+          security delete-keychain "$KEYCHAIN" 2>/dev/null || true
+          security create-keychain -p "$APPLE_KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$APPLE_KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          import() {  # <base64> <password> <tool>
+            printf '%s' "$1" | base64 --decode > "$S/cert.p12"
+            security import "$S/cert.p12" -k "$KEYCHAIN" -P "$2" -T "$3"
+            rm -f "$S/cert.p12"
+          }
+          if [ "$LANES" != app-store ]; then
+            import "$MACOS_DEVELOPER_ID_CERT_P12_BASE64" "$MACOS_DEVELOPER_ID_CERT_P12_PASSWORD" /usr/bin/codesign
+            printf '%s' "$MACOS_DEVELOPER_ID_PROFILE_BASE64" | base64 --decode > "$S/developer-id.provisionprofile"
           fi
-          APP=$(ls -d build/macos/Build/Products/Release/*.app | head -1)
-          KEY="$RUNNER_TEMP/AuthKey.p8"
-          echo "$APPLE_API_KEY_P8_BASE64" | openssl base64 -d -A > "$KEY"
+          if [ "$LANES" != developer-id ]; then
+            import "$APPLE_DIST_CERT_P12_BASE64" "$APPLE_DIST_CERT_P12_PASSWORD" /usr/bin/codesign
+            import "$MACOS_INSTALLER_CERT_P12_BASE64" "$MACOS_INSTALLER_CERT_P12_PASSWORD" /usr/bin/productbuild
+            printf '%s' "$MACOS_APP_STORE_PROFILE_BASE64" | base64 --decode > "$S/app-store.provisionprofile"
+          fi
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$APPLE_KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
+          # Prepend rather than replace, so the runner keeps every keychain it had.
+          EXISTING="$(security list-keychains -d user | sed -e 's/^[[:space:]]*"//' -e 's/"$//')"
+          # shellcheck disable=SC2086
+          security list-keychains -d user -s "$KEYCHAIN" $EXISTING
+          security find-identity -v "$KEYCHAIN" | sed -n 's/.*"\(.*\)".*/identity: \1/p'
+          # Under the job's temp dir, not the runner home: altool finds it through
+          # API_PRIVATE_KEYS_DIR, and nothing is left on the shared disk.
+          printf '%s' "$APPLE_API_KEY_P8_BASE64" | base64 --decode > "$S/private_keys/AuthKey_${APPLE_KEY_ID}.p8"
+
+      - name: Build the Developer ID app
+        id: devid
+        if: env.LANES != 'app-store'
+        run: |
+          set -euo pipefail
+          APP="$(scripts/macos/build_signed.sh "$RUNNER_TEMP/macos-signing/developer-id.provisionprofile" \
+            "$KEYCHAIN" build/macos-developer-id ENABLE_HARDENED_RUNTIME=YES | tail -1)"
+          echo "app=$APP" >> "$GITHUB_OUTPUT"
+
+      - name: Notarize and staple the Developer ID app
+        if: env.LANES != 'app-store'
+        env:
+          APP: ${{ steps.devid.outputs.app }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+        run: |
+          set -euo pipefail
           ZIP="$RUNNER_TEMP/notarize.zip"
-          # ditto, not zip: it preserves the bundle's symlinks and extended
-          # attributes, and a plain zip of a .app arrives at Apple as something
-          # it will not accept.
+          # ditto, not zip: it keeps the bundle's symlinks and extended attributes.
           ditto -c -k --keepParent "$APP" "$ZIP"
           xcrun notarytool submit "$ZIP" \
-            --key "$KEY" --key-id "$APPLE_API_KEY" --issuer "$APPLE_API_ISSUER" \
+            --key "$RUNNER_TEMP/macos-signing/private_keys/AuthKey_${APPLE_KEY_ID}.p8" \
+            --key-id "$APPLE_KEY_ID" --issuer "$APPLE_ISSUER_ID" \
             --wait --timeout 45m
-          rm -f "$KEY" "$ZIP"
-          # Stapling writes the ticket into the bundle so Gatekeeper clears it
-          # without a network round trip, which is what a user on a bad
-          # connection or behind a firewall actually needs.
+          rm -f "$ZIP"
           xcrun stapler staple "$APP"
           xcrun stapler validate "$APP"
-          echo "notarized=true" >> "$GITHUB_OUTPUT"
+          # What a user's Mac will decide on first launch, asked of this one.
+          spctl --assess --type execute --verbose=2 "$APP"
 
-      - name: Package the app
-        id: package
+      - name: Build the App Store package
+        id: mas
+        if: env.LANES != 'developer-id'
         run: |
           set -euo pipefail
-          APP=$(ls -d build/macos/Build/Products/Release/*.app | head -1)
-          VERSION=$(awk -F': ' '/^version:/ {print $2; exit}' pubspec_description.yaml | cut -d+ -f1)
-          OUT="HashBags-macos-${VERSION}.zip"
-          ditto -c -k --keepParent "$APP" "$OUT"
-          shasum -a 256 "$OUT" | tee "$OUT.sha256"
-          ls -la "$OUT"
-          echo "file=$OUT" >> "$GITHUB_OUTPUT"
+          APP="$(scripts/macos/build_signed.sh "$RUNNER_TEMP/macos-signing/app-store.provisionprofile" \
+            "$KEYCHAIN" build/macos-app-store | tail -1)"
+          # Matched by name: a hardcoded hash would break on the annual renewal.
+          # -p codesigning is absent on purpose; an installer identity is not one.
+          INSTALLER_ID="$(security find-identity -v "$KEYCHAIN" |
+            sed -n 's/.*"\(3rd Party Mac Developer Installer:[^"]*\)".*/\1/p' | head -1)"
+          [ -n "$INSTALLER_ID" ] || {
+            echo "FATAL: no 3rd Party Mac Developer Installer identity in the keychain."
+            echo "MACOS_INSTALLER_CERT_P12_BASE64 imported, so it most likely holds an"
+            echo "application certificate; its CN should read Installer."
+            exit 1; }
+          mkdir -p dist
+          PKG="dist/app-store.pkg"
+          productbuild --component "$APP" /Applications \
+            --sign "$INSTALLER_ID" --keychain "$KEYCHAIN" "$PKG"
+          pkgutil --check-signature "$PKG"
+          echo "pkg=$PKG" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the App Store package to App Store Connect
+        if: env.LANES != 'developer-id' && env.APP_STORE_UPLOAD == 'true'
+        env:
+          PKG: ${{ steps.mas.outputs.pkg }}
+          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          API_PRIVATE_KEYS_DIR="$RUNNER_TEMP/macos-signing/private_keys" \
+            xcrun altool --upload-app --type macos --file "$PKG" \
+              --apiKey "$APPLE_KEY_ID" --apiIssuer "$APPLE_ISSUER_ID"
+
+      - name: Name the outputs after the version they carry
+        id: package
+        env:
+          DEVID_APP: ${{ steps.devid.outputs.app }}
+          MAS_PKG: ${{ steps.mas.outputs.pkg }}
+        run: |
+          set -euo pipefail
+          FULL=$(awk '/^version:/ {print $2; exit}' pubspec_description.yaml)
+          VER="${FULL%%+*}"; BUILD="${FULL#*+}"
+          if [ -z "$VER" ] || [ "$BUILD" = "$FULL" ]; then
+            echo "pubspec_description.yaml version '$FULL' is not <name>+<build>; refusing to guess a name" >&2
+            exit 1
+          fi
+          BASE="hash-bags-${VER}-build${BUILD}-macos"
+          mkdir -p dist
+          if [ -n "${DEVID_APP:-}" ]; then
+            ditto -c -k --keepParent "$DEVID_APP" "dist/${BASE}.zip"
+            echo "zip=dist/${BASE}.zip" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -n "${MAS_PKG:-}" ]; then
+            mv "$MAS_PKG" "dist/${BASE}-app-store.pkg"
+          fi
+          (cd dist && shasum -a 256 hash-bags-* | tee SHA256SUMS)
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: hash-wallet-macos-${{ github.sha }}
-          path: ${{ steps.package.outputs.file }}
+          name: ${{ steps.package.outputs.base }}-${{ github.sha }}
+          path: dist/
           retention-days: 14
 
       - name: Resolve the release tag
@@ -438,12 +490,13 @@ jobs:
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           if [ -n "$TAG" ]; then echo "publishing to $TAG"; else echo "no tag; build only"; fi
 
+      # Only the Developer ID zip is a download; the App Store package goes to Apple.
       - name: Publish to the GitHub release
-        if: steps.reltag.outputs.tag != ''
+        if: steps.reltag.outputs.tag != '' && steps.package.outputs.zip != ''
         env:
           GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
           TAG: ${{ steps.reltag.outputs.tag }}
-          FILE: ${{ steps.package.outputs.file }}
+          FILE: ${{ steps.package.outputs.zip }}
         run: |
           set -euo pipefail
           if [ -z "${GH_TOKEN:-}" ]; then
@@ -469,6 +522,8 @@ jobs:
             "https://uploads.github.com/repos/$REPO/releases/$ID/assets?name=$NAME"
           echo "uploaded $NAME to the GitHub release $TAG"
 
-      - name: Clean up the keychain
-        if: always() && steps.cert.outputs.imported == 'true'
-        run: security delete-keychain "${{ steps.cert.outputs.keychain }}" || true
+      - name: Clean up the keychain, profiles and API key
+        if: always()
+        run: |
+          security delete-keychain "$KEYCHAIN" 2>/dev/null || true
+          rm -rf "$RUNNER_TEMP/macos-signing"
