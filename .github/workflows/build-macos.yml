@@ -67,7 +67,9 @@ jobs:
       APP_MACOS_TYPE: cakewallet
       # A tag push builds both lanes and uploads; a dispatch says what it wants.
       LANES: ${{ github.event.inputs.lanes || 'both' }}
-      APP_STORE_UPLOAD: ${{ github.event.inputs.app_store_upload || 'true' }}
+      # Gitea hands a dispatch boolean over as a real false, which `|| 'true'`
+      # would turn back into true; format() keeps it as the string 'false'.
+      APP_STORE_UPLOAD: ${{ github.event_name == 'workflow_dispatch' && format('{0}', github.event.inputs.app_store_upload) || 'true' }}
       KEYCHAIN: ${{ github.workspace }}/../hashbags-macos.keychain-db
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8
