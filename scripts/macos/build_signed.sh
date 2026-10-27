@@ -50,11 +50,15 @@ echo "signing identity: $identity" >&2
 
 # The profile specifier is a Runner-only setting (project.pbxproj reads it from
 # HASH_BAGS_MACOS_PROFILE), so the pods never see a profile they would refuse.
+# `xcodebuild build`, unlike `archive`, injects com.apple.security.get-task-allow
+# into the signature; the notary service rejects any executable carrying it.
+# CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO keeps the entitlements to our own file.
 xcodebuild -workspace macos/Runner.xcworkspace -scheme Runner \
     -configuration Release -derivedDataPath "$derived" \
     CODE_SIGN_IDENTITY="$identity" \
     DEVELOPMENT_TEAM="$team" \
     HASH_BAGS_MACOS_PROFILE="$name" \
+    CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
     OTHER_CODE_SIGN_FLAGS="--keychain $keychain --timestamp" \
     "$@" build >&2
 
@@ -66,6 +70,11 @@ codesign -d --entitlements - --xml "$app" > "$work/entitlements.plist" 2>/dev/nu
 if grep -q '\$(' "$work/entitlements.plist"; then
     echo "FATAL: the signed entitlements still hold an unexpanded build variable:" >&2
     grep '\$(' "$work/entitlements.plist" >&2
+    exit 1
+fi
+if grep -q 'get-task-allow' "$work/entitlements.plist"; then
+    # Notarization and App Store review both reject it, minutes later and remotely.
+    echo "FATAL: $app is signed with com.apple.security.get-task-allow, a debug-only entitlement" >&2
     exit 1
 fi
 [ -f "$app/Contents/embedded.provisionprofile" ] || {

@@ -407,11 +407,21 @@ jobs:
           ZIP="$RUNNER_TEMP/notarize.zip"
           # ditto, not zip: it keeps the bundle's symlinks and extended attributes.
           ditto -c -k --keepParent "$APP" "$ZIP"
-          xcrun notarytool submit "$ZIP" \
-            --key "$RUNNER_TEMP/macos-signing/private_keys/AuthKey_${APPLE_KEY_ID}.p8" \
-            --key-id "$APPLE_KEY_ID" --issuer "$APPLE_ISSUER_ID" \
-            --wait --timeout 45m
+          auth=(--key "$RUNNER_TEMP/macos-signing/private_keys/AuthKey_${APPLE_KEY_ID}.p8"
+                --key-id "$APPLE_KEY_ID" --issuer "$APPLE_ISSUER_ID")
+          # notarytool exits 0 on Invalid too; the status decides, and a refusal
+          # prints Apple's own log, which names each offending binary.
+          xcrun notarytool submit "$ZIP" "${auth[@]}" --wait --timeout 45m \
+            --output-format json > "$RUNNER_TEMP/notary.json"
           rm -f "$ZIP"
+          id="$(plutil -extract id raw "$RUNNER_TEMP/notary.json")"
+          status="$(plutil -extract status raw "$RUNNER_TEMP/notary.json")"
+          echo "notary submission $id: $status"
+          if [ "$status" != "Accepted" ]; then
+            xcrun notarytool log "$id" "${auth[@]}" || true
+            echo "FATAL: the notary service returned '$status' for submission $id"
+            exit 1
+          fi
           xcrun stapler staple "$APP"
           xcrun stapler validate "$APP"
           # What a user's Mac will decide on first launch, asked of this one.
