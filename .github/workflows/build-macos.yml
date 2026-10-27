@@ -169,6 +169,10 @@ jobs:
             tar -xzf torch_dart.tar.gz -C torch_dart
             rm torch_dart.tar.gz
           popd
+          # The tarball is packed on Linux with the framework's symlinks stored
+          # as copies, which codesign refuses as an ambiguous bundle.
+          scripts/macos/relink_framework.sh \
+            scripts/torch_dart/macos/LibTorch.xcframework/macos-arm64_x86_64/LibTorch.framework
 
       - name: Fetch prebuilt reown_flutter
         run: |
