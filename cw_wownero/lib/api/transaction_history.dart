@@ -81,8 +81,14 @@ Future<List<Transaction>> getAllTransactions() async {
 }
 
 // TODO(mrcyjanek): ...
-Transaction getTransaction(String txId) {
-  return Transaction(txInfo: wownero.TransactionHistory_transactionById(txhistory!, txid: txId));
+Future<Transaction> getTransaction(String txId) async {
+  await txHistoryMutex.acquire();
+  try {
+    return Transaction(
+        txInfo: wownero.TransactionHistory_transactionById(txhistory!, txid: txId));
+  } finally {
+    txHistoryMutex.release();
+  }
 }
 
 Future<PendingTransactionDescription> createTransactionSync(

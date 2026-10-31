@@ -57,27 +57,32 @@ int lastWptr = 0;
 int lastTxCount = 0;
 List<TinyTransactionDetails> ttDetails = [];
 
-List<Subaddress> getAllSubaddresses() {
-  txhistory = wownero.Wallet_history(wptr!);
-  final txCount = wownero.TransactionHistory_count(txhistory!);
-  if (lastTxCount != txCount && lastWptr != wptr!.address) {
-    final List<TinyTransactionDetails> newttDetails = [];
-    lastTxCount = txCount;
-    lastWptr = wptr!.address;
-    for (var i = 0; i < txCount; i++) {
-      final tx = wownero.TransactionHistory_transaction(txhistory!, index: i);
-      final subaddrs = wownero.TransactionInfo_subaddrIndex(tx).split(",");
-      final account = wownero.TransactionInfo_subaddrAccount(tx);
-      newttDetails.add(TinyTransactionDetails(
-        address: List.generate(
-            subaddrs.length,
-            (index) => getAddress(
-                accountIndex: account, addressIndex: int.tryParse(subaddrs[index]) ?? 0)),
-        amount: wownero.TransactionInfo_amount(tx),
-      ));
+Future<List<Subaddress>> getAllSubaddresses() async {
+  await txHistoryMutex.acquire();
+  try {
+    txhistory = wownero.Wallet_history(wptr!);
+    final txCount = wownero.TransactionHistory_count(txhistory!);
+    if (lastTxCount != txCount && lastWptr != wptr!.address) {
+      final List<TinyTransactionDetails> newttDetails = [];
+      lastTxCount = txCount;
+      lastWptr = wptr!.address;
+      for (var i = 0; i < txCount; i++) {
+        final tx = wownero.TransactionHistory_transaction(txhistory!, index: i);
+        final subaddrs = wownero.TransactionInfo_subaddrIndex(tx).split(",");
+        final account = wownero.TransactionInfo_subaddrAccount(tx);
+        newttDetails.add(TinyTransactionDetails(
+          address: List.generate(
+              subaddrs.length,
+              (index) => getAddress(
+                  accountIndex: account, addressIndex: int.tryParse(subaddrs[index]) ?? 0)),
+          amount: wownero.TransactionInfo_amount(tx),
+        ));
+      }
+      ttDetails.clear();
+      ttDetails.addAll(newttDetails);
     }
-    ttDetails.clear();
-    ttDetails.addAll(newttDetails);
+  } finally {
+    txHistoryMutex.release();
   }
   final size = wownero.Wallet_numSubaddresses(wptr!, accountIndex: subaddress!.accountIndex);
   final list = List.generate(size, (index) {

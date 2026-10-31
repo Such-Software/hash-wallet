@@ -83,10 +83,9 @@ class CWWowneroSubaddressList extends WowneroSubaddressList {
   }
 
   @override
-  List<Subaddress> getAll(Object wallet) {
+  Future<List<Subaddress>> getAll(Object wallet) async {
     final wowneroWallet = wallet as WowneroWallet;
-    return wowneroWallet.walletAddresses.subaddressList
-        .getAll()
+    return (await wowneroWallet.walletAddresses.subaddressList.getAll())
         .map((sub) => Subaddress(id: sub.id, label: sub.label, address: sub.address))
         .toList();
   }

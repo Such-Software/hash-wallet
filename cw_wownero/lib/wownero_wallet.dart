@@ -583,7 +583,12 @@ abstract class WowneroWalletBase
             wownero.CoinsInfo_unlocked(coin),
           );
           if (unspent.hash.isNotEmpty) {
-            unspent.isChange = transaction_history.getTransaction(unspent.hash) == 1;
+            try {
+              final tx = await transaction_history.getTransaction(unspent.hash);
+              unspent.isChange = tx.isSpend == true;
+            } catch (e) {
+              printV("isChange lookup failed for ${unspent.hash}: $e");
+            }
           }
           unspentCoins.add(unspent);
         }
