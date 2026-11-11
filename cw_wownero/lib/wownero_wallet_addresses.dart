@@ -73,7 +73,7 @@ abstract class WowneroWalletAddressesBase extends WalletAddresses with Store {
     account = accountList.accounts.isEmpty
         ? Account(id: 0, label: "Primary address")
         : accountList.accounts.first;
-    updateSubaddressList(accountIndex: account?.id ?? 0);
+    await updateSubaddressList(accountIndex: account?.id ?? 0);
     await updateAddressesInBox();
   }
 
@@ -85,8 +85,8 @@ abstract class WowneroWalletAddressesBase extends WalletAddresses with Store {
       addressesMap.clear();
       addressInfos.clear();
 
-      accountList.accounts.forEach((account) {
-        _subaddressList.update(accountIndex: account.id);
+      for (final account in accountList.accounts) {
+        await _subaddressList.update(accountIndex: account.id);
         _subaddressList.subaddresses.forEach((subaddress) {
           addressesMap[subaddress.address] = subaddress.label;
           addressInfos[account.id] ??= [];
@@ -97,7 +97,7 @@ abstract class WowneroWalletAddressesBase extends WalletAddresses with Store {
               address: subaddress.address,
               label: subaddress.label));
         });
-      });
+      }
 
       await saveAddressesInBox();
     } catch (e) {
@@ -105,7 +105,7 @@ abstract class WowneroWalletAddressesBase extends WalletAddresses with Store {
     }
   }
 
-  bool validate() {
+  Future<bool> validate() async {
     accountList.update();
     final accountListLength = accountList.accounts.length;
 
@@ -113,7 +113,7 @@ abstract class WowneroWalletAddressesBase extends WalletAddresses with Store {
       return false;
     }
 
-    subaddressList.update(accountIndex: accountList.accounts.first.id);
+    await subaddressList.update(accountIndex: accountList.accounts.first.id);
     final subaddressListLength = subaddressList.subaddresses.length;
 
     if (subaddressListLength <= 0) {
@@ -123,8 +123,8 @@ abstract class WowneroWalletAddressesBase extends WalletAddresses with Store {
     return true;
   }
 
-  void updateSubaddressList({required int accountIndex}) {
-    subaddressList.update(accountIndex: accountIndex);
+  Future<void> updateSubaddressList({required int accountIndex}) async {
+    await subaddressList.update(accountIndex: accountIndex);
     address = subaddressList.subaddresses.isNotEmpty
         ? subaddressList.subaddresses.first.address
         : getAddress();

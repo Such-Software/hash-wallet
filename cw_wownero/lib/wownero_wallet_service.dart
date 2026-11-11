@@ -157,7 +157,7 @@ class WowneroWalletService extends WalletService<
           unspentCoinsInfo: unspentCoinsInfoSource,
           password: password);
 
-      final isValid = wallet.walletAddresses.validate();
+      final isValid = await wallet.walletAddresses.validate();
 
       if (!isValid) {
         await restoreOrResetWalletFiles(name);
