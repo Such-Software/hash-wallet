@@ -72,6 +72,28 @@ jobs:
           git config --global user.name "Hash Bags CI"
           git config --global --list
 
+      # ---- Git symlinks -----------------------------------------------------
+      # Since the 6.5 merge each cw_*/pubspec_overrides.yaml is a git symlink to
+      # ../pubspec_overrides.yaml. Git for Windows checks symlinks out as text
+      # files holding the target path, so `flutter pub get` in a module reads
+      # "../pubspec_overrides.yaml" as YAML and refuses ("The pubspec must be a
+      # YAML mapping"). Replace every tracked symlink with a copy of its target.
+      - name: Materialise git symlinks as copies
+        run: |
+          set -euo pipefail
+          git ls-files -s | awk '$1 == "120000" { print $4 }' | while read -r link; do
+            target="$(dirname "$link")/$(cat "$link")"
+            if [ -f "$target" ]; then
+              cp --remove-destination "$target" "$link"
+              echo "copied $target -> $link"
+            elif [ -d "$target" ]; then
+              echo "leaving directory symlink $link -> $target"
+            else
+              echo "FATAL: $link points at $target, which does not exist" >&2
+              exit 1
+            fi
+          done
+
       # ---- Rust toolchain ---------------------------------------------------
       # The dnssec_proof plugin builds its native lib through cargokit
       # (windows/CMakeLists.txt -> apply_cargokit), so `flutter build windows`
