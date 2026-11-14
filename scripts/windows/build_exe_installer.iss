@@ -2,7 +2,7 @@
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "Such Software LLC"
 #define MyAppURL "https://such.software/"
-#define MyAppExeName "HashWallet.exe"
+#define MyAppExeName "HashBags.exe"
 
 [Setup]
 AppId=com.suchsoftware.hashwallet

@@ -540,17 +540,17 @@ jobs:
       # operator's session. CI never holds the key or the token password, so it
       # cannot spend one of the token's three password attempts.
       #
-      # Only HashWallet.exe is signed. The bundled MSVC runtime DLLs are
+      # Only HashBags.exe is signed. The bundled MSVC runtime DLLs are
       # already Microsoft-signed and must not be re-signed, and the plugin DLLs
       # are loaded by an already-trusted process -- it is the launcher the user
       # double-clicks that SmartScreen judges.
-      - name: Sign HashWallet.exe with the hardware token
+      - name: Sign HashBags.exe with the hardware token
         shell: powershell
         run: |
           $ErrorActionPreference = 'Stop'
           $release = "build\windows\x64\runner\Release"
-          $exe     = Join-Path $release 'HashWallet.exe'
-          if (-not (Test-Path $exe)) { throw "no HashWallet.exe at $exe" }
+          $exe     = Join-Path $release 'HashBags.exe'
+          if (-not (Test-Path $exe)) { throw "no HashBags.exe at $exe" }
 
           if (Test-Path 'C:\signing\SIGNING_LOCKED') {
             Get-Content 'C:\signing\SIGNING_LOCKED'
@@ -598,7 +598,7 @@ jobs:
 
       # ---- Package + upload as zip -----------------------------------------
       # The Flutter Windows build produces a directory tree (~500 files —
-      # HashWallet.exe + plugin DLLs + data/ + locales/ + bundled monero_c
+      # HashBags.exe + plugin DLLs + data/ + locales/ + bundled monero_c
       # + MinGW runtime DLLs). Ship as a zip; users extract and run.
       #
       # Tried wrapping with 7-Zip SFX for a single-file "portable" .exe
