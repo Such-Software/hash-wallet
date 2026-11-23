@@ -64,7 +64,6 @@ import "package:hash_wallet/new-ui/pages/seed/show_keys_disclaimer_page.dart";
 import 'package:hash_wallet/new-ui/viewmodels/charts/charts_bloc.dart';
 import 'package:hash_wallet/new-ui/viewmodels/lightning_username/lightning_username_bloc.dart';
 import 'package:hash_wallet/new-ui/widgets/addresses_page/address_label_input.dart';
-import 'package:hash_wallet/new-ui/widgets/buy_sell/buy_sell_selector_modal.dart';
 import 'package:hash_wallet/new-ui/widgets/coins_page/assets_history/transaction_details_modal.dart';
 import 'package:hash_wallet/new-ui/widgets/receive_page/receive_label_modal.dart';
 import 'package:hash_wallet/new-ui/pages/swap_page.dart';

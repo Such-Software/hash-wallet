@@ -12,7 +12,6 @@ import 'package:hash_wallet/entities/fiat_currency.dart';
 import 'package:hash_wallet/entities/provider_types.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import "package:hash_wallet/new-ui/pages/buy_sell/buy_sell_amount_page.dart";
-import 'package:hash_wallet/new-ui/widgets/buy_sell/buy_sell_selector_modal.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/store/app_store.dart';
 import 'package:hash_wallet/store/dashboard/fiat_conversion_store.dart';
@@ -456,6 +455,7 @@ abstract class BuySellViewModelBase extends WalletChangeListenerViewModel with S
       paymentMethods = ObservableList<PaymentMethod>.of(tempPaymentMethods);
 
       if (paymentMethods.isNotEmpty) {
+        paymentMethods.removeWhere((method) => method.paymentMethodType == PaymentType.all);
         paymentMethods.insert(0, PaymentMethod.all());
         selectedPaymentMethod = paymentMethods.first;
         selectedPaymentMethod!.isSelected = true;
