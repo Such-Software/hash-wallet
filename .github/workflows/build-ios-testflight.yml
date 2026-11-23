@@ -1,14 +1,14 @@
 name: Hash Bags iOS TestFlight build
 
-# Phase 2 of iOS CI: full signed build that uploads to TestFlight.
+# Build and retain a signed IPA. TestFlight upload is an explicit dispatch choice.
 # Phase 1 (build-ios-sim.yml) validates the Mac runner with no signing —
 # run that first if TestFlight blows up unexpectedly.
 #
 # Required Gitea Actions secrets (all account/app credentials):
-#   APPLE_TEAM_ID                       — 10-char (D8PL9F7X33)
-#   APPLE_KEY_ID                        — 10-char (CHK6B69G58)
-#   APPLE_ISSUER_ID                     — UUID
-#   APPLE_API_KEY_P8_BASE64             — base64 of AuthKey_<KeyID>.p8
+#   APPLE_TEAM_ID                       — Apple developer team ID
+#   APPLE_KEY_ID                        — TestFlight upload only
+#   APPLE_ISSUER_ID                     — TestFlight upload only
+#   APPLE_API_KEY_P8_BASE64             — TestFlight upload only
 #   APPLE_DIST_CERT_P12_BASE64          — base64 of distribution.p12
 #   APPLE_DIST_CERT_P12_PASSWORD        — password set during openssl pkcs12 export
 #   APPLE_PROVISIONING_PROFILE_BASE64   — base64 of Hash_Wallet.mobileprovision
@@ -16,14 +16,28 @@ name: Hash Bags iOS TestFlight build
 #   TROCADOR_*                          — reused from Linux/Android
 
 on:
-  # Don't auto-trigger on every push — TestFlight uploads are slow and use
-  # build numbers. Manual trigger only; later we can add a workflow_dispatch
-  # input for build number or auto-bump.
   workflow_dispatch:
+    inputs:
+      expected_sha:
+        description: Full commit SHA on protected Builds/dev
+        required: true
+        type: string
+      delivery:
+        description: Retain a signed candidate or explicitly upload to TestFlight
+        required: true
+        type: choice
+        default: candidate
+        options:
+          - candidate
+          - testflight
+      build_number:
+        description: Committed iOS build number, required for TestFlight upload
+        required: false
+        type: string
 
 concurrency:
-  group: ios-testflight-${{ github.ref }}
-  cancel-in-progress: true
+  group: hash-bags-ios-testflight
+  cancel-in-progress: false
 
 defaults:
   run:
@@ -46,6 +60,48 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate signed build request
+        id: dispatch
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          DELIVERY: ${{ inputs.delivery }}
+          REQUESTED_BUILD: ${{ inputs.build_number }}
+          REF_PROTECTED: ${{ github.ref_protected }}
+        run: |
+          set -euo pipefail
+          case "${GITHUB_REPOSITORY:-}" in
+            Builds/hash-wallet|builds/hash-wallet) ;;
+            *) echo "Signed builds require the Builds/hash-wallet repository." >&2; exit 1 ;;
+          esac
+          if [[ "${GITHUB_REF:-}" != refs/heads/dev || "$REF_PROTECTED" != true ]]; then
+            echo "Signed builds require the protected Builds/dev branch." >&2
+            exit 1
+          fi
+          if [[ ! "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ||
+                "$EXPECTED_SHA" != "${GITHUB_SHA:-}" ||
+                "$EXPECTED_SHA" != "$(git rev-parse HEAD)" ]]; then
+            echo "The requested commit must match the full dispatch and checkout SHA." >&2
+            exit 1
+          fi
+          case "$DELIVERY" in
+            candidate|testflight) ;;
+            *) echo "Select candidate or testflight delivery." >&2; exit 1 ;;
+          esac
+          version=$(awk '/^version:/ {print $2; exit}' pubspec_description.yaml)
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\+[1-9][0-9]*$ ]]; then
+            echo "pubspec_description.yaml must specify an iOS version and positive build number." >&2
+            exit 1
+          fi
+          if [[ -n "$REQUESTED_BUILD" || "$DELIVERY" == testflight ]]; then
+            if [[ "$REQUESTED_BUILD" != "${version##*+}" ]]; then
+              echo "The requested build number must match the committed build number (${version##*+})." >&2
+              exit 1
+            fi
+          fi
+          printf 'delivery=%s\n' "$DELIVERY" >> "$GITHUB_OUTPUT"
+          printf 'Accepted %s at %s for %s\n' "$version" "$EXPECTED_SHA" "$DELIVERY"
 
       - name: Check Flutter 3.41.9
         id: flutter_check
@@ -287,33 +343,15 @@ jobs:
       - name: Sanity-check Apple secrets are reaching the runner
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
-          APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
-          APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
           APPLE_DIST_CERT_P12_BASE64: ${{ secrets.APPLE_DIST_CERT_P12_BASE64 }}
           APPLE_DIST_CERT_P12_PASSWORD: ${{ secrets.APPLE_DIST_CERT_P12_PASSWORD }}
           APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
           APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
         run: |
-          # Print LENGTHS only — never the secret values. Length 0 means the
-          # secret isn't actually reaching the runner (most often: secret is
-          # set on a different Gitea repo than this workflow is running in).
-          set +e
-          echo "APPLE_TEAM_ID length: ${#APPLE_TEAM_ID}"
-          echo "APPLE_KEY_ID length: ${#APPLE_KEY_ID}"
-          echo "APPLE_ISSUER_ID length: ${#APPLE_ISSUER_ID}"
-          echo "APPLE_API_KEY_P8_BASE64 length: ${#APPLE_API_KEY_P8_BASE64}"
-          echo "APPLE_DIST_CERT_P12_BASE64 length: ${#APPLE_DIST_CERT_P12_BASE64}"
-          echo "APPLE_DIST_CERT_P12_PASSWORD length: ${#APPLE_DIST_CERT_P12_PASSWORD}"
-          echo "APPLE_PROVISIONING_PROFILE_BASE64 length: ${#APPLE_PROVISIONING_PROFILE_BASE64}"
-          echo "APPLE_KEYCHAIN_PASSWORD length: ${#APPLE_KEYCHAIN_PASSWORD}"
-          set -e
-          # Fail fast on any zero-length secret so we don't waste time on the
-          # subsequent steps.
-          for n in TEAM_ID KEY_ID ISSUER_ID API_KEY_P8_BASE64 DIST_CERT_P12_BASE64 DIST_CERT_P12_PASSWORD PROVISIONING_PROFILE_BASE64 KEYCHAIN_PASSWORD; do
+          for n in TEAM_ID DIST_CERT_P12_BASE64 DIST_CERT_P12_PASSWORD PROVISIONING_PROFILE_BASE64 KEYCHAIN_PASSWORD; do
             var="APPLE_$n"
             if [[ -z "${!var}" ]]; then
-              echo "FATAL: $var is empty — set it as a Gitea repo secret on the repo this workflow runs in (Builds/hash-wallet)."
+              echo "FATAL: $var is missing from Builds/hash-wallet." >&2
               exit 1
             fi
           done
@@ -345,8 +383,6 @@ jobs:
           echo "$APPLE_DIST_CERT_P12_BASE64" | openssl base64 -d -A > "$P12"
           echo "=== decoded .p12 ==="
           ls -la "$P12"
-          xxd "$P12" | head -1
-          file "$P12" || true
 
           security import "$P12" -k "$KEYCHAIN_PATH" -P "$APPLE_DIST_CERT_P12_PASSWORD" \
             -T /usr/bin/codesign -T /usr/bin/security
@@ -373,38 +409,16 @@ jobs:
           echo "PROFILE_UUID=$PROFILE_UUID" >> "$GITHUB_ENV"
           echo "PROFILE_NAME=$PROFILE_NAME" >> "$GITHUB_ENV"
 
-          # Xcode looks profiles up by UUID filename.
-          cp "$PROFILE" "$PROFILES_DIR/$PROFILE_UUID.mobileprovision"
-          ls -la "$PROFILES_DIR" | head -10
-
-      - name: Install App Store Connect API key for altool
-        env:
-          APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
-          APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
-        run: |
-          set -e
-          mkdir -p "$HOME/.appstoreconnect/private_keys"
-          P8="$HOME/.appstoreconnect/private_keys/AuthKey_${APPLE_KEY_ID}.p8"
-          echo "$APPLE_API_KEY_P8_BASE64" | openssl base64 -d -A > "$P8"
-          ls -la "$HOME/.appstoreconnect/private_keys/"
-
-          # Diagnostics — verify the PEM file is well-formed without
-          # printing the private key body. A valid AuthKey .p8 must:
-          #   - Start with "-----BEGIN PRIVATE KEY-----"
-          #   - End with "-----END PRIVATE KEY-----"
-          #   - openssl pkey -in file -noout must succeed (real ASN.1 parse)
-          echo "=== .p8 first/last lines (no key body) ==="
-          head -1 "$P8"
-          tail -1 "$P8"
-          echo "=== openssl parse check (silent on success) ==="
-          if openssl pkey -in "$P8" -noout 2>&1; then
-            echo "OK — .p8 parses as a valid EC private key"
+          # Xcode looks profiles up by UUID. Leave an existing host profile alone.
+          installed_profile="$PROFILES_DIR/$PROFILE_UUID.mobileprovision"
+          if [[ -e "$installed_profile" ]]; then
+            if ! cmp -s "$PROFILE" "$installed_profile"; then
+              echo "The installed provisioning profile differs from the enrolled profile for this UUID." >&2
+              exit 1
+            fi
           else
-            echo "FATAL: .p8 doesn't parse — secret likely truncated or wrong content"
-            echo "Re-paste APPLE_API_KEY_P8_BASE64 via the Gitea API (same flow"
-            echo "as the .p12 re-paste); the file decoded to:"
-            wc -c "$P8"
-            exit 1
+            printf 'INSTALLED_PROFILE=%s\n' "$installed_profile" >> "$GITHUB_ENV"
+            cp "$PROFILE" "$installed_profile"
           fi
 
       # ---- Flutter init + codegen + pod install ---------------------------
@@ -510,28 +524,50 @@ jobs:
 
       # ---- Upload to TestFlight -------------------------------------------
       - name: Upload to TestFlight via altool
+        if: steps.dispatch.outputs.delivery == 'testflight'
         env:
           APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
           APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+          APPLE_API_KEY_P8_BASE64: ${{ secrets.APPLE_API_KEY_P8_BASE64 }}
         run: |
-          set -e
-          IPA=$(ls build/ios/ipa/*.ipa | head -1)
-          echo "Uploading $IPA to TestFlight..."
+          set -euo pipefail
+          if [[ ! "$APPLE_KEY_ID" =~ ^[A-Z0-9]{10}$ ||
+                -z "$APPLE_ISSUER_ID" || -z "$APPLE_API_KEY_P8_BASE64" ]]; then
+            echo "The TestFlight upload needs an enrolled key ID, issuer, and private key." >&2
+            exit 1
+          fi
+          shopt -s nullglob
+          ipas=(build/ios/ipa/*.ipa)
+          if [[ "${#ipas[@]}" != 1 ]]; then
+            echo "Expected exactly one signed IPA to upload to TestFlight." >&2
+            exit 1
+          fi
+          umask 077
+          key_dir=$(mktemp -d "$RUNNER_TEMP/hash-bags-testflight.XXXXXX")
+          trap 'rm -rf -- "$key_dir"' EXIT
+          p8="$key_dir/AuthKey_${APPLE_KEY_ID}.p8"
+          printf '%s' "$APPLE_API_KEY_P8_BASE64" | openssl base64 -d -A > "$p8"
+          if ! openssl pkey -in "$p8" -noout >/dev/null 2>&1; then
+            echo "The enrolled App Store Connect key could not be parsed." >&2
+            exit 1
+          fi
+          unset APPLE_API_KEY_P8_BASE64
+          export API_PRIVATE_KEYS_DIR="$key_dir"
           xcrun altool --upload-app \
             --type ios \
-            --file "$IPA" \
+            --file "${ipas[0]}" \
             --apiKey "$APPLE_KEY_ID" \
             --apiIssuer "$APPLE_ISSUER_ID"
 
       # ---- Cleanup keychain so we don't leak it across builds -------------
       - name: Cleanup
-        if: always()
-        env:
-          APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+        if: always() && steps.dispatch.outcome == 'success'
         run: |
           set +e
           KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
           security delete-keychain "$KEYCHAIN_PATH" 2>/dev/null
-          rm -rf "$HOME/.appstoreconnect/private_keys"
-          rm -f "$HOME/Library/MobileDevice/Provisioning Profiles"/*.mobileprovision
+          rm -f -- "$RUNNER_TEMP/dist.p12" "$RUNNER_TEMP/Hash_Wallet.mobileprovision"
+          if [[ -n "${INSTALLED_PROFILE:-}" ]]; then
+            rm -f -- "$INSTALLED_PROFILE"
+          fi
           true
