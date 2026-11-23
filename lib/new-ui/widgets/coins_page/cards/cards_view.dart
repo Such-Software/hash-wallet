@@ -10,7 +10,6 @@ import 'package:hash_wallet/entities/provider_types.dart';
 import 'package:hash_wallet/generated/i18n.dart';
 import 'package:hash_wallet/new-ui/modal_navigator.dart';
 import 'package:hash_wallet/new-ui/pages/send_page.dart';
-import 'package:hash_wallet/new-ui/widgets/buy_sell/buy_sell_selector_modal.dart';
 import 'package:hash_wallet/routes.dart';
 import 'package:hash_wallet/utils/payment_request.dart';
 import 'package:hash_wallet/utils/responsive_layout_util.dart';
@@ -214,10 +213,7 @@ class _CardsViewState extends State<CardsView> {
                   label: S.current.buy,
                   icon: Icons.arrow_forward_ios_rounded,
                   iconSize: 12,
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context, builder: (context) => BuySellSelectorModal());
-                  },
+                  onTap: () => Navigator.of(context).pushNamed(Routes.buySellPage),
                 )
               ]
                   : [];

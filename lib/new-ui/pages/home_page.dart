@@ -15,7 +15,6 @@ import "package:hash_wallet/new-ui/pages/seed/seed_backup_reminder_page.dart";
 import "package:hash_wallet/new-ui/pages/send_page.dart";
 import "package:hash_wallet/new-ui/pages/settings_page.dart";
 import "package:hash_wallet/new-ui/pages/wallet_accounts_page.dart";
-import "package:hash_wallet/new-ui/widgets/buy_sell/buy_sell_selector_modal.dart";
 import "package:hash_wallet/new-ui/widgets/coins_page/action_row/coin_action_row.dart";
 import "package:hash_wallet/new-ui/widgets/coins_page/assets_history/assets_history_section.dart";
 import "package:hash_wallet/new-ui/widgets/coins_page/cards/balance_card.dart";

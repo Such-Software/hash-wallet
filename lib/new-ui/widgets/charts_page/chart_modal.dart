@@ -1,4 +1,5 @@
 import "package:hash_wallet/di.dart";
+import "package:hash_wallet/entities/provider_types.dart";
 import "package:hash_wallet/generated/i18n.dart";
 import "package:hash_wallet/main.dart";
 import "package:hash_wallet/new-ui/modal_navigator.dart";
@@ -57,7 +58,7 @@ class ChartModal extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: MediaQuery.of(context).size.width * 0.05,
                   children: [
-                    if (canOpenBuySell) ...[
+                    if (canOpenBuySell && ProvidersHelper.getAvailableBuyProviderTypes().isNotEmpty)
                       CoinActionButton(
                         icon: HashImageWidget(
                           width: 36,
@@ -71,6 +72,7 @@ class ChartModal extends StatelessWidget {
                         label: S.of(context).buy,
                         action: () => openBuySellPage(context, BuySellPageMode.buy),
                       ),
+                    if (canOpenBuySell && ProvidersHelper.getAvailableSellProviderTypes().isNotEmpty)
                       CoinActionButton(
                         icon: HashImageWidget(
                           width: 36,
@@ -84,7 +86,6 @@ class ChartModal extends StatelessWidget {
                         label: S.of(context).sell,
                         action: () => openBuySellPage(context, BuySellPageMode.sell),
                       ),
-                    ],
                     CoinActionButton(
                       icon: HashImageWidget(
                         imageUrl: "assets/new-ui/exchange.svg",

@@ -186,7 +186,7 @@ class MoonPayProvider extends BuyProvider {
       final moonPayMethods = await fetchMoonPayPaymentMethods(
         currencyCode: fiatCurrency,
         transactionType: isBuyAction ? "buy" : "sell",
-      );
+      ).timeout(const Duration(seconds: 5));
 
       for (final method in moonPayMethods) {
         if (!method.active) {
@@ -201,6 +201,9 @@ class MoonPayProvider extends BuyProvider {
       }
     } catch (e) {
       printV("Error fetching payment methods: $e");
+      // The existing signer may not offer method lookup. Let MoonPay quote a
+      // purchase without a method filter and enforce availability in checkout.
+      return isBuyAction ? [PaymentMethod.all()] : [];
     }
 
     return paymentMethods;

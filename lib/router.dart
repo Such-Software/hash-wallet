@@ -17,7 +17,6 @@ import "package:hash_wallet/new-ui/pages/seed/show_keys_disclaimer_page.dart";
 import "package:hash_wallet/new-ui/pages/receive_page.dart";
 import 'package:hash_wallet/new-ui/pages/send_page.dart';
 import "package:hash_wallet/new-ui/pages/swap_page.dart";
-import "package:hash_wallet/new-ui/widgets/buy_sell/buy_sell_selector_modal.dart";
 import 'package:hash_wallet/new-ui/widgets/hardware_wallet/sync_key_images_sheet.dart';
 import 'package:hash_wallet/order/order.dart';
 import 'package:hash_wallet/core/new_wallet_type_arguments.dart';
