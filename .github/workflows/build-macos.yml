@@ -65,11 +65,10 @@ jobs:
     timeout-minutes: 90
     env:
       APP_MACOS_TYPE: cakewallet
-      # A tag push builds both lanes and uploads; a dispatch says what it wants.
-      LANES: ${{ github.event.inputs.lanes || 'both' }}
-      # Gitea hands a dispatch boolean over as a real false, which `|| 'true'`
-      # would turn back into true; format() keeps it as the string 'false'.
-      APP_STORE_UPLOAD: ${{ github.event_name == 'workflow_dispatch' && format('{0}', github.event.inputs.app_store_upload) || 'true' }}
+      # Release tags produce the direct download. The Mac App Store has its own dispatch.
+      LANES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.lanes || 'developer-id' }}
+      # Gitea passes a checkbox as a boolean. format() preserves an explicit false.
+      APP_STORE_UPLOAD: ${{ github.event_name == 'workflow_dispatch' && format('{0}', github.event.inputs.app_store_upload) || 'false' }}
       KEYCHAIN: ${{ github.workspace }}/../hashbags-macos.keychain-db
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8
@@ -496,12 +495,14 @@ jobs:
 
       - name: Resolve the release tag
         id: reltag
+        env:
+          REQUESTED_RELEASE_TAG: ${{ github.event.inputs.release_tag }}
         run: |
           set -euo pipefail
           if [ "${GITHUB_REF:-}" != "${GITHUB_REF#refs/tags/}" ]; then
             TAG="${GITHUB_REF#refs/tags/}"
           else
-            TAG="${{ github.event.inputs.release_tag }}"
+            TAG="$REQUESTED_RELEASE_TAG"
           fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           if [ -n "$TAG" ]; then echo "publishing to $TAG"; else echo "no tag; build only"; fi
@@ -513,30 +514,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
           TAG: ${{ steps.reltag.outputs.tag }}
           FILE: ${{ steps.package.outputs.zip }}
-        run: |
-          set -euo pipefail
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo "GH_RELEASE_TOKEN not set; skipping the GitHub upload"
-            exit 0
-          fi
-          REPO="Such-Software/hash-wallet"
-          API="https://api.github.com/repos/$REPO"
-          AUTH="Authorization: Bearer $GH_TOKEN"
-          NAME="$(basename "$FILE")"
-          code=$(curl -sS -o rel-gh.json -w '%{http_code}' -H "$AUTH" "$API/releases/tags/$TAG" || true)
-          if [ "$code" != "200" ]; then
-            echo "no GitHub release for $TAG (HTTP $code); skipping"
-            exit 0
-          fi
-          ID=$(python3 -c 'import json;print(json.load(open("rel-gh.json"))["id"])')
-          for oid in $(python3 -c 'import json,sys;d=json.load(open("rel-gh.json"));print(" ".join(str(a["id"]) for a in d.get("assets",[]) if a["name"]==sys.argv[1]))' "$NAME"); do
-            curl -sS -o /dev/null -X DELETE -H "$AUTH" "$API/releases/assets/$oid" || true
-          done
-          curl -sS --fail-with-body -o /dev/null -X POST -H "$AUTH" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary "@$FILE" \
-            "https://uploads.github.com/repos/$REPO/releases/$ID/assets?name=$NAME"
-          echo "uploaded $NAME to the GitHub release $TAG"
+        run: python3 scripts/release/publish-desktop-asset.py "$TAG" "$FILE"
 
       - name: Clean up the keychain, profiles and API key
         if: always()

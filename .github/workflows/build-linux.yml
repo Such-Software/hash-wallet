@@ -322,16 +322,16 @@ jobs:
       # that did not happen. Release assets are the path that actually returns
       # bytes, and GitHub is where users are told to look.
       #
-      # Both steps skip quietly without a token, so a fork or a local runner
-      # does not fail a build over a credential it was never given.
       - name: Resolve the release tag
         id: reltag
+        env:
+          REQUESTED_RELEASE_TAG: ${{ github.event.inputs.release_tag }}
         run: |
           set -euo pipefail
           if [ "${GITHUB_REF:-}" != "${GITHUB_REF#refs/tags/}" ]; then
             TAG="${GITHUB_REF#refs/tags/}"
           else
-            TAG="${{ github.event.inputs.release_tag }}"
+            TAG="$REQUESTED_RELEASE_TAG"
           fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           if [ -n "$TAG" ]; then echo "publishing to $TAG"; else echo "no tag; build only"; fi
@@ -341,37 +341,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
           TAG: ${{ steps.reltag.outputs.tag }}
-        run: |
-          set -euo pipefail
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo "GH_RELEASE_TOKEN not set; skipping the GitHub upload"
-            exit 0
-          fi
-          REPO="Such-Software/hash-wallet"
-          API="https://api.github.com/repos/$REPO"
-          AUTH="Authorization: Bearer $GH_TOKEN"
-          FILE="build/linux/x64/release/Hash_Bags-x86_64.AppImage"
-          [ -f "$FILE" ] || { echo "no AppImage to upload"; exit 1; }
-          NAME="$(basename "$FILE")"
-          code=$(curl -sS -o rel-gh.json -w '%{http_code}' -H "$AUTH" "$API/releases/tags/$TAG" || true)
-          if [ "$code" != "200" ]; then
-            echo "no GitHub release for $TAG (HTTP $code); skipping"
-            exit 0
-          fi
-          # Fail rather than skip if there is no JSON parser. An upload that
-          # quietly did not happen leaves a release page that looks finished
-          # and a user with nothing to download.
-          PY=""
-          for c in python3 python; do command -v "$c" >/dev/null && { PY="$c"; break; }; done
-          [ -n "$PY" ] || { echo "no python available to parse the release JSON"; exit 1; }
-          ID=$($PY -c 'import json;print(json.load(open("rel-gh.json"))["id"])')
-          # Replace a same-named asset from an earlier attempt, so a re-run does
-          # not leave two that differ only by which build produced them.
-          for oid in $($PY -c 'import json,sys;d=json.load(open("rel-gh.json"));print(" ".join(str(a["id"]) for a in d.get("assets",[]) if a["name"]==sys.argv[1]))' "$NAME"); do
-            curl -sS -o /dev/null -X DELETE -H "$AUTH" "$API/releases/assets/$oid" || true
-          done
-          curl -sS --fail-with-body -o /dev/null -X POST -H "$AUTH" \
-            -H "Content-Type: application/octet-stream" \
-            --data-binary "@$FILE" \
-            "https://uploads.github.com/repos/$REPO/releases/$ID/assets?name=$NAME"
-          echo "uploaded $NAME to the GitHub release $TAG"
+        run: python3 scripts/release/publish-desktop-asset.py "$TAG" "build/linux/x64/release/Hash_Bags-x86_64.AppImage"
