@@ -69,6 +69,28 @@ Open an issue at https://github.com/Such-Software/hash-wallet/issues. Please inc
 - Terminal output if you built and ran from a terminal — many error popups don't print to stderr; check `<appDir>/error.txt` (typically `~/.config/hash_wallet/error.txt` on Linux).
 - Whether the bug also reproduces in the latest Cake Wallet build (so we know whether it's a Cake-upstream bug or a Hash Bags regression).
 
+## Desktop releases
+
+From a checkout with the canonical GitHub and Gitea Builds remotes, use the exact
+reviewed commit on canonical `dev`. The command reads the version and build number
+from that commit.
+
+```sh
+python3 scripts/release/desktop-release.py FULL_COMMIT_SHA
+python3 scripts/release/desktop-release.py FULL_COMMIT_SHA --start
+python3 scripts/release/desktop-release.py FULL_COMMIT_SHA --verify
+```
+
+The default command checks the source and prints the release tag. `--start` creates
+the canonical tag and GitHub draft before pushing the same tag to Builds. The
+tag starts the Windows, Linux, and Developer ID macOS jobs. `--verify` checks that
+the three expected assets have uploaded with SHA-256 digests. Review the download
+files before publishing the GitHub draft.
+
+The Android workflow can also produce an APK and AAB from the same tag after
+`HASH_BAGS_ANDROID_RELEASE_TAGS` is explicitly enabled in Builds. Play internal
+upload uses a separately enrolled Fleet publisher.
+
 ## Security disclosures
 
 See [`docs/SECURITY.md`](docs/SECURITY.md). Email `support@such.software` for anything sensitive; do not open a public issue for unpatched vulnerabilities.

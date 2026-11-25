@@ -1,13 +1,9 @@
 name: Hash Bags Android build
 
-# Triggers:
-# - push to dev/main (validate every commit)
-# - PRs targeting dev/main (gate merges)
-# - manual via workflow_dispatch
 on:
-  # Manual-only for now. Trigger via Actions → "Hash Bags Android build"
-  # → Run workflow when you want a build. workflow_dispatch runs as the
-  # triggering user, so secrets are always available (unlike PR triggers).
+  push:
+    tags:
+      - 'hash-bags-*-build*'
   workflow_dispatch:
 
 concurrency:
@@ -20,6 +16,8 @@ defaults:
 
 jobs:
   build:
+    # Manual builds stay available. Signed tag builds require separate activation.
+    if: github.event_name == 'workflow_dispatch' || vars.HASH_BAGS_ANDROID_RELEASE_TAGS == 'true'
     runs-on: ubuntu-latest
     container:
       # Same Cake-Labs prebuilt image used for Linux. Bundles Flutter 3.41.9,
@@ -43,6 +41,24 @@ jobs:
           git config --global --add safe.directory '*'
           git config --global user.email "ci@suchsoftware.com"
           git config --global user.name "Hash Bags CI"
+
+      - name: Verify the canonical release tag
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          version=$(awk '/^version:/ {print $2; exit}' pubspec_description.yaml)
+          expected_ref="refs/tags/hash-bags-${version%%+*}-build${version#*+}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\+[1-9][0-9]*$ ||
+                "$GITHUB_REF" != "$expected_ref" ]]; then
+            echo "The Android release tag must match the committed version and build number." >&2
+            exit 1
+          fi
+          tags=$(git ls-remote https://github.com/Such-Software/hash-wallet.git "$expected_ref" "${expected_ref}^{}")
+          canonical=$(awk -v ref="$expected_ref" '$2==ref { direct=$1 } $2==ref "^{}" { peeled=$1 } END { print peeled ? peeled : direct }' <<< "$tags")
+          if [[ "$canonical" != "$GITHUB_SHA" ]]; then
+            echo "The canonical GitHub tag does not point to the Android build commit." >&2
+            exit 1
+          fi
 
       # ---- External prebuilt deps (same approach as Linux workflow) --------
       - name: Fetch prebuilt torch_dart

@@ -627,15 +627,17 @@ jobs:
       # ---- Publish to the GitHub release ------------------------------------
       # PowerShell rather than the bash used elsewhere in this file: this step
       # parses JSON, and git-bash here has neither python nor node guaranteed,
-      # while ConvertFrom-Json is native. Skips quietly without a token.
+      # while ConvertFrom-Json is native.
       - name: Resolve the release tag
         id: reltag
+        env:
+          REQUESTED_RELEASE_TAG: ${{ github.event.inputs.release_tag }}
         run: |
           set -euo pipefail
           if [ "${GITHUB_REF:-}" != "${GITHUB_REF#refs/tags/}" ]; then
             TAG="${GITHUB_REF#refs/tags/}"
           else
-            TAG="${{ github.event.inputs.release_tag }}"
+            TAG="$REQUESTED_RELEASE_TAG"
           fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           if [ -n "$TAG" ]; then echo "publishing to $TAG"; else echo "no tag; build only"; fi
@@ -648,10 +650,7 @@ jobs:
           TAG: ${{ steps.reltag.outputs.tag }}
         run: |
           $ErrorActionPreference = 'Stop'
-          if (-not $env:GH_TOKEN) {
-            Write-Host 'GH_RELEASE_TOKEN not set; skipping the GitHub upload'
-            exit 0
-          }
+          if (-not $env:GH_TOKEN) { throw 'GH_RELEASE_TOKEN is missing' }
           $repo = 'Such-Software/hash-wallet'
           $api  = "https://api.github.com/repos/$repo"
           $hdr  = @{ Authorization = "Bearer $env:GH_TOKEN"; 'User-Agent' = 'hash-bags-ci' }
@@ -660,18 +659,43 @@ jobs:
           # Named for the tag, not the commit: a release asset called
           # HashBags-windows-<40 hex>.zip tells a downloader nothing.
           $name = "HashBags-windows-$env:TAG.zip"
-          try {
-            $rel = Invoke-RestMethod -Headers $hdr -Uri "$api/releases/tags/$env:TAG"
-          } catch {
-            Write-Host "no GitHub release for $env:TAG; skipping"
+          $page = 1
+          do {
+            $releases = Invoke-RestMethod -Headers $hdr -Uri "$api/releases?per_page=100&page=$page"
+            $rel = $releases | Where-Object { $_.tag_name -ceq $env:TAG } | Select-Object -First 1
+            $page++
+          } while (-not $rel -and $releases.Count -eq 100)
+          if (-not $rel) { throw "GitHub release $env:TAG does not exist" }
+
+          if ($env:GITHUB_EVENT_NAME -eq 'push') {
+            $ref = "refs/tags/$env:TAG"
+            $peeledRef = $ref + '^{}'
+            $tagRefs = @(git ls-remote "https://github.com/$repo.git" $ref $peeledRef)
+            if ($LASTEXITCODE -ne 0) { throw 'Could not read the GitHub release tag' }
+            $tagSha = $tagRefs | Where-Object { $_.EndsWith("`t$peeledRef") } | Select-Object -First 1
+            if (-not $tagSha) {
+              $tagSha = $tagRefs | Where-Object { $_.EndsWith("`t$ref") } | Select-Object -First 1
+            }
+            if (-not $tagSha -or ($tagSha -split "`t")[0] -cne $env:GITHUB_SHA) {
+              throw "GitHub tag $env:TAG does not point to the build commit"
+            }
+            if (-not $rel.draft) { throw 'Tag builds may only attach assets to a draft release' }
+          }
+
+          $digest = 'sha256:' + (Get-FileHash -Algorithm SHA256 -LiteralPath $src.FullName).Hash.ToLowerInvariant()
+          $asset = $rel.assets | Where-Object { $_.name -ceq $name } | Select-Object -First 1
+          if ($asset) {
+            if ($asset.state -ne 'uploaded' -or $asset.digest -cne $digest) {
+              throw "GitHub already has a different or incomplete asset named $name"
+            }
+            Write-Host "$name is already uploaded with the expected digest"
             exit 0
           }
-          # Replace a same-named asset from an earlier attempt, so a re-run does
-          # not leave two that differ only by which build produced them.
-          foreach ($a in @($rel.assets | Where-Object { $_.name -eq $name })) {
-            Invoke-RestMethod -Headers $hdr -Method Delete -Uri "$api/releases/assets/$($a.id)" | Out-Null
+          $encodedName = [uri]::EscapeDataString($name)
+          $up = "https://uploads.github.com/repos/$repo/releases/$($rel.id)/assets?name=$encodedName"
+          $uploaded = Invoke-RestMethod -Headers $hdr -Method Post -ContentType 'application/octet-stream' `
+            -InFile $src.FullName -Uri $up
+          if ($uploaded.state -ne 'uploaded' -or $uploaded.digest -cne $digest) {
+            throw "GitHub did not confirm the expected digest for $name"
           }
-          $up = "https://uploads.github.com/repos/$repo/releases/$($rel.id)/assets?name=$name"
-          Invoke-RestMethod -Headers $hdr -Method Post -ContentType 'application/octet-stream' `
-            -InFile $src.FullName -Uri $up | Out-Null
           Write-Host "uploaded $name to the GitHub release $env:TAG"
