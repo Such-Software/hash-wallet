@@ -49,6 +49,24 @@ class DesktopReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "AppImage"):
             release.verify_assets({"assets": []}, ["Hash_Bags-x86_64.AppImage"])
 
+    def test_staging_waits_for_the_draft_without_recreating_it(self):
+        commit = "a" * 40
+        tag = "hash-bags-1.2.3-build4"
+        draft = {"draft": True, "html_url": "https://example.invalid/draft"}
+        with (
+            patch.object(release, "has_release_driver", return_value=True),
+            patch.object(release, "release_for", side_effect=[None, draft]),
+            patch.object(release, "remote_tag", return_value=commit),
+            patch.object(release.subprocess, "run") as run,
+            patch.object(release.time, "sleep") as sleep,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            release.stage(commit, tag, "1.2.3", f"refs/tags/{tag}", commit, None, None)
+        actions = [call.args[0] for call in run.call_args_list]
+        self.assertEqual([action[0] for action in actions], ["gh", "git"])
+        self.assertIn("--draft", actions[0])
+        sleep.assert_called_once()
+
 
 class DesktopPublisherTests(unittest.TestCase):
     def test_tag_build_refuses_public_release(self):

@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import time
 
 
 REPO = "Such-Software/hash-wallet"
@@ -80,6 +81,21 @@ def has_release_driver(commit):
     return source.returncode == 0 and source.stdout.strip() == Path(__file__).read_text().strip()
 
 
+def confirm_draft(commit, tag, ref):
+    for delay in (0, 1, 2, 4, 8):
+        if delay:
+            time.sleep(delay)
+        canonical = remote_tag("origin", ref)
+        release = release_for(tag)
+        if canonical is not None and canonical != commit:
+            raise ValueError(f"GitHub tag {tag} moved to a different commit")
+        if release is not None and not release["draft"]:
+            raise ValueError(f"GitHub release {tag} is already public")
+        if canonical == commit and release is not None:
+            return release
+    raise ValueError("GitHub did not confirm the exact release tag and draft")
+
+
 def stage(commit, tag, version, ref, canonical, builds, release):
     if not has_release_driver(commit):
         raise ValueError("The exact release commit does not contain this desktop release automation")
@@ -95,9 +111,7 @@ def stage(commit, tag, version, ref, canonical, builds, release):
              "--title", f"Hash Bags {version}", "--notes", ""],
             check=True,
         )
-        release = release_for(tag)
-    if release is None or not release["draft"] or remote_tag("origin", ref) != commit:
-        raise ValueError("GitHub did not confirm the exact release tag and draft")
+    release = confirm_draft(commit, tag, ref)
     if builds is None:
         subprocess.run(["git", "push", "gitea-builds", f"{commit}:{ref}"], check=True)
     if remote_tag("gitea-builds", ref) != commit:
